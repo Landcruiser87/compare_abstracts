@@ -107,7 +107,7 @@ def log_time(fn):
 	return inner
 
 #FUNCTION Filter result
-def filter_neurips_result(json_data:json)->dict:
+def extract_json(json_data:json)->dict:
 	# Possible cool data within neuripps
 	ids = list(range(json_data["count"]))
 	base_keys = ["id","name","author","abstract","topic","session","event_type","virtualsite_url","url","paper_url"]
@@ -124,10 +124,12 @@ def filter_neurips_result(json_data:json)->dict:
 		for term in base_keys:
 			if json_data["results"][id].get(term):
 				base_dict[id][term] = json_data["results"][id][term]
-
+	#could be cool stuff in event media, but save for later. 
 	return base_dict
 
-	#could be cool stuff in event media, but save for later. 
+
+def extract_w_soup():
+	pass
 
 #FUNCTION Request Conference
 def request_conf(conference:str):
@@ -137,7 +139,10 @@ def request_conf(conference:str):
 
 	if resp.status_code == 200:
 		resp_json = resp.json()
-		results = filter_neurips_result(resp_json)
+		if conference != "ml4h":
+			results = extract_json(resp_json)
+		else:
+			results = extract_w_soup(resp_json)
 	else:
 		logger.warning(f"\nServer Error\n{url}\nResponse: {resp.status_code}\n{resp.reason}")
 		results = None
@@ -171,16 +176,25 @@ def main():
 	"""Main driver code for program
 	"""	
 	logger.info(f"Beginning search")
-	main_conferences = ["icml", "neurips","ml4h"] 
-	#TODO - Add MHSRS when ready, that website will be more challenging to scrape
-
-	for conference in main_conferences[:1]:
+	main_conferences = ["icml", "neurips"]# ,"ml4h"] 
+	#TODO - 
+		#Add MHSRS when ready, that website will be more challenging to scrape
+		#Add ML4H.  
+			#Go here to scrape other conferences. 
+			#https://proceedings.mlr.press/
+	
+	for conference in main_conferences[:2]:
 		result = request_conf(conference)
 		# add_tovectordb(result)
 		# save Dataframes
 		# save_result(name, processed)
 		logger.warning(f"{conference} has been converted and saved")
 
+			#Ryan idea's for embedding
+			# Bert embed
+			# tsne
+			# plot first two components. 
+		
 	# save_data()		
 	logger.warning(f'All conferences have been searched.  Shutting down program')
 
