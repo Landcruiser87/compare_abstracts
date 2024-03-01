@@ -61,8 +61,25 @@ CONF_DICT={
 	"icml":{
 		"name":"International Conference of Machine Learning",
 		"abbrv":"ICML",
-		"url":"stuff",
-		"headers":"morestuff"
+		"url":"https://icml.cc/static/virtual/data/icml-2023-orals-posters.json",
+		"headers":{
+			"authority":"https://icml.cc/static/virtual/data/icml-2023-orals-posters.json",
+			"method":"GET",
+			"path":"/static/virtual/data/neurips-2023-orals-posters.json",
+			"scheme":"https",
+			"accept":"*/*",
+			"accept-encoding":"gzip,deflate,br,zstd",
+			"accept-language":"en-US,en;q=0.9",
+			"referer":"https://icml.cc/virtual/2023/papers.html?filter=titles",
+			"sec-ch-ua":'"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+			"sec-ch-ua-Mobile":"?0",
+			"sec-ch-ua-platform":"Windows",
+			"sec-fetch-dest":"empty",
+			"sec-fetch-mode":"cors",
+			"sec-fetch-site":"same-origin",
+			"user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+			"x-requested-with":"XMLHttpRequest"
+			}
 	},
 	"ml4h":{
 		"name":"Machine Learning for Health",
@@ -154,7 +171,7 @@ def main():
 	"""Main driver code for program
 	"""	
 	logger.info(f"Beginning search")
-	main_conferences = ["neurips", "icml", "ml4h"] 
+	main_conferences = ["icml", "neurips","ml4h"] 
 	#TODO - Add MHSRS when ready, that website will be more challenging to scrape
 
 	for conference in main_conferences[:1]:
