@@ -140,7 +140,6 @@ dmypy.json
 *.log
 *.csv
 *.xlsx
-*.json
 *.txt
 .Rhistory
 .DS_Store

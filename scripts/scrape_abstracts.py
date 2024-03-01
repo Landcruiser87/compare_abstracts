@@ -33,21 +33,22 @@ logging.basicConfig(
 	]
 )
 logger = logging.getLogger(__name__) 
-
+#NOTE CHANGE ME
+YEAR = 2023	
 CONF_DICT={
 	"neurips":{
 		"name":"Conference and Workshop on Neural Information Processing Systems",
 		"abbrv":"NEURIPS",
-		"url":"https://neurips.cc/static/virtual/data/neurips-2023-orals-posters.json",
+		"url":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
 		"headers":{
-			"authority":"https://neurips.cc/static/virtual/data/neurips-2023-orals-posters.json",
+			"authority":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
 			"method":"GET",
-			"path":"/static/virtual/data/neurips-2023-orals-posters.json",
+			"path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
 			"scheme":"https",
 			"accept":"*/*",
 			"accept-encoding":"gzip,deflate,br,zstd",
 			"accept-language":"en-US,en;q=0.9",
-			"referer":"https://neurips.cc/virtual/2023/papers.html?filter=titles",
+			"referer":f"https://neurips.cc/virtual/{YEAR}/papers.html?filter=titles",
 			"sec-ch-ua":'"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
 			"sec-ch-ua-Mobile":"?0",
 			"sec-ch-ua-platform":"Windows",
@@ -61,16 +62,16 @@ CONF_DICT={
 	"icml":{
 		"name":"International Conference of Machine Learning",
 		"abbrv":"ICML",
-		"url":"https://icml.cc/static/virtual/data/icml-2023-orals-posters.json",
+		"url":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
 		"headers":{
-			"authority":"https://icml.cc/static/virtual/data/icml-2023-orals-posters.json",
+			"authority":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
 			"method":"GET",
-			"path":"/static/virtual/data/neurips-2023-orals-posters.json",
+			"path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
 			"scheme":"https",
 			"accept":"*/*",
 			"accept-encoding":"gzip,deflate,br,zstd",
 			"accept-language":"en-US,en;q=0.9",
-			"referer":"https://icml.cc/virtual/2023/papers.html?filter=titles",
+			"referer":f"https://icml.cc/virtual/{YEAR}/papers.html?filter=titles",
 			"sec-ch-ua":'"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
 			"sec-ch-ua-Mobile":"?0",
 			"sec-ch-ua-platform":"Windows",
@@ -151,7 +152,7 @@ def request_conf(conference:str):
 
 #FUNCTION save results
 def save_result(name:str, processed:pd.DataFrame):
-	"""Save Routine.  Takes in name of file and processed dataframe.  Saves it to the data/cleaned folder.  Also offloads the updated CM_dict and PCS_dict variables to JSON for future use. 
+	"""Save Routine.  Takes in name of file and processed dataframe.  Saves it to the data/cleaned folder. 
 
 	Args:
 		name (str): Name of file being converted
@@ -162,11 +163,11 @@ def save_result(name:str, processed:pd.DataFrame):
 	logger.info(f"CSV for file {spath} saved")
 
 #FUNCTION save dictionary
-def save_data(data):
+def save_data(data:dict, conference:str):
 	result_json = json.dumps(data, indent=4)
-	with open(f"./data/json/{data}.json", "w") as outf:
+	with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
 		outf.write(result_json)
-	logger.info("data saved")
+	logger.info(f"{conference} for {YEAR} data saved")
 
 
 #NOTE START PROGRAM
@@ -175,29 +176,30 @@ def save_data(data):
 def main():
 	"""Main driver code for program
 	"""	
-	logger.info(f"Beginning search")
-	main_conferences = ["icml", "neurips"]# ,"ml4h"] 
-	#TODO - 
-		#Add MHSRS when ready, that website will be more challenging to scrape
-		#Add ML4H.  
-			#Go here to scrape other conferences. 
-			#https://proceedings.mlr.press/
-	
-	for conference in main_conferences[:2]:
+
+	logger.info(f"Beginning search for {YEAR}")
+	main_conferences = ["icml"]# ,"ml4h"] "neurips"
+
+	for conference in main_conferences[:1]:
 		result = request_conf(conference)
 		# add_tovectordb(result)
-		# save Dataframes
-		# save_result(name, processed)
-		logger.warning(f"{conference} has been converted and saved")
+ 		# save_result(name, processed)
 
-			#Ryan idea's for embedding
-			# Bert embed
-			# tsne
-			# plot first two components. 
-		
-	# save_data()		
+		save_data(result, conference)		
+		logger.warning(f"{conference} has been converted and saved")
 	logger.warning(f'All conferences have been searched.  Shutting down program')
 
 if __name__ == "__main__":
 	main()
 
+#TODO - 
+	#Add MHSRS when ready, that website will be more challenging to scrape
+	#Add ML4H.  
+		#Go here to scrape other conferences. 
+		#https://proceedings.mlr.press/
+
+
+#Ryan idea's for embedding
+# gemma/bert embed
+# tsne
+# plot first two components. 
