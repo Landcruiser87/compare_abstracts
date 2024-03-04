@@ -12,19 +12,20 @@ import time
 
 papers_dict, all_dict = {}, {}
 
-for YEAR in [2021, 2022, 2023]:
-	for CONFERENCE in ["neurips", "icml"]:
-		with open(f"../data/scraped/{YEAR}_{CONFERENCE}.json", "r") as f:
+for year in [2021, 2022, 2023]:
+	for conference in ["neurips", "icml"]:
+		with open(f"../data/scraped/{year}_{conference}.json", "r") as f:
 			papers_dict = json.loads(f.read())
-			papers_dict = {k+f"_{CONFERENCE[:1]}_{str(YEAR)[-2:]}":v for k, v in papers_dict.items()}
-			all_dict.update(papers_dict)
-			
+			# remap the keys so they don't overlap
+			papers_dict = {k+f"_{conference[:1]}_{str(year)[-2:]}":v for k, v in papers_dict.items()}
+			all_dict.update(**papers_dict)
+
 #lets.... look at topics first. 
-topics = [papers_dict[x]["topic"] for x in list(papers_dict.keys())]
+topics = [all_dict[x]["topic"] for x in list(all_dict.keys())]
 c_topic = Counter(topics)
 sorted(c_topic.items(), key=lambda x:x[1], reverse=True)
 
 #now research centers
-centers = [[papers_dict[x]["author"][auth]["institution"] for auth in papers_dict[x]["author"].keys()] for x in list(papers_dict.keys())]
+centers = [[all_dict[x]["author"][auth]["institution"] for auth in all_dict[x]["author"].keys()] for x in list(all_dict.keys())]
 counts = Counter(list(chain(*centers)))
 counts = sorted(counts.items(), key=lambda x:x[1], reverse=True)
