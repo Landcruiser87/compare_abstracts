@@ -35,7 +35,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__) 
 
 #NOTE CHANGE ME 
-YEAR = 2021
+YEAR = 2022
 CONF_DICT={
 	"neurips":{
 		"name":"Conference and Workshop on Neural Information Processing Systems",
@@ -112,7 +112,7 @@ def log_time(fn):
 def extract_json(json_data:json)->dict:
 	# Possible cool data within neuripps
 	ids = list(range(json_data["count"]))
-	base_keys = ["id","name","author","abstract","topic","session","event_type","virtualsite_url","url","paper_url"]
+	base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
 	base_dict = {val:{key:"" for key in base_keys} for val in ids}
 	for id in ids:
 		authors = range(len(json_data['results'][id]['authors']))
@@ -124,8 +124,9 @@ def extract_json(json_data:json)->dict:
 		
 		#Grab other keys we want from the paper
 		for term in base_keys:
-			if json_data["results"][id].get(term):
-				base_dict[id][term] = json_data["results"][id][term]
+			temp = json_data["results"][id].get(term)
+			if temp:
+				base_dict[id][term] = temp
 	#could be cool stuff in event media, but save for later. 
 	return base_dict
 
@@ -179,7 +180,7 @@ def main():
 	"""	
 
 	logger.info(f"Beginning search for {YEAR}")
-	main_conferences = ["icml", "neurips" ]# ,"ml4h"] 
+	main_conferences = ["icml", "neurips"]# ,"ml4h"] 
 
 	for conference in main_conferences[:1]:
 		result = request_conf(conference)
