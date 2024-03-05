@@ -11,7 +11,6 @@ import json
 import time
 
 papers_dict, all_dict = {}, {}
-
 for year in [2021, 2022, 2023]:
 	for conference in ["neurips", "icml"]:
 		with open(f"../data/scraped/{year}_{conference}.json", "r") as f:
@@ -21,7 +20,7 @@ for year in [2021, 2022, 2023]:
 			all_dict.update(**papers_dict)
 
 #lets.... look at topics first. 
-topics = [all_dict[x]["topic"] for x in list(all_dict.keys())]
+topics = [all_dict[x]["keywords"] for x in list(all_dict.keys())]
 c_topic = Counter(topics)
 sorted(c_topic.items(), key=lambda x:x[1], reverse=True)
 

@@ -35,7 +35,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__) 
 
 #NOTE CHANGE ME 
-YEAR = 2022
+YEAR = 2023
 CONF_DICT={
 	"neurips":{
 		"name":"Conference and Workshop on Neural Information Processing Systems",
@@ -180,7 +180,7 @@ def main():
 	"""	
 
 	logger.info(f"Beginning search for {YEAR}")
-	main_conferences = ["icml", "neurips"]# ,"ml4h"] 
+	main_conferences = ["neurips", "icml"]# ,"ml4h"] 
 
 	for conference in main_conferences[:1]:
 		result = request_conf(conference)
