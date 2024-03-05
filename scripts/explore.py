@@ -19,12 +19,17 @@ for year in [2021, 2022, 2023]:
 			papers_dict = {k+f"_{conference[:1]}_{str(year)[-2:]}":v for k, v in papers_dict.items()}
 			all_dict.update(**papers_dict)
 
-#lets.... look at topics first. 
-topics = [all_dict[x]["keywords"] for x in list(all_dict.keys())]
-c_topic = Counter(topics)
-sorted(c_topic.items(), key=lambda x:x[1], reverse=True)
+#lets.... look at keywords first. 
+keywords = [all_dict[x]["keywords"] for x in list(all_dict.keys())]
+c_keys = Counter(list(chain(*keywords)))
+sorted(c_keys.items(), key=lambda x:x[1], reverse=True)[:10]
 
-#now research centers
+topics = [all_dict[x]["topic"] for x in list(all_dict.keys())]
+c_topics = Counter(list(chain(*topics)))
+
+
+
+#now research centers 
 centers = [[all_dict[x]["author"][auth]["institution"] for auth in all_dict[x]["author"].keys()] for x in list(all_dict.keys())]
 counts = Counter(list(chain(*centers)))
 counts = sorted(counts.items(), key=lambda x:x[1], reverse=True)
