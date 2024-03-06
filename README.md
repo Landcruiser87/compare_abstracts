@@ -10,7 +10,11 @@
 
 ## Purpose
 
-The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  Modeling ossibilities are clustering, cosine similarity to a particular subject.
+The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  Modeling possibilities are 
+
+1. Clustering
+2. Cosine similarity to a particular subject.
+3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
 
 
 ## Requirements
