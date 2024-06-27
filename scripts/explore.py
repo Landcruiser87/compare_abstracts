@@ -41,7 +41,8 @@ tupes = [
     ("Massachusetts Institute of Technology", "MIT"),
      ("Tsinghua University","Tsinghua University, Tsinghua University"),
     ("Stanford University", "Stanford"),
-    ("UCLA", "University of California, Los Angeles")
+    ("UCLA", "University of California, Los Angeles"),
+    ("UC Berkeley", "University of California, Berkeley")
 ]
 for tupe in tupes:
     count_d[tupe[0]] += count_d[tupe[1]]
