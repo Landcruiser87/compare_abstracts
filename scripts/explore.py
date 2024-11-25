@@ -57,10 +57,12 @@ counts[:40]
 
 #Justins idea
 #NLP stuffs
-#embed it and ... do stuff?
+#embed it and ... do stuff?  ehh ok
 
 #Ned Idea
 #Take a lookat who's using open source LLM's vs for profit LLM's. 
 #Could be an interesting dynamic to look at  to see how much adoption
 #of the open source frameworks has occured.
+
+
 

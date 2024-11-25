@@ -34,7 +34,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__) 
 
-YEAR = 2023  #! CHANGE ME 
+YEAR = 2024  #! CHANGE ME 
 CONF_DICT={
     "neurips":{
         "name":"Conference and Workshop on Neural Information Processing Systems",
@@ -175,16 +175,12 @@ def save_data(data:dict, conference:str):
 #FUNCTION main
 @log_time
 def main():
-    """Main driver code for program
-    """	
-
+    """Main driver code for program"""
     logger.info(f"Beginning search for {YEAR}")
     main_conferences = ["neurips", "icml"]# ,"ml4h"] 
 
     for conference in main_conferences[:1]:
         result = request_conf(conference)
-        # add_tovectordb(result)
-
         save_data(result, conference)		
         logger.warning(f"{conference} has been converted and saved")
     logger.warning(f'All conferences have been searched.  Shutting down program')
@@ -197,6 +193,8 @@ if __name__ == "__main__":
     #Add ML4H.  
         #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
+    #Other future conferences to add
+
 
 
 #Ryan idea's for embedding
