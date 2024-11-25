@@ -191,8 +191,9 @@ if __name__ == "__main__":
 #TODO - 
     #Add MHSRS when ready, that website will be more challenging to scrape
     #Add ML4H.  
-        #Go here to scrape other conferences. 
+    #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
+    #Also download ICLR papers.   
     #Other future conferences to add
 
 
