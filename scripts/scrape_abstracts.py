@@ -1,6 +1,7 @@
 import requests
 import json
 import support
+import time
 import numpy as np
 from support import logger, console, log_time
 # from bs4 import BeautifulSoup, only installing if we need it. 
@@ -45,13 +46,13 @@ CONF_DICT={
             "accept-encoding":"gzip,deflate,br,zstd",
             "accept-language":"en-US,en;q=0.9",
             "referer":f"https://icml.cc/virtual/{YEAR}/papers.html?filter=titles",
-            "sec-ch-ua":'"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+            "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
             "sec-ch-ua-Mobile":"?0",
             "sec-ch-ua-platform":"Windows",
             "sec-fetch-dest":"empty",
             "sec-fetch-mode":"cors",
             "sec-fetch-site":"same-origin",
-            "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
             "x-requested-with":"XMLHttpRequest"
             }
     },
@@ -73,9 +74,9 @@ CONF_DICT={
             "Sec-Fetch-Dest": "empty",
             "Sec-Fetch-Mode": "cors",
             "Sec-Fetch-Site": "same-origin",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+            "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
             "X-Requested-With": "XMLHttpRequest",
-            "sec-ch-ua": "'Chromium';v='122', 'Not:A-Brand';v='24', 'Google Chrome';v='122'",
+            "sec-ch-ua": f"'Chromium';v='{CHROME_VERSION}', 'Not:A-Brand';v='24', 'Google Chrome';v='{CHROME_VERSION}'",
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "'Windows'",
         }
@@ -134,7 +135,7 @@ def request_conf(conference:str):
 def main():
     """Main driver code for program"""
     logger.debug(f"Beginning search for {YEAR}")
-    main_conferences = ["iclr", "neurips", "icml"]# ,"ml4h"] 
+    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
 
     for conference in main_conferences:
         result = request_conf(conference)
@@ -143,7 +144,7 @@ def main():
             logger.debug(f"{conference} has been converted and saved")
         else:
             logger.info(f"{conference} had no data.")
-
+        time.sleep(np.random.randint(2, 4))
     logger.warning(f'All conferences have been searched.  Shutting down program')
 
 if __name__ == "__main__":
