@@ -3,6 +3,7 @@ import support
 import requests
 import numpy as np
 from support import logger, console, log_time
+
 # I might be able to do this with just dictionaries. 
 # Keeping for now, just in case.
 # # from dataclasses import dataclass, field
@@ -21,7 +22,6 @@ from support import logger, console, log_time
 #     pub_date    : datetime.datetime
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
-
 
 CHROME_VERSION = np.random.randint(120, 132)
 
@@ -147,12 +147,11 @@ def request_conf(conference:str, year:int):
 @log_time
 def main():
     """Main driver code for program"""
-    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"]
+    main_conferences = ["ICLR", "NEURIPS", "ICML"] #"ml4h"
     years = range(2013, 2025)
     global prog, task, total_stops
     total_stops = 0
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
-
     with prog:
         for year in years:
             logger.debug(f"beginning search for {year}")
@@ -165,9 +164,7 @@ def main():
                     logger.debug(f"{conference} has been converted and saved")
                 else:
                     logger.info(f"{conference} data not available.")
-
                 support.add_spin_subt(prog, "He who takes naps, gets 200's", np.random.randint(3, 6))
-
     logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
 
 if __name__ == "__main__":

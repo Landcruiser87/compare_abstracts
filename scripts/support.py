@@ -29,7 +29,7 @@ def get_file_handler(log_dir:Path)->logging.FileHandler:
     Returns:
         filehandler(handler): This will handle the logger's format and file management
     """	
-    log_format = "%(asctime)s|%(levelname)-8s|%(lineno)-4d|%(funcName)-23s|%(message)-100s|" 
+    log_format = "%(asctime)s|%(levelname)-8s|%(lineno)-4d|%(funcName)-13s|%(message)-60s|" 
                  #f"%(asctime)s - [%(levelname)s] - (%(funcName)s(%(lineno)d)) - %(message)s"
     # current_date = time.strftime("%m_%d_%Y")
     file_handler = logging.FileHandler(log_dir)
