@@ -73,7 +73,7 @@ def request_conf(conference:str, year:int):
                 "sec-fetch-site":"same-origin",
                 "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
                 "x-requested-with":"XMLHttpRequest"
-                }
+            }
         },
         "ICML":{
             "name":"International Conference of Machine Learning",
@@ -96,7 +96,7 @@ def request_conf(conference:str, year:int):
                 "sec-fetch-site":"same-origin",
                 "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
                 "x-requested-with":"XMLHttpRequest"
-                }
+            }
         },
         "ML4H":{
             "name":"Machine Learning for Health",
