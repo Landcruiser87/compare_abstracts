@@ -4,24 +4,25 @@ import support
 import datetime
 import requests
 import numpy as np
-from dataclasses import dataclass, field
 from support import logger, console, log_time
-
-#Dataclass container
-@dataclass
-class ML_Paper():
-    id          : str
-    url         : str
-    title       : str
-    abstract    : str
-    topic       : str
-    session     : str
-    conference  : str
-    event_type  : str
-    paper_url   : str
-    pub_date    : datetime.datetime
-    virtual_site_url : str
-    authors          : dict = field(default_factory=lambda:{})
+# I might be able to do this with just dictionaries. 
+# Keeping for now, just in case.
+# # from dataclasses import dataclass, field
+# #Dataclass container
+# @dataclass
+# class ML_Paper():
+#     id          : str
+#     url         : str
+#     title       : str
+#     abstract    : str
+#     topic       : str
+#     session     : str
+#     conference  : str
+#     event_type  : str
+#     paper_url   : str
+#     pub_date    : datetime.datetime
+#     virtual_site_url : str
+#     authors          : dict = field(default_factory=lambda:{})
 
 years = [range(2013, 2024)]
 CHROME_VERSION = np.random.randint(120, 132)
@@ -114,7 +115,7 @@ def request_conf(conference:str, year:int):
                 "Accept": "*/*",
                 "Accept-Language": "en-US,en;q=0.9",
                 "Connection": "keep-alive",
-                "Referer": "https://iclr.cc/virtual/{year}/papers.html?filter=titles",
+                "Referer": f"https://iclr.cc/virtual/{year}/papers.html?filter=titles",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -151,14 +152,15 @@ def main():
     """Main driver code for program"""
     global prog, task, total_stops
     total_stops = 0
-    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
-
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
+    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
 
     with prog:
         for year in years:
-            logger.debug(f"Beginning search for {year}")
+            logger.debug(f"beginning search for {year}")
             for conference in main_conferences:
+                logger.debug(f"searching {conference} {year}")
+                prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
                 result = request_conf(conference, year)
                 if result:
                     support.save_data(result, conference, year)		
@@ -166,7 +168,8 @@ def main():
                 else:
                     logger.info(f"{conference} data not available.")
 
-                time.sleep(np.random.randint(2, 4))
+                support.add_spin_subt(prog, "He who takes naps, gets 200's", np.random.randint(3, 6))
+
     logger.warning(f'All conferences have been searched.  Shutting down program')
 
 if __name__ == "__main__":

@@ -164,7 +164,7 @@ def mainspinner(console:Console, totalstops:int):
         refresh_per_second=6,
         redirect_stdout=False
     )
-    jobtask = my_progress_bar.add_task("[green]Detecting peaks", total=totalstops + 1)
+    jobtask = my_progress_bar.add_task("[green] searching papers", total=totalstops + 1)
     return my_progress_bar, jobtask
 
 def add_spin_subt(prog:Progress, msg:str, howmanysleeps:int):
