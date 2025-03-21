@@ -5,7 +5,7 @@ import datetime
 import requests
 import numpy as np
 from dataclasses import dataclass, field
-from support import logger, log_time
+from support import logger, console, log_time
 
 #Dataclass container
 @dataclass
@@ -24,81 +24,8 @@ class ML_Paper():
     authors          : dict = field(default_factory=lambda:{})
 
 YEAR = 2024  #! CHANGE ME
-CHROME_VERSION = np.random.randint(120, 132)
 YEARS = [range(2013, 2024)]
-CONF_DICT={
-    "NEURIPS":{
-        "name":"Conference and Workshop on Neural Information Processing Systems",
-        "abbrv":"NEURIPS",
-        "url":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
-        "headers":{
-            "authority":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
-            "method":"GET",
-            "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
-            "scheme":"https",
-            "accept":"*/*",
-            "accept-encoding":"gzip,deflate,br,zstd",
-            "accept-language":"en-US,en;q=0.9",
-            "referer":f"https://neurips.cc/virtual/{YEAR}/papers.html?filter=titles",
-            "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
-            "sec-ch-ua-Mobile":"?0",
-            "sec-ch-ua-platform":"Windows",
-            "sec-fetch-dest":"empty",
-            "sec-fetch-mode":"cors",
-            "sec-fetch-site":"same-origin",
-            "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
-            "x-requested-with":"XMLHttpRequest"
-            }
-    },
-    "ICML":{
-        "name":"International Conference of Machine Learning",
-        "abbrv":"ICML",
-        "url":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
-        "headers":{
-            "authority":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
-            "method":"GET",
-            "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
-            "scheme":"https",
-            "accept":"*/*",
-            "accept-encoding":"gzip,deflate,br,zstd",
-            "accept-language":"en-US,en;q=0.9",
-            "referer":f"https://icml.cc/virtual/{YEAR}/papers.html?filter=titles",
-            "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
-            "sec-ch-ua-Mobile":"?0",
-            "sec-ch-ua-platform":"Windows",
-            "sec-fetch-dest":"empty",
-            "sec-fetch-mode":"cors",
-            "sec-fetch-site":"same-origin",
-            "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
-            "x-requested-with":"XMLHttpRequest"
-            }
-    },
-    "ML4H":{
-        "name":"Machine Learning for Health",
-        "abbrv":"ML4H",
-        "url":"stuff",
-        "headers":"morestuff"
-    }, 
-    "ICLR":{
-        "name":"International Conference of Learning Representations",
-        "abbrv":"ICLR",
-        "url":f"https://iclr.cc/static/virtual/data/iclr-{YEAR}-orals-posters.json",
-        "headers":{
-            "Accept": "*/*",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Connection": "keep-alive",
-            "Referer": "https://iclr.cc/virtual/{YEAR}/papers.html?filter=titles",
-            "Sec-Fetch-Dest": "empty",
-            "Sec-Fetch-Mode": "cors",
-            "Sec-Fetch-Site": "same-origin",
-            "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
-            "X-Requested-With": "XMLHttpRequest",
-            "sec-ch-ua": f"'Chromium';v='{CHROME_VERSION}', 'Not:A-Brand';v='24', 'Google Chrome';v='{CHROME_VERSION}'",
-            "sec-ch-ua-mobile": "?0",
-            "sec-ch-ua-platform": "'Windows'",
-        }
-    }
-}
+CHROME_VERSION = np.random.randint(120, 132)
 
 import requests
 #FUNCTION Filter result
@@ -127,12 +54,87 @@ def extract_json(json_data:json)->dict:
     return base_dict
 
 #FUNCTION Request Conference
-def request_conf(conference:str):
+def request_conf(conference:str, YEAR:int):
+    CONF_DICT={
+        "NEURIPS":{
+            "name":"Conference and Workshop on Neural Information Processing Systems",
+            "abbrv":"NEURIPS",
+            "url":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+            "headers":{
+                "authority":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "method":"GET",
+                "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "scheme":"https",
+                "accept":"*/*",
+                "accept-encoding":"gzip,deflate,br,zstd",
+                "accept-language":"en-US,en;q=0.9",
+                "referer":f"https://neurips.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
+                "sec-ch-ua-Mobile":"?0",
+                "sec-ch-ua-platform":"Windows",
+                "sec-fetch-dest":"empty",
+                "sec-fetch-mode":"cors",
+                "sec-fetch-site":"same-origin",
+                "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
+                "x-requested-with":"XMLHttpRequest"
+                }
+        },
+        "ICML":{
+            "name":"International Conference of Machine Learning",
+            "abbrv":"ICML",
+            "url":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
+            "headers":{
+                "authority":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
+                "method":"GET",
+                "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "scheme":"https",
+                "accept":"*/*",
+                "accept-encoding":"gzip,deflate,br,zstd",
+                "accept-language":"en-US,en;q=0.9",
+                "referer":f"https://icml.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
+                "sec-ch-ua-Mobile":"?0",
+                "sec-ch-ua-platform":"Windows",
+                "sec-fetch-dest":"empty",
+                "sec-fetch-mode":"cors",
+                "sec-fetch-site":"same-origin",
+                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
+                "x-requested-with":"XMLHttpRequest"
+                }
+        },
+        "ML4H":{
+            "name":"Machine Learning for Health",
+            "abbrv":"ML4H",
+            "url":"stuff",
+            "headers":"morestuff"
+        }, 
+        "ICLR":{
+            "name":"International Conference of Learning Representations",
+            "abbrv":"ICLR",
+            "url":f"https://iclr.cc/static/virtual/data/iclr-{YEAR}-orals-posters.json",
+            "headers":{
+                "Accept": "*/*",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Connection": "keep-alive",
+                "Referer": "https://iclr.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "Sec-Fetch-Dest": "empty",
+                "Sec-Fetch-Mode": "cors",
+                "Sec-Fetch-Site": "same-origin",
+                "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
+                "X-Requested-With": "XMLHttpRequest",
+                "sec-ch-ua": f"'Chromium';v='{CHROME_VERSION}', 'Not:A-Brand';v='24', 'Google Chrome';v='{CHROME_VERSION}'",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "'Windows'",
+            }
+        }
+    }
+
     url = CONF_DICT[conference]["url"]
     headers = CONF_DICT[conference]["headers"]
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
+        logger.debug(f"request successful for {url}, parsing data")
         resp_json = resp.json()
         results = extract_json(resp_json)
     else:
@@ -149,17 +151,24 @@ def request_conf(conference:str):
 @log_time
 def main():
     """Main driver code for program"""
-    logger.debug(f"Beginning search for {YEAR}")
+    global prog, task, total_stops
+    total_stops = 0
     main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
 
-    for conference in main_conferences:
-        result = request_conf(conference)
-        if result:
-            support.save_data(result, conference, YEAR)		
-            logger.debug(f"{conference} has been converted and saved")
-        else:
-            logger.info(f"{conference} had no data.")
-        time.sleep(np.random.randint(2, 4))
+    prog, task = support.mainspinner(console, len(main_conferences)*len(YEARS)) 
+
+    with prog:
+        for YEAR in YEARS:
+            logger.debug(f"Beginning search for {YEAR}")
+            for conference in main_conferences:
+                result = request_conf(conference, YEAR)
+                if result:
+                    support.save_data(result, conference, YEAR)		
+                    logger.debug(f"{conference} has been converted and saved")
+                else:
+                    logger.info(f"{conference} data not available.")
+
+                time.sleep(np.random.randint(2, 4))
     logger.warning(f'All conferences have been searched.  Shutting down program')
 
 if __name__ == "__main__":

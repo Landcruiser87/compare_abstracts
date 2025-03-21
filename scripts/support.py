@@ -5,6 +5,16 @@ import json
 import logging
 import pandas as pd
 from pathlib import Path
+
+#Progress bar fun
+from rich.progress import (
+    Progress,
+    BarColumn,
+    SpinnerColumn,
+    TextColumn,
+    TimeRemainingColumn,
+    TimeElapsedColumn
+)
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -124,3 +134,52 @@ def save_data(data:dict, conference:str, YEAR:int):
     with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
         outf.write(result_json)
     logger.info(f"{conference} for {YEAR} data saved")
+################################# Rich Spinner Control ####################################
+
+#FUNCTION Progress bar
+def mainspinner(console:Console, totalstops:int):
+    """Load a rich Progress bar for alerting you to the progress of the search
+
+    Args:
+        console (Console): reference to the terminal
+        totalstops (int): Amount of years * num of conferences to be searched
+
+    Returns:
+        my_progress_bar (Progress): Progress bar for tracking overall progress
+        jobtask (int): mainjob id for ecg extraction
+    """
+
+    my_progress_bar = Progress(
+        TextColumn("{task.description}"),
+        SpinnerColumn("aesthetic"),
+        BarColumn(),
+        TextColumn("*"),
+        "time elapsed:",
+        TextColumn("*"),
+        TimeElapsedColumn(),
+        TextColumn("*"),
+        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
+        transient=True,
+        console=console,
+        refresh_per_second=6,
+        redirect_stdout=False
+    )
+    jobtask = my_progress_bar.add_task("[green]Detecting peaks", total=totalstops + 1)
+    return my_progress_bar, jobtask
+
+def add_spin_subt(prog:Progress, msg:str, howmanysleeps:int):
+    """Adds a secondary job to the main progress bar
+
+    Args:
+        prog (Progress): Main progress bar
+        msg (str): Message to update secondary progress bar
+        howmanysleeps (int): How long to let the timer sleep
+    """
+    #Add secondary task to progbar
+    liljob = prog.add_task(f"[magenta]{msg}", total = howmanysleeps)
+    #Run job for random sleeps
+    for _ in range(howmanysleeps):
+        time.sleep(1)
+        prog.update(liljob, advance=1)
+    #Hide secondary progress bar
+    prog.update(liljob, visible=False)
