@@ -65,11 +65,11 @@ def get_logger(console:Console, log_dir:Path)->logging.Logger:
     logger.setLevel(logging.DEBUG)
     #Load file handler for how to format the log file.
     file_handler = get_file_handler(log_dir)
-    file_handler.setLevel(logging.INFO)
+    file_handler.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
     #Load rich handler for how to display the log in the console
     rich_handler = get_rich_handler(console)
-    rich_handler.setLevel(logging.DEBUG)
+    rich_handler.setLevel(logging.INFO)
     logger.addHandler(rich_handler)
     logger.propagate = False
     return logger

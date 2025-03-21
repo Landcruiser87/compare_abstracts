@@ -168,7 +168,7 @@ def main():
 
                 support.add_spin_subt(prog, "He who takes naps, gets 200's", np.random.randint(3, 6))
 
-    logger.warning(f'All conferences have been searched.  Shutting down program')
+    logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
 
 if __name__ == "__main__":
     main()
