@@ -103,7 +103,7 @@ CONF_DICT={
 import requests
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
-    #NOTE: Possible cool data within neurips
+    
     ids = list(range(json_data["count"]))
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
     base_dict = {val:{key:"" for key in base_keys} for val in ids}
@@ -116,16 +116,15 @@ def extract_json(json_data:json)->dict:
             base_dict[id]["author"][author].update(**auth_info)
         
         #Grab other keys we want from the paper
-        for term in base_keys:
-            temp = json_data["results"][id].get(term)
+        for key in base_keys:
+            temp = json_data["results"][id].get(key)
             if temp:
-                base_dict[id][term] = temp
+                base_dict[id][key] = temp
+
+    #NOTE: Possible cool data within neurips
     #could be cool stuff in event media, but save for later. 
+
     return base_dict
-
-
-def extract_w_soup():
-    pass
 
 #FUNCTION Request Conference
 def request_conf(conference:str):
@@ -137,7 +136,7 @@ def request_conf(conference:str):
         resp_json = resp.json()
         results = extract_json(resp_json)
     else:
-        # If there's an error, log it and return no data for that site
+        # If there's an error, log it and return no data for that conference
         logger.warning(f"Status code: {resp.status_code}")
         logger.warning(f"Reason: {resp.reason}")
         results = None
