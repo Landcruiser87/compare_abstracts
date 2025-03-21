@@ -22,7 +22,7 @@ from support import logger, console, log_time
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
 
-years = [range(2013, 2024)]
+
 CHROME_VERSION = np.random.randint(120, 132)
 
 #FUNCTION Filter result
@@ -147,10 +147,11 @@ def request_conf(conference:str, year:int):
 @log_time
 def main():
     """Main driver code for program"""
+    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"]
+    years = range(2013, 2025)
     global prog, task, total_stops
     total_stops = 0
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
-    main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
 
     with prog:
         for year in years:
