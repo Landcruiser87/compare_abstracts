@@ -1,11 +1,30 @@
-import requests
 import json
-import support
 import time
+import support
+import datetime
+import requests
 import numpy as np
-from support import logger, console, log_time
+from dataclasses import dataclass, field
+from support import logger, log_time
 # from bs4 import BeautifulSoup, only installing if we need it. 
 
+#Define dataclass container
+@dataclass
+class ML_Paper():
+    id          : str
+    url         : str
+    title       : str
+    abstract    : str
+    topic       : str
+    session     : str
+    conference  : str
+    event_type  : str
+    paper_url   : str
+    pub_date    : datetime.datetime
+    virtual_site_url : str
+    authors          : dict = field(default_factory=lambda:{})
+
+BASE_KEYS = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
 
 YEAR = 2024  #! CHANGE ME
 CHROME_VERSION = np.random.randint(120, 132)
