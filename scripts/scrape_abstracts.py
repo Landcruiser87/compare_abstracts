@@ -1,7 +1,5 @@
 import json
-import time
 import support
-import datetime
 import requests
 import numpy as np
 from support import logger, console, log_time
@@ -27,7 +25,6 @@ from support import logger, console, log_time
 years = [range(2013, 2024)]
 CHROME_VERSION = np.random.randint(120, 132)
 
-import requests
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
     ids = list(range(json_data["count"]))
