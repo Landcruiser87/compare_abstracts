@@ -1,10 +1,9 @@
 #main libraries
 import datetime
-import numpy as np
 import time
 import json
-from os.path import exists
 import logging
+import pandas as pd
 from pathlib import Path
 from rich.console import Console
 from rich.logging import RichHandler
@@ -56,7 +55,7 @@ def get_logger(console:Console, log_dir:Path)->logging.Logger:
     logger.setLevel(logging.INFO)
     #Load file handler for how to format the log file.
     file_handler = get_file_handler(log_dir)
-    file_handler.setLevel(logging.WARNING)
+    file_handler.setLevel(logging.INFO)
     logger.addHandler(file_handler)
     #Load rich handler for how to display the log in the console
     rich_handler = get_rich_handler(console)
@@ -104,3 +103,23 @@ def get_time():
 DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
 logger = get_logger(console, log_dir=f"src/rad_ecg/data/logs/{DATE_JSON}.log") 
+
+########################## Saving funcs ##########################################
+#FUNCTION save results
+def save_result(name:str, processed:pd.DataFrame):
+    """Save Routine.  Takes in name of file and processed dataframe.  Saves it to the data/cleaned folder. 
+
+    Args:
+        name (str): Name of file being converted
+        processed (pd.DataFrame): Processed dataframe of translated codes
+    """	
+    spath = f"./data/cleaned/web/{name}"
+    processed.to_csv(spath, mode='w', header=0, encoding='utf-8')
+    logger.info(f"CSV for file {spath} saved")
+
+#FUNCTION save dictionary
+def save_data(data:dict, conference:str, YEAR:int):
+    result_json = json.dumps(data, indent=4)
+    with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
+        outf.write(result_json)
+    logger.info(f"{conference} for {YEAR} data saved")

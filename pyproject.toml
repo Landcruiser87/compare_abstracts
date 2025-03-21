@@ -1,0 +1,21 @@
+[project]
+name = "compare-abstracts"
+version = "0.1.0"
+description = "For scraping ML papers from major conferences"
+authors = [
+    {name = "Landcruiser87",email = "andyheroy@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy (>=2.2.4,<3.0.0)",
+    "rich (>=13.9.4,<14.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
+    "pandas (>=2.2.3,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
