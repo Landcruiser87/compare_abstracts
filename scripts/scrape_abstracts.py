@@ -4,35 +4,15 @@ from rich.logging import RichHandler
 from rich.console import Console
 from time import strftime, sleep
 from collections import deque
-import os
 import logging
 import requests
 import json
 import time	
+from support import logger, console, log_time
 # from bs4 import BeautifulSoup, only installing if we need it. 
 
 #Grab abstracts from here. 
 #https://neurips.cc/virtual/2023/papers.html?filter=titles
-
-#Logging setup stuffs
-current_date = strftime("%m-%d-%Y_%H-%M-%S")
-FORMAT = "%(asctime)s|%(levelname)s|%(funcName)s|%(lineno)d|%(message)s" #[%(name)s]
-FORMAT_RICH = "%(funcName)s|%(lineno)d|%(message)s"
-console = Console(color_system="truecolor")
-rh = RichHandler(level = logging.WARNING, console=console)
-rh.setFormatter(logging.Formatter(FORMAT_RICH))
-
-#Set up basic config for logger
-logging.basicConfig(
-    level=logging.INFO, 
-    format=FORMAT,
-    datefmt="[%X]",
-    handlers=[
-        rh,
-        # logging.FileHandler(f"./data/logs/{current_date}.log", mode="w")
-    ]
-)
-logger = logging.getLogger(__name__) 
 
 YEAR = 2024  #! CHANGE ME 
 CONF_DICT={
@@ -89,23 +69,6 @@ CONF_DICT={
         "headers":"morestuff"
     }
 }
-
-#Will need URL and a dict to store each request header
-#FUNCTION log time
-def log_time(fn):
-    def inner(*args, **kwargs):
-        tnow = time.time()
-        out = fn(*args, **kwargs)
-        te = time.time()
-        took = round(te - tnow, 2)
-        if took <= 60:
-            logging.info(f"{fn.__name__} ran in {took:.2f}s")
-        elif took <= 3600:
-            logging.info(f"{fn.__name__} ran in {(took)/60:.2f}m")		
-        else:
-            logging.info(f"{fn.__name__} ran in {(took)/3600:.2f}h")
-        return out
-    return inner
 
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
@@ -191,9 +154,11 @@ if __name__ == "__main__":
 #TODO - 
     #Add MHSRS when ready, that website will be more challenging to scrape
     #Add ML4H.  
+    #Add ICLR
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
-    #Also download ICLR papers.   
+        #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them
+
     #Other future conferences to add
 
 
