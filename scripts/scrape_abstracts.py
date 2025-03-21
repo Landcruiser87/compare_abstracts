@@ -23,14 +23,12 @@ class ML_Paper():
     virtual_site_url : str
     authors          : dict = field(default_factory=lambda:{})
 
-YEAR = 2024  #! CHANGE ME
-YEARS = [range(2013, 2024)]
+years = [range(2013, 2024)]
 CHROME_VERSION = np.random.randint(120, 132)
 
 import requests
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
-    
     ids = list(range(json_data["count"]))
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
     base_dict = {val:{key:"" for key in base_keys} for val in ids}
@@ -54,21 +52,21 @@ def extract_json(json_data:json)->dict:
     return base_dict
 
 #FUNCTION Request Conference
-def request_conf(conference:str, YEAR:int):
-    CONF_DICT={
+def request_conf(conference:str, year:int):
+    conf_dict={
         "NEURIPS":{
             "name":"Conference and Workshop on Neural Information Processing Systems",
             "abbrv":"NEURIPS",
-            "url":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+            "url":f"https://neurips.cc/static/virtual/data/neurips-{year}-orals-posters.json",
             "headers":{
-                "authority":f"https://neurips.cc/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "authority":f"https://neurips.cc/static/virtual/data/neurips-{year}-orals-posters.json",
                 "method":"GET",
-                "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "path":f"/static/virtual/data/neurips-{year}-orals-posters.json",
                 "scheme":"https",
                 "accept":"*/*",
                 "accept-encoding":"gzip,deflate,br,zstd",
                 "accept-language":"en-US,en;q=0.9",
-                "referer":f"https://neurips.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "referer":f"https://neurips.cc/virtual/{year}/papers.html?filter=titles",
                 "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
                 "sec-ch-ua-Mobile":"?0",
                 "sec-ch-ua-platform":"Windows",
@@ -82,16 +80,16 @@ def request_conf(conference:str, YEAR:int):
         "ICML":{
             "name":"International Conference of Machine Learning",
             "abbrv":"ICML",
-            "url":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
+            "url":f"https://icml.cc/static/virtual/data/icml-{year}-orals-posters.json",
             "headers":{
-                "authority":f"https://icml.cc/static/virtual/data/icml-{YEAR}-orals-posters.json",
+                "authority":f"https://icml.cc/static/virtual/data/icml-{year}-orals-posters.json",
                 "method":"GET",
-                "path":f"/static/virtual/data/neurips-{YEAR}-orals-posters.json",
+                "path":f"/static/virtual/data/neurips-{year}-orals-posters.json",
                 "scheme":"https",
                 "accept":"*/*",
                 "accept-encoding":"gzip,deflate,br,zstd",
                 "accept-language":"en-US,en;q=0.9",
-                "referer":f"https://icml.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "referer":f"https://icml.cc/virtual/{year}/papers.html?filter=titles",
                 "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
                 "sec-ch-ua-Mobile":"?0",
                 "sec-ch-ua-platform":"Windows",
@@ -111,12 +109,12 @@ def request_conf(conference:str, YEAR:int):
         "ICLR":{
             "name":"International Conference of Learning Representations",
             "abbrv":"ICLR",
-            "url":f"https://iclr.cc/static/virtual/data/iclr-{YEAR}-orals-posters.json",
+            "url":f"https://iclr.cc/static/virtual/data/iclr-{year}-orals-posters.json",
             "headers":{
                 "Accept": "*/*",
                 "Accept-Language": "en-US,en;q=0.9",
                 "Connection": "keep-alive",
-                "Referer": "https://iclr.cc/virtual/{YEAR}/papers.html?filter=titles",
+                "Referer": "https://iclr.cc/virtual/{year}/papers.html?filter=titles",
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
@@ -129,8 +127,8 @@ def request_conf(conference:str, YEAR:int):
         }
     }
 
-    url = CONF_DICT[conference]["url"]
-    headers = CONF_DICT[conference]["headers"]
+    url = conf_dict[conference]["url"]
+    headers = conf_dict[conference]["headers"]
     resp = requests.get(url, headers=headers)
 
     if resp.status_code == 200:
@@ -155,15 +153,15 @@ def main():
     total_stops = 0
     main_conferences = ["ICLR", "NEURIPS", "ICML"]# ,"ml4h"] 
 
-    prog, task = support.mainspinner(console, len(main_conferences)*len(YEARS)) 
+    prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
 
     with prog:
-        for YEAR in YEARS:
-            logger.debug(f"Beginning search for {YEAR}")
+        for year in years:
+            logger.debug(f"Beginning search for {year}")
             for conference in main_conferences:
-                result = request_conf(conference, YEAR)
+                result = request_conf(conference, year)
                 if result:
-                    support.save_data(result, conference, YEAR)		
+                    support.save_data(result, conference, year)		
                     logger.debug(f"{conference} has been converted and saved")
                 else:
                     logger.info(f"{conference} data not available.")
