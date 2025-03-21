@@ -6,9 +6,8 @@ import requests
 import numpy as np
 from dataclasses import dataclass, field
 from support import logger, log_time
-# from bs4 import BeautifulSoup, only installing if we need it. 
 
-#Define dataclass container
+#Dataclass container
 @dataclass
 class ML_Paper():
     id          : str
@@ -24,10 +23,9 @@ class ML_Paper():
     virtual_site_url : str
     authors          : dict = field(default_factory=lambda:{})
 
-BASE_KEYS = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
-
 YEAR = 2024  #! CHANGE ME
 CHROME_VERSION = np.random.randint(120, 132)
+YEARS = [range(2013, 2024)]
 CONF_DICT={
     "NEURIPS":{
         "name":"Conference and Workshop on Neural Information Processing Systems",
@@ -105,7 +103,7 @@ CONF_DICT={
 import requests
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
-    # Possible cool data within neuripps
+    #NOTE: Possible cool data within neurips
     ids = list(range(json_data["count"]))
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
     base_dict = {val:{key:"" for key in base_keys} for val in ids}
@@ -137,12 +135,11 @@ def request_conf(conference:str):
 
     if resp.status_code == 200:
         resp_json = resp.json()
-        if conference != "ml4h":
-            results = extract_json(resp_json)
-        else:
-            results = extract_w_soup(resp_json)
+        results = extract_json(resp_json)
     else:
-        logger.warning(f"\nServer Error\n{url}\nResponse: {resp.status_code}\n{resp.reason}")
+        # If there's an error, log it and return no data for that site
+        logger.warning(f"Status code: {resp.status_code}")
+        logger.warning(f"Reason: {resp.reason}")
         results = None
 
     return results
@@ -174,9 +171,6 @@ if __name__ == "__main__":
         #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them
 
     #Other future conferences to add
-
-    #Grab abstracts from here. 
-    #https://neurips.cc/virtual/2023/papers.html?filter=titles
 
 
 #Ryan idea's for embedding

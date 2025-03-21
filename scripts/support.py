@@ -119,7 +119,8 @@ def save_result(name:str, processed:pd.DataFrame):
 
 #FUNCTION save dictionary
 def save_data(data:dict, conference:str, YEAR:int):
-    result_json = json.dumps(data, indent=4)
+    # sorted_dict = dict(sorted(jsond.items(), key=lambda x:datetime.datetime.strftime(x[1]["pub_date"], "%Y-%m-%d").split("-"), reverse=True))
+    result_json = json.dumps(data, indent=2)
     with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
         outf.write(result_json)
     logger.info(f"{conference} for {YEAR} data saved")
