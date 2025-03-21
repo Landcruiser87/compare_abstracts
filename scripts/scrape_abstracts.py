@@ -46,7 +46,6 @@ def extract_json(json_data:json)->dict:
 
     #NOTE: Possible cool data within neurips
     #could be cool stuff in event media, but save for later. 
-
     return base_dict
 
 #FUNCTION Request Conference
@@ -140,7 +139,6 @@ def request_conf(conference:str, year:int):
         results = None
 
     return results
-
 
 #NOTE START PROGRAM
 #FUNCTION main

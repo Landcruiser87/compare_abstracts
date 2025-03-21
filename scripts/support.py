@@ -45,7 +45,7 @@ def get_rich_handler(console:Console)-> RichHandler:
     Returns:
         rh(RichHandler): This will format your terminal output
     """
-    rich_format = "|%(funcName)-23s|%(message)s"
+    rich_format = "|%(funcName)-13s| %(message)s"
     rh = RichHandler(console=console)
     rh.setFormatter(logging.Formatter(rich_format))
     return rh
