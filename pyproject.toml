@@ -7,12 +7,13 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "numpy (>=2.2.4,<3.0.0)",
     "rich (>=13.9.4,<14.0.0)",
     "requests (>=2.32.3,<3.0.0)",
-    "pandas (>=2.2.3,<3.0.0)"
+    "pandas (>=2.2.3,<3.0.0)",
+    "jtree (>=0.2.7,<0.3.0)"
 ]
 
 

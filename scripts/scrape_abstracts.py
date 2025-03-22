@@ -29,18 +29,18 @@ CHROME_VERSION = np.random.randint(120, 132)
 def extract_json(json_data:json)->dict:
     ids = list(range(json_data["count"]))
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
-    base_dict = {val:{key:"" for key in base_keys} for val in ids}
-    for id in ids:
-        authors = range(len(json_data['results'][id]['authors']))
+    base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
+    for id, idx in zip(base_dict.keys(), ids):
+        authors = range(len(json_data['results'][idx]['authors']))
         base_dict[id]["author"] = {author:{} for author in authors} 
         #Grab author info
         for author in authors:
-            auth_info = json_data["results"][id]["authors"][author]
+            auth_info = json_data["results"][idx]["authors"][author]
             base_dict[id]["author"][author].update(**auth_info)
         
         #Grab other keys we want from the paper
         for key in base_keys:
-            temp = json_data["results"][id].get(key)
+            temp = json_data["results"][idx].get(key)
             if temp:
                 base_dict[id][key] = temp
 
@@ -146,7 +146,7 @@ def request_conf(conference:str, year:int):
 def main():
     """Main driver code for program"""
     main_conferences = ["ICLR", "NEURIPS", "ICML"] #"ml4h"
-    years = range(2013, 2025)
+    years = range(2020, 2025)
     global prog, task, total_stops
     total_stops = 0
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
@@ -162,7 +162,7 @@ def main():
                     logger.debug(f"{conference} has been converted and saved")
                 else:
                     logger.info(f"{conference} data not available.")
-                support.add_spin_subt(prog, "He who takes naps, gets 200's", np.random.randint(3, 6))
+                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
     logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
 
 if __name__ == "__main__":

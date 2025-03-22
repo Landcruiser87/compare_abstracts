@@ -11,8 +11,8 @@ import json
 import time
 
 papers_dict, all_dict = {}, {}
-for year in [2021, 2022, 2023, 2024]:
-    for conference in ["neurips", "icml"]:
+for year in range(2020, 2025):
+    for conference in ["neurips", "icml", "iclr"]:
         with open(f"../data/scraped/{year}_{conference}.json", "r") as f:
             papers_dict = json.loads(f.read())
             # remap the keys so they don't overlap
