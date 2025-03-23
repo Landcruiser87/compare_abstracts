@@ -2,7 +2,7 @@ import json
 import support
 import requests
 import numpy as np
-from support import logger, console, log_time
+from support import console, log_time
 
 # I might be able to do this with just dictionaries. 
 # Keeping for now, just in case.
@@ -147,9 +147,13 @@ def main():
     """Main driver code for program"""
     main_conferences = ["ICLR", "NEURIPS", "ICML"] #"ml4h"
     years = range(2020, 2025)
-    global prog, task, total_stops
+    global prog, task, total_stop, logger
     total_stops = 0
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
+    date_json = support.get_time().strftime("%m-%d-%Y_%H-%M-%S")
+    logger = support.get_logger(console, log_dir=f"data/logs/scrape/{date_json}.log") 
+
+
     with prog:
         for year in years:
             logger.debug(f"beginning search for {year}")

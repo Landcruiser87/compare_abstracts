@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import json
 import sys
-import datetime
 from typing import TYPE_CHECKING
 
 from textual.app import App, ComposeResult
@@ -17,7 +16,7 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "jtree_andy"
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 
 
 class JSONTreeApp(App):
@@ -56,7 +55,7 @@ class JSONTreeApp(App):
 
     def on_mount(self) -> None:
         tree = self.query_one(JSONTree)
-        root_name = "JSON" #Update this name to the filename
+        root_name = "JSON" #TODO Update this name to the filename
         json_node = tree.root.add(root_name)
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)

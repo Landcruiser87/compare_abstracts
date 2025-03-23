@@ -110,9 +110,10 @@ def get_time():
 
 
 ########################## Global Variables to return ##########################################
-DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
+
 console = Console(color_system="auto", stderr=True)
-logger = get_logger(console, log_dir=f"data/logs/{DATE_JSON}.log") 
+# DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
+# logger = get_logger(console, log_dir=f"data/logs/{DATE_JSON}.log") 
 
 ########################## Saving funcs ##########################################
 #FUNCTION save results
