@@ -89,11 +89,11 @@ def log_time(fn):
         te = time.time()
         took = round(te - tnow, 2)
         if took <= 60:
-            logger.info(f"{fn.__name__} ran in {took:.3f}s")
+            logging.info(f"{fn.__name__} ran in {took:.3f}s")
         elif took <= 3600:
-            logger.info(f"{fn.__name__} ran in {(took)/60:.3f}m")		
+            logging.info(f"{fn.__name__} ran in {(took)/60:.3f}m")		
         else:
-            logger.info(f"{fn.__name__} ran in {(took)/3600:.3f}h")
+            logging.info(f"{fn.__name__} ran in {(took)/3600:.3f}h")
         return out
     return inner
 
@@ -117,7 +117,7 @@ console = Console(color_system="auto", stderr=True)
 
 ########################## Saving funcs ##########################################
 #FUNCTION save results
-def save_result(name:str, processed:pd.DataFrame):
+def save_result(name:str, processed:pd.DataFrame, logger:logging):
     """Save Routine.  Takes in name of file and processed dataframe.  Saves it to the data/cleaned folder. 
 
     Args:
@@ -129,7 +129,7 @@ def save_result(name:str, processed:pd.DataFrame):
     logger.info(f"CSV for file {spath} saved")
 
 #FUNCTION save dictionary
-def save_data(data:dict, conference:str, YEAR:int):
+def save_data(data:dict, conference:str, YEAR:int, logger:int):
     # sorted_dict = dict(sorted(jsond.items(), key=lambda x:datetime.datetime.strftime(x[1]["pub_date"], "%Y-%m-%d").split("-"), reverse=True))
     result_json = json.dumps(data, indent=2)
     with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:

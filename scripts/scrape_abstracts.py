@@ -145,14 +145,13 @@ def request_conf(conference:str, year:int):
 @log_time
 def main():
     """Main driver code for program"""
-    main_conferences = ["ICLR", "NEURIPS", "ICML"] #"ml4h"
+    main_conferences = ["ICLR", "ICML", "NEURIPS"] #"ml4h"
     years = range(2020, 2025)
     global prog, task, total_stop, logger
     total_stops = 0
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
     date_json = support.get_time().strftime("%m-%d-%Y_%H-%M-%S")
     logger = support.get_logger(console, log_dir=f"data/logs/scrape/{date_json}.log") 
-
 
     with prog:
         for year in years:
@@ -162,7 +161,7 @@ def main():
                 prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
                 result = request_conf(conference, year)
                 if result:
-                    support.save_data(result, conference, year)		
+                    support.save_data(result, conference, year, logger)		
                     logger.debug(f"{conference} has been converted and saved")
                 else:
                     logger.info(f"{conference} data not available.")
