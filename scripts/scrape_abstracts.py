@@ -147,8 +147,7 @@ def main():
     """Main driver code for program"""
     main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
     years = range(2020, 2025)
-    global prog, task, total_stop, logger
-    total_stops = 0
+    global prog, task, logger
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
     date_json = support.get_time().strftime("%m-%d-%Y_%H-%M-%S")
     logger = support.get_logger(console, log_dir=f"data/logs/scrape/{date_json}.log") 

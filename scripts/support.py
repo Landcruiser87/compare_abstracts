@@ -134,7 +134,7 @@ def save_data(data:dict, conference:str, YEAR:int, logger:int):
     result_json = json.dumps(data, indent=2)
     with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
         outf.write(result_json)
-    logger.info(f"{conference} for {YEAR} data saved")
+    logger.info(f"{conference:7s}:{YEAR} data saved")
 ################################# Rich Spinner Control ####################################
 
 #FUNCTION Progress bar
