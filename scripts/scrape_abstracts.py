@@ -31,11 +31,11 @@ def extract_json(json_data:json)->dict:
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
     base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
     for id, idx in zip(base_dict.keys(), ids):
-        authors = range(len(json_data['results'][idx]['authors']))
+        authors = [str(x) + "_" + json_data['results'][idx]['authors'][x]["fullname"] for x in range(len(json_data['results'][idx]['authors']))]
         base_dict[id]["author"] = {author:{} for author in authors} 
         #Grab author info
-        for author in authors:
-            auth_info = json_data["results"][idx]["authors"][author]
+        for num, author in enumerate(authors):
+            auth_info = json_data["results"][idx]["authors"][num]
             base_dict[id]["author"][author].update(**auth_info)
         
         #Grab other keys we want from the paper
@@ -185,17 +185,4 @@ if __name__ == "__main__":
 #TODO - if a paper doesn't have keywords, maybe create a function that can
     #extract them from an abstract? Or the paper maybe?  I should have urls for
     #those, but again, processing PDFS is a PITA.
-
-#TODO .  Fork JTREE /adapt TUI for different json tree exploration.
-    #various categories that are found within that years scrape.  Might need to
-    #update each keyword for sites to get better category data for sorting
-
-#Sidebar expands out from left side and allows you to regroup by the following categories.  
-    #dataset ID
-    #institution - Will need to go with either first person or majority of institution among authors
-    #timezone - lol
-    #topic cosine sim
-    #abstract cosine sim
-        #cosine sim to current selected abstract above... eh 80 percent.  
-        #(or put an input box to control that)
     
