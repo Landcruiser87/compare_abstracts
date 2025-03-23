@@ -145,7 +145,7 @@ def request_conf(conference:str, year:int):
 @log_time
 def main():
     """Main driver code for program"""
-    main_conferences = ["ICLR", "ICML", "NEURIPS"] #"ml4h"
+    main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
     years = range(2020, 2025)
     global prog, task, total_stop, logger
     total_stops = 0
