@@ -10,7 +10,7 @@ if sys.version_info < (3, 8):
 else:
     import importlib.metadata as importlib_metadata
 
-from jtree import JSONTreeApp, __prog_name__, __version__
+from __init__ import JSONTreeApp, __prog_name__, __version__
 
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
@@ -45,11 +45,10 @@ def main():
     if not isinstance(numeric_level, int):
         print(f"Invalid log level {args.log!r}")
 
-    if numeric_level == logging.DEBUG:
-        import debugpy
-
-        debugpy.listen(DEBUGPY_PORT)
-        debugpy.wait_for_client()
+    # if numeric_level == logging.DEBUG:
+    #     import debugpy
+    #     debugpy.listen(DEBUGPY_PORT)
+    #     debugpy.wait_for_client()
 
     try:
         # See:Textualize/textual/issues/153#issuecomment-1256933121

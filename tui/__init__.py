@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import sys
+import datetime
 from typing import TYPE_CHECKING
 
 from textual.app import App, ComposeResult
@@ -9,8 +10,8 @@ from textual.binding import Binding
 from textual.containers import Container
 from textual.widgets import Footer, Header
 
-from jtree.utils import clean_string_values
-from jtree.widgets import JSONDocument, JSONDocumentView, JSONTree, TreeView
+from utils import clean_string_values, get_c_time
+from widgets import JSONDocument, JSONDocumentView, JSONTree, TreeView
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -22,12 +23,12 @@ __version__ = "0.2.7"
 class JSONTreeApp(App):
     TITLE = __prog_name__
     SUB_TITLE = f"A JSON Tree Viewer ({__version__})"
-    CSS_PATH = "css/layout.css"
+    CSS_PATH = "css/layout.tcss"
 
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
         ("ctrl+t", "toggle_root", "Toggle root"),
-        Binding("ctrl+q", "app.quit", "Quit"),
+        Binding("alt+q", "app.quit", "Quit"),
     ]
 
     def __init__(
@@ -55,7 +56,7 @@ class JSONTreeApp(App):
 
     def on_mount(self) -> None:
         tree = self.query_one(JSONTree)
-        root_name = "JSON"
+        root_name = "JSON" #Update this name to the filename
         json_node = tree.root.add(root_name)
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
@@ -63,7 +64,8 @@ class JSONTreeApp(App):
         json_doc.load(json.dumps(json_data, indent=4))
 
     def action_screenshot(self):
-        self.save_screenshot("./json-tree.svg")
+        current_time = get_c_time()
+        self.save_screenshot(f"./data/screenshots/{current_time}.svg")
 
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
