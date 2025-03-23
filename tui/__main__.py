@@ -4,7 +4,6 @@ import argparse
 import logging
 import platform
 import sys
-import support
 from support import logger
 
 if sys.version_info < (3, 8):

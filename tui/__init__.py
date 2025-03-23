@@ -27,7 +27,7 @@ class JSONTreeApp(App):
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
         ("ctrl+t", "toggle_root", "Toggle root"),
-        Binding("alt+q", "app.quit", "Quit"),
+        Binding("q", "app.quit", "Quit"),
     ]
 
     def __init__(
@@ -39,6 +39,7 @@ class JSONTreeApp(App):
     ):
         super().__init__(driver_class, css_path, watch_css)
         self.json_data: str = ""
+        self.json_name: str = json_file.name.split("/")[-1]
 
         if json_file is sys.stdin:
             self.json_data = "".join(sys.stdin.readlines())
@@ -55,7 +56,7 @@ class JSONTreeApp(App):
 
     def on_mount(self) -> None:
         tree = self.query_one(JSONTree)
-        root_name = "JSON" #TODO Update this name to the filename
+        root_name = self.json_name
         json_node = tree.root.add(root_name)
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
