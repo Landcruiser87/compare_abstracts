@@ -4,7 +4,8 @@ import argparse
 import logging
 import platform
 import sys
-
+import support
+from support import console, logger
 if sys.version_info < (3, 8):
     import importlib_metadata
 else:
@@ -35,6 +36,7 @@ def main():
         help="path to file, or stdin",
         default=sys.stdin,
     )
+    
     parser.add_argument(
         "--log", nargs="?", help="Log level for enable debugpy", default="INFO"
     )
@@ -43,7 +45,7 @@ def main():
     numeric_level = getattr(logging, args.log.upper(), None)
 
     if not isinstance(numeric_level, int):
-        print(f"Invalid log level {args.log!r}")
+        logger.warning(f"Invalid log level {args.log!r}")
 
     # if numeric_level == logging.DEBUG:
     #     import debugpy
@@ -64,7 +66,6 @@ def main():
     except Exception as error:
         print(f"Unable to read {args.path!r}; {error}")
         sys.exit(-1)
-
 
 if __name__ == "__main__":
     main()

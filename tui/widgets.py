@@ -11,7 +11,6 @@ from textual.widgets.tree import TreeNode
 
 highlighter = ReprHighlighter()
 
-
 class JSONDocument(Static):
     def load(self, json_data: str) -> bool:
         try:

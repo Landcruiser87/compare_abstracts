@@ -50,7 +50,7 @@ class JSONTreeApp(App):
         yield Header()
         yield Container(
             TreeView(id="tree-view"), JSONDocumentView(id="json-docview"), id="app-grid"
-        )
+        ) 
         yield Footer()
 
     def on_mount(self) -> None:
