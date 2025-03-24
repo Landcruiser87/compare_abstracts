@@ -1,7 +1,6 @@
 #main libraries
 import datetime
 import time
-import json
 import logging
 import pandas as pd
 from pathlib import Path

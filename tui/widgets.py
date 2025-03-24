@@ -1,46 +1,48 @@
 from __future__ import annotations
 
+import json
 from rich.highlighter import ReprHighlighter
 from rich.syntax import Syntax
 from rich.text import Text
-import json
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.widget import Widget
-from textual.widgets import Static, Tree
+from textual.widgets import Static, Tree, TextArea
 from textual.widgets.tree import TreeNode
 
 highlighter = ReprHighlighter()
 
-class JSONDocument(Static):
-    DEFAULT_CSS = """
-    JSONDocument {
-        width: 100%;
-        word-wrap: break-word;
-    }
-    """
+class JSONDocument(TextArea):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.read_only = True  # Ensure it's not editable
+
     def load(self, json_data: str) -> bool:
         try:
+            # TODO: Customize theme="github-dark"
             json_doc = Syntax(json_data, lexer="json", line_numbers=True)
+            self.text = str(json_doc)
+            return True
         except Exception as e:
             return False
-        self.update(json_doc)
-        return True
 
     def load_text(self, text: str) -> bool:
-        self.update(text)
+        self.text = text
         return True
+
 
 class JSONDocumentView(Vertical):
     DEFAULT_CSS = """
     JSONDocumentView {
         height: 1fr;
-        overflow-y: auto;
+        overflow: auto;
     }
 
-    JSONDocumentView > Static {
+    JSONDocumentView > TextArea {
         width: auto;
         height: auto;
+        padding: 1;
+        scrollbar-gutter: stable; /* Prevent layout shifts from scrollbar */
     }
     """
 
@@ -67,7 +69,7 @@ class JSONDocumentView(Vertical):
             print(f"Abstract Text:\n{abstract_text}")  # Debugging line
             json_doc = self.query_one("#json-document", JSONDocument)
             json_doc.load_text(abstract_text)
-            self.scroll_home(animate=True)
+            json_doc.cursor_position = (0, 0) # Reset to top
         elif self.current_json_data and isinstance(self.current_json_data, dict):
             # Check for abstract in the first level values if the top level doesn't have it
             for value in self.current_json_data.values():
@@ -76,8 +78,9 @@ class JSONDocumentView(Vertical):
                     print(f"Abstract Text (nested):\n{abstract_text}")  # Debugging line
                     json_doc = self.query_one("#json-document", JSONDocument)
                     json_doc.load_text(abstract_text)
-                    self.scroll_home(animate=True)
+                    json_doc.cursor_position = (0, 0) # Reset to top
                     return
+
 
 class JSONTree(Tree):
     def add_node(self, name: str, node: TreeNode, data: object) -> None:
@@ -93,13 +96,13 @@ class JSONTree(Tree):
             for key, value in data.items():
                 new_node = node.add("")
                 self.add_node(key, new_node, value)
-                new_node.data = value  # <--- THIS LINE WAS MISSING
+                new_node.data = value
         elif isinstance(data, list):
             node._label = Text(f"{name}")
             for index, value in enumerate(data):
                 new_node = node.add("")
                 self.add_node(str(index), new_node, value)
-                new_node.data = value  # <--- THIS LINE WAS MISSING
+                new_node.data = value
         else:
             node._allow_expand = False
             if name:
@@ -110,6 +113,7 @@ class JSONTree(Tree):
                 label = Text(repr(data))
             node._label = label
             node.data = data
+
 
 class TreeView(Widget, can_focus_children=True):
     def compose(self) -> ComposeResult:
