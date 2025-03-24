@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.containers import Container
-from textual.widgets import Footer, Header
+from textual.widgets import Footer, Header, Tree
 
 from utils import clean_string_values, get_c_time
 from widgets import JSONDocument, JSONDocumentView, JSONTree, TreeView
@@ -55,13 +55,34 @@ class JSONTreeApp(App):
         yield Footer()
 
     def on_mount(self) -> None:
+        self.theme = "textual-dark"
         tree = self.query_one(JSONTree)
         root_name = self.json_name
         json_node = tree.root.add(root_name)
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
-        json_doc = self.query_one(JSONDocument)
-        json_doc.load(json.dumps(json_data, indent=4))
+        # json_doc = self.query_one(JSONDocument)
+        # json_doc.load(json.dumps(json_data, indent=4))
+        json_docview = self.query_one(JSONDocumentView)
+        json_docview.update_document(json_data)
+        tree.focus()
+
+    def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
+        """Called when a node in the tree is selected."""
+        event.stop()
+        node_data = event.node.data
+        json_docview = self.query_one(JSONDocumentView)
+        if node_data is not None:
+            json_docview.update_document(node_data)
+        elif event.node.allow_expand:
+            # If it's a parent node, display its structure (first level of children)
+            data = {}
+            for child in event.node.children:
+                data[child._label.plain.split("=")[0].strip().lstrip("{}")] = child.data
+            json_docview.update_document(data)
+        else:
+            # Handle leaf nodes without explicit data (shouldn't happen with this tree structure)
+            json_docview.query_one("#json-document", JSONDocument).update("")
 
     def action_screenshot(self):
         current_time = get_c_time()
