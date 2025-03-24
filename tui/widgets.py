@@ -40,10 +40,10 @@ class JSONDocumentView(Vertical):
         self.current_json_data = json_data
         json_doc = self.query_one("#json-document", JSONDocument)
         if isinstance(json_data, dict):
-            if "abstract" in json_data.keys():
-                json_doc.load(json.dumps(json_data["abstract"]))
+            if "abstract" in list(json_data.values()):
+                json_doc.load(json.dumps(json_data.get("abstract")))
             else:
-                json_doc.load(json.dumps(json_data, indent=2))
+                json_doc.load(json.dumps(json_data, indent=4))
         self.refresh()
 
 class JSONTree(Tree):

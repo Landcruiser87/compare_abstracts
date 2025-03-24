@@ -106,8 +106,8 @@ class JSONTreeApp(App):
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
 
-    def action_focus_next(self) -> None:
-        if self.focused is self.query_one(TreeView):
-            self.query_one(JSONDocumentView).focus()
-        else:
-            self.query_one(TreeView).focus()
+    # def action_focus_next(self) -> None:
+    #     if self.focused is self.query_one(TreeView):
+    #         self.query_one(JSONDocumentView).focus()
+    #     else:
+    #         self.query_one(TreeView).focus()
