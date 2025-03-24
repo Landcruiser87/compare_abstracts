@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import json
 from rich.highlighter import ReprHighlighter
 from rich.syntax import Syntax
@@ -7,29 +6,19 @@ from rich.text import Text
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.widget import Widget
-from textual.widgets import Static, Tree, TextArea
+from textual.widgets import Static, Tree
 from textual.widgets.tree import TreeNode
 
 highlighter = ReprHighlighter()
 
-class JSONDocument(TextArea):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.read_only = True  # Ensure it's not editable
-
+class JSONDocument(Static):
     def load(self, json_data: str) -> bool:
         try:
-            # TODO: Customize theme="github-dark"
-            json_doc = Syntax(json_data, lexer="json", line_numbers=True)
-            self.text = str(json_doc)
-            return True
+            json_doc = Syntax(json_data, lexer="json", word_wrap=True)
         except Exception as e:
             return False
-
-    def load_text(self, text: str) -> bool:
-        self.text = text
+        self.update(json_doc)
         return True
-
 
 class JSONDocumentView(Vertical):
     DEFAULT_CSS = """
@@ -38,21 +27,11 @@ class JSONDocumentView(Vertical):
         overflow: auto;
     }
 
-    JSONDocumentView > TextArea {
+    JSONDocumentView > Static {
         width: auto;
         height: auto;
-        padding: 1;
-        scrollbar-gutter: stable; /* Prevent layout shifts from scrollbar */
     }
     """
-
-    BINDINGS = [
-        ("a", "scroll_abstract", "Scroll Abstract"),
-    ]
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.current_json_data: dict | None = None
 
     def compose(self) -> ComposeResult:
         yield JSONDocument(id="json-document")
@@ -60,27 +39,12 @@ class JSONDocumentView(Vertical):
     def update_document(self, json_data: dict) -> None:
         self.current_json_data = json_data
         json_doc = self.query_one("#json-document", JSONDocument)
-        json_doc.load(json.dumps(json_data, indent=4))
+        if isinstance(json_data, dict):
+            if "abstract" in json_data.keys():
+                json_doc.load(json.dumps(json_data["abstract"]))
+            else:
+                json_doc.load(json.dumps(json_data, indent=2))
         self.refresh()
-
-    def action_scroll_abstract(self) -> None:
-        if self.current_json_data and "abstract" in self.current_json_data:
-            abstract_text = self.current_json_data["abstract"]
-            print(f"Abstract Text:\n{abstract_text}")  # Debugging line
-            json_doc = self.query_one("#json-document", JSONDocument)
-            json_doc.load_text(abstract_text)
-            json_doc.cursor_position = (0, 0) # Reset to top
-        elif self.current_json_data and isinstance(self.current_json_data, dict):
-            # Check for abstract in the first level values if the top level doesn't have it
-            for value in self.current_json_data.values():
-                if isinstance(value, dict) and "abstract" in value:
-                    abstract_text = value["abstract"]
-                    print(f"Abstract Text (nested):\n{abstract_text}")  # Debugging line
-                    json_doc = self.query_one("#json-document", JSONDocument)
-                    json_doc.load_text(abstract_text)
-                    json_doc.cursor_position = (0, 0) # Reset to top
-                    return
-
 
 class JSONTree(Tree):
     def add_node(self, name: str, node: TreeNode, data: object) -> None:
@@ -113,7 +77,6 @@ class JSONTree(Tree):
                 label = Text(repr(data))
             node._label = label
             node.data = data
-
 
 class TreeView(Widget, can_focus_children=True):
     def compose(self) -> ComposeResult:

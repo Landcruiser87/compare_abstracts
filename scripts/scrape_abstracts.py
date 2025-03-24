@@ -50,6 +50,9 @@ def extract_json(json_data:json)->dict:
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int):
+    #TODO - Add in yearly search terms.  
+    # Different years have different fields, so lets do what we can to capture
+    # those. 
     conf_dict={
         "NEURIPS":{
             "name":"Conference and Workshop on Neural Information Processing Systems",
