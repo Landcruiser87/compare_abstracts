@@ -27,6 +27,7 @@ class JSONTreeApp(App):
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
         ("ctrl+t", "toggle_root", "Toggle root"),
+        Binding("tab", "focus_next", "Focus Next"),
         Binding("q", "app.quit", "Quit"),
     ]
 
@@ -56,16 +57,15 @@ class JSONTreeApp(App):
 
     def on_mount(self) -> None:
         self.theme = "textual-dark"
-        tree = self.query_one(JSONTree)
+        tree_view = self.query_one(TreeView)
+        tree = tree_view.query_one(JSONTree)
         root_name = self.json_name
         json_node = tree.root.add(root_name)
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
-        # json_doc = self.query_one(JSONDocument)
-        # json_doc.load(json.dumps(json_data, indent=4))
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
-        tree.focus()
+        tree_view.focus()
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
@@ -89,5 +89,12 @@ class JSONTreeApp(App):
         self.save_screenshot(f"./data/screenshots/{current_time}.svg")
 
     def action_toggle_root(self) -> None:
+        tree_view = self.query_one(TreeView)
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
+    
+    def action_focus_next(self) -> None:
+        if self.focused is self.query_one(TreeView):
+            self.query_one(JSONDocumentView).focus()
+        else:
+            self.query_one(TreeView).focus()

@@ -4,7 +4,6 @@ from rich.highlighter import ReprHighlighter
 from rich.syntax import Syntax
 from rich.text import Text
 import json
-
 from textual.app import ComposeResult
 from textual.containers import Vertical
 from textual.widget import Widget
@@ -14,6 +13,12 @@ from textual.widgets.tree import TreeNode
 highlighter = ReprHighlighter()
 
 class JSONDocument(Static):
+    DEFAULT_CSS = """
+    JSONDocument {
+        width: 100%;
+        word-wrap: break-word;
+    }
+    """
     def load(self, json_data: str) -> bool:
         try:
             json_doc = Syntax(json_data, lexer="json", line_numbers=True)
@@ -21,11 +26,11 @@ class JSONDocument(Static):
             return False
         self.update(json_doc)
         return True
-    
+
     def load_text(self, text: str) -> bool:
         self.update(text)
         return True
-    
+
 class JSONDocumentView(Vertical):
     DEFAULT_CSS = """
     JSONDocumentView {
@@ -88,11 +93,13 @@ class JSONTree(Tree):
             for key, value in data.items():
                 new_node = node.add("")
                 self.add_node(key, new_node, value)
+                new_node.data = value  # <--- THIS LINE WAS MISSING
         elif isinstance(data, list):
-            node._label = Text(f"[] {name}")
+            node._label = Text(f"{name}")
             for index, value in enumerate(data):
                 new_node = node.add("")
                 self.add_node(str(index), new_node, value)
+                new_node.data = value  # <--- THIS LINE WAS MISSING
         else:
             node._allow_expand = False
             if name:
@@ -102,6 +109,7 @@ class JSONTree(Tree):
             else:
                 label = Text(repr(data))
             node._label = label
+            node.data = data
 
 class TreeView(Widget, can_focus_children=True):
     def compose(self) -> ComposeResult:
