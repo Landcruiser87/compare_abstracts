@@ -49,7 +49,11 @@ class JSONTreeApp(App):
         else:
             self.json_data = json_file.read()
             json_file.close()
-        self.json_name = json_file.name.split("/")[-1]
+        
+        if "/" in json_file.name:
+            self.json_name = json_file.name.split("/")[-1]
+        elif "\\" in json_file.name:
+            self.json_name = json_file.name.split("\\")[-1]
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)

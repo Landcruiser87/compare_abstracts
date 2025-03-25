@@ -5,6 +5,7 @@ import logging
 import platform
 import sys
 from support import logger
+import support
 
 if sys.version_info < (3, 8):
     import importlib_metadata
@@ -16,8 +17,8 @@ from __init__ import JSONTreeApp, __prog_name__, __version__
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
 
-
 def main():
+    
     parser = argparse.ArgumentParser(
         prog=__prog_name__, description="Json Tree - ML Conference", epilog=f"v{__version__}"
     )
@@ -28,6 +29,11 @@ def main():
         action="version",
         version=f"%(prog)s {__version__} (Textual v{importlib_metadata.version( 'textual' )})",
     )
+
+    parser.add_argument(
+        "--log", nargs="?", help="Log level for enable debugpy", default="INFO"
+    )
+
     parser.add_argument(
         "path",
         nargs="?",
@@ -36,16 +42,27 @@ def main():
         help="path to file, or stdin",
         default=sys.stdin,
     )
-    
-    parser.add_argument(
-        "--log", nargs="?", help="Log level for enable debugpy", default="INFO"
-    )
 
     args = parser.parse_args()
     numeric_level = getattr(logging, args.log.upper(), None)
 
     if not isinstance(numeric_level, int):
         logger.warning(f"Invalid log level {args.log!r}")
+    
+    if args.path is sys.stdin:
+        file_choice = support.launch_tui()
+    # Check if no path was provided as a command-line argument
+    if args.path is sys.stdin and file_choice:
+        try:
+            # Open the file chosen by the TUI
+            args.path = open(file_choice, mode="r", encoding="utf-8")
+            
+        except FileNotFoundError:
+            logger.error(f"File not found: {file_choice}")
+            sys.exit(1)
+        except Exception as e:
+            logger.error(f"Error opening file {file_choice}: {e}")
+            sys.exit(1)
 
     # if numeric_level == logging.DEBUG:
     #     import debugpy
@@ -56,7 +73,7 @@ def main():
         # See:Textualize/textual/issues/153#issuecomment-1256933121
         if not WINDOWS:
             sys.stdin = open("/dev/tty", "r")
-
+        
         app = JSONTreeApp(args.path)
         app.run()
 

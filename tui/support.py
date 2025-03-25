@@ -3,19 +3,15 @@ import datetime
 import time
 import logging
 import pandas as pd
-from pathlib import Path
-
-#Progress bar fun
-from rich.progress import (
-    Progress,
-    BarColumn,
-    SpinnerColumn,
-    TextColumn,
-    TimeRemainingColumn,
-    TimeElapsedColumn
-)
+import os
+from rich import print
+from rich.tree import Tree
+from rich.text import Text
+from rich.markup import escape
+from rich.filesize import decimal
 from rich.console import Console
 from rich.logging import RichHandler
+from pathlib import Path, PurePath
 
 ################################# Logger functions ####################################
 #FUNCTION Logging Futures
@@ -124,3 +120,96 @@ logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log")
 #     spath = f"./data/cleaned/{name}"
 #     processed.to_csv(spath, mode='w', header=0, encoding='utf-8')
 #     logger.info(f"CSV for file {spath} saved")
+
+################################# Size Funcs ############################################
+
+def sizeofobject(folder)->str:
+    for unit in ["B", "KB", "MB", "GB"]:
+        if abs(folder) < 1024:
+            return f"{folder:4.1f} {unit}"
+        folder /= 1024.0
+    return f"{folder:.1f} PB"
+
+def getfoldersize(folder:Path):
+    fsize = 0
+    for root, dirs, files in os.walk(folder):
+        for f in files:
+            fp = os.path.join(folder,f)
+            fsize += os.stat(fp).st_size
+
+    return sizeofobject(fsize)
+
+################################# TUI Funcs ############################################
+
+#FUNCTION Launch TUI
+def launch_tui():
+    try:
+        directory = PurePath(Path.cwd(), Path("./data/scraped/"))
+
+    except IndexError:
+        logger.info("[b]Usage:[/] python tree.py <DIRECTORY>")
+    else:
+        tree = Tree(
+            f":open_file_folder: [link file://{directory}]{directory}",
+            guide_style="bold bright_blue",
+        )
+        files = walk_directory(Path(directory), tree)
+        print(tree)
+        
+    question ="What file would you like to load?\n"
+    file_choice = console.input(f"{question}")
+    if file_choice.isnumeric():
+        file_to_load = files[int(file_choice) - 1]
+        #check output directory exists
+        return file_to_load
+    elif file_choice is None:
+        return None
+
+    else:
+        raise ValueError("Please restart and select an integer of the file you'd like to import")
+    
+#FUNCTION Walk Directory
+def walk_directory(directory: Path, tree: Tree) -> None:
+    """Build a Tree with directory contents.
+    Source Code: https://github.com/Textualize/rich/blob/master/examples/tree.py
+
+    """
+    # Sort dirs first then by filename
+    paths = sorted(
+        Path(directory).iterdir(),
+        key=lambda path: (path.is_file(), path.name.lower()),
+    )
+    idx = 1
+    for path in paths:
+        # Remove hidden files
+        if path.name.startswith("."):
+            continue
+        # Just list the CAM folders
+        if path.is_dir():
+            style = "dim" if path.name.startswith("__") else ""
+            file_size = getfoldersize(path)
+            branch = tree.add(
+                f"[bold green]{idx} [/bold green][bold magenta]:open_file_folder: [link file://{path}]{escape(path.name)}[/bold magenta] [bold blue]{file_size}[/bold blue]",
+                style=style,
+                guide_style=style,
+            )
+            
+            # walk_directory(path, branch)
+        else:
+            text_filename = Text(path.name, "green")
+            text_filename.highlight_regex(r"\..*$", "bold red")
+            text_filename.stylize(f"link file://{path}")
+            file_size = path.stat().st_size
+            text_filename.append(f" ({decimal(file_size)})", "blue")
+            if path.suffix == "py":
+                icon = "🐍 "
+            elif path.suffix == ".json":
+                icon = "🔫 "
+            elif path.suffix == ".mib":
+                icon = "👽 "
+            else:
+                icon = "📄 "
+            tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
+        
+        idx += 1    
+    return paths
