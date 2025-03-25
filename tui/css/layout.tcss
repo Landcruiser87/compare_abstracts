@@ -9,10 +9,10 @@
     dock:left;
     width: 0.5fr;
     overflow-x: auto;
-    /* border: dodgerblue; */
+    border: dodgerblue;
 } 
 
 #json-document {
     height: auto;
-    /* border: mediumvioletred; */
+    border: mediumvioletred;
 }

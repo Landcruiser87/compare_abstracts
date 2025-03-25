@@ -19,7 +19,6 @@ if TYPE_CHECKING:
 __prog_name__ = "jtree_andy"
 __version__ = "0.2.8"   
 
-
 class JSONTreeApp(App):
     TITLE = __prog_name__
     SUB_TITLE = f"A JSON Tree Viewer ({__version__})"
@@ -79,7 +78,7 @@ class JSONTreeApp(App):
         json_docview = self.query_one(JSONDocumentView)
 
         if new_data is not None:
-            if isinstance(new_data, (dict, list, str)):
+            if isinstance(new_data, (dict, list, str, int)):
                 json_docview.update_document(new_data)
         else:
              json_docview.update_document("")
