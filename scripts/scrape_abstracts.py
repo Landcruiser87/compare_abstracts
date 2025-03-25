@@ -50,9 +50,6 @@ def extract_json(json_data:json)->dict:
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int):
-    #TODO - Add in yearly search terms.  
-    # Different years have different fields, so lets do what we can to capture
-    # those. 
     conf_dict={
         "NEURIPS":{
             "name":"Conference and Workshop on Neural Information Processing Systems",
@@ -73,7 +70,7 @@ def request_conf(conference:str, year:int):
                 "sec-fetch-dest":"empty",
                 "sec-fetch-mode":"cors",
                 "sec-fetch-site":"same-origin",
-                "user-agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
+                "user-agent": f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
                 "x-requested-with":"XMLHttpRequest"
             }
         },
