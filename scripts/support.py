@@ -113,7 +113,7 @@ def get_time():
 
 console = Console(color_system="auto", stderr=True)
 DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
-logger = get_logger(console, log_dir=f"data/logs/{DATE_JSON}.log") 
+logger = get_logger(console, log_dir=f"data/logs/scrape/{DATE_JSON}.log") 
 
 ########################## Saving funcs ##########################################
 #FUNCTION save results

@@ -155,7 +155,7 @@ def main():
             logger.debug(f"beginning search for {year}")
             for conference in main_conferences:
                 logger.info(f"searching {conference} {year}")
-                prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
+                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
                 if result:
                     support.save_data(result, conference, year, logger)		
