@@ -40,6 +40,7 @@ Order of operations of below terminal commands.
 - Install libraries
 
 ```
+
 `CTRL + SHIFT + ~` will open a terminal
 Navigate to the directory where you want to clone the repo. 
 
@@ -47,9 +48,6 @@ Navigate to the directory where you want to clone the repo.
 Launch VSCode if that is IDE of choice.
 
 # Project setup with Poetry
-
-
-
 
 ## How to check Poetry installation
 
