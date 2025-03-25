@@ -51,7 +51,7 @@ If poetry is not installed, do so in order to continue
 This will install version 1.7.0.  Adjust to your preference
 
 ```terminal
-curl -sSL https://install.python-poetry.org | python3 - --version 1.7.0
+curl -sSL https://install.python-poetry.org | python3 - --version 2.0.0
 ```
 
 To check if poetry is installed on your system. Type the following into your terminal
