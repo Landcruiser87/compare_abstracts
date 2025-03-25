@@ -10,20 +10,24 @@
 
 ## Purpose
 
-The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  Modeling possibilities are 
+The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
 
 1. Clustering
 2. Cosine similarity to a particular subject.
 3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
 
+## TUI
+
+This repo also comes with a TUI (Terminal User Interface) that allows you to explore the scraped JSON objects with 
 
 ## Requirements
-- Python >= 3.8
+- Python >= 3.11
 
 ## Main Libraries used
 - numpy
 - pandas
 - rich
+- textual
 - requests
 - matplotlib
 
@@ -41,40 +45,82 @@ Navigate to the directory where you want to clone the repo.
 
 ## Cloning and setting up environment.
 Launch VSCode if that is IDE of choice.
- 
-$ git clone https://github.com/landcruiser87/compare_abstracts.git
-$ cd compare_abstracts
-$ python -m venv .c_venv
-(Or replace ".c_venv" with whatever you want to call your environment)	
 
-On Windows
-$ .ca_venv\Scripts\activate.bat
+# Project setup with Poetry
 
-On Mac
-$ source .c_venv/bin/activate
+
+
+
+## How to check Poetry installation
+
+In your terminal, navigate to your root folder.
+
+If poetry is not installed, do so in order to continue
+This will install version 1.7.0.  Adjust to your preference
+
+```terminal
+curl -sSL https://install.python-poetry.org | python3 - --version 1.7.0
 ```
 
-Before next step, ensure you see the environment name to the left of your command prompt.  If you see it and the path file to your current directory, then the environment is activated.  If you don't activate it, and start installing things.  You'll install all the `requirements.txt` libraries into your base python environment. Which will lead to dependency problems down the road.  I promise.
+To check if poetry is installed on your system. Type the following into your terminal
 
-![Screenshot 2023-03-28 144052](https://user-images.githubusercontent.com/16505709/228358535-3364e0ea-b273-40b8-ab59-4dddf2f92ee2.png)
-
-```
-$ pip install -r requirements.txt
+```terminal
+poetry -V
 ```
 
+if you see a `version` returned, you have Poetry installed.  The second command is to update poetry if its installed. (Always a good idea). If not, follow this [link](https://python-poetry.org/docs/) and follow installation commands for your systems requirements. If on windows, we recommend the `powershell` option for easiest installation. Using pip to install poetry will lead to problems down the road and we do not recommend that option.  It needs to be installed separately from your standard python installation to manage your many python installations.  `Note: Python 2.7 is not supported`
+
+## Environment storage
+
+Some prefer Poetry's default storage method of storing environments in one location on your system.  The default storage are nested under the `{cache_dir}/virtualenvs`.  
+
+If you want to store you virtual environment locally.  Set this global configuration flag below once poetry is installed.  This will now search for whatever environments you have in the root folder before trying any global versions of the environment in the cache.
+
+```terminal
+poetry config virtualenvs.in-project true
+```
+
+For general instruction as to poetry's functionality and commands, please see read through poetry's [cli documentation](https://python-poetry.org/docs/cli/)
+
+To new .venv
+
+```terminal
+python -m venv .venv
+```
+
+To install libraries
+
+```terminal
+poetry install
+```
+
+This will read from the poetry lock file that is included
+in this repo and install all necessary packagage versions.  Should other
+versions be needed, the project TOML file will be utilized and packages updated according to your system requirements.  
+
+To view the current libraries installed
+
+```terminal
+poetry show
+```
+
+To view only top level library requirements
+
+```terminal
+poetry show -T
+```
+
+
+## Environment storage
 ## File Setup
+
 While in root directory run commands below
 
 ```
-$ mkdir data
 $ cd data
 $ mkdir logs
-$ mkdir scraped
+$ mkdir screenshots
 $ cd ..
 ```
 
 # Project Todo list
-- [ ] stuff 
-- [ ] stuff stuff
-- [ ] stuff stuff
-- [ ] stuff stuff
