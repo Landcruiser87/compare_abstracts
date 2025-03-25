@@ -29,7 +29,9 @@ class JSONDocument(ScrollableContainer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.json_static = Static("", id="json-text")  # Pre-create
+        # --- THIS IS THE CRUCIAL LINE ---
+        self.json_static = Static("", id="json-text", markup=False)
+        # --------------------------------
 
     def on_mount(self) -> None:
         """Mount the pre-created Static widget."""
@@ -47,18 +49,18 @@ class JSONDocument(ScrollableContainer):
                     # If it's not valid JSON, just display the raw string
                     formatted_text = json_data
             elif isinstance(json_data, (dict, list)):
-                formatted_text = pretty_repr(json_data)  # Use pretty_repr
+                formatted_text = pretty_repr(json_data)
             else:
                 formatted_text = f"Error: Invalid input type: {type(json_data)}"
-                self.json_static.update(formatted_text)
+                self.json_static.update(formatted_text) # Update existing static
                 return False
 
-            self.json_static.update(formatted_text)
+            self.json_static.update(formatted_text) # Update existing static
             return True
 
         except Exception as e:
-            # Catch *any* exception during formatting and display it
-            formatted_text = f"An unexpected error occurred: {e}"  # More informative
+            formatted_text = f"An unexpected error occurred: {e}"
+            # Use plain=True in update for extra safety with error messages
             self.json_static.update(formatted_text)
             return False
 
