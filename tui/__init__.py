@@ -11,7 +11,7 @@ from textual.containers import Container
 from textual.widgets import Footer, Header, Tree
 from support import logger
 from utils import clean_string_values, get_c_time
-from widgets import JSONDocument, JSONDocumentView, JSONTree, TreeView
+from widgets import JSONDocumentView, JSONTree, TreeView
 
 if TYPE_CHECKING:
     from io import TextIOWrapper

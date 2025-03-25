@@ -158,7 +158,7 @@ def main():
                 prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
                 result = request_conf(conference, year)
                 if result:
-                    # support.save_data(result, conference, year, logger)		
+                    support.save_data(result, conference, year, logger)		
                     logger.info(f"{conference} has been converted and saved")
                 else:
                     logger.warning(f"{conference} data not available.")
