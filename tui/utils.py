@@ -8,11 +8,10 @@ def get_c_time():
     """Function for getting current time
 
     Returns:
-        t_adjusted (str): String of current time
+        current_t_s (str): String of current time
     """
     current_t_s = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
-    current_t = datetime.datetime.strptime(current_t_s, "%m-%d-%Y-%H-%M-%S")
-    return current_t
+    return current_t_s
 
 def clean_string_values(obj):
     if isinstance(obj, dict):

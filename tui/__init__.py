@@ -86,7 +86,7 @@ class JSONTreeApp(App):
 
     def action_screenshot(self):
         current_time = get_c_time()
-        self.save_screenshot(f"./data/screenshots/{current_time}.svg")
+        self.save_screenshot(f"{current_time}.svg", "./data/screenshots/" )
 
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
