@@ -29,9 +29,7 @@ class JSONDocument(ScrollableContainer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # --- THIS IS THE CRUCIAL LINE ---
         self.json_static = Static("", id="json-text", markup=False)
-        # --------------------------------
 
     def on_mount(self) -> None:
         """Mount the pre-created Static widget."""

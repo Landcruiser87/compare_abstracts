@@ -13,6 +13,7 @@ def get_c_time():
     current_t_s = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
     return current_t_s
 
+#FUNCTION Clean String vals
 def clean_string_values(obj):
     if isinstance(obj, dict):
         for key, value in obj.items():

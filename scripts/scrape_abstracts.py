@@ -28,7 +28,7 @@ CHROME_VERSION = np.random.randint(120, 132)
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
     ids = list(range(json_data["count"]))
-    base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url"]
+    base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url", "paper_pdf_url", "sourceurl"]
     base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
     for id, idx in zip(base_dict.keys(), ids):
         authors = [str(x) + "_" + json_data['results'][idx]['authors'][x]["fullname"] for x in range(len(json_data['results'][idx]['authors']))]
@@ -163,7 +163,7 @@ def main():
                 prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
                 result = request_conf(conference, year)
                 if result:
-                    support.save_data(result, conference, year, logger)		
+                    # support.save_data(result, conference, year, logger)		
                     logger.debug(f"{conference} has been converted and saved")
                 else:
                     logger.info(f"{conference} data not available.")
