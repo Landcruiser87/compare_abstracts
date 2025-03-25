@@ -67,7 +67,11 @@ class JSONTreeApp(App):
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
         json_docview = self.query_one(JSONDocumentView)
-        json_docview.update_document(json_data)
+        # Initial display.  Important to handle different top-level types.
+        if isinstance(json_data, (dict, list)):
+            json_docview.update_document(json.dumps(json_data, indent=4))
+        else:
+            json_docview.update_document(str(json_data)) # Handle simple types
         tree.focus()
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
@@ -79,8 +83,10 @@ class JSONTreeApp(App):
         json_docview = self.query_one(JSONDocumentView)
 
         if new_data is not None:
-            if isinstance(new_data, (dict, list, str)):
-                json_docview.update_document(new_data)
+            if isinstance(new_data, str):
+                json_docview.update_document(str(new_data))
+            elif isinstance(new_data, (dict ,list)):
+                json_docview.update_document(json.dumps(new_data, indent=4))
         else:
              json_docview.update_document("")
 
@@ -89,5 +95,12 @@ class JSONTreeApp(App):
         self.save_screenshot(f"./data/screenshots/{current_time}.svg")
 
     def action_toggle_root(self) -> None:
+        tree_view = self.query_one(TreeView)
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
+
+    # def action_focus_next(self) -> None:
+    #     if self.focused is self.query_one(TreeView):
+    #         self.query_one(JSONDocumentView).focus()
+    #     else:
+    #         self.query_one(TreeView).focus()

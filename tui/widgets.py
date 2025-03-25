@@ -1,50 +1,85 @@
 from __future__ import annotations
 import json
 from rich.highlighter import ReprHighlighter
-from rich.syntax import Syntax
+# from rich.syntax import Syntax
 from rich.text import Text
+from rich.pretty import pretty_repr
 from textual.app import ComposeResult
-from textual.containers import Vertical
+from textual.containers import ScrollableContainer
 from textual.widget import Widget
 from textual.widgets import Static, Tree
 from textual.widgets.tree import TreeNode
 
 highlighter = ReprHighlighter()
 
-class JSONDocument(Static):
-    def load(self, json_data: str) -> bool:
-        try:
-            json_doc = Syntax(json_data, lexer="json", word_wrap=True)
-        except Exception as e:
-            return False
-        self.update(json_doc)
-        return True
+class JSONDocument(ScrollableContainer):
+    """Widget to display JSON data (as plain text) with scrolling."""
 
-class JSONDocumentView(Vertical):
     DEFAULT_CSS = """
-    JSONDocumentView {
+    JSONDocument {
+        width: 1fr;
         height: 1fr;
-        overflow: auto;
     }
-
-    JSONDocumentView > Static {
-        width: auto;
+    JSONDocument Static {
+        width: 100%;
         height: auto;
+        padding: 1 2;
     }
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.json_static = Static("", id="json-text")  # Pre-create
+
+    def on_mount(self) -> None:
+        """Mount the pre-created Static widget."""
+        self.mount(self.json_static)
+
+    def load(self, json_data: str | dict | list) -> bool:
+        """Load JSON data and update the Static widget's content."""
+        try:
+            if isinstance(json_data, str):
+                try:
+                    # Attempt to parse as JSON, but don't require it
+                    parsed_data = json.loads(json_data)
+                    formatted_text = pretty_repr(parsed_data)
+                except json.JSONDecodeError:
+                    # If it's not valid JSON, just display the raw string
+                    formatted_text = json_data
+            elif isinstance(json_data, (dict, list)):
+                formatted_text = pretty_repr(json_data)  # Use pretty_repr
+            else:
+                formatted_text = f"Error: Invalid input type: {type(json_data)}"
+                self.json_static.update(formatted_text)
+                return False
+
+            self.json_static.update(formatted_text)
+            return True
+
+        except Exception as e:
+            # Catch *any* exception during formatting and display it
+            formatted_text = f"An unexpected error occurred: {e}"  # More informative
+            self.json_static.update(formatted_text)
+            return False
+
+class JSONDocumentView(ScrollableContainer): #Make JSONDocumentView scrollable
+    """Container for the JSON document."""
+    DEFAULT_CSS = """
+       JSONDocumentView {
+           height: 1fr;
+           width: 1fr;
+       }
+       """
+
     def compose(self) -> ComposeResult:
+        """Compose the JSONDocument widget."""
         yield JSONDocument(id="json-document")
 
-    def update_document(self, json_data: dict) -> None:
-        self.current_json_data = json_data
+    def update_document(self, json_data: str | dict | list) -> None:
+        """Update the JSON document with new data."""
         json_doc = self.query_one("#json-document", JSONDocument)
-        if isinstance(json_data, dict):
-            if "abstract" in list(json_data.values()):
-                json_doc.load(json.dumps(json_data.get("abstract")))
-            else:
-                json_doc.load(json.dumps(json_data, indent=4))
-        self.refresh()
+        json_doc.load(json_data)
+
 
 class JSONTree(Tree):
     def add_node(self, name: str, node: TreeNode, data: object) -> None:
@@ -61,6 +96,7 @@ class JSONTree(Tree):
                 new_node = node.add("")
                 self.add_node(key, new_node, value)
                 new_node.data = value
+
         elif isinstance(data, list):
             node._label = Text(f"{name}")
             for index, value in enumerate(data):
