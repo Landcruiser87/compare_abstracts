@@ -16,10 +16,6 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 2. Cosine similarity to a particular subject.
 3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
 
-## TUI
-
-This repo also comes with a TUI (Terminal User Interface) that allows you to explore the scraped JSON objects with 
-
 ## Requirements
 - Python >= 3.11
 
@@ -38,8 +34,6 @@ Order of operations of below terminal commands.
 - Create venv
 - Activate venv
 - Install libraries
-
-```
 
 `CTRL + SHIFT + ~` will open a terminal
 Navigate to the directory where you want to clone the repo. 
@@ -80,7 +74,7 @@ poetry config virtualenvs.in-project true
 
 For general instruction as to poetry's functionality and commands, please see read through poetry's [cli documentation](https://python-poetry.org/docs/cli/)
 
-To new .venv
+To create a new venv
 
 ```terminal
 python -m venv .venv
@@ -120,5 +114,15 @@ $ mkdir logs
 $ mkdir screenshots
 $ cd ..
 ```
+
+## TUI
+
+This repo also comes with a TUI (Terminal User Interface) that allows you to explore the scraped JSON objects for each year.  To run the TUI with poetry
+
+```terminal
+poetry run python tui/__main__.py data/scraped/2024_ICML.json 
+#replace year/conf
+```
+
 
 # Project Todo list
