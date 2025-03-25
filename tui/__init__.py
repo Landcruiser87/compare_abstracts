@@ -16,12 +16,12 @@ from widgets import JSONDocumentView, JSONTree, TreeView
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
-__prog_name__ = "jtree_andy"
+__prog_name__ = "jtree_ML"
 __version__ = "0.2.8"   
 
 class JSONTreeApp(App):
     TITLE = __prog_name__
-    SUB_TITLE = f"A JSON Tree Viewer ({__version__})"
+    SUB_TITLE = f"A JSON Tree Viewer for Machine Learning Papers ({__version__})"
     CSS_PATH = "css/layout.tcss"
     show_abstract = False
     BINDINGS = [
