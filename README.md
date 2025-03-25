@@ -12,6 +12,7 @@
 
 The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
 
+### Possible modeling paths
 1. Clustering
 2. Cosine similarity to a particular subject.
 3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
@@ -110,19 +111,29 @@ While in root directory run commands below
 
 ```
 $ cd data
-$ mkdir logs
-$ mkdir screenshots
+$ mkdir logs logs/scrape logs/tui
 $ cd ..
 ```
 
 ## TUI
 
-This repo also comes with a TUI (Terminal User Interface) that allows you to explore the scraped JSON objects for each year.  To run the TUI with poetry
+This repo also comes with a TUI (Terminal User Interface) that allows you to
+explore the scraped JSON objects for each year.  This repo was forked from
+[here](https://github.com/oleksis/jtree) and updated with a ScrollableContainer
+on the right panel instead of the previous output.  Thank you to
+[oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
+
+To run the TUI with poetry
 
 ```terminal
 poetry run python tui/__main__.py data/scraped/2024_ICML.json 
 #replace year/conf
 ```
 
+With Python
+```terminal
+python tui/__main__.py data/scraped/2024_ICML.json 
+#replace year/conf
+```
 
 # Project Todo list
