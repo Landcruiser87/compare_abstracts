@@ -28,15 +28,7 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 - requests
 - matplotlib
 
-Order of operations of below terminal commands. 
-- Open Terminal
-- Clone repo
-- Change directories
-- Create venv
-- Activate venv
-- Install libraries
-
-`CTRL + SHIFT + ~` will open a terminal
+In `VSCODE` press `CTRL + SHIFT + ~` to open a terminal
 Navigate to the directory where you want to clone the repo. 
 
 ## Cloning and setting up environment.
@@ -102,9 +94,6 @@ To view only top level library requirements
 ```terminal
 poetry show -T
 ```
-
-
-## Environment storage
 ## File Setup
 
 While in root directory run commands below
