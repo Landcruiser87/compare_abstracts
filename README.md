@@ -125,6 +125,13 @@ python tui/__main__.py data/scraped/2024_ICML.json
 #replace year/conf
 ```
 
+With no file args.  This will launch a file picking application that scans the
+`data/scraped` folder and shows you a list of available files. 
+
+```terminal
+python tui/__main__.py 
+```
+
 # Project Todo list
 
 UI
@@ -133,3 +140,4 @@ UI
   - members of the tree might have 
   - those searchwords
 - [ ] Regex Search  
+- [x] File Directory search when no arg parse (i got tired of typing paths)
