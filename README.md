@@ -137,3 +137,10 @@ python tui/__main__.py data/scraped/2024_ICML.json
 ```
 
 # Project Todo list
+
+UI
+- [ ] Add autofiltered search to Tree
+  - Enter word, highlight which other 
+  - members of the tree might have 
+  - those searchwords
+- [ ] Regex Search  
