@@ -175,7 +175,7 @@ if __name__ == "__main__":
 
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
-        #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them
+        #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them!!!
 
     #Other future conferences to add
 

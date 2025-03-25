@@ -69,19 +69,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-#TODO .  Fork JTREE /adapt TUI for different json tree exploration.
-    #various categories that are found within that years scrape.  Might need to
-    #update each keyword for sites to get better category data for sorting
-
-#Sidebar expands out from left side and allows you to regroup by the following categories.  
-    #dataset ID
-    #institution - Will need to go with either first person or majority of institution among authors
-    #timezone - lol 
-    #topic cosine sim
-    #abstract cosine sim
-        #cosine sim to current selected abstract above... eh 80 percent.  
-        #(or put an input box to control that)
-    #abstract summary text wrap.
