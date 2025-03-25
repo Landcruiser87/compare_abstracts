@@ -46,7 +46,7 @@ class JSONDocument(ScrollableContainer):
                 except json.JSONDecodeError:
                     # If it's not valid JSON, just display the raw string
                     formatted_text = json_data
-            elif isinstance(json_data, (dict, list)):
+            elif isinstance(json_data, (dict, list, int)):
                 formatted_text = pretty_repr(json_data)
             else:
                 formatted_text = f"Error: Invalid input type: {type(json_data)}"
