@@ -26,7 +26,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "1_Differentiation of Blackbox Combinatorial Solvers": {
     "id": 2083,
@@ -77,7 +79,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "2_Learning to Group: A Bottom-Up Framework for 3D Part Discovery in Unseen Categories": {
     "id": 2077,
@@ -141,7 +145,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "3_Mirror-Generative Neural Machine Translation": {
     "id": 2065,
@@ -198,7 +204,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "4_Option Discovery using Deep Skill Chaining": {
     "id": 2048,
@@ -227,7 +235,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "5_On the interaction between supervision and self-play in emergent communication": {
     "id": 2017,
@@ -279,7 +289,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "6_Capsules with Inverted Dot-Product Attention Routing": {
     "id": 2015,
@@ -322,7 +334,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "7_Guiding Program Synthesis by Learning to Generate Examples": {
     "id": 2010,
@@ -358,7 +372,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "8_Understanding and Robustifying Differentiable Architecture Search": {
     "id": 2019,
@@ -416,7 +432,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "9_Gradient Descent Maximizes the Margin of Homogeneous Neural Networks": {
     "id": 1985,
@@ -445,7 +463,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "10_Gap-Aware Mitigation of Gradient Staleness": {
     "id": 1979,
@@ -480,7 +500,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "11_BatchEnsemble: an Alternative Approach to Efficient Ensemble and Lifelong Learning": {
     "id": 1988,
@@ -516,7 +538,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "12_Dynamics-Aware Unsupervised Skill Discovery": {
     "id": 1966,
@@ -566,7 +590,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "13_Feature Interaction Interpretability: A Case for Explaining Ad-Recommendation Systems via Neural Interaction Detection": {
     "id": 1963,
@@ -623,7 +649,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "14_Learning Robust Representations via Multi-View Information Bottleneck": {
     "id": 1967,
@@ -674,7 +702,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "15_Minimizing FLOPs to Learn Efficient Sparse Representations": {
     "id": 1959,
@@ -731,7 +761,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "16_ALBERT: A Lite BERT for Self-supervised Learning of Language Representations": {
     "id": 1935,
@@ -787,7 +819,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "17_Few-shot Text Classification with Distributional Signatures": {
     "id": 1928,
@@ -830,7 +864,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "18_Sub-policy Adaptation for Hierarchical Reinforcement Learning": {
     "id": 1924,
@@ -872,7 +908,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "19_Exploration in Reinforcement Learning with Deep Covering Options": {
     "id": 1509,
@@ -915,7 +953,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "20_RNNs Incrementally Evolving on an Equilibrium Manifold: A Panacea for Vanishing and Exploding Gradients?": {
     "id": 1913,
@@ -951,7 +991,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "21_Actor-Critic Provably Finds Nash Equilibria of Linear-Quadratic Mean-Field Games": {
     "id": 1901,
@@ -994,7 +1036,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "22_Reinforced Genetic Algorithm Learning for Optimizing Computation Graphs": {
     "id": 1890,
@@ -1058,7 +1102,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "23_RaPP: Novelty Detection with Reconstruction along Projection Pathway": {
     "id": 1889,
@@ -1121,7 +1167,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "24_Quantifying Point-Prediction Uncertainty in Neural Networks via Residual Estimation with an I/O Kernel": {
     "id": 2066,
@@ -1157,7 +1205,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "25_Meta Reinforcement Learning with Autonomous Inference of Subtask Dependencies": {
     "id": 1881,
@@ -1202,7 +1252,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "26_Improved Sample Complexities for Deep Neural Networks and Robust Classification via an All-Layer Margin": {
     "id": 1868,
@@ -1231,7 +1283,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "27_BlockSwap: Fisher-guided Block Substitution for Network Compression on a Budget": {
     "id": 1860,
@@ -1280,7 +1334,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "28_Why Not to Use Zero Imputation? Correcting Sparsity Bias in Training Neural Networks": {
     "id": 1858,
@@ -1330,7 +1386,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "29_DivideMix: Learning with Noisy Labels as Semi-supervised Learning": {
     "id": 1537,
@@ -1367,7 +1425,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "30_Breaking  Certified  Defenses:  Semantic  Adversarial  Examples  With  Spoofed  Robustness  Certificates": {
     "id": 1732,
@@ -1404,7 +1464,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "31_Tranquil Clouds: Neural Networks for Learning Temporally Coherent Features in Point Clouds": {
     "id": 1859,
@@ -1447,7 +1509,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "32_Multiplicative Interactions and Where to Find Them": {
     "id": 1710,
@@ -1525,7 +1589,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "33_Computation Reallocation for Object Detection": {
     "id": 1850,
@@ -1589,7 +1655,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "34_Few-Shot Learning on Graphs via Super-Classes Based on Graph Spectral Measures": {
     "id": 1829,
@@ -1624,7 +1692,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "35_Asymptotics of Wide Networks from Feynman Diagrams": {
     "id": 1987,
@@ -1654,7 +1724,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "36_Network Deconvolution": {
     "id": 1838,
@@ -1725,7 +1797,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "37_Q-learning with UCB Exploration is Sample Efficient for Infinite-Horizon MDP": {
     "id": 1823,
@@ -1768,7 +1842,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "38_Deep Learning of Determinantal Point Processes via Proper Spectral Sub-gradient": {
     "id": 1819,
@@ -1803,7 +1879,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "39_Improved memory in recurrent neural networks with sequential non-normal dynamics": {
     "id": 1799,
@@ -1832,7 +1910,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "40_Geometric Insights into the Convergence of Nonlinear TD Learning": {
     "id": 1791,
@@ -1862,7 +1942,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "41_Interpretable Complex-Valued Neural Networks for Privacy Protection": {
     "id": 1792,
@@ -1921,7 +2003,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "42_Measuring the Reliability of Reinforcement Learning Algorithms": {
     "id": 1777,
@@ -1972,7 +2056,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "43_Universal Approximation with Certified Networks": {
     "id": 1750,
@@ -2008,7 +2094,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "44_Drawing Early-Bird Tickets: Toward More Efficient Training of Deep Networks": {
     "id": 1755,
@@ -2090,7 +2178,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "45_Deep Semi-Supervised Anomaly Detection": {
     "id": 1748,
@@ -2156,7 +2246,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "46_Ae-Ot: A New Generative Model Based on Extended Semi-Discrete Optimal Transport": {
     "id": 1937,
@@ -2212,7 +2304,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "47_DeepHoyer: Learning Sparser Neural Network with Differentiable Scale-Invariant Sparsity Measures": {
     "id": 1728,
@@ -2248,7 +2342,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "48_Deep probabilistic subsampling for task-adaptive compressed sensing": {
     "id": 1713,
@@ -2284,7 +2380,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "49_B-Spline CNNs on Lie groups": {
     "id": 1698,
@@ -2305,7 +2403,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "50_A Mutual Information Maximization Perspective of Language Representation Learning": {
     "id": 1671,
@@ -2363,7 +2463,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "51_Federated Adversarial Domain Adaptation": {
     "id": 1658,
@@ -2407,7 +2509,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "52_ELECTRA: Pre-training Text Encoders as Discriminators Rather Than Generators": {
     "id": 1587,
@@ -2450,7 +2554,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "53_Towards Stable and Efficient Training of Verifiably Robust Neural Networks": {
     "id": 1636,
@@ -2525,7 +2631,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "54_Meta-Q-Learning": {
     "id": 1490,
@@ -2568,7 +2676,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "55_The Break-Even Point on Optimization Trajectories of Deep Neural Networks": {
     "id": 1634,
@@ -2633,7 +2743,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "56_Population-Guided Parallel Policy Search for Reinforcement Learning": {
     "id": 1621,
@@ -2668,7 +2780,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "57_Diverse Trajectory Forecasting with Determinantal Point Processes": {
     "id": 1694,
@@ -2697,7 +2811,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "58_Enhancing Transformation-Based Defenses Against Adversarial Attacks with a Distribution Classifier": {
     "id": 1618,
@@ -2739,7 +2855,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "59_Hoppity: Learning Graph Transformations to Detect and Fix Bugs in Programs": {
     "id": 1851,
@@ -2796,7 +2914,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "60_Training individually fair ML models with sensitive subspace robustness": {
     "id": 1955,
@@ -2832,7 +2952,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "61_Cross-lingual Alignment vs Joint Training: A Comparative Study and A Simple Unified Framework": {
     "id": 1594,
@@ -2890,7 +3012,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "62_Graph Convolutional Reinforcement Learning": {
     "id": 1548,
@@ -2933,7 +3057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "63_Learning Self-Correctable Policies and Value Functions from Demonstrations with Negative Sampling": {
     "id": 1577,
@@ -2968,7 +3094,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "64_Influence-Based Multi-Agent Exploration": {
     "id": 1578,
@@ -3013,7 +3141,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "65_On Bonus Based Exploration Methods In The Arcade Learning Environment": {
     "id": 1574,
@@ -3064,7 +3194,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "66_Mixup Inference: Better Exploiting Mixup to Defend Adversarial Attacks": {
     "id": 1553,
@@ -3100,7 +3232,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "67_Exploring Model-based Planning with Policy Networks": {
     "id": 1552,
@@ -3128,7 +3262,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "68_Picking Winning Tickets Before Training by Preserving Gradient Flow": {
     "id": 2062,
@@ -3164,7 +3300,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "69_Unsupervised Clustering using Pseudo-semi-supervised Learning": {
     "id": 1538,
@@ -3206,7 +3344,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "70_Adversarially robust transfer learning": {
     "id": 1528,
@@ -3271,7 +3411,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "71_On Generalization Error Bounds of Noisy Gradient Methods for Non-Convex Learning": {
     "id": 1524,
@@ -3306,7 +3448,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "72_Learning transport cost from subset correspondence": {
     "id": 1530,
@@ -3341,7 +3485,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "73_MMA Training: Direct Input Space Margin Maximization through Adversarial Training": {
     "id": 1501,
@@ -3384,7 +3530,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "74_Vid2Game: Controllable Characters Extracted from Real-World Videos": {
     "id": 1839,
@@ -3419,7 +3567,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "75_Understanding Architectures Learnt by Cell-based Neural Architecture Search": {
     "id": 1488,
@@ -3455,7 +3605,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "76_Deep Double Descent: Where Bigger Models and More Data Hurt": {
     "id": 1489,
@@ -3514,7 +3666,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "77_Composition-based Multi-Relational Graph Convolutional Networks": {
     "id": 1462,
@@ -3557,7 +3711,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "78_Scalable and Order-robust Continual Learning with Additive Parameter Decomposition": {
     "id": 1441,
@@ -3599,7 +3755,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "79_Meta-Learning Deep Energy-Based Memory Models": {
     "id": 1468,
@@ -3641,7 +3799,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "80_Cross-Lingual Ability of Multilingual BERT: An Empirical Study": {
     "id": 1539,
@@ -3684,7 +3844,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "81_On the Variance of the Adaptive Learning Rate and Beyond": {
     "id": 1812,
@@ -3747,7 +3909,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "82_Towards neural networks that provably know when they don't know": {
     "id": 1459,
@@ -3775,7 +3939,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "83_Reanalysis of Variance Reduced Temporal Difference Learning": {
     "id": 1458,
@@ -3818,7 +3984,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "84_Consistency Regularization for Generative Adversarial Networks": {
     "id": 1454,
@@ -3862,7 +4030,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "85_At Stability's Edge: How to Adjust Hyperparameters to Preserve Minima Selection in Asynchronous Training of Neural Networks?": {
     "id": 1856,
@@ -3905,7 +4075,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "86_Bayesian Meta Sampling for Fast Uncertainty Adaptation": {
     "id": 1466,
@@ -3955,7 +4127,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "87_FSPool: Learning Set Representations with Featurewise Sort Pooling": {
     "id": 1440,
@@ -3993,7 +4167,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "88_Unsupervised Model Selection for Variational Disentangled Representation Learning": {
     "id": 1870,
@@ -4059,7 +4235,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "89_Scaling Autoregressive Video Models": {
     "id": 1443,
@@ -4096,7 +4274,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "90_GENESIS: Generative Scene Inference and Sampling with Object-Centric Latent Representations": {
     "id": 1437,
@@ -4139,7 +4319,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "91_Deep Learning For Symbolic Mathematics": {
     "id": 1417,
@@ -4168,7 +4350,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "92_Bounds on Over-Parameterization for Guaranteed Existence of Descent Paths in Shallow ReLU Networks": {
     "id": 1455,
@@ -4204,7 +4388,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "93_V4D: 4D Convolutional Neural Networks for Video-level Representation Learning": {
     "id": 1433,
@@ -4253,7 +4439,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "94_Frequency-based Search-control in Dyna": {
     "id": 1510,
@@ -4291,7 +4479,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "95_Understanding Why Neural Networks Generalize Well Through GSNR of Parameters": {
     "id": 2064,
@@ -4340,7 +4530,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "96_Learning representations for binary-classification without backpropagation": {
     "id": 1482,
@@ -4361,7 +4553,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "97_Optimal Strategies Against Generative Attacks": {
     "id": 1614,
@@ -4404,7 +4598,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "98_A Closer Look at the Optimization Landscapes of Generative Adversarial Networks": {
     "id": 1529,
@@ -4455,7 +4651,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "99_Differentiable learning of numerical rules in knowledge graphs": {
     "id": 1486,
@@ -4499,7 +4697,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "100_Batch-shaping for learning conditional channel gated networks": {
     "id": 2072,
@@ -4536,7 +4736,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "101_Once for All: Train One Network and Specialize it for Efficient Deployment": {
     "id": 2086,
@@ -4589,7 +4791,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "102_Linear Symmetric Quantization of Neural Networks for Low-precision Integer Hardware": {
     "id": 1425,
@@ -4638,7 +4842,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "103_IMPACT: Importance Weighted Asynchronous Architectures with Clipped Target Networks": {
     "id": 1514,
@@ -4687,7 +4893,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "104_Hamiltonian Generative Networks": {
     "id": 1561,
@@ -4744,7 +4952,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "105_Ensemble Distribution Distillation": {
     "id": 1810,
@@ -4780,7 +4990,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "106_Reformer: The Efficient Transformer": {
     "id": 1692,
@@ -4815,7 +5027,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "107_High Fidelity Speech Synthesis with Adversarial Networks": {
     "id": 1663,
@@ -4889,7 +5103,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "108_Four Things Everyone Should Know to Improve Batch Normalization": {
     "id": 1575,
@@ -4917,7 +5133,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "109_Learning Space Partitions for Nearest Neighbor Search": {
     "id": 1476,
@@ -4961,7 +5179,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "110_Automatically Discovering and Learning New Visual Categories with Ranking Statistics": {
     "id": 1582,
@@ -5012,7 +5232,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "111_Harnessing Structures for Value-Based Planning and Reinforcement Learning": {
     "id": 1598,
@@ -5055,7 +5277,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "112_Neural Stored-program Memory": {
     "id": 1989,
@@ -5090,7 +5314,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "113_Additive Powers-of-Two Quantization: An Efficient Non-uniform Discretization for Neural Networks": {
     "id": 1638,
@@ -5126,7 +5352,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "114_Difference-Seeking Generative Adversarial Network--Unseen Sample Generation": {
     "id": 2087,
@@ -5169,7 +5397,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "115_Learning from Explanations with Neural Execution Tree": {
     "id": 2074,
@@ -5241,7 +5471,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "116_Training binary neural networks with real-to-binary convolutions": {
     "id": 1667,
@@ -5285,7 +5517,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "117_Quantifying the Cost of Reliable Photo Authentication via High-Performance Learned Lossy Representations": {
     "id": 1535,
@@ -5313,7 +5547,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "118_Recurrent neural circuits for contour detection": {
     "id": 1472,
@@ -5357,7 +5593,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "119_Making Efficient Use of Demonstrations to Solve Hard Exploration Problems": {
     "id": 1949,
@@ -5471,7 +5709,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "120_Comparing Rewinding and Fine-tuning in Neural Network Pruning": {
     "id": 1969,
@@ -5507,7 +5747,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "121_Inductive representation learning on temporal graphs": {
     "id": 1456,
@@ -5558,7 +5800,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "122_Implementation Matters in Deep RL: A Case Study on PPO and TRPO": {
     "id": 1752,
@@ -5625,7 +5869,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "123_Contrastive Representation Distillation": {
     "id": 1703,
@@ -5661,7 +5907,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "124_Massively Multilingual Sparse Word Representations": {
     "id": 1685,
@@ -5682,7 +5930,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "125_Adversarially Robust Representations with Smooth Encoders": {
     "id": 1527,
@@ -5727,7 +5977,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "126_Network Randomization: A Simple Technique for Generalization in Deep Reinforcement Learning": {
     "id": 1547,
@@ -5772,7 +6024,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "127_The Local Elasticity of Neural Networks": {
     "id": 1683,
@@ -5802,7 +6056,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "128_Provable Benefit of Orthogonal Initialization in Optimizing Deep Linear Networks": {
     "id": 1735,
@@ -5839,7 +6095,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "129_Measuring and Improving the Use of Graph Information in Graph Neural Networks": {
     "id": 1830,
@@ -5903,7 +6161,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "130_Robustness Verification for Transformers": {
     "id": 1800,
@@ -5956,7 +6216,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "131_The Shape of Data: Intrinsic Distance for Data Distributions": {
     "id": 1753,
@@ -6020,7 +6282,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "132_Truth or backpropaganda? An empirical investigation of deep learning theory": {
     "id": 1555,
@@ -6073,7 +6337,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "133_Emergent Tool Use From Multi-Agent Autocurricula": {
     "id": 1450,
@@ -6136,7 +6402,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "134_Discovering Motor Programs by Recomposing Demonstrations": {
     "id": 1720,
@@ -6178,7 +6446,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "135_DeepV2D: Video to Depth with Differentiable Structure from Motion": {
     "id": 1436,
@@ -6207,7 +6477,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "136_I Am Going MAD: Maximum Discrepancy Competition for Comparing Classifiers Adaptively": {
     "id": 1908,
@@ -6249,7 +6521,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "137_Meta-Dataset: A Dataset of Datasets for Learning to Learn from Few Examples": {
     "id": 1933,
@@ -6345,7 +6619,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "138_Global Relational Models of Source Code": {
     "id": 1945,
@@ -6398,7 +6674,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "139_NeurQuRI: Neural Question Requirement Inspector for Answerability Prediction in Machine Reading Comprehension": {
     "id": 1842,
@@ -6447,7 +6725,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "140_Polylogarithmic width suffices for gradient descent to achieve arbitrarily small test error with shallow ReLU networks": {
     "id": 1999,
@@ -6477,7 +6757,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "141_Are Transformers universal approximators of sequence-to-sequence functions?": {
     "id": 2018,
@@ -6529,7 +6811,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "142_StructBERT: Incorporating Language Structures into Pre-training for Deep Language Understanding": {
     "id": 1693,
@@ -6599,7 +6883,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "143_Towards Verified Robustness under Text Deletion Interventions": {
     "id": 2031,
@@ -6665,7 +6951,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "144_Simple and Effective Regularization Methods for Training on Noisily Labeled Data with Generalization Guarantee": {
     "id": 2034,
@@ -6703,7 +6991,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "145_Enabling Deep Spiking Neural Networks with Hybrid Conversion and Spike Timing Dependent Backpropagation": {
     "id": 1526,
@@ -6746,7 +7036,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "146_On the Relationship between Self-Attention and Convolutional Layers": {
     "id": 2036,
@@ -6783,7 +7075,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "147_Learning Efficient Parameter Server Synchronization Policies for Distributed SGD": {
     "id": 2003,
@@ -6832,7 +7126,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "148_Convolutional Conditional Neural Processes": {
     "id": 2060,
@@ -6890,7 +7186,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "149_RTFM: Generalising to New Environment Dynamics via Reading": {
     "id": 2053,
@@ -6928,7 +7226,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "150_Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning": {
     "id": 1549,
@@ -6985,7 +7285,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "151_Exploratory Not Explanatory: Counterfactual Analysis of Saliency Maps for Deep Reinforcement Learning": {
     "id": 1708,
@@ -7021,7 +7323,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "152_Principled Weight Initialization for Hypernetworks": {
     "id": 1474,
@@ -7056,7 +7360,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "153_Decoding As Dynamic Programming For Recurrent Autoregressive Models": {
     "id": 1426,
@@ -7092,7 +7398,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "154_You Only Train Once: Loss-Conditional Training of Deep Networks": {
     "id": 2021,
@@ -7121,7 +7429,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "155_Tensor Decompositions for Temporal Knowledge Base Completion": {
     "id": 1516,
@@ -7156,7 +7466,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "156_Certified Robustness for Top-k Predictions against Adversarial Perturbations via Randomized Smoothing": {
     "id": 1946,
@@ -7199,7 +7511,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "157_EMPIR: Ensembles of Mixed Precision Deep Networks for Increased Robustness Against Adversarial Attacks": {
     "id": 1568,
@@ -7234,7 +7548,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "158_Meta-Learning Acquisition Functions for Transfer Learning in Bayesian Optimization": {
     "id": 1585,
@@ -7299,7 +7615,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "159_BERTScore: Evaluating Text Generation with BERT": {
     "id": 1738,
@@ -7350,7 +7668,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "160_Enhancing Adversarial Defense by k-Winners-Take-All": {
     "id": 1619,
@@ -7385,7 +7705,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "161_Lite Transformer with Long-Short Range Attention": {
     "id": 1724,
@@ -7436,7 +7758,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "162_Triple Wins: Boosting Accuracy, Robustness and Efficiency Together by Enabling Input-Adaptive Inference": {
     "id": 1606,
@@ -7478,7 +7802,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "163_PAC Confidence Sets for Deep Neural Networks via Calibrated Prediction": {
     "id": 1997,
@@ -7522,7 +7848,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "164_Pseudo-LiDAR++: Accurate Depth for 3D Object Detection in Autonomous Driving": {
     "id": 1727,
@@ -7595,7 +7923,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "165_Distance-Based Learning from Errors for Confidence Calibration": {
     "id": 1646,
@@ -7638,7 +7968,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "166_Analysis of Video Feature Learning in Two-Stream CNNs on the Example of Zebrafish Swim Bout Classification": {
     "id": 1543,
@@ -7666,7 +7998,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "167_You CAN Teach an Old Dog New Tricks! On Training Knowledge Graph Embeddings": {
     "id": 1952,
@@ -7701,7 +8035,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "168_SUMO: Unbiased Estimation of Log Marginal Probability for Latent Variable Models": {
     "id": 1705,
@@ -7766,7 +8102,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "169_Query-efficient Meta Attack to Deep Neural Networks": {
     "id": 1629,
@@ -7816,7 +8154,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "170_Thieves on Sesame Street! Model Extraction of BERT-based APIs": {
     "id": 1664,
@@ -7866,7 +8206,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "171_Smooth markets: A basic mechanism for organizing gradient-based learners": {
     "id": 1595,
@@ -7939,7 +8281,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "172_On the Need for Topology-Aware Generative Models for Manifold-Based Defenses": {
     "id": 1788,
@@ -7976,7 +8320,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "173_Understanding l4-based Dictionary Learning: Interpretation, Stability, and Robustness": {
     "id": 1754,
@@ -8018,7 +8364,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "174_Continual learning with hypernetworks": {
     "id": 1844,
@@ -8063,7 +8411,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "175_Pre-training Tasks for Embedding-based Large-scale Retrieval": {
     "id": 1439,
@@ -8113,7 +8463,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "176_A Learning-based Iterative Method for Solving Vehicle Routing Problems": {
     "id": 1827,
@@ -8148,7 +8500,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "177_Sparse Coding with Gated Learned ISTA": {
     "id": 1442,
@@ -8193,7 +8547,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "178_Learning from Rules Generalizing Labeled Exemplars": {
     "id": 1895,
@@ -8237,7 +8593,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "179_Dream to Control: Learning Behaviors by Latent Imagination": {
     "id": 1737,
@@ -8280,7 +8638,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "180_Inductive Matrix Completion Based on Graph Neural Networks": {
     "id": 1929,
@@ -8309,7 +8669,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "181_DD-PPO: Learning Near-Perfect PointGoal Navigators from 2.5 Billion Frames": {
     "id": 1576,
@@ -8380,7 +8742,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "182_Weakly Supervised Clustering by Exploiting Unique Class Count": {
     "id": 1573,
@@ -8415,7 +8779,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "183_RIDE: Rewarding Impact-Driven Exploration for Procedurally-Generated Environments": {
     "id": 1682,
@@ -8444,7 +8810,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "184_LambdaNet: Probabilistic Type Inference using Graph Neural Networks": {
     "id": 1695,
@@ -8486,7 +8854,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "185_Your classifier is secretly an energy based model and you should treat it like one": {
     "id": 1816,
@@ -8545,7 +8915,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "186_Deep Network Classification by Scattering and Homotopy Dictionary Learning": {
     "id": 1613,
@@ -8588,7 +8960,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "187_CLN2INV: Learning Loop Invariants with Continuous Logic Networks": {
     "id": 1605,
@@ -8638,7 +9012,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "188_Single Episode Policy Transfer in Reinforcement Learning": {
     "id": 1409,
@@ -8681,7 +9057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "189_Discrepancy Ratio: Evaluating Model Performance When Even Experts Disagree on the Truth": {
     "id": 1521,
@@ -8772,7 +9150,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "190_Generative Models for Effective ML on Private, Decentralized Datasets": {
     "id": 1673,
@@ -8842,7 +9222,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "191_Latent Normalizing Flows for Many-to-Many Cross-Domain Mappings": {
     "id": 1467,
@@ -8877,7 +9259,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "192_Generalized Convolutional Forest Networks for Domain Generalization and Visual Recognition": {
     "id": 1824,
@@ -8919,7 +9303,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "193_Disentangling Factors of Variations Using Few Labels": {
     "id": 1407,
@@ -8976,7 +9362,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "194_Cyclical Stochastic Gradient MCMC for Bayesian Deep Learning": {
     "id": 1805,
@@ -9026,7 +9414,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "195_Conservative Uncertainty Estimation By Fitting  Prior Networks": {
     "id": 1837,
@@ -9077,7 +9467,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "196_Compressive Transformers for Long-Range Sequence Modelling": {
     "id": 1602,
@@ -9126,7 +9518,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "197_Expected Information Maximization: Using the I-Projection for Mixture Density Estimation": {
     "id": 1903,
@@ -9162,7 +9556,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "198_Efficient Probabilistic Logic Reasoning with Graph Neural Networks": {
     "id": 1733,
@@ -9226,7 +9622,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "199_Learning to Balance: Bayesian Meta-Learning for Imbalanced and Out-of-distribution Tasks": {
     "id": 1742,
@@ -9290,7 +9688,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "200_Mutual Information Gradient Estimation for  Representation Learning": {
     "id": 1583,
@@ -9340,7 +9740,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "201_BayesOpt Adversarial Attack": {
     "id": 1747,
@@ -9383,7 +9785,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "202_Neural tangent kernels, transportation mappings, and universal approximation": {
     "id": 1607,
@@ -9420,7 +9824,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "203_word2ket: Space-efficient Word Embeddings inspired by Quantum Entanglement": {
     "id": 1444,
@@ -9457,7 +9863,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "204_Learning to Guide Random Search": {
     "id": 1451,
@@ -9487,7 +9895,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "205_Selection via Proxy: Efficient Data Selection for Deep Learning": {
     "id": 1432,
@@ -9560,7 +9970,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "206_Differentially Private Meta-Learning": {
     "id": 1505,
@@ -9603,7 +10015,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "207_Detecting and Diagnosing Adversarial Images with Class-Conditional Capsule Reconstructions": {
     "id": 1470,
@@ -9660,7 +10074,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "208_Disagreement-Regularized Imitation Learning": {
     "id": 1775,
@@ -9695,7 +10111,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "209_NAS-Bench-201: Extending the Scope of Reproducible Neural Architecture Search": {
     "id": 1481,
@@ -9724,7 +10142,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "210_Editable Neural Networks": {
     "id": 1500,
@@ -9773,7 +10193,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "211_On Robustness of Neural Ordinary Differential Equations": {
     "id": 1507,
@@ -9816,7 +10238,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "212_Adaptive Structural Fingerprints for Graph Attention Networks": {
     "id": 1835,
@@ -9858,7 +10282,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "213_Learning to Move with Affordance Maps": {
     "id": 1498,
@@ -9901,7 +10327,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "214_Depth-Width Trade-offs for ReLU Networks via Sharkovsky's Theorem": {
     "id": 1418,
@@ -9943,7 +10371,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "215_Distributed Bandit Learning: Near-Optimal Regret with Efficient Communication": {
     "id": 1540,
@@ -9986,7 +10416,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "216_Environmental drivers of systematicity and generalization in a situated agent": {
     "id": 1445,
@@ -10052,7 +10484,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "217_Beyond Linearization: On Quadratic and Higher-Order Approximation of Wide Neural Networks": {
     "id": 1556,
@@ -10082,7 +10516,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "218_Sign Bits Are All You Need for Black-Box Attacks": {
     "id": 1701,
@@ -10112,7 +10548,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "219_Are Pre-trained Language Models Aware of Phrases? Simple but Strong Baselines for Grammar Induction": {
     "id": 1639,
@@ -10154,7 +10592,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "220_Mixout: Effective Regularization to Finetune Large-scale Pretrained Language Models": {
     "id": 1610,
@@ -10190,7 +10630,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "221_Neural Arithmetic Units": {
     "id": 1876,
@@ -10218,7 +10660,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "222_Memory-Based Graph Networks": {
     "id": 1927,
@@ -10269,7 +10713,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "223_Self-Adversarial Learning with Comparative Discrimination for Text Generation": {
     "id": 1767,
@@ -10318,7 +10764,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "224_Neural Oblivious Decision Ensembles for Deep Learning on Tabular Data": {
     "id": 1852,
@@ -10354,7 +10802,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "225_Black-box Off-policy Estimation for Infinite-Horizon Reinforcement Learning": {
     "id": 1512,
@@ -10396,7 +10846,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "226_Neural Machine Translation with Universal Visual Representation": {
     "id": 2090,
@@ -10461,7 +10913,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "227_Understanding the Limitations of Variational Mutual Information Estimators": {
     "id": 1825,
@@ -10491,7 +10945,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "228_InfoGraph: Unsupervised and Semi-supervised Graph-Level Representation Learning via Mutual Information Maximization": {
     "id": 1405,
@@ -10536,7 +10992,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "229_Fast Neural Network Adaptation via Parameter Remapping and Architecture Search": {
     "id": 2079,
@@ -10599,7 +11057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "230_Towards Better Understanding of Adaptive Gradient Algorithms in Generative Adversarial Nets": {
     "id": 2082,
@@ -10665,7 +11125,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "231_Dynamically Pruned Message Passing Networks for Large-scale Knowledge Graph Reasoning": {
     "id": 2081,
@@ -10721,7 +11183,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "232_Self-Supervised Learning of Appliance Usage": {
     "id": 2071,
@@ -10771,7 +11235,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "233_Kernelized Wasserstein Natural Gradient": {
     "id": 2075,
@@ -10817,7 +11283,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "234_CAQL: Continuous Action Q-Learning": {
     "id": 2070,
@@ -10867,7 +11335,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "235_The intriguing role of module criticality in the generalization of deep networks": {
     "id": 2055,
@@ -10904,7 +11374,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "236_Contrastive Learning of Structured World Models": {
     "id": 1813,
@@ -10939,7 +11411,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "237_VideoFlow: A Conditional Flow-Based Model for Stochastic Video Generation": {
     "id": 2058,
@@ -11003,7 +11477,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "238_Infinite-horizon Off-Policy Policy Evaluation with Multiple Behavior Policies": {
     "id": 2050,
@@ -11052,7 +11528,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "239_Regularizing activations in neural networks via distribution matching with the Wasserstein metric": {
     "id": 2059,
@@ -11088,7 +11566,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "240_On Universal Equivariant Set Networks": {
     "id": 1609,
@@ -11117,7 +11597,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "241_Deep Symbolic Superoptimization Without Human Knowledge": {
     "id": 2047,
@@ -11167,7 +11649,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "242_Deep Orientation Uncertainty Learning based on a Bingham Loss": {
     "id": 2057,
@@ -11224,7 +11708,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "243_Fair Resource Allocation in Federated Learning": {
     "id": 2041,
@@ -11269,7 +11755,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "244_Geom-GCN: Geometric Graph Convolutional Networks": {
     "id": 2039,
@@ -11319,7 +11807,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "245_Sampling-Free Learning of Bayesian Quantized Neural Networks": {
     "id": 2037,
@@ -11356,7 +11846,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "246_Duration-of-Stay Storage Assignment under Uncertainty": {
     "id": 1984,
@@ -11391,7 +11883,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "247_Learning to Learn by Zeroth-Order Oracle": {
     "id": 2033,
@@ -11443,7 +11937,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "248_AssembleNet: Searching for Multi-Stream Neural Connectivity in Video Architectures": {
     "id": 2023,
@@ -11486,7 +11982,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "249_Graph Neural Networks Exponentially Lose Expressive Power for Node Classification": {
     "id": 2052,
@@ -11515,7 +12013,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "250_Rotation-invariant clustering of neuronal responses in primary visual cortex": {
     "id": 1570,
@@ -11607,7 +12107,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "251_Model-based reinforcement learning for biological sequence design": {
     "id": 1494,
@@ -11664,7 +12166,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "252_Stochastic Conditional Generative Networks with Basis Decomposition": {
     "id": 2011,
@@ -11707,7 +12211,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "253_StructPool: Structured Graph Pooling via Conditional Random Fields": {
     "id": 1675,
@@ -11736,7 +12242,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "254_Denoising and Regularization via Exploiting the Structural Bias of Convolutional Generators": {
     "id": 2006,
@@ -11764,7 +12272,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "255_RaCT: Toward Amortized Ranking-Critical Training For Collaborative Filtering ": {
     "id": 2004,
@@ -11807,7 +12317,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "256_Gradientless Descent: High-Dimensional Zeroth-Order Optimization": {
     "id": 1831,
@@ -11863,7 +12375,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "257_Decoupling Representation and Classifier for Long-Tailed Recognition": {
     "id": 2000,
@@ -11929,7 +12443,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "258_Accelerating SGD with momentum for over-parameterized learning": {
     "id": 1998,
@@ -11957,7 +12473,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "259_Disentangling neural mechanisms for perceptual grouping": {
     "id": 1993,
@@ -12001,7 +12519,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "260_Watch, Try, Learn: Meta-Learning from Demonstrations and Rewards": {
     "id": 2002,
@@ -12087,7 +12607,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "261_NAS-Bench-1Shot1: Benchmarking and Dissecting One-shot Neural Architecture Search": {
     "id": 1768,
@@ -12124,7 +12646,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "262_Optimistic Exploration even with a Pessimistic Initialisation": {
     "id": 1986,
@@ -12166,7 +12690,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "263_Training Generative Adversarial Networks from Incomplete Observations using Factorised Discriminators": {
     "id": 1991,
@@ -12201,7 +12727,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "264_Augmenting Genetic Algorithms with Deep Neural Networks for Exploring the Chemical Space": {
     "id": 1976,
@@ -12243,7 +12771,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "265_Maximum Likelihood Constraint Inference for Inverse Reinforcement Learning": {
     "id": 1975,
@@ -12271,7 +12801,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "266_SCALOR: Generative World Models with Scalable Object Representations": {
     "id": 1973,
@@ -12316,7 +12848,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "267_Knowledge Consistency between Neural Networks and Beyond": {
     "id": 2016,
@@ -12366,7 +12900,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "268_Graph Constrained Reinforcement Learning for Natural Language Action Spaces": {
     "id": 1970,
@@ -12394,7 +12930,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "269_Reinforcement Learning Based Graph-to-Sequence Model for Natural Question Generation": {
     "id": 1968,
@@ -12430,7 +12968,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "270_Fooling Detection Alone is Not Enough: Adversarial Attack against Multiple Object Tracking": {
     "id": 1980,
@@ -12493,7 +13033,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "271_End to End Trainable Active Contours via Differentiable Rendering": {
     "id": 1962,
@@ -12528,7 +13070,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "272_A Probabilistic Formulation of Unsupervised Text Style Transfer": {
     "id": 1992,
@@ -12573,7 +13117,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "273_Pad\u00e9 Activation Units: End-to-end Learning of Flexible Activation Functions in Deep Networks": {
     "id": 1964,
@@ -12609,7 +13155,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "274_Mogrifier LSTM": {
     "id": 2044,
@@ -12644,7 +13192,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "275_The Variational Bandwidth Bottleneck: Stochastic Evaluation on an Information Budget": {
     "id": 1953,
@@ -12690,7 +13240,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "276_Towards a Deep Network Architecture for Structured Smoothness": {
     "id": 1950,
@@ -12719,7 +13271,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "277_Mixed-curvature Variational Autoencoders": {
     "id": 1954,
@@ -12755,7 +13309,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "278_Lookahead: A Far-sighted Alternative of Magnitude-based Pruning": {
     "id": 1943,
@@ -12800,7 +13356,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "279_Symplectic Recurrent Neural Networks": {
     "id": 1960,
@@ -12843,7 +13401,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "280_Fast Task Inference with Variational Intrinsic Successor Features": {
     "id": 1938,
@@ -12901,7 +13461,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "281_Meta-Learning with Warped Gradient Descent": {
     "id": 1951,
@@ -12960,7 +13522,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "282_Black-Box Adversarial Attack with Transferable Model-based Embedding": {
     "id": 1919,
@@ -12989,7 +13553,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "283_Phase Transitions for the Information Bottleneck in Representation Learning": {
     "id": 1944,
@@ -13017,7 +13583,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "284_Pay Attention to Features, Transfer Learn Faster CNNs": {
     "id": 1931,
@@ -13073,7 +13641,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "285_Scalable Neural Methods for Reasoning With a Symbolic Knowledge   Base": {
     "id": 1921,
@@ -13116,7 +13686,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "286_DBA: Distributed Backdoor Attacks against Federated Learning": {
     "id": 1923,
@@ -13160,7 +13732,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "287_Self-labelling via simultaneous clustering and representation learning": {
     "id": 1917,
@@ -13196,7 +13770,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "288_GenDICE: Generalized Offline Estimation of Stationary Values": {
     "id": 1871,
@@ -13238,7 +13814,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "289_Neural Text Generation With Unlikelihood Training": {
     "id": 1911,
@@ -13299,7 +13877,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "290_Gradient-Based Neural DAG Learning": {
     "id": 1922,
@@ -13342,7 +13922,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "291_Efficient Riemannian Optimization on the Stiefel Manifold via the Cayley Transform": {
     "id": 1628,
@@ -13377,7 +13959,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "292_Learning Execution Through Neural Code Fusion": {
     "id": 1900,
@@ -13429,7 +14013,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "293_Emergence of functional and structural properties of the head direction system by optimization of recurrent neural networks": {
     "id": 1899,
@@ -13471,7 +14057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "294_On the Equivalence between Positional Node Embeddings and Structural Graph Representations": {
     "id": 1926,
@@ -13501,7 +14089,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "295_An Exponential Learning Rate Schedule for Deep Learning": {
     "id": 1896,
@@ -13531,7 +14121,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "296_Learning The Difference That Makes A Difference With Counterfactually-Augmented Data": {
     "id": 1891,
@@ -13568,7 +14160,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "297_Measuring Compositional Generalization: A Comprehensive Method on Realistic Data": {
     "id": 1894,
@@ -13681,7 +14275,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "298_Generative Ratio Matching Networks": {
     "id": 1936,
@@ -13726,7 +14322,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "299_White Noise Analysis of Neural Networks": {
     "id": 2024,
@@ -13755,7 +14353,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "300_Progressive Learning and Disentanglement of Hierarchical Representations": {
     "id": 2027,
@@ -13798,7 +14398,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "301_FSNet: Compression of Deep Convolutional Neural Networks by Filter Summary": {
     "id": 2063,
@@ -13848,7 +14450,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "302_Variance Reduction With Sparse Gradients": {
     "id": 2073,
@@ -13884,7 +14488,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "303_Towards Stabilizing Batch Statistics in Backward Propagation of Batch Normalization": {
     "id": 2078,
@@ -13940,7 +14546,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "304_Intrinsically Motivated Discovery of Diverse Patterns in Self-Organizing Systems": {
     "id": 1880,
@@ -13976,7 +14584,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "305_Order Learning and Its Application to Age Estimation": {
     "id": 1473,
@@ -14020,7 +14630,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "306_Stochastic Weight Averaging in Parallel: Large-Batch Training That Generalizes Well": {
     "id": 1883,
@@ -14055,7 +14667,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "307_Neural Execution of Graph Algorithms": {
     "id": 1888,
@@ -14108,7 +14722,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "308_Understanding Knowledge Distillation in Non-autoregressive Machine Translation": {
     "id": 1879,
@@ -14144,7 +14760,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "309_Reconstructing continuous distributions of 3D protein structure from cryo-EM images": {
     "id": 1875,
@@ -14188,7 +14806,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "310_SELF: Learning to Filter Noisy Labels with Self-Ensembling": {
     "id": 1873,
@@ -14245,7 +14865,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "311_Projection-Based Constrained Policy Optimization": {
     "id": 1508,
@@ -14288,7 +14910,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "312_Robust Reinforcement Learning for Continuous Control with Model Misspecification": {
     "id": 1872,
@@ -14372,7 +14996,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "313_Neural Outlier Rejection for Self-Supervised Keypoint Learning": {
     "id": 1865,
@@ -14421,7 +15047,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "314_Robust Subspace Recovery Layer for Unsupervised Anomaly Detection": {
     "id": 1866,
@@ -14457,7 +15085,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "315_Estimating Gradients for Discrete Random Variables by Sampling without Replacement": {
     "id": 1483,
@@ -14493,7 +15123,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "316_A Constructive Prediction of the Generalization Error Across Scales": {
     "id": 1864,
@@ -14535,7 +15167,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "317_Understanding the Limitations of Conditional Generative Models": {
     "id": 1849,
@@ -14579,7 +15213,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "318_Biologically inspired sleep algorithm for increased generalization and adversarial robustness in deep neural networks": {
     "id": 1731,
@@ -14622,7 +15258,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "319_Composing Task-Agnostic Policies with Deep Reinforcement Learning": {
     "id": 1843,
@@ -14678,7 +15316,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "320_Pure and Spurious Critical Points: a Geometric Study of Linear Networks": {
     "id": 1836,
@@ -14714,7 +15354,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "321_GraphZoom: A Multi-level Spectral Approach for Accurate and Scalable Graph Embedding": {
     "id": 1563,
@@ -14765,7 +15407,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "322_Simplified Action Decoder for Deep Multi-Agent Reinforcement Learning": {
     "id": 2067,
@@ -14794,7 +15438,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "323_Finding and Visualizing Weaknesses of Deep Reinforcement Learning Agents": {
     "id": 1783,
@@ -14830,7 +15476,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "324_A Theory of Usable Information under Computational Constraints": {
     "id": 1832,
@@ -14881,7 +15529,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "325_Meta Dropout: Learning to Perturb Latent Features for Generalization": {
     "id": 1833,
@@ -14923,7 +15573,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "326_Bridging Mode Connectivity in Loss Landscapes and Adversarial Robustness": {
     "id": 1826,
@@ -14975,7 +15627,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "327_Keep Doing What Worked: Behavior Modelling Priors for Offline Reinforcement Learning": {
     "id": 1828,
@@ -15052,7 +15706,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "328_Pitfalls of In-Domain Uncertainty Estimation and Ensembling in Deep Learning": {
     "id": 1822,
@@ -15094,7 +15750,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "329_A Signal Propagation Perspective for Pruning Neural Networks at Initialization": {
     "id": 1807,
@@ -15137,7 +15795,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "330_Relational State-Space Model for Stochastic Multi-Object Systems": {
     "id": 1821,
@@ -15186,7 +15846,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "331_Low-Resource Knowledge-Grounded Dialogue Generation": {
     "id": 1809,
@@ -15243,7 +15905,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "332_Dynamics-Aware Embeddings": {
     "id": 1802,
@@ -15287,7 +15951,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "333_Rethinking the Hyperparameters for Fine-tuning": {
     "id": 1804,
@@ -15352,7 +16018,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "334_The Gambler's Problem and Beyond": {
     "id": 1794,
@@ -15394,7 +16062,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "335_DropEdge: Towards Deep Graph Convolutional Networks on Node Classification": {
     "id": 1793,
@@ -15438,7 +16108,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "336_Precision Gating: Improving Neural Network Efficiency with Dynamic Dual-Precision Activations": {
     "id": 1786,
@@ -15495,7 +16167,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "337_Cross-Domain Few-Shot Classification via Learned Feature-Wise Transformation": {
     "id": 1776,
@@ -15537,7 +16211,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "338_Reinforced active learning for image segmentation": {
     "id": 1782,
@@ -15579,7 +16255,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "339_Observational Overfitting in Reinforcement Learning": {
     "id": 1885,
@@ -15630,7 +16308,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "340_Stochastic AUC Maximization with Deep Neural Networks": {
     "id": 1765,
@@ -15674,7 +16354,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "341_Compression based bound for non-compressed network: unified generalization error analysis of large compressible deep neural network": {
     "id": 1762,
@@ -15710,7 +16392,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "342_On Solving Minimax Optimization Locally: A Follow-the-Ridge Approach": {
     "id": 1761,
@@ -15745,7 +16429,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "343_Model Based Reinforcement Learning for Atari": {
     "id": 1766,
@@ -15861,7 +16547,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "344_Skip Connections Matter: On the Transferability of Adversarial Examples Generated with ResNets": {
     "id": 1751,
@@ -15913,7 +16601,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "345_DeepSphere: a graph-based spherical CNN": {
     "id": 1758,
@@ -15955,7 +16645,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "346_ReClor: A Reading Comprehension Dataset Requiring Logical Reasoning": {
     "id": 1749,
@@ -15997,7 +16689,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "347_Learning to Link": {
     "id": 1740,
@@ -16033,7 +16727,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "348_Encoding word order in complex embeddings": {
     "id": 1744,
@@ -16090,7 +16786,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "349_To Relieve Your Headache of Training an MRF, Take AdVIL": {
     "id": 1741,
@@ -16146,7 +16844,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "350_Deep neuroethology of a virtual rodent": {
     "id": 1730,
@@ -16202,7 +16902,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "351_A Stochastic Derivative Free Optimization Method with Momentum": {
     "id": 1729,
@@ -16253,7 +16955,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "352_Dynamic Time Lag Regression: Predicting What & When": {
     "id": 1726,
@@ -16302,7 +17006,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "353_A critical analysis of self-supervision, or what we can learn from a single image": {
     "id": 1721,
@@ -16338,7 +17044,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "354_Input Complexity and Out-of-distribution Detection with Likelihood-based Generative Models": {
     "id": 1884,
@@ -16396,7 +17104,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "355_Adversarial Policies: Attacking Deep Reinforcement Learning": {
     "id": 1723,
@@ -16455,7 +17165,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "356_Defending Against Physically Realizable Attacks on Image Classification": {
     "id": 1717,
@@ -16491,7 +17203,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "357_Learning Hierarchical Discrete Linguistic Units from Visually-Grounded Speech": {
     "id": 1722,
@@ -16526,7 +17240,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "358_Nesterov Accelerated Gradient and Scale Invariance for Adversarial Attacks": {
     "id": 1712,
@@ -16575,7 +17291,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "359_Curriculum Loss: Robust Learning and Generalization  against Label Corruption": {
     "id": 1707,
@@ -16603,7 +17321,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "360_Learning to Coordinate Manipulation Skills via Skill Behavior Diversification": {
     "id": 1716,
@@ -16638,7 +17358,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "361_U-GAT-IT: Unsupervised Generative Attentional Networks with Adaptive Layer-Instance Normalization for Image-to-Image Translation": {
     "id": 1699,
@@ -16680,7 +17402,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "362_Sequential Latent Knowledge Selection for Knowledge-Grounded Dialogue": {
     "id": 1691,
@@ -16717,7 +17441,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "363_Critical initialisation in continuous approximations of binary neural networks": {
     "id": 1689,
@@ -16768,7 +17494,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "364_Deep Audio Priors Emerge From Harmonic Convolutional Networks": {
     "id": 1684,
@@ -16835,7 +17563,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "365_Understanding and Improving Information Transfer in Multi-Task Learning": {
     "id": 1676,
@@ -16872,7 +17602,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "366_Chameleon: Adaptive Code Optimization for Expedited Deep Neural Network Compilation": {
     "id": 1453,
@@ -16916,7 +17648,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "367_Uncertainty-guided Continual Learning with Bayesian Neural Networks": {
     "id": 1681,
@@ -16961,7 +17695,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "368_Watch the Unobserved: A Simple Approach to Parallelizing Monte Carlo Tree Search": {
     "id": 1677,
@@ -17017,7 +17753,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "369_Differentiable Reasoning over a Virtual Knowledge Base": {
     "id": 1679,
@@ -17076,7 +17814,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "370_Physics-as-Inverse-Graphics: Unsupervised Physical Parameter Estimation from Video": {
     "id": 1674,
@@ -17113,7 +17853,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "371_Abductive Commonsense Reasoning": {
     "id": 1668,
@@ -17190,7 +17932,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "372_Discriminative Particle Filter Reinforcement Learning for Complex Partial observations": {
     "id": 1665,
@@ -17239,7 +17983,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "373_Jelly Bean World: A Testbed for Never-Ending Learning": {
     "id": 1657,
@@ -17274,7 +18020,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "374_AdvectiveNet: An Eulerian-Lagrangian Fluidic Reservoir for Point Cloud Processing     ": {
     "id": 1654,
@@ -17310,7 +18058,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "375_ES-MAML: Simple Hessian-Free Meta Learning": {
     "id": 1642,
@@ -17369,7 +18119,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "376_Augmenting Non-Collaborative Dialog Systems with Explicit Semantic and Strategic Dialog History": {
     "id": 1647,
@@ -17412,7 +18164,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "377_Combining Q-Learning and Search with Amortized Value Estimates": {
     "id": 1641,
@@ -17481,7 +18235,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "378_Low-dimensional statistical manifold embedding of directed graphs": {
     "id": 1630,
@@ -17523,7 +18279,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "379_Learned Step Size Quantization": {
     "id": 1631,
@@ -17572,7 +18330,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "380_Strategies for Pre-training Graph Neural Networks": {
     "id": 2001,
@@ -17638,7 +18398,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "381_Neural Policy Gradient Methods: Global Optimality and Rates of Convergence": {
     "id": 1635,
@@ -17680,7 +18442,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "382_Transferring Optimality Across Data Distributions via Homotopy Methods": {
     "id": 1623,
@@ -17731,7 +18495,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "383_FreeLB: Enhanced Adversarial Training for Natural Language Understanding": {
     "id": 1624,
@@ -17789,7 +18555,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "384_Posterior sampling for multi-agent reinforcement learning: solving extensive games with imperfect information": {
     "id": 1779,
@@ -17824,7 +18592,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "385_Explanation  by Progressive  Exaggeration": {
     "id": 1620,
@@ -17861,7 +18631,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "386_Understanding Generalization in Recurrent Neural Networks": {
     "id": 1599,
@@ -17898,7 +18670,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "387_Physics-aware Difference Graph Networks for Sparsely-Observed Dynamics": {
     "id": 1612,
@@ -17936,7 +18710,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "388_Permutation Equivariant Models for Compositional Generalization in Language": {
     "id": 1592,
@@ -17978,7 +18754,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "389_Overlearning Reveals Sensitive Attributes": {
     "id": 1588,
@@ -18007,7 +18785,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "390_Reducing Transformer Depth on Demand with Structured Dropout": {
     "id": 1590,
@@ -18043,7 +18823,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "391_GAT: Generative Adversarial Training for Adversarial Example Detection and Classification": {
     "id": 1759,
@@ -18079,7 +18861,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "392_Scalable Model Compression by Entropy Penalized Reparameterization": {
     "id": 1811,
@@ -18124,7 +18908,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "393_The Logical Expressiveness of Graph Neural Networks": {
     "id": 1591,
@@ -18181,7 +18967,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "394_Compositional languages emerge in a neural iterated learning model": {
     "id": 1771,
@@ -18230,7 +19018,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "395_CM3: Cooperative Multi-goal Multi-stage Multi-agent Reinforcement Learning": {
     "id": 1581,
@@ -18279,7 +19069,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "396_Hierarchical Foresight: Self-Supervised Learning of Long-Horizon Tasks via Visual Subgoal Generation": {
     "id": 1569,
@@ -18308,7 +19100,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "397_Intrinsic Motivation for Encouraging Synergistic Behavior": {
     "id": 1567,
@@ -18351,7 +19145,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "398_Adaptive Correlated Monte Carlo for Contextual Categorical Sequence Generation": {
     "id": 1559,
@@ -18394,7 +19190,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "399_On Mutual Information Maximization for Representation Learning": {
     "id": 1725,
@@ -18444,7 +19242,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "400_Masked Based Unsupervised Content Transfer": {
     "id": 1562,
@@ -18487,7 +19287,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "401_Adversarial Lipschitz Regularization": {
     "id": 1626,
@@ -18508,7 +19310,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "402_A Meta-Transfer Objective for Learning to Disentangle Causal Mechanisms": {
     "id": 1557,
@@ -18582,7 +19386,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "403_Improving Adversarial Robustness Requires Revisiting Misclassified Examples": {
     "id": 1550,
@@ -18642,7 +19448,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "404_Deformable Kernels: Adapting Effective Receptive Fields for Object Deformation": {
     "id": 1551,
@@ -18685,7 +19493,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "405_Revisiting Self-Training for Neural Sequence Generation": {
     "id": 1520,
@@ -18729,7 +19539,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "406_Imitation Learning via Off-Policy Distribution Matching": {
     "id": 1519,
@@ -18766,7 +19578,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "407_Progressive Memory Banks for Incremental Domain Adaptation": {
     "id": 1515,
@@ -18823,7 +19637,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "408_A Closer Look at Deep Policy Gradients": {
     "id": 1517,
@@ -18890,7 +19706,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "409_PC-DARTS: Partial Channel Connections for Memory-Efficient Architecture Search": {
     "id": 1706,
@@ -18955,7 +19773,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "410_Model-Augmented Actor-Critic: Backpropagating through Paths": {
     "id": 1497,
@@ -18990,7 +19810,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "411_Real or Not Real, that is the Question": {
     "id": 1503,
@@ -19040,7 +19862,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "412_Intriguing Properties of Adversarial Training at Scale": {
     "id": 1493,
@@ -19069,7 +19893,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "413_Behaviour Suite for Reinforcement Learning": {
     "id": 1492,
@@ -19181,7 +20007,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "414_A Neural Dirichlet Process Mixture Model for Task-Free Continual Learning": {
     "id": 1477,
@@ -19226,7 +20054,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "415_Hyper-SAGNN: a self-attention based graph neural network for hypergraphs": {
     "id": 1471,
@@ -19261,7 +20091,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "416_Shifted and Squeezed 8-bit Floating Point format for Low-Precision Training of Deep Neural Networks": {
     "id": 1478,
@@ -19319,7 +20151,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "417_Neural Module Networks for Reasoning over Text": {
     "id": 1484,
@@ -19369,7 +20203,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "418_Target-Embedding Autoencoders for Supervised Representation Learning": {
     "id": 2042,
@@ -19397,7 +20233,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "419_Can gradient clipping mitigate label noise?": {
     "id": 1449,
@@ -19441,7 +20279,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "420_Prediction, Consistency, Curvature: Representation Learning for Locally-Linear Control": {
     "id": 2043,
@@ -19499,7 +20339,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "421_LAMOL: LAnguage MOdeling for Lifelong Language Learning": {
     "id": 1446,
@@ -19535,7 +20377,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "422_Quantum Algorithms for Deep Convolutional Neural Networks": {
     "id": 1457,
@@ -19570,7 +20414,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "423_Explain Your Move: Understanding Agent Actions Using Salient and Relevant Feature Attribution": {
     "id": 2061,
@@ -19634,7 +20480,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "424_SlowMo: Improving Communication-Efficient Distributed SGD with Slow Momentum": {
     "id": 2085,
@@ -19678,7 +20526,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "425_Scale-Equivariant Steerable Networks": {
     "id": 2056,
@@ -19714,7 +20564,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "426_ProxSGD: Training Structured Neural Networks under Regularization and Constraints": {
     "id": 1410,
@@ -19770,7 +20622,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "427_BackPACK: Packing more into Backprop": {
     "id": 1430,
@@ -19805,7 +20659,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "428_Coherent Gradients: An Approach to Understanding Generalization in Gradient Descent-based Optimization": {
     "id": 1545,
@@ -19826,7 +20682,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "429_Novelty Detection Via Blurring": {
     "id": 1808,
@@ -19854,7 +20712,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "430_AMRL: Aggregated Memory For Reinforcement Learning": {
     "id": 1435,
@@ -19911,7 +20771,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "431_Learning Heuristics for Quantified Boolean Formulas through Reinforcement Learning": {
     "id": 1423,
@@ -19954,7 +20816,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "432_Federated Learning with Matched Averaging": {
     "id": 1739,
@@ -20003,7 +20867,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "433_On the Convergence of FedAvg on Non-IID Data": {
     "id": 1421,
@@ -20053,7 +20919,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "434_Data-Independent Neural Pruning via Coresets": {
     "id": 1817,
@@ -20104,7 +20972,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "435_Dynamic Sparse Training: Find Efficient Sparse Network From Scratch With Trainable Masked Layers": {
     "id": 1411,
@@ -20153,7 +21023,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "436_Pruned Graph Scattering Transforms": {
     "id": 1579,
@@ -20188,7 +21060,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "437_A Latent Morphology Model for Open-Vocabulary Neural Machine Translation": {
     "id": 1406,
@@ -20224,7 +21098,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "438_Learning to Plan in High Dimensions via Neural Exploration-Exploitation Trees": {
     "id": 1878,
@@ -20282,7 +21158,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "439_Empirical Studies on the Properties of Linear Regions in Deep Neural Networks": {
     "id": 1904,
@@ -20310,7 +21188,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "440_AutoQ: Automated Kernel-Wise Neural Network Quantization ": {
     "id": 1932,
@@ -20361,7 +21241,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "441_V-MPO: On-Policy Maximum a Posteriori Policy Optimization for Discrete and Continuous Control": {
     "id": 1763,
@@ -20476,7 +21358,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "442_Action Semantics Network: Considering the Effects of Actions in Multiagent Systems": {
     "id": 2076,
@@ -20554,7 +21438,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "443_State Alignment-based Imitation Learning": {
     "id": 2046,
@@ -20596,7 +21482,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "444_Efficient and Information-Preserving Future Frame Prediction and Beyond": {
     "id": 1469,
@@ -20639,7 +21527,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "445_Iterative energy-based projection on a normal data manifold for anomaly localization": {
     "id": 1518,
@@ -20681,7 +21571,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "446_Finite Depth and Width Corrections to the Neural Tangent Kernel": {
     "id": 1977,
@@ -20709,7 +21601,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "447_Kernel of CycleGAN as a principal homogeneous space": {
     "id": 1429,
@@ -20745,7 +21639,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "448_Playing the lottery with rewards and multiple languages: lottery tickets in RL and NLP": {
     "id": 1774,
@@ -20788,7 +21684,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "449_Multi-Agent Interactions Modeling with Correlated Policies": {
     "id": 1495,
@@ -20852,7 +21750,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "450_Meta-Learning without Memorization": {
     "id": 1525,
@@ -20906,7 +21806,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "451_Neural Tangents: Fast and Easy Infinite Neural Networks in Python": {
     "id": 1981,
@@ -20974,7 +21876,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "452_Semi-Supervised Generative Modeling for Controllable Speech Synthesis": {
     "id": 2022,
@@ -21044,7 +21948,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "453_Sharing Knowledge in Multi-Task Deep Reinforcement Learning": {
     "id": 1661,
@@ -21095,7 +22001,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "454_Effect of Activation Functions on the Training of Overparametrized Neural Nets": {
     "id": 1625,
@@ -21130,7 +22038,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "455_Pretrained Encyclopedia: Weakly Supervised Knowledge-Pretrained Language Model": {
     "id": 1696,
@@ -21174,7 +22084,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "456_DDSP: Differentiable Digital Signal Processing": {
     "id": 1659,
@@ -21219,7 +22131,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "457_Curvature Graph Network": {
     "id": 1772,
@@ -21268,7 +22182,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "458_Functional vs. parametric equivalence of ReLU networks": {
     "id": 1867,
@@ -21297,7 +22213,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "459_A Function Space View of Bounded Norm Infinite Width ReLU Nets: The Multivariate Case": {
     "id": 1546,
@@ -21340,7 +22258,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "460_VariBAD: A Very Good Method for Bayes-Adaptive Deep RL via Meta-Learning": {
     "id": 1534,
@@ -21405,7 +22325,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "461_Robust anomaly detection and backdoor attack detection via differential privacy": {
     "id": 1785,
@@ -21441,7 +22363,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "462_Learning deep graph matching with channel-independent embedding and Hungarian attention": {
     "id": 1862,
@@ -21483,7 +22407,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "463_Learning To Explore Using Active Neural SLAM": {
     "id": 1861,
@@ -21533,7 +22459,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "464_vq-wav2vec: Self-Supervised Learning of Discrete Speech Representations": {
     "id": 1632,
@@ -21568,7 +22496,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "465_What Can Neural Networks Reason About?": {
     "id": 1447,
@@ -21628,7 +22558,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "466_HiLLoC: lossless image compression with hierarchical latent variable models": {
     "id": 2008,
@@ -21672,7 +22604,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "467_Learning to Represent Programs with Property Signatures": {
     "id": 1434,
@@ -21701,7 +22635,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "468_MetaPix: Few-Shot Video Retargeting": {
     "id": 2088,
@@ -21736,7 +22672,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "469_Functional Regularisation for  Continual Learning with Gaussian Processes": {
     "id": 1650,
@@ -21785,7 +22723,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "470_Fast is better than free: Revisiting adversarial training": {
     "id": 1941,
@@ -21823,7 +22763,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "471_Learning to Control PDEs with Differentiable Physics": {
     "id": 1504,
@@ -21860,7 +22802,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "472_Training Recurrent Neural Networks Online by Learning Explicit State Variables": {
     "id": 1645,
@@ -21920,7 +22864,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "473_And the Bit Goes Down: Revisiting the Quantization of Neural Networks": {
     "id": 1709,
@@ -21970,7 +22916,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "474_Identity Crisis: Memorization and Generalization Under Extreme Overparameterization": {
     "id": 1847,
@@ -22021,7 +22969,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "475_Provable robustness against all adversarial $l_p$-perturbations for $p\\geq 1$": {
     "id": 1948,
@@ -22050,7 +23000,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "476_In Search for a SAT-friendly Binarized Neural Network Architecture": {
     "id": 1452,
@@ -22092,7 +23044,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "477_Data-dependent Gaussian Prior Objective for Language Generation": {
     "id": 1925,
@@ -22157,7 +23111,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "478_Rapid Learning or Feature Reuse? Towards Understanding the Effectiveness of MAML": {
     "id": 1672,
@@ -22202,7 +23158,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "479_Learning Expensive Coordination: An Event-Based Deep RL Approach": {
     "id": 1627,
@@ -22265,7 +23223,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "480_Unrestricted Adversarial Examples via Semantic Manipulation": {
     "id": 1818,
@@ -22316,7 +23276,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "481_Improving Neural Language Generation with Spectrum Control": {
     "id": 1601,
@@ -22374,7 +23336,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "482_Controlling generative models with continuous factors of variations": {
     "id": 1660,
@@ -22409,7 +23373,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "483_GLAD: Learning Sparse Graph Recovery": {
     "id": 1806,
@@ -22473,7 +23439,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "484_Generalization through Memorization: Nearest Neighbor Language Models": {
     "id": 1815,
@@ -22524,7 +23492,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "485_Probability Calibration for Knowledge Graph Embedding Models": {
     "id": 1541,
@@ -22553,7 +23523,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "486_DiffTaichi: Differentiable Programming for Physical Simulation": {
     "id": 2049,
@@ -22616,7 +23588,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "487_Thinking While Moving: Deep Reinforcement Learning with Concurrent Control": {
     "id": 1463,
@@ -22681,7 +23655,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "488_Lipschitz constant estimation of Neural Networks via sparse polynomial optimization": {
     "id": 1652,
@@ -22716,7 +23692,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "489_Transferable Perturbations of Deep Feature Distributions": {
     "id": 2026,
@@ -22759,7 +23737,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "490_Jacobian Adversarially Regularized Networks for Robustness": {
     "id": 1542,
@@ -22803,7 +23783,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "491_CoPhy: Counterfactual Learning of Physical Dynamics": {
     "id": 1643,
@@ -22853,7 +23835,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "492_Smoothness and Stability in GANs": {
     "id": 1764,
@@ -22890,7 +23874,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "493_From Variational to Deterministic Autoencoders": {
     "id": 2012,
@@ -22939,7 +23925,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "494_Program Guided Agent": {
     "id": 1662,
@@ -22974,7 +23962,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "495_The Early Phase of Neural Network Training": {
     "id": 1934,
@@ -23011,7 +24001,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "496_Learning to Retrieve Reasoning Paths over Wikipedia Graph for Question Answering": {
     "id": 1897,
@@ -23061,7 +24053,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "497_GraphAF: a Flow-based Autoregressive Model for Molecular Graph Generation": {
     "id": 1651,
@@ -23118,7 +24112,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "498_Stable Rank Normalization for Improved Generalization in Neural Networks and GANs": {
     "id": 2068,
@@ -23154,7 +24150,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "499_On the Global Convergence  of Training Deep Linear ResNets": {
     "id": 1718,
@@ -23191,7 +24189,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "500_SNOW: Subscribing to Knowledge via Channel Pooling for Transfer & Lifelong Learning of Convolutional Neural Networks": {
     "id": 1939,
@@ -23226,7 +24226,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "501_Mutual Mean-Teaching: Pseudo Label Refinery for Unsupervised Domain Adaptation on Person Re-identification": {
     "id": 1790,
@@ -23263,7 +24265,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "502_A Framework  for Robustness Certification  of Smoothed Classifiers Using  F-Divergences": {
     "id": 1974,
@@ -23346,7 +24350,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "503_CATER: A diagnostic dataset for Compositional Actions & TEmporal Reasoning": {
     "id": 1798,
@@ -23374,7 +24380,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "504_Co-Attentive Equivariant Neural Networks: Focusing Equivariance On Transformations Co-Occurring in Data": {
     "id": 1820,
@@ -23403,7 +24411,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "505_Harnessing the Power of Infinitely Wide Deep Nets on Small-data Tasks": {
     "id": 1680,
@@ -23463,7 +24473,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "506_SPACE: Unsupervised Object-Oriented Scene Representation via Spatial Attention and Decomposition": {
     "id": 1853,
@@ -23538,7 +24550,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "507_Convergence of Gradient Methods on Bilinear Zero-Sum Games": {
     "id": 1882,
@@ -23566,7 +24580,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "508_Poly-encoders: Architectures and Pre-training Strategies for Fast and Accurate Multi-sentence Scoring": {
     "id": 1905,
@@ -23609,7 +24625,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "509_How to 0wn the NAS in Your Spare Time": {
     "id": 1909,
@@ -23660,7 +24678,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "510_SEED RL: Scalable and Efficient Deep-RL with Accelerated Central Inference": {
     "id": 1893,
@@ -23709,7 +24729,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "511_RNA Secondary Structure Prediction By Learning Unrolled Algorithms": {
     "id": 1958,
@@ -23759,7 +24781,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "512_Escaping Saddle Points Faster with Stochastic Momentum": {
     "id": 1414,
@@ -23794,7 +24818,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "513_Gradients as Features for Deep Representation Learning": {
     "id": 1978,
@@ -23829,7 +24855,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "514_Learning Disentangled Representations for CounterFactual Regression": {
     "id": 1961,
@@ -23857,7 +24885,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "515_ReMixMatch: Semi-Supervised Learning with Distribution Matching and Augmentation Anchoring": {
     "id": 1972,
@@ -23922,7 +24952,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "516_GraphSAINT: Graph Sampling Based Inductive Learning Method": {
     "id": 1995,
@@ -23972,7 +25004,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "517_Infinite-Horizon Differentiable Model Predictive Control": {
     "id": 1780,
@@ -24023,7 +25057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "518_Identifying through Flows for Recovering Latent Representations": {
     "id": 2005,
@@ -24059,7 +25095,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "519_Variational Template Machine for Data-to-Text Generation": {
     "id": 2009,
@@ -24109,7 +25147,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "520_On Computation and Generalization of Generative Adversarial Imitation Learning": {
     "id": 2029,
@@ -24173,7 +25213,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "521_Don't Use Large Mini-batches, Use Local SGD": {
     "id": 1408,
@@ -24217,7 +25259,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "522_Locality and Compositionality in Zero-Shot Learning": {
     "id": 1797,
@@ -24254,7 +25298,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "523_Probabilistic Connection Importance Inference and Lossless Compression of Deep Neural Networks": {
     "id": 1787,
@@ -24303,7 +25349,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "524_A Theoretical Analysis of the Number of Shots in Few-Shot Learning": {
     "id": 2054,
@@ -24339,7 +25387,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "525_Ranking Policy Gradient": {
     "id": 2020,
@@ -24367,7 +25417,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "526_Multi-Scale Representation Learning  for Spatial Feature Distributions using Grid Cells": {
     "id": 1778,
@@ -24423,7 +25475,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "527_SAdam: A Variant of Adam for Strongly Convex Functions": {
     "id": 1855,
@@ -24472,7 +25526,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "528_Large Batch Optimization for Deep Learning: Training BERT in 76 minutes": {
     "id": 1745,
@@ -24558,7 +25614,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "529_Piecewise linear activations substantially shape the loss surfaces of neural networks": {
     "id": 1814,
@@ -24594,7 +25652,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "530_Deep Graph Matching Consensus": {
     "id": 1784,
@@ -24645,7 +25705,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "531_Symplectic ODE-Net: Learning Hamiltonian Dynamics with Control": {
     "id": 1656,
@@ -24682,7 +25744,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "532_Certified Defenses for Adversarial Patches": {
     "id": 1670,
@@ -24742,7 +25806,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "533_The Curious Case of Neural Text Degeneration": {
     "id": 1428,
@@ -24793,7 +25859,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "534_Learning Nearly Decomposable Value Functions Via Communication Minimization": {
     "id": 1711,
@@ -24838,7 +25906,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "535_The asymptotic spectrum of the Hessian of DNN throughout training": {
     "id": 1715,
@@ -24874,7 +25944,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "536_PCMC-Net: Feature-based Pairwise Choice Markov Chains": {
     "id": 1431,
@@ -24895,7 +25967,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "537_Robust And Interpretable Blind Image Denoising Via Bias-Free Convolutional Neural Networks": {
     "id": 1438,
@@ -24937,7 +26011,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "538_Short and Sparse Deconvolution --- A Geometric Approach": {
     "id": 1496,
@@ -24993,7 +26069,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "539_Learn to Explain Efficiently via Neural Logic Inductive Learning": {
     "id": 1688,
@@ -25022,7 +26100,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "540_MACER: Attack-free and Scalable Robust Training via Maximizing Certified Radius": {
     "id": 1586,
@@ -25096,7 +26176,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "541_Spike-based causal inference for weight alignment": {
     "id": 1906,
@@ -25131,7 +26213,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "542_The Ingredients of Real World Robotic Reinforcement Learning": {
     "id": 1511,
@@ -25206,7 +26290,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "543_AtomNAS: Fine-Grained End-to-End Neural Architecture Search": {
     "id": 1513,
@@ -25271,7 +26357,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "544_Variational Hetero-Encoder Randomized GANs for Joint Image-Text Modeling": {
     "id": 2038,
@@ -25322,7 +26410,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "545_Detecting Extrapolation with Local Ensembles": {
     "id": 1536,
@@ -25358,7 +26448,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "546_Graph inference learning for semi-supervised classification": {
     "id": 1522,
@@ -25414,7 +26506,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "547_Non-Autoregressive Dialog State Tracking": {
     "id": 1994,
@@ -25451,7 +26545,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "548_Deep 3D Pan via Local adaptive \"t-shaped\" convolutions with global and local adaptive dilations": {
     "id": 1523,
@@ -25479,7 +26575,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "549_Unpaired Point Cloud Completion on Real Scans using Adversarial Training": {
     "id": 1412,
@@ -25514,7 +26612,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "550_Robust training with ensemble consensus": {
     "id": 1869,
@@ -25542,7 +26642,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "551_Fantastic Generalization Measures and Where to Find Them": {
     "id": 1531,
@@ -25593,7 +26695,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "552_Spectral  Embedding of Regularized Block Models": {
     "id": 1611,
@@ -25621,7 +26725,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "553_Inductive and Unsupervised Representation Learning on Graph Structured Objects": {
     "id": 1996,
@@ -25706,7 +26812,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "554_Tree-Structured Attention with Hierarchical Accumulation": {
     "id": 1616,
@@ -25734,7 +26842,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "555_FasterSeg: Searching for Faster Real-time Semantic Segmentation": {
     "id": 1544,
@@ -25791,7 +26901,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "556_Incorporating BERT into Neural Machine Translation": {
     "id": 1415,
@@ -25865,7 +26977,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "557_Learning Compositional Koopman Operators for Model-Based Control": {
     "id": 1789,
@@ -25916,7 +27030,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "558_Theory and Evaluation Metrics for Learning Disentangled Representations": {
     "id": 1572,
@@ -25944,7 +27060,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "559_Distributionally Robust Neural Networks": {
     "id": 1491,
@@ -25990,7 +27108,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "560_A Fair Comparison of Graph Neural Networks for Graph Classification": {
     "id": 1649,
@@ -26034,7 +27154,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "561_Budgeted Training: Rethinking Deep Neural Network Training Under Resource Constraints": {
     "id": 1640,
@@ -26069,7 +27191,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "562_What graph neural networks cannot learn: depth vs width": {
     "id": 1736,
@@ -26090,7 +27214,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "563_An Inductive Bias for Distances: Neural Nets that Respect the Triangle Inequality": {
     "id": 1566,
@@ -26133,7 +27259,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "564_Provable Filter Pruning for Efficient Neural Networks": {
     "id": 2051,
@@ -26183,7 +27311,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "565_DeFINE: Deep Factorized Input Token Embeddings for Neural Sequence Modeling": {
     "id": 1734,
@@ -26226,7 +27356,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "566_Mathematical Reasoning in Latent Space": {
     "id": 1596,
@@ -26278,7 +27410,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "567_Doubly Robust Bias Reduction in Infinite Horizon Off-Policy Estimation": {
     "id": 1845,
@@ -26329,7 +27463,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "568_Sign-OPT: A Query-Efficient Hard-label Adversarial Attack": {
     "id": 1914,
@@ -26389,7 +27525,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "569_Empirical Bayes Transductive Meta-Learning with Synthetic Gradients": {
     "id": 1416,
@@ -26454,7 +27592,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "570_How much Position Information Do Convolutional Neural Networks Encode?": {
     "id": 1622,
@@ -26491,7 +27631,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "571_Evaluating The Search Phase of Neural Architecture Search": {
     "id": 1746,
@@ -26541,7 +27683,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "572_A Baseline for Few-Shot Image Classification": {
     "id": 1803,
@@ -26584,7 +27728,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "573_Mixed Precision DNNs: All you need is a good parametrization": {
     "id": 2030,
@@ -26656,7 +27802,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "574_Abstract Diagrammatic Reasoning with Multiplex Graph Networks": {
     "id": 1608,
@@ -26693,7 +27841,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "575_Language GANs Falling Short": {
     "id": 1982,
@@ -26752,7 +27902,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "576_MEMO: A Deep Network for Flexible Combination of Episodic Memories": {
     "id": 1990,
@@ -26838,7 +27990,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "577_SpikeGrad: An ANN-equivalent Computation Model for Implementing Backpropagation with Spikes": {
     "id": 1686,
@@ -26873,7 +28027,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "578_Counterfactuals uncover the modular structure of deep generative models": {
     "id": 2080,
@@ -26915,7 +28071,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "579_BinaryDuo: Reducing Gradient Mismatch in Binary Activation Network by Coupling Binary Activations": {
     "id": 1956,
@@ -26957,7 +28115,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "580_Residual Energy-Based Models for Text Generation": {
     "id": 1532,
@@ -27001,7 +28161,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "581_Robust Local Features for Improving the Generalization of Adversarial Training": {
     "id": 1479,
@@ -27050,7 +28212,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "582_Learning from Unlabelled Videos Using Contrastive Predictive Neural 3D Mapping": {
     "id": 1413,
@@ -27109,7 +28273,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "583_SNODE: Spectral Discretization of Neural ODEs for System Identification": {
     "id": 1615,
@@ -27153,7 +28319,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "584_Sample Efficient Policy Gradient Methods with Recursive Variance Reduction": {
     "id": 1584,
@@ -27190,7 +28358,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "585_Higher-Order Function Networks for Learning Composable 3D Object Representations": {
     "id": 1427,
@@ -27232,7 +28402,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "586_Economy Statistical Recurrent Units For Inferring Nonlinear Granger Causality": {
     "id": 1795,
@@ -27260,7 +28432,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "587_Implementing Inductive bias for different navigation tasks through diverse RNN attrractors": {
     "id": 1912,
@@ -27289,7 +28463,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "588_Learning-Augmented Data Stream Algorithms": {
     "id": 1757,
@@ -27339,7 +28515,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "589_Domain Adaptive Multibranch Networks": {
     "id": 2069,
@@ -27374,7 +28552,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "590_Implicit Bias of Gradient Descent based Adversarial Training on Separable Data": {
     "id": 1898,
@@ -27416,7 +28596,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "591_On the \"steerability\" of generative adversarial networks": {
     "id": 1460,
@@ -27454,7 +28636,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "592_Continual Learning with Bayesian Neural Networks for Non-Stationary Data": {
     "id": 1983,
@@ -27505,7 +28689,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "593_Making Sense of Reinforcement Learning and Probabilistic Inference": {
     "id": 1617,
@@ -27540,7 +28726,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "594_Semantically-Guided Representation Learning for Self-Supervised Monocular Depth": {
     "id": 1840,
@@ -27589,7 +28777,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "595_On Identifiability in Transformers": {
     "id": 1589,
@@ -27646,7 +28836,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "596_Why Gradient Clipping Accelerates Training: A Theoretical Justification for Adaptivity": {
     "id": 1480,
@@ -27690,7 +28882,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "597_SVQN: Sequential Variational Soft Q-Learning Networks": {
     "id": 1863,
@@ -27733,7 +28927,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "598_Automated Relational Meta-learning": {
     "id": 1892,
@@ -27797,7 +28993,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "599_AugMix: A Simple Data Processing Method to Improve Robustness and Uncertainty": {
     "id": 1915,
@@ -27856,7 +29054,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "600_Geometric Analysis of Nonconvex Optimization Landscapes for Overcomplete Learning": {
     "id": 1475,
@@ -27906,7 +29106,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "601_Episodic Reinforcement Learning with Associative Memory": {
     "id": 1603,
@@ -27949,7 +29151,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "602_Towards Hierarchical Importance Attribution: Explaining Compositional Semantics for Neural Sequence Models": {
     "id": 1565,
@@ -27998,7 +29202,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "603_Lazy-CFR: fast and near-optimal regret minimization for extensive games with imperfect information": {
     "id": 1841,
@@ -28047,7 +29253,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "604_Building Deep Equivariant Capsule Networks": {
     "id": 1700,
@@ -28082,7 +29290,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "605_Toward Evaluating Robustness of Deep Reinforcement Learning with Continuous Control": {
     "id": 1760,
@@ -28151,7 +29361,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "606_Lagrangian Fluid Simulation with Continuous Convolutions": {
     "id": 1580,
@@ -28195,7 +29407,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "607_Dynamic Model Pruning with Feedback": {
     "id": 1702,
@@ -28246,7 +29460,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "608_R\u00e9nyi Fair Inference": {
     "id": 1857,
@@ -28289,7 +29505,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "609_Compositional Language Continual Learning": {
     "id": 1886,
@@ -28334,7 +29552,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "610_On the Weaknesses of Reinforcement Learning for Neural Machine Translation": {
     "id": 1704,
@@ -28376,7 +29596,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "611_Rethinking Softmax Cross-Entropy Loss for Adversarial Robustness": {
     "id": 1907,
@@ -28433,7 +29655,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "612_Extreme Classification via Adversarial Softmax Approximation": {
     "id": 1796,
@@ -28463,7 +29687,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "613_Plug and Play Language Models: A Simple Approach to Controlled Text Generation": {
     "id": 1769,
@@ -28534,7 +29760,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "614_Variational Recurrent Models for Solving Partially Observable Control Tasks": {
     "id": 1424,
@@ -28571,7 +29799,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "615_PairNorm: Tackling Oversmoothing in GNNs": {
     "id": 1719,
@@ -28599,7 +29829,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "616_Automated curriculum generation through setter-solver interactions": {
     "id": 1971,
@@ -28655,7 +29887,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "617_Extreme Tensoring for Low-Memory Preconditioning ": {
     "id": 1487,
@@ -28704,7 +29938,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "618_Maxmin Q-learning: Controlling the Estimation Bias of Q-learning": {
     "id": 1666,
@@ -28750,7 +29986,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "619_Never Give Up: Learning Directed Exploration Strategies": {
     "id": 1419,
@@ -28844,7 +30082,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "620_One-Shot Pruning of Recurrent Neural Networks by Jacobian Spectrum Evaluation": {
     "id": 1554,
@@ -28872,7 +30112,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "621_VL-BERT: Pre-training of Generic Visual-Linguistic Representations": {
     "id": 1422,
@@ -28937,7 +30179,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "622_Synthesizing Programmatic Policies that Inductively Generalize": {
     "id": 1637,
@@ -28979,7 +30223,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "623_Query2box: Reasoning over Knowledge Graphs in Vector Space Using Box Embeddings": {
     "id": 1644,
@@ -29017,7 +30263,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "624_The Implicit Bias of Depth: How Incremental Learning Drives Generalization": {
     "id": 1678,
@@ -29052,7 +30300,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "625_RGBD-GAN: Unsupervised 3D Representation Learning From Natural Image Datasets via RGBD Image Synthesis": {
     "id": 2045,
@@ -29081,7 +30331,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "626_CLEVRER: Collision Events for Video Representation and Reasoning": {
     "id": 1600,
@@ -29149,7 +30401,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "627_Hypermodels for Exploration": {
     "id": 2025,
@@ -29206,7 +30460,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "628_Weakly Supervised Disentanglement with Guarantees": {
     "id": 1957,
@@ -29258,7 +30514,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "629_Directional Message Passing for Molecular Graphs": {
     "id": 1560,
@@ -29294,7 +30552,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "630_State-only Imitation with Transition Dynamics Mismatch": {
     "id": 1653,
@@ -29322,7 +30582,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "631_Prediction Poisoning: Towards Defenses Against DNN Model Stealing Attacks": {
     "id": 1887,
@@ -29359,7 +30621,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "632_Reinforcement Learning with Competitive  Ensembles of Information-Constrained Primitives": {
     "id": 1558,
@@ -29419,7 +30683,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "633_Demystifying Inter-Class Disentanglement": {
     "id": 2028,
@@ -29447,7 +30713,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "634_Neural Symbolic Reader: Scalable Integration of Distributed and Symbolic Representations for Reading Comprehension": {
     "id": 1848,
@@ -29504,7 +30772,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "635_Meta-learning curiosity algorithms": {
     "id": 1902,
@@ -29546,7 +30816,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "636_Estimating counterfactual treatment outcomes over time through adversarially balanced representations": {
     "id": 2007,
@@ -29590,7 +30862,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "637_Conditional Learning of Fair Representations": {
     "id": 1781,
@@ -29634,7 +30908,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "638_NAS evaluation is frustratingly hard": {
     "id": 1773,
@@ -29670,7 +30946,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "639_Information Geometry of Orthogonal Initializations and Training": {
     "id": 2032,
@@ -29700,7 +30978,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "640_Double Neural Counterfactual Regret Minimization": {
     "id": 1655,
@@ -29749,7 +31029,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "641_A Target-Agnostic Attack on Deep Models: Exploiting Security Vulnerabilities of Transfer Learning": {
     "id": 1571,
@@ -29778,7 +31060,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "642_N-BEATS: Neural basis expansion analysis for interpretable time series forecasting": {
     "id": 1743,
@@ -29821,7 +31105,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "643_Multilingual Alignment of Contextual Word Representations": {
     "id": 1597,
@@ -29856,7 +31142,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "644_Adjustable Real-time Style Transfer": {
     "id": 1633,
@@ -29884,7 +31172,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "645_Energy-based models for atomic-resolution protein conformations": {
     "id": 1669,
@@ -29936,7 +31226,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "646_TabFact: A Large-scale Dataset for Table-based Fact Verification": {
     "id": 1877,
@@ -30007,7 +31299,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "647_Is a Good Representation Sufficient for Sample Efficient Reinforcement Learning?": {
     "id": 2089,
@@ -30051,7 +31345,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "648_Multi-agent Reinforcement Learning for Networked System Control": {
     "id": 1464,
@@ -30086,7 +31382,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "649_Transformer-XH: Multi-Evidence Reasoning with eXtra Hop Attention": {
     "id": 1687,
@@ -30142,7 +31440,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "650_A Generalized Training Approach for Multiagent Learning": {
     "id": 2035,
@@ -30264,7 +31564,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "651_Gradient $\\ell_1$ Regularization for Quantization Robustness": {
     "id": 1461,
@@ -30322,7 +31624,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "652_Restricting the Flow: Information Bottlenecks for Attribution": {
     "id": 1465,
@@ -30366,7 +31670,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "653_Learning to solve the credit assignment problem": {
     "id": 1593,
@@ -30401,7 +31707,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "654_A closer look at the approximation capabilities of neural networks": {
     "id": 1920,
@@ -30423,7 +31731,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "655_Learning the Arrow of Time for Problems in Reinforcement Learning": {
     "id": 1714,
@@ -30475,7 +31785,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "656_Continual Learning with Adaptive Weights (CLAW)": {
     "id": 1420,
@@ -30512,7 +31824,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "657_From Inference to Generation: End-to-end Fully Self-supervised Generation of Human Face from Speech": {
     "id": 1448,
@@ -30548,7 +31862,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "658_Neural Network Branching for Neural Network Verification ": {
     "id": 1485,
@@ -30577,7 +31893,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "659_Deep Batch Active Learning by Diverse, Uncertain Gradient Lower Bounds": {
     "id": 1502,
@@ -30626,7 +31944,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "660_Adversarial AutoAugment": {
     "id": 2091,
@@ -30668,7 +31988,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "661_Improving Generalization in Meta Reinforcement Learning using Learned Objectives": {
     "id": 1834,
@@ -30705,7 +32027,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "662_Ridge Regression: Structure, Cross-Validation, and Sketching": {
     "id": 1965,
@@ -30733,7 +32057,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "663_Neural Epitome Search for Architecture-Agnostic Network Compression": {
     "id": 1604,
@@ -30790,7 +32116,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "664_SQIL: Imitation Learning via Reinforcement Learning with Sparse Rewards": {
     "id": 1854,
@@ -30827,7 +32155,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "665_Depth-Adaptive Transformer": {
     "id": 1770,
@@ -30870,7 +32200,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "666_Locally Constant Networks": {
     "id": 1947,
@@ -30899,7 +32231,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "667_Variational Autoencoders for Highly Multivariate Spatial Point Processes Intensities": {
     "id": 2014,
@@ -30956,7 +32290,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "668_Causal Discovery with Reinforcement Learning": {
     "id": 2040,
@@ -30991,7 +32327,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "669_Deep Imitative Models for Flexible Inference, Planning, and Control": {
     "id": 1648,
@@ -31028,7 +32366,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "670_Dynamical Distance Learning for Semi-Supervised and Unsupervised Skill Discovery": {
     "id": 2084,
@@ -31072,7 +32412,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "671_Generalization of Two-layer Neural Networks: An Asymptotic Viewpoint": {
     "id": 1874,
@@ -31122,7 +32464,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "672_Towards Fast Adaptation of Neural Architectures with Meta Learning": {
     "id": 2013,
@@ -31194,7 +32538,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "673_Disentanglement by Nonlinear ICA with General Incompressible-flow Networks (GIN)": {
     "id": 1756,
@@ -31229,7 +32575,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "674_Decentralized Deep Learning with Arbitrary Communication Compression": {
     "id": 1942,
@@ -31273,7 +32621,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "675_Classification-Based Anomaly Detection for General Data": {
     "id": 1916,
@@ -31301,7 +32651,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "676_Kaleidoscope: An Efficient, Learnable Representation For All Structured Linear Maps": {
     "id": 1910,
@@ -31373,7 +32725,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "677_Structured Object-Aware Physics Prediction for Video Modeling and Planning": {
     "id": 1940,
@@ -31424,7 +32778,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "678_Logic and the 2-Simplicial Transformer": {
     "id": 1499,
@@ -31467,7 +32823,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "679_Intensity-Free Learning of Temporal Point Processes": {
     "id": 1564,
@@ -31504,7 +32862,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "680_Sliced Cramer Synaptic Consolidation for Preserving Deeply Learned Representations": {
     "id": 1690,
@@ -31547,7 +32907,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "681_Adversarial Training and Provable Defenses: Bridging the Gap": {
     "id": 1846,
@@ -31575,7 +32937,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "682_Unbiased Contrastive Divergence Algorithm for Training Energy-Based Latent Variable Models": {
     "id": 1801,
@@ -31611,7 +32975,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "683_Span Recovery for Deep Neural Networks with Applications to Input Obfuscation": {
     "id": 1697,
@@ -31646,7 +33012,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "684_Monotonic Multihead Attention": {
     "id": 1533,
@@ -31696,7 +33064,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "685_Online and stochastic optimization beyond Lipschitz continuity: A Riemannian approach": {
     "id": 1918,
@@ -31733,7 +33103,9 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   },
   "686_Image-guided Neural Object Rendering": {
     "id": 1930,
@@ -31782,6 +33154,8 @@
     "event_type": "",
     "virtualsite_url": "",
     "url": "",
-    "paper_url": ""
+    "paper_url": "",
+    "paper_pdf_url": "",
+    "sourceurl": ""
   }
 }
