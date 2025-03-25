@@ -2,7 +2,7 @@ import json
 import support
 import requests
 import numpy as np
-from support import console, log_time
+from support import console, logger, log_time
 
 # I might be able to do this with just dictionaries. 
 # Keeping for now, just in case.
@@ -146,24 +146,22 @@ def request_conf(conference:str, year:int):
 def main():
     """Main driver code for program"""
     main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
-    years = range(2020, 2025)
-    global prog, task, logger
+    years = range(2019, 2025)
+    global prog, task
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
-    date_json = support.get_time().strftime("%m-%d-%Y_%H-%M-%S")
-    logger = support.get_logger(console, log_dir=f"data/logs/scrape/{date_json}.log") 
 
     with prog:
         for year in years:
             logger.debug(f"beginning search for {year}")
             for conference in main_conferences:
-                logger.debug(f"searching {conference} {year}")
+                logger.info(f"searching {conference} {year}")
                 prog.update(task_id=task, description=f"[green]{year}:{conference}", advance=1)
                 result = request_conf(conference, year)
                 if result:
                     # support.save_data(result, conference, year, logger)		
-                    logger.debug(f"{conference} has been converted and saved")
+                    logger.info(f"{conference} has been converted and saved")
                 else:
-                    logger.info(f"{conference} data not available.")
+                    logger.warning(f"{conference} data not available.")
                 support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
     logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
 
