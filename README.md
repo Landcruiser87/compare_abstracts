@@ -83,7 +83,7 @@ python -m venv .venv
 To install libraries
 
 ```terminal
-poetry install
+poetry install --no-root
 ```
 
 This will read from the poetry lock file that is included
