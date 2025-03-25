@@ -65,12 +65,12 @@ class JSONTreeApp(App):
         json_data = clean_string_values(json.loads(self.json_data))
         tree.add_node(root_name, json_node, json_data)
         json_docview = self.query_one(JSONDocumentView)
-        json_docview.update_document(json_data.values())
+        json_docview.update_document(json.dumps(json_data, indent=4))
         tree.focus()
 
+    # @on(Tree.NodeSelected)
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
-        event.stop()
         node_data = event.node.data
         json_docview = self.query_one(JSONDocumentView)
 
@@ -86,7 +86,7 @@ class JSONTreeApp(App):
         if self._current_abstract:
             json_docview.update_document({"abstract": self._current_abstract})
         elif node_data is not None:
-            json_docview.update_document(node_data)
+            json_docview.update_document(json.dumps(node_data))
         elif event.node.allow_expand:
             # If it's a parent node (that wasn't a dictionary at the top level), display its structure
             data = {}
