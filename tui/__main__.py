@@ -45,14 +45,14 @@ def main():
 
     args = parser.parse_args()
     numeric_level = getattr(logging, args.log.upper(), None)
-
+    file_choice = ""
     if not isinstance(numeric_level, int):
         logger.warning(f"Invalid log level {args.log!r}")
     
     if args.path is sys.stdin:
         file_choice = support.launch_tui()
     # Check if no path was provided as a command-line argument
-    if args.path is sys.stdin and file_choice:
+    if file_choice:
         try:
             # Open the file chosen by the TUI
             args.path = open(file_choice, mode="r", encoding="utf-8")
@@ -99,4 +99,14 @@ if __name__ == "__main__":
 #ML4H - conf
 #ECCV 
 
-
+#IDEA
+#Grab all of above
+#Need a better way to search. 
+    #maybe think of filtering like Zotero?
+    #NoSQL won't really be available...  
+    #could parse the topic field
+    #Could do a similarity to a selected paper. 
+    #Institution grouping
+        #partially done in the explore.py
+    #year filtering
+    #load all function. 

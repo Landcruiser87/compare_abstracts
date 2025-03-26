@@ -75,7 +75,7 @@ class JSONDocumentView(ScrollableContainer): #Make JSONDocumentView scrollable
         """Compose the JSONDocument widget."""
         yield JSONDocument(id="json-document")
 
-    def update_document(self, json_data: str | dict | list) -> None:
+    def update_document(self, json_data: str | dict | list | int) -> None:
         """Update the JSON document with new data."""
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
