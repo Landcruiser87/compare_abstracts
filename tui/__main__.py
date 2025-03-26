@@ -86,3 +86,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+#nEW CONFERENCE
+
+#colt
+#stats
+    #aistats
+    #AAAI 
+#CHIL
+#CDD
+#ML4H - conf
+#ECCV 
+
+
