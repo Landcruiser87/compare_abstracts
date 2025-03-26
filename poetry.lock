@@ -133,28 +133,6 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
-name = "jtree"
-version = "0.2.7"
-description = "jtree is a command line interface (CLI) for displaying JavaScript Object Notation (JSON) in a tree view"
-optional = false
-python-versions = ">=3.7"
-groups = ["main"]
-markers = "python_version == \"3.11\" or python_version >= \"3.12\""
-files = [
-    {file = "jtree-0.2.7-py3-none-any.whl", hash = "sha256:85883ecc2b5fdf5705206576a71e1d3f7052b01873fc6a69afbd0bf86d98cc1d"},
-    {file = "jtree-0.2.7.tar.gz", hash = "sha256:b681379bfae97afa15fdb89e635916fe257caf2ad8276fd72c69da89993ccb77"},
-]
-
-[package.dependencies]
-textual = ">=0.11.0"
-
-[package.extras]
-ci = ["tox"]
-dev = ["bumpver", "check-manifest", "check-wheel-contents", "debugpy", "pip-tools", "pipdeptree", "tomli (>=1.1.0)", "tox"]
-format = ["black", "isort"]
-test = ["pytest"]
-
-[[package]]
 name = "linkify-it-py"
 version = "2.0.3"
 description = "Links recognition library with FULL unicode support."
@@ -596,4 +574,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11,<4.0"
-content-hash = "404873e7b0ad11b658704077f0205cc3fea8a332f47d3acf18c73d7742ff415c"
+content-hash = "7281e7da452cd3e2d2a25ef1dc29ace768e2af7b0389c2f19d5402d1d15fc7bd"
