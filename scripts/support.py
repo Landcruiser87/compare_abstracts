@@ -3,7 +3,6 @@ import datetime
 import time
 import json
 import logging
-import pandas as pd
 from pathlib import Path
 
 #Progress bar fun
@@ -116,18 +115,6 @@ DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 logger = get_logger(console, log_dir=f"data/logs/scrape/{DATE_JSON}.log") 
 
 ########################## Saving funcs ##########################################
-#FUNCTION save results
-def save_result(name:str, processed:pd.DataFrame, logger:logging):
-    """Save Routine.  Takes in name of file and processed dataframe.  Saves it to the data/cleaned folder. 
-
-    Args:
-        name (str): Name of file being converted
-        processed (pd.DataFrame): Processed dataframe of translated codes
-    """	
-    spath = f"./data/cleaned/web/{name}"
-    processed.to_csv(spath, mode='w', header=0, encoding='utf-8')
-    logger.info(f"CSV for file {spath} saved")
-
 #FUNCTION save dictionary
 def save_data(data:dict, conference:str, YEAR:int, logger:int):
     # sorted_dict = dict(sorted(jsond.items(), key=lambda x:datetime.datetime.strftime(x[1]["pub_date"], "%Y-%m-%d").split("-"), reverse=True))
@@ -135,6 +122,7 @@ def save_data(data:dict, conference:str, YEAR:int, logger:int):
     with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
         outf.write(result_json)
     logger.info(f"{conference:7s}:{YEAR} data saved")
+
 ################################# Rich Spinner Control ####################################
 
 #FUNCTION Progress bar

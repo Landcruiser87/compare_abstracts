@@ -2,7 +2,6 @@
 import datetime
 import time
 import logging
-import pandas as pd
 import os
 from rich import print
 from rich.tree import Tree
