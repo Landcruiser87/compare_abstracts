@@ -11,7 +11,6 @@ from rich.progress import (
     BarColumn,
     SpinnerColumn,
     TextColumn,
-    TimeRemainingColumn,
     TimeElapsedColumn
 )
 from rich.console import Console

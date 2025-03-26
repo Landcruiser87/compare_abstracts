@@ -23,7 +23,7 @@ from support import console, logger, log_time
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
 
-CHROME_VERSION = np.random.randint(120, 132)
+
 
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
@@ -50,6 +50,7 @@ def extract_json(json_data:json)->dict:
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int):
+    chrome_version = np.random.randint(120, 132)
     conf_dict={
         "NEURIPS":{
             "name":"Conference and Workshop on Neural Information Processing Systems",
@@ -64,13 +65,13 @@ def request_conf(conference:str, year:int):
                 "accept-encoding":"gzip,deflate,br,zstd",
                 "accept-language":"en-US,en;q=0.9",
                 "referer":f"https://neurips.cc/virtual/{year}/papers.html?filter=titles",
-                "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
+                "sec-ch-ua":f'"Chromium";v="{chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{chrome_version}"',
                 "sec-ch-ua-Mobile":"?0",
                 "sec-ch-ua-platform":"Windows",
                 "sec-fetch-dest":"empty",
                 "sec-fetch-mode":"cors",
                 "sec-fetch-site":"same-origin",
-                "user-agent": f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36',
+                "user-agent": f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
                 "x-requested-with":"XMLHttpRequest"
             }
         },
@@ -87,13 +88,13 @@ def request_conf(conference:str, year:int):
                 "accept-encoding":"gzip,deflate,br,zstd",
                 "accept-language":"en-US,en;q=0.9",
                 "referer":f"https://icml.cc/virtual/{year}/papers.html?filter=titles",
-                "sec-ch-ua":f'"Chromium";v="{CHROME_VERSION}", "Not(A:Brand";v="24", "Google Chrome";v="{CHROME_VERSION}"',
+                "sec-ch-ua":f'"Chromium";v="{chrome_version}", "Not(A:Brand";v="24", "Google Chrome";v="{chrome_version}"',
                 "sec-ch-ua-Mobile":"?0",
                 "sec-ch-ua-platform":"Windows",
                 "sec-fetch-dest":"empty",
                 "sec-fetch-mode":"cors",
                 "sec-fetch-site":"same-origin",
-                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
+                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
                 "x-requested-with":"XMLHttpRequest"
             }
         },
@@ -115,9 +116,9 @@ def request_conf(conference:str, year:int):
                 "Sec-Fetch-Dest": "empty",
                 "Sec-Fetch-Mode": "cors",
                 "Sec-Fetch-Site": "same-origin",
-                "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{CHROME_VERSION}.0.0.0 Safari/537.36",
+                "User-Agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
                 "X-Requested-With": "XMLHttpRequest",
-                "sec-ch-ua": f"'Chromium';v='{CHROME_VERSION}', 'Not:A-Brand';v='24', 'Google Chrome';v='{CHROME_VERSION}'",
+                "sec-ch-ua": f"'Chromium';v='{chrome_version}', 'Not:A-Brand';v='24', 'Google Chrome';v='{chrome_version}'",
                 "sec-ch-ua-mobile": "?0",
                 "sec-ch-ua-platform": "'Windows'",
             }
