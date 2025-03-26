@@ -111,3 +111,11 @@ if __name__ == "__main__":
         #partially done in the explore.py
     #year filtering
     #load all function. 
+
+    #hieracrhy research of common cited sources!!! Create knowledge graph of similar sourcing. 
+
+    #google scholar ?  hindex and impact scores???
+
+#Layout
+#1. Sidebar popout that controls each page.  
+#2. Activate new source item (left pane) when 

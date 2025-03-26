@@ -23,7 +23,6 @@ class JSONTreeApp(App):
     TITLE = __prog_name__
     SUB_TITLE = f"A JSON Tree Viewer for Machine Learning Papers ({__version__})"
     CSS_PATH = "css/layout.tcss"
-    show_abstract = False
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
         ("ctrl+t", "toggle_root", "Toggle root"),
