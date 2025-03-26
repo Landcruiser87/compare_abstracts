@@ -18,7 +18,6 @@ WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
 
 def main():
-    
     parser = argparse.ArgumentParser(
         prog=__prog_name__, description="Json Tree - ML Conference", epilog=f"v{__version__}"
     )
@@ -49,9 +48,11 @@ def main():
     if not isinstance(numeric_level, int):
         logger.warning(f"Invalid log level {args.log!r}")
     
+    # Check if no path was provided as a command-line argument
     if args.path is sys.stdin:
         file_choice = support.launch_tui()
-    # Check if no path was provided as a command-line argument
+    
+    # If a file was chosen
     if file_choice:
         try:
             # Open the file chosen by the TUI
