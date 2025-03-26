@@ -21,6 +21,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog=__prog_name__, description="Json Tree - ML Conference", epilog=f"v{__version__}"
     )
+
     parser.add_argument(
         "-V",
         "--version",
@@ -57,7 +58,6 @@ def main():
         try:
             # Open the file chosen by the TUI
             args.path = open(file_choice, mode="r", encoding="utf-8")
-            
         except FileNotFoundError:
             logger.error(f"File not found: {file_choice}")
             sys.exit(1)
