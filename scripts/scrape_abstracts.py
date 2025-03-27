@@ -1,7 +1,10 @@
+import re
 import json
 import support
 import requests
 import numpy as np
+import xml.etree.ElementTree as ET
+from itertools import cycle
 from support import console, logger, log_time
 
 # I might be able to do this with just dictionaries. 
@@ -22,6 +25,9 @@ from support import console, logger, log_time
 #     pub_date    : datetime.datetime
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
+
+MAIN_CONFERENCES = ["ICML", "ICLR", "NEURIPS"]
+SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "CLDD", "ML4H", "ECCV"]
 
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
@@ -45,7 +51,7 @@ def extract_json(json_data:json)->dict:
     return base_dict
 
 #FUNCTION Request Conference
-def request_conf(conference:str, year:int):
+def request_conf(conference:str, year:int=None):
     """Function to request a single years conference papers
 
     Args:
@@ -159,8 +165,12 @@ def request_conf(conference:str, year:int):
 
     if resp.status_code == 200:
         logger.debug(f"request successful for {url}, parsing data")
-        resp_json = resp.json()
-        results = extract_json(resp_json)
+        if conference == "PMLR":
+            results = parse_conf(resp.content)
+
+        else:
+            resp_json = resp.json()
+            results = extract_json(resp_json)
     else:
         # If there's an error, log it and return no data for that conference
         logger.warning(f"Status code: {resp.status_code}")
@@ -169,8 +179,37 @@ def request_conf(conference:str, year:int):
 
     return results
 
-def get_PMLR_summary():
-    pass
+def parse_conf(xml:str, year_limit:int=2016) -> dict:
+    """parses xml from initial RSS feed of possible conferences
+
+    Args:
+        xml (str): _description_
+        year_limit (int, optional): _description_. Defaults to 2016.
+
+    Returns:
+        dict: _description_
+    """    
+    results = {}
+    
+    root = ET.fromstring(xml)
+    for paper in root.findall("channel/item"):
+        description = paper.find("description").text
+        for conf in SUB_CONFERENCES:
+            if conf in description:
+                #regex for any length four number between 1900 and 2100
+                pattern = r"\b(19[0-9]{2}|20[0-9]{2}|2100)\b"
+                match = re.findall(pattern, description)
+                if match:
+                    if int(match[0]) >= year_limit:
+                        year = match[0]
+                    else:
+                        year = ""
+                else:
+                    year = ""
+                results[conf + "_" + year]= paper.find("link").text
+
+    return results
+
 
 #NOTE START PROGRAM
 #FUNCTION main
@@ -184,33 +223,31 @@ def main():
         # 
 
 
-    main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
-    sub_conferences = ["COLT", "AISTATS", "AAAI", "CHIL", "CDD", "ML4H", "ECCV"]
+     #"ml4h"
+    
     years = range(2019, 2025)
     global prog, task
-    prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
+    prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)) 
 
     with prog:
-        for year in years:
-            logger.debug(f"beginning search for {year}")
-            for conference in main_conferences:
-                logger.info(f"searching {conference} {year}")
-                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-                result = request_conf(conference, year)
-                if result:
-                    support.save_data(result, conference, year, logger)		
-                    logger.info(f"{conference} has been converted and saved")
-                else:
-                    logger.warning(f"{conference} data not available.")
-                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
-            #todo - func to parse PLMR list to get outer list
-                #for the return.  Pull back the conference name (formatted for storage) and years found.
-                #That way I can keep the pulls to the major ranges.
-            PMLR = get_PMLR_summary()
-            for conference in sub_conferences:
-                logger.info(f"searching {conference} {year}")
+        # for year in years:
+        #     logger.debug(f"searching main conferences in {year}")
+        #     for conference in MAIN_CONFERENCES:
+        #         logger.info(f"searching {conference}:{year}")
+        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+        #         result = request_conf(conference, year)
+        #         if result:
+        #             support.save_data(result, conference, year, logger)		
+        #             logger.info(f"{conference} has been converted and saved")
+        #         else:
+        #             logger.warning(f"{conference} data not available.")
+        #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+        # logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
+        PMLR = request_conf("PMLR")
+        for conference in PMLR:
+            logger.info(f"searching {conference}")
 
-    logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
+
 
 if __name__ == "__main__":
     main()
