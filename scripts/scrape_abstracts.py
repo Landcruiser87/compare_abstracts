@@ -23,8 +23,6 @@ from support import console, logger, log_time
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
 
-
-
 #FUNCTION Filter result
 def extract_json(json_data:json)->dict:
     ids = list(range(json_data["count"]))
@@ -105,12 +103,6 @@ def request_conf(conference:str, year:int):
                 "x-requested-with":"XMLHttpRequest"
             }
         },
-        "ML4H":{
-            "name":"Machine Learning for Health",
-            "abbrv":"ML4H",
-            "url":"stuff",
-            "headers":"morestuff"
-        }, 
         "ICLR":{
             "name":"International Conference of Learning Representations",
             "abbrv":"ICLR",
@@ -129,6 +121,12 @@ def request_conf(conference:str, year:int):
                 "sec-ch-ua-mobile": "?0",
                 "sec-ch-ua-platform": "'Windows'",
             }
+        },
+        "ML4H":{
+            "name":"Machine Learning for Health",
+            "abbrv":"ML4H",
+            "url":"stuff",
+            "headers":"morestuff"
         }
     }
 
@@ -153,7 +151,15 @@ def request_conf(conference:str, year:int):
 @log_time
 def main():
     """Main driver code for program"""
+    #? I need a new iteration loop.  
+        # The initial (main_conf) goes by conf then year.  
+        # Sub conferences will need to go by conf and any year it can find...  
+        #? Maybe set a lower limit on years past it can look?
+        # 
+
+        
     main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
+    sub_conferences = ["COLT", "AISTATS", "AAAI", "CHIL", "CDD", "ML4H", "ECCV"]
     years = range(2019, 2025)
     global prog, task
     prog, task = support.mainspinner(console, len(main_conferences)*len(years)) 
