@@ -267,29 +267,26 @@ def parse_conf(xml:str):
 def main():
     """Main driver code for program"""
     years = range(2019, 2025)
+    logger.debug("searching PMLR")
+    PMLR = request_conf("PMLR", year=years.start)
+
     global prog, task
-    prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)) 
+    prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)+ len(PMLR.keys())) 
 
     with prog:
-        
-        # for year in years:
-        #     logger.debug(f"searching main conferences in {year}")
-        #     for conference in MAIN_CONFERENCES:
-        #         logger.info(f"searching {conference}:{year}")
-        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-        #         result = request_conf(conference, year)
-        #         if result:
-        #             support.save_data(result, conference, year, logger)		
-        #             logger.info(f"{conference} has been converted and saved")
-        #         else:
-        #             logger.warning(f"{conference} data not available.")
-        #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
-        # logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
-        
-        logger.debug("searching PMLR")
-        PMLR = request_conf("PMLR", year=years.start)
-        #? - Condider moving this below prog and having a separate loop for the sub_conferences
-            #That way the progress bar can have the total count
+        for year in years:
+            logger.debug(f"searching main conferences in {year}")
+            for conference in MAIN_CONFERENCES:
+                logger.info(f"searching {conference}:{year}")
+                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+                result = request_conf(conference, year)
+                if result:
+                    support.save_data(result, conference, year, logger)		
+                    logger.info(f"{conference} has been converted and saved")
+                else:
+                    logger.warning(f"{conference} data not available.")
+                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+        logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
             version = link.split("/")[-1]
