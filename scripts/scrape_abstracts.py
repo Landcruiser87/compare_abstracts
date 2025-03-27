@@ -256,8 +256,9 @@ def parse_conf(xml:str):
         results[key]["description"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
-        user = results[key]["url"].split("/")[-1].split(".")[0]
-        results[key]["pdf"] = results[key]["url"][:results[key]["url"].rindex(".")] + "/" + user + ".pdf" 
+        user = url.split("/")[-1].split(".")[0]
+        results[key]["pdf"] = url[:url.rindex(".")] + "/" + user + ".pdf"
+
     return results
 
 #NOTE START PROGRAM
