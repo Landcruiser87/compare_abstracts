@@ -31,7 +31,7 @@ SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "CLDD", "ML4H", "ECCV"]
 
 
 #FUNCTION Request Conference
-def request_conf(conference:str, year:int=None):
+def request_conf(conference:str, year:int=None, version:str=""):
     """Function to request a single years conference papers
 
     Args:
@@ -111,7 +111,9 @@ def request_conf(conference:str, year:int=None):
         "PMLR":{
             "name":"Proceedings in Machine Learning Research",
             "abbrv":"PMLR",
-            "url":"https://proceedings.mlr.press//assets/rss/feed.xml",
+            "url":f"https://proceedings.mlr.press//{version}assets/rss/feed.xml",
+            # https://proceedings.mlr.press//v151/assets/rss/feed.xml
+            #BUG - Not sure how to encode the url here with the 
             "headers" : {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
                 "accept-language": "en-US,en;q=0.9",
@@ -143,19 +145,21 @@ def request_conf(conference:str, year:int=None):
     headers = conf_dict[conference]["headers"]
     resp = requests.get(url, headers=headers)
 
-    if resp.status_code == 200:
-        logger.debug(f"request successful for {url}, parsing data")
-        if conference == "PMLR":
-            results = parse_conf(resp.content)
-
-        else:
-            resp_json = resp.json()
-            results = extract_json(resp_json)
-    else:
+    if resp.status_code != 200:
         # If there's an error, log it and return no data for that conference
         logger.warning(f"Status code: {resp.status_code}")
         logger.warning(f"Reason: {resp.reason}")
         results = None
+    else:
+        logger.debug(f"request successful for {url}, parsing data")
+        if conference == "PMLR":
+            results = parse_all(resp.content)
+
+        elif conference in MAIN_CONFERENCES:
+            resp_json = resp.json()
+            results = extract_json(resp_json)
+        else:
+            results = parse_conf(resp.content)
 
     return results
 
@@ -181,7 +185,7 @@ def extract_json(json_data:json)->dict:
 
     return base_dict
 
-def parse_conf(xml:str, year_limit:int=2016) -> dict:
+def parse_all(xml:str, year_limit:int=2016) -> dict:
     """parses xml from initial RSS feed of possible conferences
 
     Args:
@@ -208,9 +212,11 @@ def parse_conf(xml:str, year_limit:int=2016) -> dict:
                         year = ""
                 else:
                     year = ""
-                results[conf + "_" + year]= paper.find("link").text
-
+                results[year + "_" + conf]= paper.find("link").text
     return results
+
+def parse_conf():
+    pass
 
 
 #NOTE START PROGRAM
@@ -223,9 +229,6 @@ def main():
         # Sub conferences will need to go by conf and any year it can find...  
         #? Maybe set a lower limit on years past it can look?
         # 
-
-
-     #"ml4h"
     
     years = range(2019, 2025)
     global prog, task
@@ -245,9 +248,16 @@ def main():
         #             logger.warning(f"{conference} data not available.")
         #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
         # logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
-        PMLR = request_conf("PMLR")
-        for conference in PMLR:
+        logger.debug("searching PMLR")
+        PMLR = request_conf("PMLR", years.start)
+        for conference, link in PMLR.items():
             logger.info(f"searching {conference}")
+            result = request_conf(link, version=link.split("/")[-1])
+            if any(x for x in conference.isnumeric()):
+                year = conference.split("_")
+            else:
+                year = ""
+            support.save_data(result, conference, year, logger)
 
 
 
