@@ -122,6 +122,29 @@ def request_conf(conference:str, year:int):
                 "sec-ch-ua-platform": "'Windows'",
             }
         },
+        "PMLR":{
+            "name":"Proceedings in Machine Learning Research",
+            "abbrv":"PMLR",
+            "url":"https://proceedings.mlr.press//assets/rss/feed.xml",
+            "headers" : {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "accept-language": "en-US,en;q=0.9",
+                "cache-control": "max-age=0",
+                "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
+                "if-none-match": "W/'67b4586e-111f4'",
+                "priority": "u=0, i",
+                "referer": "https://proceedings.mlr.press/",
+                "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "'Windows'",
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1",
+                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
+            }
+        },
         "ML4H":{
             "name":"Machine Learning for Health",
             "abbrv":"ML4H",
@@ -146,6 +169,9 @@ def request_conf(conference:str, year:int):
 
     return results
 
+def get_PMLR_summary():
+    pass
+
 #NOTE START PROGRAM
 #FUNCTION main
 @log_time
@@ -157,7 +183,7 @@ def main():
         #? Maybe set a lower limit on years past it can look?
         # 
 
-        
+
     main_conferences = ["ICML", "ICLR", "NEURIPS"] #"ml4h"
     sub_conferences = ["COLT", "AISTATS", "AAAI", "CHIL", "CDD", "ML4H", "ECCV"]
     years = range(2019, 2025)
@@ -177,6 +203,13 @@ def main():
                 else:
                     logger.warning(f"{conference} data not available.")
                 support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+            #todo - func to parse PLMR list to get outer list
+                #for the return.  Pull back the conference name (formatted for storage) and years found.
+                #That way I can keep the pulls to the major ranges.
+            PMLR = get_PMLR_summary()
+            for conference in sub_conferences:
+                logger.info(f"searching {conference} {year}")
+
     logger.warning(f"Conferences from {years.start} to {years.stop} searched.  Shutting down program")
 
 if __name__ == "__main__":
