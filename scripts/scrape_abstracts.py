@@ -29,26 +29,6 @@ from support import console, logger, log_time
 MAIN_CONFERENCES = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "CLDD", "ML4H", "ECCV"]
 
-#FUNCTION Filter result
-def extract_json(json_data:json)->dict:
-    ids = list(range(json_data["count"]))
-    base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url", "paper_pdf_url", "sourceurl"]
-    base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
-    for id, idx in zip(base_dict.keys(), ids):
-        authors = [str(x) + "_" + json_data['results'][idx]['authors'][x]["fullname"] for x in range(len(json_data['results'][idx]['authors']))]
-        base_dict[id]["author"] = {author:{} for author in authors} 
-        #Grab author info
-        for num, author in enumerate(authors):
-            auth_info = json_data["results"][idx]["authors"][num]
-            base_dict[id]["author"][author].update(**auth_info)
-        
-        #Grab other keys we want from the paper
-        for key in base_keys:
-            temp = json_data["results"][idx].get(key)
-            if temp:
-                base_dict[id][key] = temp
-
-    return base_dict
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int=None):
@@ -178,6 +158,28 @@ def request_conf(conference:str, year:int=None):
         results = None
 
     return results
+
+############################### Data Extraction Function ##################
+#FUNCTION Filter result
+def extract_json(json_data:json)->dict:
+    ids = list(range(json_data["count"]))
+    base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url", "paper_pdf_url", "sourceurl"]
+    base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
+    for id, idx in zip(base_dict.keys(), ids):
+        authors = [str(x) + "_" + json_data['results'][idx]['authors'][x]["fullname"] for x in range(len(json_data['results'][idx]['authors']))]
+        base_dict[id]["author"] = {author:{} for author in authors} 
+        #Grab author info
+        for num, author in enumerate(authors):
+            auth_info = json_data["results"][idx]["authors"][num]
+            base_dict[id]["author"][author].update(**auth_info)
+        
+        #Grab other keys we want from the paper
+        for key in base_keys:
+            temp = json_data["results"][idx].get(key)
+            if temp:
+                base_dict[id][key] = temp
+
+    return base_dict
 
 def parse_conf(xml:str, year_limit:int=2016) -> dict:
     """parses xml from initial RSS feed of possible conferences
