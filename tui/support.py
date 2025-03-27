@@ -143,7 +143,7 @@ def getfoldersize(folder:Path):
 #FUNCTION Launch TUI
 def launch_tui():
     try:
-        directory = PurePath(Path.cwd(), Path("./data/scraped/"))
+        directory = PurePath(Path.cwd(), Path("./data/conferences/"))
 
     except IndexError:
         logger.info("[b]Usage:[/] python tree.py <DIRECTORY>")

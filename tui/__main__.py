@@ -69,7 +69,7 @@ def main():
     #     import debugpy
     #     debugpy.listen(DEBUGPY_PORT)
     #     debugpy.wait_for_client()
-
+    
     try:
         # See:Textualize/textual/issues/153#issuecomment-1256933121
         if not WINDOWS:

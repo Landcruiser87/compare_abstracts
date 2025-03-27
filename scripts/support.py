@@ -118,7 +118,7 @@ logger = get_logger(console, log_dir=f"data/logs/scrape/{DATE_JSON}.log")
 def save_data(data:dict, conference:str, YEAR:int, logger:int):
     # sorted_dict = dict(sorted(jsond.items(), key=lambda x:datetime.datetime.strftime(x[1]["pub_date"], "%Y-%m-%d").split("-"), reverse=True))
     result_json = json.dumps(data, indent=2)
-    with open(f"./data/scraped/{YEAR}_{conference}.json", "w") as outf:
+    with open(f"./data/conferences/scraped/{YEAR}_{conference}.json", "w") as outf:
         outf.write(result_json)
     logger.info(f"{conference:7s}:{YEAR} data saved")
 
