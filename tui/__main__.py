@@ -89,16 +89,6 @@ if __name__ == "__main__":
     main()
 
 
-#nEW CONFERENCE
-
-#colt
-#stats
-    #aistats
-    #AAAI 
-#CHIL
-#CDD
-#ML4H - conf
-#ECCV 
 
 #IDEA
 #Grab all of above
@@ -118,4 +108,7 @@ if __name__ == "__main__":
 
 #Layout
 #1. Sidebar popout that controls each page.  
+    #Select year tree?
+    #Select conf dropdown?
+    #Select similarity measure?
 #2. Activate new source item (left pane) when 

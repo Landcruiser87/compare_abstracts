@@ -13,7 +13,14 @@ from textual.widgets.tree import TreeNode
 highlighter = ReprHighlighter()
 
 class JSONDocument(ScrollableContainer):
-    """Widget to display JSON data (as plain text) with scrolling."""
+    """Widget to display JSON data (as plain text) with scrolling.
+
+    Args:
+         JSONDocument (ScrollableContainer): Scrollable container
+
+    Returns:
+        _type_: _description_
+    """    
 
     DEFAULT_CSS = """
     JSONDocument {
@@ -36,7 +43,14 @@ class JSONDocument(ScrollableContainer):
         self.mount(self.json_static)
 
     def load(self, json_data: str | dict | list) -> bool:
-        """Load JSON data and update the Static widget's content."""
+        """Load JSON data and update the Static widget's content.
+
+        Args:
+            json_data (str | dict | list): _description_
+
+        Returns:
+            bool: Loads formatted json into static widget
+        """        
         try:
             if isinstance(json_data, str):
                 try:
@@ -62,8 +76,15 @@ class JSONDocument(ScrollableContainer):
             self.json_static.update(formatted_text)
             return False
 
-class JSONDocumentView(ScrollableContainer): #Make JSONDocumentView scrollable
-    """Container for the JSON document."""
+class JSONDocumentView(JSONDocument): #ScrollableContainer
+    """Container for the JSON document.
+
+    Args:
+        JSONDocument (Widget): Inherits from the JSONDocument Class
+
+    Yields:
+        Widget : The JSONDocumentView Widget
+    """    
     DEFAULT_CSS = """
        JSONDocumentView {
            height: 1fr;

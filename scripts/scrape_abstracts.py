@@ -44,12 +44,19 @@ def extract_json(json_data:json)->dict:
             if temp:
                 base_dict[id][key] = temp
 
-    #NOTE: Possible cool data within neurips
-    #could be cool stuff in event media, but save for later. 
     return base_dict
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int):
+    """Function to request a single years conference papers
+
+    Args:
+        conference (str): Conference of interest
+        year (int): Year of interest
+
+    Returns:
+        results (JSON): JSON return of papers
+    """    
     chrome_version = np.random.randint(120, 132)
     conf_dict={
         "NEURIPS":{
@@ -185,3 +192,17 @@ if __name__ == "__main__":
     #extract them from an abstract? Or the paper maybe?  I should have urls for
     #those, but again, processing PDFS is a PITA.
     
+#Extra conferences to track
+#colt
+#aistats
+#AAAI 
+#CHIL
+#CDD
+#ML4H - conf
+#ECCV 
+
+#Decision
+#https://proceedings.mlr.press/
+#I can first pull down the proceedings page and then look for any matching
+#conference terms... Or i can try to get it from the site as I've done with the
+#main 3
