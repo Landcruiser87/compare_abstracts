@@ -281,7 +281,7 @@ def main():
                 prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
                 if result:
-                    support.save_data(result, conference, year, logger)		
+                    support.save_data(result, conference, year)		
                     logger.info(f"{conference} has been converted and saved")
                 else:
                     logger.warning(f"{conference} data not available.")
@@ -289,11 +289,12 @@ def main():
         logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
+            prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conf}[/yellow]", advance=1)
             version = link.split("/")[-1]
             logger.info(f"searching {year}:{conf}")
             result = request_conf(link, version=version)
             support.save_data(result, conf, year)
-
+            support.add_spin_subt(prog, "[yellow]Patience Iago[/yellow]", np.random.randint(3, 6))
 
 
 if __name__ == "__main__":
