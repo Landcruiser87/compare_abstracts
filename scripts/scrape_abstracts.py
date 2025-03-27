@@ -111,9 +111,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
         "PMLR":{
             "name":"Proceedings in Machine Learning Research",
             "abbrv":"PMLR",
-            "url":f"https://proceedings.mlr.press//{version}assets/rss/feed.xml",
-            # https://proceedings.mlr.press//v151/assets/rss/feed.xml
-            #BUG - Not sure how to encode the url here with the 
+            "url":f"https://proceedings.mlr.press//assets/rss/feed.xml",
             "headers" : {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
                 "accept-language": "en-US,en;q=0.9",
@@ -136,9 +134,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
         "IND_CONF":{
             "name":"Individual conference request",
             "abbrv":"PMLR",
-            # "url":f"https://proceedings.mlr.press//{version}assets/rss/feed.xml",
-            # https://proceedings.mlr.press//v151/assets/rss/feed.xml
-            #BUG - Not sure how to encode the url here with the 
+            "url":f"https://proceedings.mlr.press//{version}//assets/rss/feed.xml",
             "headers" : {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
                 "accept-language": "en-US,en;q=0.9",
@@ -166,7 +162,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
         }
     }
     if version:
-        url = conference
+        url = conf_dict["IND_CONF"]["url"]
         headers = conf_dict["IND_CONF"]["headers"]
         resp = requests.get(url, headers=headers)
         
@@ -188,8 +184,10 @@ def request_conf(conference:str, year:int=None, version:str=""):
         elif conference in MAIN_CONFERENCES:
             resp_json = resp.json()
             results = extract_json(resp_json)
+        
         else:
             results = parse_conf(resp.content)
+            #TODO - Need to build this func
 
     return results
 
@@ -215,7 +213,7 @@ def extract_json(json_data:json)->dict:
 
     return base_dict
 
-def parse_all(xml:str, year_limit:int=2016) -> dict:
+def parse_all(xml:str, year_limit:int=2010) -> dict:
     """parses xml from initial RSS feed of possible conferences
 
     Args:
@@ -226,7 +224,6 @@ def parse_all(xml:str, year_limit:int=2016) -> dict:
         dict: _description_
     """    
     results = {}
-    
     root = ET.fromstring(xml)
     for paper in root.findall("channel/item"):
         description = paper.find("description").text
@@ -245,21 +242,28 @@ def parse_all(xml:str, year_limit:int=2016) -> dict:
                 results[year + "_" + conf]= paper.find("link").text
     return results
 
-def parse_conf():
-    pass
-
+def parse_conf(xml:str):
+    #?Use either a dict or custom mappings to reroute data to existing fields
+    # ['title', 'description', 'pubDate', 'link', 'guid']
+    results = {}
+    root = ET.fromstring(xml)
+    for idx, paper in enumerate(root.findall("channel/item")):
+        key = paper.find("title").text
+        key = "".join(str(x) for x in key if x.isalnum() | x.isspace())
+        key = str(idx) + "_" + key
+        results[key] = {}
+        results[key]["title"] = key
+        results[key]["description"] = paper.find("description").text
+        results[key]["url"] = paper.find("link").text
+        results[key]["id"] = paper.find("guid").text
+        results[key]["pdf"] = paper.find("link").text.replace("html", "pdf")
+    return results
 
 #NOTE START PROGRAM
 #FUNCTION main
 @log_time
 def main():
     """Main driver code for program"""
-    #? I need a new iteration loop.  
-        # The initial (main_conf) goes by conf then year.  
-        # Sub conferences will need to go by conf and any year it can find...  
-        #? Maybe set a lower limit on years past it can look?
-        # 
-    
     years = range(2019, 2025)
     global prog, task
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)) 
@@ -281,18 +285,15 @@ def main():
         # logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
         
         logger.debug("searching PMLR")
-        PMLR = request_conf("PMLR", years.start)
+        PMLR = request_conf("PMLR", year=years.start)
         #? - Condider moving this below prog and having a separate loop for the sub_conferences
+            #That way the progress bar can have the total count
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
             version = link.split("/")[-1]
-            logger.info(f"searching {conf}:{year}")
+            logger.info(f"searching {year}:{conf}")
             result = request_conf(link, version=version)
-            if any(x for x in conference.isnumeric()):
-                year = conference.split("_")
-            else:
-                year = ""
-            support.save_data(result, conference, year, logger)
+            support.save_data(result, conference, year)
 
 
 
