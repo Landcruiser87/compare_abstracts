@@ -133,6 +133,31 @@ def request_conf(conference:str, year:int=None, version:str=""):
                 "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
             }
         },
+        "IND_CONF":{
+            "name":"Individual conference request",
+            "abbrv":"PMLR",
+            # "url":f"https://proceedings.mlr.press//{version}assets/rss/feed.xml",
+            # https://proceedings.mlr.press//v151/assets/rss/feed.xml
+            #BUG - Not sure how to encode the url here with the 
+            "headers" : {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "accept-language": "en-US,en;q=0.9",
+                "cache-control": "max-age=0",
+                "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
+                "if-none-match": "W/'67b4586e-111f4'",
+                "priority": "u=0, i",
+                "referer": "https://proceedings.mlr.press/",
+                "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "'Windows'",
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1",
+                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
+            }
+        },        
         "ML4H":{
             "name":"Machine Learning for Health",
             "abbrv":"ML4H",
@@ -140,10 +165,15 @@ def request_conf(conference:str, year:int=None, version:str=""):
             "headers":"morestuff"
         }
     }
-
-    url = conf_dict[conference]["url"]
-    headers = conf_dict[conference]["headers"]
-    resp = requests.get(url, headers=headers)
+    if version:
+        url = conference
+        headers = conf_dict["IND_CONF"]["headers"]
+        resp = requests.get(url, headers=headers)
+        
+    else:
+        url = conf_dict[conference]["url"]
+        headers = conf_dict[conference]["headers"]
+        resp = requests.get(url, headers=headers)
 
     if resp.status_code != 200:
         # If there's an error, log it and return no data for that conference
@@ -153,7 +183,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
     else:
         logger.debug(f"request successful for {url}, parsing data")
         if conference == "PMLR":
-            results = parse_all(resp.content)
+            results = parse_all(resp.content, year_limit=year)
 
         elif conference in MAIN_CONFERENCES:
             resp_json = resp.json()
@@ -209,9 +239,9 @@ def parse_all(xml:str, year_limit:int=2016) -> dict:
                     if int(match[0]) >= year_limit:
                         year = match[0]
                     else:
-                        year = ""
+                        continue
                 else:
-                    year = ""
+                    continue
                 results[year + "_" + conf]= paper.find("link").text
     return results
 
@@ -235,6 +265,7 @@ def main():
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)) 
 
     with prog:
+        
         # for year in years:
         #     logger.debug(f"searching main conferences in {year}")
         #     for conference in MAIN_CONFERENCES:
@@ -248,11 +279,15 @@ def main():
         #             logger.warning(f"{conference} data not available.")
         #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
         # logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
+        
         logger.debug("searching PMLR")
         PMLR = request_conf("PMLR", years.start)
+        #? - Condider moving this below prog and having a separate loop for the sub_conferences
         for conference, link in PMLR.items():
-            logger.info(f"searching {conference}")
-            result = request_conf(link, version=link.split("/")[-1])
+            year, conf = conference.split("_")
+            version = link.split("/")[-1]
+            logger.info(f"searching {conf}:{year}")
+            result = request_conf(link, version=version)
             if any(x for x in conference.isnumeric()):
                 year = conference.split("_")
             else:
