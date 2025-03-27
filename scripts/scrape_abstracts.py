@@ -187,7 +187,6 @@ def request_conf(conference:str, year:int=None, version:str=""):
         
         else:
             results = parse_conf(resp.content)
-            #TODO - Need to build this func
 
     return results
 
@@ -251,12 +250,14 @@ def parse_conf(xml:str):
         key = paper.find("title").text
         key = "".join(str(x) for x in key if x.isalnum() | x.isspace())
         key = str(idx) + "_" + key
+        url = paper.find("link").text
         results[key] = {}
         results[key]["title"] = key
         results[key]["description"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
-        results[key]["pdf"] = paper.find("link").text.replace("html", "pdf")
+        user = results[key]["url"].split("/")[-1].split(".")[0]
+        results[key]["pdf"] = results[key]["url"][:results[key]["url"].rindex(".")] + "/" + user + ".pdf" 
     return results
 
 #NOTE START PROGRAM
@@ -293,7 +294,7 @@ def main():
             version = link.split("/")[-1]
             logger.info(f"searching {year}:{conf}")
             result = request_conf(link, version=version)
-            support.save_data(result, conference, year)
+            support.save_data(result, conf, year)
 
 
 
