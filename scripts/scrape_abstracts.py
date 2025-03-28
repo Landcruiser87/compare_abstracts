@@ -247,7 +247,6 @@ def parse_all(xml:str, year_limit:int=2010) -> dict:
     return results
 
 def parse_conf(xml:str):
-    #?Use either a dict or custom mappings to reroute data to existing fields
     # ['title', 'description', 'pubDate', 'link', 'guid']
     results = {}
     root = ET.fromstring(xml)
@@ -263,6 +262,8 @@ def parse_conf(xml:str):
         results[key]["id"] = paper.find("guid").text
         user = url.split("/")[-1].split(".")[0]
         results[key]["pdf"] = url[:url.rindex(".")] + "/" + user + ".pdf"
+        #Could ask for another individual request here to get the authors from each individual page. 
+        #But .... That's going to add a significant amount of time for scraping
 
     return results
 
@@ -290,7 +291,7 @@ def main():
                     support.save_data(result, conference, year)		
                 else:
                     logger.warning(f"{conference:7s}:{year} not available.")
-                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+                support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
 
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
         #Search Sub conferences
@@ -300,41 +301,20 @@ def main():
             prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conf}[/yellow]", advance=1)
             version = link.split("/")[-1]
             logger.info(f"{conf:7s}:{year} searching")
-            result = request_conf(link, version=version)
-            support.save_data(result, conf, year)
+            results = request_conf(link, version=version)
+            support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
 
 if __name__ == "__main__":
     main()
-
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
         #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them!!!
 
     #Other future conferences to add
 
-
 #Ryan idea's for embedding
 # gemma/bert embed
 # tsne
 # plot first two components. 
-
-#TODO - if a paper doesn't have keywords, maybe create a function that can
-    #extract them from an abstract? Or the paper maybe?  I should have urls for
-    #those, but again, processing PDFS is a PITA.
-    
-#Extra conferences to track
-#colt
-#aistats
-#AAAI 
-#CHIL
-#CDD
-#ML4H - conf
-#ECCV 
-
-#Decision
-#https://proceedings.mlr.press/
-#I can first pull down the proceedings page and then look for any matching
-#conference terms... Or i can try to get it from the site as I've done with the
-#main 3

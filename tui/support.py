@@ -200,14 +200,14 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             text_filename.stylize(f"link file://{path}")
             file_size = path.stat().st_size
             text_filename.append(f" ({decimal(file_size)})", "blue")
-            if path.suffix == "py":
+            if path.suffix == ".py":
                 icon = "🐍 "
             elif path.suffix == ".json":
-                icon = "🔫 "
+                icon = "📄 "
             elif path.suffix == ".mib":
                 icon = "👽 "
             else:
-                icon = "📄 "
+                icon = "🔫 "
             tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
         
         idx += 1    
