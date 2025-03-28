@@ -39,7 +39,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
         year (int): Year of interest
 
     Returns:
-        results (JSON): JSON return of papers
+        results (dict): Dictionary of papers from each conference
     """    
     chrome_version = np.random.randint(120, 132)
     conf_dict={
@@ -153,29 +153,6 @@ def request_conf(conference:str, year:int=None, version:str=""):
                 "upgrade-insecure-requests": "1",
                 "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
             }
-        },
-        "IND_PAPER":{
-            "name":"Individual conference request",
-            "abbrv":"PMLR",
-            "url":f"https://proceedings.mlr.press//{version}//assets/rss/feed.xml",
-            "headers" : {
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                "accept-language": "en-US,en;q=0.9",
-                "cache-control": "max-age=0",
-                "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
-                "if-none-match": "W/'67b4586e-111f4'",
-                "priority": "u=0, i",
-                "referer": "https://proceedings.mlr.press/",
-                "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
-                "sec-ch-ua-mobile": "?0",
-                "sec-ch-ua-platform": "'Windows'",
-                "sec-fetch-dest": "document",
-                "sec-fetch-mode": "navigate",
-                "sec-fetch-site": "same-origin",
-                "sec-fetch-user": "?1",
-                "upgrade-insecure-requests": "1",
-                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
-            }
         },        
         "ML4H":{
             "name":"Machine Learning for Health",
@@ -214,7 +191,68 @@ def request_conf(conference:str, year:int=None, version:str=""):
 
     return results
 
-############################### Data Extraction Function ##################
+
+def request_paper(title:str, paper:dict):
+    chrome_version = np.random.randint(120, 132)
+    paper_dict = {
+        "name":"Individual conference request",
+        "abbrv":"PMLR",
+        "url":paper["url"],
+        "headers" : {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-language": "en-US,en;q=0.9",
+            "cache-control": "max-age=0",
+            "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
+            "if-none-match": "W/'67b4586e-111f4'",
+            "priority": "u=0, i",
+            "referer": "https://proceedings.mlr.press/",
+            "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "'Windows'",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
+        }
+    }
+
+    headers = {
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+        'accept-language': 'en-US,en;q=0.9',
+        'cache-control': 'max-age=0',
+        'if-modified-since': 'Wed, 08 Feb 2023 10:41:52 GMT',
+        'if-none-match': 'W/"63e37c70-34a9"',
+        'priority': 'u=0, i',
+        'sec-ch-ua': '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'document',
+        'sec-fetch-mode': 'navigate',
+        'sec-fetch-site': 'none',
+        'sec-fetch-user': '?1',
+        'upgrade-insecure-requests': '1',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
+    }
+
+    url = paper_dict["url"]
+    headers = paper_dict["headers"]
+    resp = requests.get(url, headers=headers)
+
+    if resp.status_code != 200:
+        # If there's an error, log it and return no data for that conference
+        logger.warning(f"Status code: {resp.status_code}")
+        logger.warning(f"Reason: {resp.reason}")
+        results = None
+    else:
+        logger.debug(f"request successful for {url}, parsing data")
+        extras = parse_paper(resp.content)
+        results.update(**extras)
+
+    return results
+
+############################### Data Extraction Functions ##################
 #FUNCTION Filter result
 def extract_json(json_data:json, url:str)->dict:
     ids = list(range(json_data["count"]))
@@ -290,6 +328,12 @@ def parse_conf(xml:str):
 
     return results
 
+def parse_paper():
+    pass
+    #NOTE Needs to return updated dictionary entry of title and underlying dict
+    #Also might need bs4 to parse the HTML..  Need to look for json build.
+
+
 #NOTE START PROGRAM
 #FUNCTION main
 @log_time
@@ -298,24 +342,23 @@ def main():
     years = range(2017, 2025)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
-
     global prog, task
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)+ len(PMLR.keys())) 
 
     with prog:
-        for year in years:
-            #Search Main conferences
-            logger.debug(f"searching main conferences in {year}")
-            for conference in MAIN_CONFERENCES:
-                logger.info(f"{conference:7s}:{year} searching")
-                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-                result = request_conf(conference, year)
-                if result:
-                    support.save_data(result, conference, year)		
-                else:
-                    logger.warning(f"{conference:7s}:{year} not available.")
-                support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
-        logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
+        # for year in years:
+        #     #Search Main conferences
+        #     logger.debug(f"searching main conferences in {year}")
+        #     for conference in MAIN_CONFERENCES:
+        #         logger.info(f"{conference:7s}:{year} searching")
+        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+        #         result = request_conf(conference, year)
+        #         if result:
+        #             support.save_data(result, conference, year)		
+        #         else:
+        #             logger.warning(f"{conference:7s}:{year} not available.")
+        #         support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
+        # logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
 
         #Search Sub conferences
         for conference, link in PMLR.items():
@@ -325,6 +368,11 @@ def main():
             version = link.split("/")[-1]
             logger.info(f"{conf:7s}:{year} searching")
             results = request_conf(link, version=version)
+            
+            #Author / Git extraction
+            for title, paperinfo in results.items():
+                results[title] = request_paper(title, paperinfo)
+
             #?Search ind papers for authors?
             #Could go multiple ways here.  
                 #1. Load full link and get authors, poster, github, pdf links.
