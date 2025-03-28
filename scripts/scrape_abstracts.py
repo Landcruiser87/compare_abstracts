@@ -242,7 +242,7 @@ def parse_all(xml:str, year_limit:int=2010) -> dict:
                 else:
                     continue
                 results[year + "_" + conf]= paper.find("link").text
-                #BUG - For the sub conferences I don't have authors... I could get them if i individually scrape all 2k from each paper. 
+                #BUG - For the sub conferences I don't have authors... I could get them if i individually scrape all 2k from each conference. 
                 #buuuuuuuuuuuuu that's going to take a while. 
     return results
 
