@@ -251,7 +251,7 @@ def parse_conf(xml:str):
         key = str(idx) + "_" + key
         url = paper.find("link").text
         results[key] = {}
-        results[key]["title"] = key
+        results[key]["title"] = paper.find("title").text
         results[key]["description"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
@@ -292,7 +292,7 @@ def main():
             conf = conf.strip()
             prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conf}[/yellow]", advance=1)
             version = link.split("/")[-1]
-            logger.info(f"{conf:7s}:{year}: searching")
+            logger.info(f"{conf:7s}:{year} searching")
             result = request_conf(link, version=version)
             support.save_data(result, conf, year)
             support.add_spin_subt(prog, "[yellow]Patience Iago[/yellow]", np.random.randint(3, 6))
