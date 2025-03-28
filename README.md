@@ -112,9 +112,7 @@ explore the scraped JSON objects for each year.  This repo was forked from
 on the right panel instead of the previous output.  Thank you to
 [oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
 
-To run the TUI with poetry, select from one of the following options
-
-With poetry
+To run the TUI with poetry
 ```terminal
 poetry run python tui/__main__.py data/scraped/2024_ICML.json 
 #replace year/conf
