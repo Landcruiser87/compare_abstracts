@@ -153,6 +153,29 @@ def request_conf(conference:str, year:int=None, version:str=""):
                 "upgrade-insecure-requests": "1",
                 "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
             }
+        },
+        "IND_PAPER":{
+            "name":"Individual conference request",
+            "abbrv":"PMLR",
+            "url":f"https://proceedings.mlr.press//{version}//assets/rss/feed.xml",
+            "headers" : {
+                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+                "accept-language": "en-US,en;q=0.9",
+                "cache-control": "max-age=0",
+                "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
+                "if-none-match": "W/'67b4586e-111f4'",
+                "priority": "u=0, i",
+                "referer": "https://proceedings.mlr.press/",
+                "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
+                "sec-ch-ua-mobile": "?0",
+                "sec-ch-ua-platform": "'Windows'",
+                "sec-fetch-dest": "document",
+                "sec-fetch-mode": "navigate",
+                "sec-fetch-site": "same-origin",
+                "sec-fetch-user": "?1",
+                "upgrade-insecure-requests": "1",
+                "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
+            }
         },        
         "ML4H":{
             "name":"Machine Learning for Health",
@@ -231,7 +254,7 @@ def parse_all(xml:str, year_limit:int=2010) -> dict:
         description = paper.find("description").text
         for conf in SUB_CONFERENCES:
             if conf in description:
-                #regex for any length four number between 1900 and 2100
+                #regex for any year (four consecutive numbers) between 1900 and 2100
                 pattern = r"\b(19[0-9]{2}|20[0-9]{2}|2100)\b"
                 match = re.findall(pattern, description)
                 if match:
@@ -287,13 +310,18 @@ def main():
                 logger.info(f"{conference:7s}:{year} searching")
                 prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
+                #?Search ind papers for authors?
+                #Could go multiple ways here.  
+                    #1. Load full link and get poster / github / pdf links.
+                    #2. Have Zotero look up authors, poster link, github, and more.  
+                    
                 if result:
                     support.save_data(result, conference, year)		
                 else:
                     logger.warning(f"{conference:7s}:{year} not available.")
                 support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
-
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
+
         #Search Sub conferences
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
@@ -311,10 +339,4 @@ if __name__ == "__main__":
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
         #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them!!!
-
     #Other future conferences to add
-
-#Ryan idea's for embedding
-# gemma/bert embed
-# tsne
-# plot first two components. 
