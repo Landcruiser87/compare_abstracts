@@ -154,7 +154,7 @@ def launch_tui():
             f":open_file_folder: [link file://{directory}]{directory}",
             guide_style="bold bright_blue",
         )
-        files, pcount = walk_directory(Path(directory), tree)
+        files = walk_directory(Path(directory), tree)
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
@@ -181,7 +181,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
         key=lambda path: (path.is_file(), path.name.lower()),
     )
     idx = 1
-    paper_count = 0
+    # paper_count = 0
     for path in paths:
         # Remove hidden files
         if path.name.startswith("."):
@@ -198,7 +198,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             
             # walk_directory(path, branch)
         else:
-            paper_count += getpapercount(path)
+            # paper_count += getpapercount(path)
             text_filename = Text(path.name, "green")
             text_filename.highlight_regex(r"\..*$", "bold red")
             text_filename.stylize(f"link file://{path}")
@@ -215,7 +215,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
         
         idx += 1    
-    return paths, paper_count
+    return paths#, paper_count
 
 ########################## Global Variables to return ##########################################
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
