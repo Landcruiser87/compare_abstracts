@@ -73,7 +73,7 @@ To create a new venv
 python -m venv .venv
 ```
 
-Activate it
+Activate the venv
 Windows
 ```terminal
 .venv\scripts\activate
@@ -147,10 +147,18 @@ python tui/__main__.py
 
 # Project Todo list
 
-UI
-- [ ] Add autofiltered search to Tree
-  - Enter word, highlight which other 
-  - members of the tree might have 
-  - those searchwords
+TUI
+- [ ] Need a more advanced layout for search
+  - How is that going to look... Native dropdown?
+  - Sidebar that expands from the left/right?
+  - Window popup.
+- [ ] Cosine Sim search
+  - Easy first win for search.  Do sim search by abstract.
 - [ ] Regex Search  
-- [x] File Directory search when no arg parse (i got tired of typing paths)
+  - Enter word, highlight which other members of the tree might have those searchwords?
+- [ ] Zotero Connector.  
+  - Use their OCR for citation grabs from the pdf urls.
+- [ ] Citation subject frequency analysis
+  - Tom Arnold idea.  Build a graph network from the citations of each paper
+  - Analyze who is getting cited most often and driving a particular area of research
+- [ ] 
