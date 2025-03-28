@@ -253,7 +253,7 @@ def parse_conf(xml:str):
         url = paper.find("link").text
         results[key] = {}
         results[key]["title"] = paper.find("title").text
-        results[key]["description"] = paper.find("description").text
+        results[key]["abstract"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
         user = url.split("/")[-1].split(".")[0]
