@@ -349,7 +349,7 @@ def parse_paper(page_text:str):
 @log_time
 def main():
     """Main driver code for program"""
-    years = range(2017, 2025)
+    years = range(2021, 2025)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
     global prog, task
@@ -367,7 +367,7 @@ def main():
                     support.save_data(result, conference, year)		
                 else:
                     logger.warning(f"{conference:7s}:{year} not available.")
-                support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
+                support.add_spin_subt(prog, f"[purple]{next(FUN_STATUS_UPDATE)}[/purple]", np.random.randint(3, 6))
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
 
         #Search Sub conferences
@@ -382,8 +382,9 @@ def main():
             #Author / Git extraction
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
-                support.add_spin_subt(prog, f"[green]Being nice to PMLR[/green]", np.random.randint(1, 3))
-                
+                logger.info(f"parsing {title}")
+                support.add_spin_subt(prog, f"[green]Being nice to PMLR[/green]", np.random.randint(1, 8))
+
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
