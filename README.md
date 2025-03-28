@@ -73,6 +73,17 @@ To create a new venv
 python -m venv .venv
 ```
 
+Activate it
+Windows
+```terminal
+.venv\scripts\activate
+```
+
+Mac/Linux
+```terminal
+source .venv\bin\activate
+```
+
 To install libraries
 
 ```terminal
