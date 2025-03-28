@@ -382,7 +382,8 @@ def main():
             #Author / Git extraction
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
-                support.add_spin_subt(prog, f"[green]Being nice to the PMLR[/green]", np.random.randint(1, 3))
+                support.add_spin_subt(prog, f"[green]Being nice to PMLR[/green]", np.random.randint(1, 3))
+                
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
