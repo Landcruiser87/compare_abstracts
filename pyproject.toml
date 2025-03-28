@@ -13,6 +13,7 @@ dependencies = [
     "rich (>=13.9.4,<14.0.0)",
     "requests (>=2.32.3,<3.0.0)",
     "textual (>=2.1.2,<3.0.0)",
+    "pyzotero (>=1.6.11,<2.0.0)",
 ]
 
 [build-system]
