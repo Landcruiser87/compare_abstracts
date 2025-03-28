@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 from rich.logging import RichHandler
 from rich.console import Console
 from time import strftime, sleep

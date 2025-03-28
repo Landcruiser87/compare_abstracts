@@ -178,13 +178,14 @@ def request_conf(conference:str, year:int=None, version:str=""):
         results = None
     else:
         logger.debug(f"request successful for {url}, parsing data")
+        #If its the overall scrape of PLMR
         if conference == "PMLR":
             results = parse_all(resp.content, year_limit=year)
-
+        #If its a main conference
         elif conference in MAIN_CONFERENCES:
             resp_json = resp.json()
             results = extract_json(resp_json)
-        
+        #If its a sub conference
         else:
             results = parse_conf(resp.content)
 
@@ -266,7 +267,7 @@ def parse_conf(xml:str):
 @log_time
 def main():
     """Main driver code for program"""
-    years = range(2019, 2025)
+    years = range(2017, 2025)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
 
@@ -277,14 +278,14 @@ def main():
         for year in years:
             logger.debug(f"searching main conferences in {year}")
             for conference in MAIN_CONFERENCES:
-                logger.info(f"searching {conference}:{year}")
+                logger.info(f"{conference:7s}:{year}")
                 prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
                 if result:
                     support.save_data(result, conference, year)		
-                    logger.info(f"{conference} has been converted and saved")
+                    logger.info(f"{conference:7s}:{year} saved")
                 else:
-                    logger.warning(f"{conference} data not available.")
+                    logger.warning(f"{conference:7s}:{year} not available.")
                 support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
 
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
