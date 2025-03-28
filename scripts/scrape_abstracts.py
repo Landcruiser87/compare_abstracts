@@ -27,8 +27,7 @@ from support import console, logger, log_time
 #     authors          : dict = field(default_factory=lambda:{})
 
 MAIN_CONFERENCES = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "CLDD", "ML4H", "ECCV"]
-
+SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int=None, version:str=""):
@@ -274,28 +273,30 @@ def main():
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)+ len(PMLR.keys())) 
 
     with prog:
-        for year in years:
-            logger.debug(f"searching main conferences in {year}")
-            for conference in MAIN_CONFERENCES:
-                logger.info(f"searching {conference}:{year}")
-                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-                result = request_conf(conference, year)
-                if result:
-                    support.save_data(result, conference, year)		
-                    logger.info(f"{conference} has been converted and saved")
-                else:
-                    logger.warning(f"{conference} data not available.")
-                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
-        logger.warning(f"Conferences from {years.start} to {years.stop} searched.")
+        # for year in years:
+        #     logger.debug(f"searching main conferences in {year}")
+        #     for conference in MAIN_CONFERENCES:
+        #         logger.info(f"searching {conference}:{year}")
+        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+        #         result = request_conf(conference, year)
+        #         if result:
+        #             support.save_data(result, conference, year)		
+        #             logger.info(f"{conference} has been converted and saved")
+        #         else:
+        #             logger.warning(f"{conference} data not available.")
+        #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+
+        logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
+            conf = conf.strip()
             prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conf}[/yellow]", advance=1)
             version = link.split("/")[-1]
-            logger.info(f"searching {year}:{conf}")
+            logger.info(f"{conf:7s}:{year}: searching")
             result = request_conf(link, version=version)
             support.save_data(result, conf, year)
             support.add_spin_subt(prog, "[yellow]Patience Iago[/yellow]", np.random.randint(3, 6))
-
+        logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
 
 if __name__ == "__main__":
     main()
