@@ -149,16 +149,19 @@ python tui/__main__.py
 
 TUI
 - [ ] Need a more advanced layout for search
-  - How is that going to look... Native dropdown?
+  - How is that search going to look... native dropdowns?
   - Sidebar that expands from the left/right?
   - Window popup.
-- [ ] Cosine Sim search
-  - Easy first win for search.  Do sim search by abstract.
-- [ ] Regex Search  
-  - Enter word, highlight which other members of the tree might have those searchwords?
+  - Keep the tree on the left.. Tabbed Panel on the right with summary or search functions
+    - Defaults to the summary tab (JSONDocumentView) when navigating the tree.  Keyboard binding trigger to load search tab...  
+    - Types of search
+    - [ ] Cosine Sim search
+      - Easy first win for search.  Do sim search by abstract.
+    - [ ] Regex Search  
+      - Enter word, highlight which other members of the tree might have those searchwords?
 - [ ] Zotero Connector.  
   - Use their OCR for citation grabs from the pdf urls.
-- [ ] Citation subject frequency analysis
+- [ ] Citation impact factor analysis
   - Tom Arnold idea.  Build a graph network from the citations of each paper
-  - Analyze who is getting cited most often and driving a particular area of research
+  - Analyze who is getting cited most often and driving a particular area of research.  Really like this idea.
 - [ ] 
