@@ -383,7 +383,7 @@ def main():
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
                 logger.info(f"parsing {title}")
-                support.add_spin_subt(prog, f"[green]Being nice to PMLR[/green]", np.random.randint(1, 8))
+                support.add_spin_subt(prog, f"[green]{title}[/green]", np.random.randint(1, 8))
 
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
