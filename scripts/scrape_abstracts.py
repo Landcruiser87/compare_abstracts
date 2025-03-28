@@ -26,9 +26,10 @@ from support import console, logger, log_time
 #     virtual_site_url : str
 #     authors          : dict = field(default_factory=lambda:{})
 
-MAIN_CONFERENCES = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
-FUN_STATUS_UPDATES = cycle("Patience Iago", "Help is on the way dear", "Books, i've read these books", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!")
+MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
+SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
+FUN_STATUS_UPDATE = cycle(["Patience Iago", "Help is on the way dear", "Books, i've read these books", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
+
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int=None, version:str=""):
     """Function to request a single years conference papers
@@ -295,7 +296,7 @@ def main():
             logger.info(f"{conf:7s}:{year} searching")
             result = request_conf(link, version=version)
             support.save_data(result, conf, year)
-            support.add_spin_subt(prog, f"[yellow]{FUN_STATUS_UPDATES}[/yellow]", np.random.randint(3, 6))
+            support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
 
 if __name__ == "__main__":
