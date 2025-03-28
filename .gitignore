@@ -134,6 +134,7 @@ dmypy.json
 /data/cleaned
 /data/files
 /data/logs
+/secret
 /.c_venv
 /.vscode
 /.pytest_cache

@@ -28,7 +28,7 @@ from support import console, logger, log_time
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
-FUN_STATUS_UPDATE = cycle(["Patience Iago", "Help is on the way dear", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
+FUN_STATUS_UPDATE = cycle(["Patience Iago", "Phenominal COSMIC POWER", "Iiiiiity bitty living space", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int=None, version:str=""):
@@ -184,7 +184,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
         #If its a main conference
         elif conference in MAIN_CONFERENCES:
             resp_json = resp.json()
-            results = extract_json(resp_json)
+            results = extract_json(resp_json, url)
         #If its a sub conference
         else:
             results = parse_conf(resp.content)
@@ -193,7 +193,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
 
 ############################### Data Extraction Function ##################
 #FUNCTION Filter result
-def extract_json(json_data:json)->dict:
+def extract_json(json_data:json, url:str)->dict:
     ids = list(range(json_data["count"]))
     base_keys = ["id","name","author","abstract","keywords","topic","session","event_type","virtualsite_url","url","paper_url", "paper_pdf_url", "sourceurl"]
     base_dict = {str(val) + "_" + json_data["results"][val]["name"]:{key:"" for key in base_keys} for val in ids}
@@ -208,7 +208,9 @@ def extract_json(json_data:json)->dict:
         #Grab other keys we want from the paper
         for key in base_keys:
             temp = json_data["results"][idx].get(key)
-            if temp:
+            if key == "virtualsite_url" and temp:
+                base_dict[id][key] = "https://"+ url.split("/")[2] + temp
+            elif temp:
                 base_dict[id][key] = temp
 
     return base_dict
@@ -278,6 +280,7 @@ def main():
 
     with prog:
         for year in years:
+            #Search Main conferences
             logger.debug(f"searching main conferences in {year}")
             for conference in MAIN_CONFERENCES:
                 logger.info(f"{conference:7s}:{year} searching")
@@ -290,6 +293,7 @@ def main():
                 support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
 
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
+        #Search Sub conferences
         for conference, link in PMLR.items():
             year, conf = conference.split("_")
             conf = conf.strip()
