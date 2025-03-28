@@ -310,11 +310,6 @@ def main():
                 logger.info(f"{conference:7s}:{year} searching")
                 prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
-                #?Search ind papers for authors?
-                #Could go multiple ways here.  
-                    #1. Load full link and get poster / github / pdf links.
-                    #2. Have Zotero look up authors, poster link, github, and more.  
-                    
                 if result:
                     support.save_data(result, conference, year)		
                 else:
@@ -330,6 +325,10 @@ def main():
             version = link.split("/")[-1]
             logger.info(f"{conf:7s}:{year} searching")
             results = request_conf(link, version=version)
+            #?Search ind papers for authors?
+            #Could go multiple ways here.  
+                #1. Load full link and get authors, poster, github, pdf links.
+                #2. Have Zotero look up authors, poster link, github, and more.  
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
