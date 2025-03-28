@@ -146,7 +146,8 @@ python tui/__main__.py
 ### Possible modeling paths
 1. Clustering
 2. Cosine similarity to a particular subject.
-3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
+3. Bert embedding into PCA.  
+   1. Look at first two components to find the subject topics that are most in variation.
 
 
 ### TUI
@@ -158,9 +159,10 @@ python tui/__main__.py
     - Defaults to the summary tab (JSONDocumentView) when navigating the tree.  Keyboard binding trigger to load search tab...  
     - Types of search
     - [ ] Cosine Sim search
-      - Easy first win for search.  Do sim search by abstract.
+      - Easy first win for search.  Do sim search by abstract.  Return top 10 papers for exploration.  (redraw the tree? Will need a full reset function if so)
     - [ ] Regex Search  
       - Enter word, highlight which other members of the tree might have those searchwords?
+      - 
 - [ ] Zotero Connector.  
   - Use their OCR for citation grabs from the pdf urls.
 - [ ] Citation impact factor analysis
