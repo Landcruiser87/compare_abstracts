@@ -107,11 +107,6 @@ def get_time():
     return current_t
 
 
-########################## Global Variables to return ##########################################
-
-console = Console(color_system="auto", stderr=True)
-DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
-logger = get_logger(console, log_dir=f"data/logs/scrape/{DATE_JSON}.log") 
 
 ########################## Saving funcs ##########################################
 #FUNCTION save dictionary
@@ -171,3 +166,10 @@ def add_spin_subt(prog:Progress, msg:str, howmanysleeps:int):
         prog.update(liljob, advance=1)
     #Hide secondary progress bar
     prog.update(liljob, visible=False)
+
+
+########################## Global Variables to return ##########################################
+
+console = Console(color_system="auto", stderr=True)
+DATE_JSON = get_time().strftime("%m-%d-%Y_%H-%M-%S")
+logger = get_logger(console, log_dir=f"data/logs/scrape/{DATE_JSON}.log") 

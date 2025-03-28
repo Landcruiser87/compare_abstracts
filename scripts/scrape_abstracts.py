@@ -278,7 +278,7 @@ def main():
         for year in years:
             logger.debug(f"searching main conferences in {year}")
             for conference in MAIN_CONFERENCES:
-                logger.info(f"{conference:7s}:{year}")
+                logger.info(f"{conference:7s}:{year} searching")
                 prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
                 result = request_conf(conference, year)
                 if result:
