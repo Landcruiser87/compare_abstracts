@@ -273,18 +273,18 @@ def main():
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)+ len(PMLR.keys())) 
 
     with prog:
-        # for year in years:
-        #     logger.debug(f"searching main conferences in {year}")
-        #     for conference in MAIN_CONFERENCES:
-        #         logger.info(f"searching {conference}:{year}")
-        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-        #         result = request_conf(conference, year)
-        #         if result:
-        #             support.save_data(result, conference, year)		
-        #             logger.info(f"{conference} has been converted and saved")
-        #         else:
-        #             logger.warning(f"{conference} data not available.")
-        #         support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
+        for year in years:
+            logger.debug(f"searching main conferences in {year}")
+            for conference in MAIN_CONFERENCES:
+                logger.info(f"searching {conference}:{year}")
+                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+                result = request_conf(conference, year)
+                if result:
+                    support.save_data(result, conference, year)		
+                    logger.info(f"{conference} has been converted and saved")
+                else:
+                    logger.warning(f"{conference} data not available.")
+                support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
 
         logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
         for conference, link in PMLR.items():
