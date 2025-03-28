@@ -112,23 +112,27 @@ explore the scraped JSON objects for each year.  This repo was forked from
 on the right panel instead of the previous output.  Thank you to
 [oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
 
-To run the TUI with poetry
+To run the TUI with poetry, select from one of the following options
 
+With poetry
 ```terminal
 poetry run python tui/__main__.py data/scraped/2024_ICML.json 
 #replace year/conf
 ```
 
-With Python
+With python
 ```terminal
 python tui/__main__.py data/scraped/2024_ICML.json 
 #replace year/conf
 ```
 
-With no file args.  This will launch a file picking application that scans the
-`data/scraped` folder and shows you a list of available files. 
+With no file args, like a madman.  This will launch a file picking application
+that scans the `data/scraped` folder and shows you a list of available files. 
+Enter a number of the conference you want, and you're good to go.
 
 ```terminal
+poetry run python tui/__main__.py
+
 python tui/__main__.py 
 ```
 
