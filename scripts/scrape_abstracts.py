@@ -356,19 +356,19 @@ def main():
     prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years) + len(PMLR.keys())) 
 
     with prog:
-        # for year in years:
-        #     #Search Main conferences
-        #     logger.debug(f"searching main conferences in {year}")
-        #     for conference in MAIN_CONFERENCES:
-        #         logger.info(f"{conference:7s}:{year} searching")
-        #         prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
-        #         result = request_conf(conference, year)
-        #         if result:
-        #             support.save_data(result, conference, year)		
-        #         else:
-        #             logger.warning(f"{conference:7s}:{year} not available.")
-        #         support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
-        # logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
+        for year in years:
+            #Search Main conferences
+            logger.debug(f"searching main conferences in {year}")
+            for conference in MAIN_CONFERENCES:
+                logger.info(f"{conference:7s}:{year} searching")
+                prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conference}[/yellow]", advance=1)
+                result = request_conf(conference, year)
+                if result:
+                    support.save_data(result, conference, year)		
+                else:
+                    logger.warning(f"{conference:7s}:{year} not available.")
+                support.add_spin_subt(prog, f"[rainbow]{next(FUN_STATUS_UPDATE)}[/rainbow]", np.random.randint(3, 6))
+        logger.warning(f"Main conferences from {years.start} to {years.stop} searched.")
 
         #Search Sub conferences
         for conference, link in PMLR.items():
@@ -382,18 +382,15 @@ def main():
             #Author / Git extraction
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
-                support.add_spin_subt(prog, f"[green]Being nice to the PMLR[/green]", np.random.randint(1, 2))
-
-            #?Search ind papers for authors?
-            #Could go multiple ways here.  
-                #1. Load full link and get authors, poster, github, pdf links.
-                #2. Have Zotero look up authors, poster link, github, and more.  
+                support.add_spin_subt(prog, f"[green]Being nice to the PMLR[/green]", np.random.randint(1, 3))
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
         logger.warning(f"Sub conferences from {years.start} to {years.stop} searched.")
 
 if __name__ == "__main__":
     main()
+
+
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
         #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them!!!
