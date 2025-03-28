@@ -12,10 +12,6 @@
 
 The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
 
-### Possible modeling paths
-1. Clustering
-2. Cosine similarity to a particular subject.
-3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
 
 ## Requirements
 - Python >= 3.11
@@ -147,7 +143,13 @@ python tui/__main__.py
 
 # Project Todo list
 
-TUI
+### Possible modeling paths
+1. Clustering
+2. Cosine similarity to a particular subject.
+3. Bert embedding into PCA.  Look at first two components to find the subject topics that are most in variation.
+
+
+### TUI
 - [ ] Need a more advanced layout for search
   - How is that search going to look... native dropdowns?
   - Sidebar that expands from the left/right?
@@ -163,5 +165,5 @@ TUI
   - Use their OCR for citation grabs from the pdf urls.
 - [ ] Citation impact factor analysis
   - Tom Arnold idea.  Build a graph network from the citations of each paper
-  - Analyze who is getting cited most often and driving a particular area of research.  Really like this idea.
+  - Analyze who is getting cited most often and driving a particular area of research.  Really like this
 - [ ] 
