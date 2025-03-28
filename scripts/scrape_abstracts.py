@@ -191,8 +191,7 @@ def request_conf(conference:str, year:int=None, version:str=""):
 
     return results
 
-
-def request_paper(title:str, paper:dict):
+def request_paper(paper:dict, version:str) -> dict | None:
     chrome_version = np.random.randint(120, 132)
     paper_dict = {
         "name":"Individual conference request",
@@ -205,35 +204,17 @@ def request_paper(title:str, paper:dict):
             "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
             "if-none-match": "W/'67b4586e-111f4'",
             "priority": "u=0, i",
-            "referer": "https://proceedings.mlr.press/",
+            "referer":f"https://proceedings.mlr.press/{version}/",
             "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "'Windows'",
             "sec-fetch-dest": "document",
             "sec-fetch-mode": "navigate",
-            "sec-fetch-site": "same-origin",
+            "sec-fetch-site': 'none'"
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
             "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
         }
-    }
-
-    headers = {
-        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-        'accept-language': 'en-US,en;q=0.9',
-        'cache-control': 'max-age=0',
-        'if-modified-since': 'Wed, 08 Feb 2023 10:41:52 GMT',
-        'if-none-match': 'W/"63e37c70-34a9"',
-        'priority': 'u=0, i',
-        'sec-ch-ua': '"Chromium";v="134", "Not:A-Brand";v="24", "Google Chrome";v="134"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'document',
-        'sec-fetch-mode': 'navigate',
-        'sec-fetch-site': 'none',
-        'sec-fetch-user': '?1',
-        'upgrade-insecure-requests': '1',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36',
     }
 
     url = paper_dict["url"]
@@ -244,11 +225,11 @@ def request_paper(title:str, paper:dict):
         # If there's an error, log it and return no data for that conference
         logger.warning(f"Status code: {resp.status_code}")
         logger.warning(f"Reason: {resp.reason}")
-        results = None
+        results = paper
     else:
         logger.debug(f"request successful for {url}, parsing data")
         extras = parse_paper(resp.content)
-        results.update(**extras)
+        results = paper.update(**extras)
 
     return results
 
@@ -303,12 +284,9 @@ def parse_all(xml:str, year_limit:int=2010) -> dict:
                 else:
                     continue
                 results[year + "_" + conf]= paper.find("link").text
-                #BUG - For the sub conferences I don't have authors... I could get them if i individually scrape all 2k from each conference. 
-                #buuuuuuuuuuuuu that's going to take a while. 
     return results
 
 def parse_conf(xml:str):
-    # ['title', 'description', 'pubDate', 'link', 'guid']
     results = {}
     root = ET.fromstring(xml)
     for idx, paper in enumerate(root.findall("channel/item")):
@@ -321,16 +299,12 @@ def parse_conf(xml:str):
         results[key]["abstract"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
-        user = url.split("/")[-1].split(".")[0]
-        results[key]["pdf"] = url[:url.rindex(".")] + "/" + user + ".pdf"
-        #Could ask for another individual request here to get the authors from each individual page. 
-        #But .... That's going to add a significant amount of time for scraping
 
     return results
 
 def parse_paper():
     pass
-    #NOTE Needs to return updated dictionary entry of title and underlying dict
+    #NOTE Needs to return updated dictionary
     #Also might need bs4 to parse the HTML..  Need to look for json build.
 
 
@@ -343,7 +317,7 @@ def main():
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
     global prog, task
-    prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years)+ len(PMLR.keys())) 
+    prog, task = support.mainspinner(console, len(MAIN_CONFERENCES)*len(years) + len(PMLR.keys())) 
 
     with prog:
         # for year in years:
@@ -371,7 +345,8 @@ def main():
             
             #Author / Git extraction
             for title, paperinfo in results.items():
-                results[title] = request_paper(title, paperinfo)
+                results[title] = request_paper(paperinfo, version)
+                support.add_spin_subt(prog, f"[green]Being nice to the PMLR[/green]", np.random.randint(1, 2))
 
             #?Search ind papers for authors?
             #Could go multiple ways here.  
