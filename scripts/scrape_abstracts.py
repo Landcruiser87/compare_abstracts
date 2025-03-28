@@ -4,6 +4,7 @@ import support
 import requests
 import numpy as np
 import xml.etree.ElementTree as ET
+from bs4 import BeautifulSoup
 from itertools import cycle
 from support import console, logger, log_time
 
@@ -194,23 +195,21 @@ def request_conf(conference:str, year:int=None, version:str=""):
 def request_paper(paper:dict, version:str) -> dict | None:
     chrome_version = np.random.randint(120, 132)
     paper_dict = {
-        "name":"Individual conference request",
+        "name":"Individual paper request",
         "abbrv":"PMLR",
         "url":paper["url"],
         "headers" : {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
             "accept-language": "en-US,en;q=0.9",
             "cache-control": "max-age=0",
-            "if-modified-since": "Tue, 18 Feb 2025 09:52:46 GMT",
-            "if-none-match": "W/'67b4586e-111f4'",
             "priority": "u=0, i",
-            "referer":f"https://proceedings.mlr.press/{version}/",
+            "referer": f"https://proceedings.mlr.press/{version}/",
             "sec-ch-ua": f"'Chromium';v={chrome_version}, 'Not:A-Brand';v='24', 'Google Chrome';v={chrome_version}",
             "sec-ch-ua-mobile": "?0",
             "sec-ch-ua-platform": "'Windows'",
             "sec-fetch-dest": "document",
             "sec-fetch-mode": "navigate",
-            "sec-fetch-site': 'none'"
+            "sec-fetch-site": "none",
             "sec-fetch-user": "?1",
             "upgrade-insecure-requests": "1",
             "user-agent": f"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36",
@@ -225,13 +224,13 @@ def request_paper(paper:dict, version:str) -> dict | None:
         # If there's an error, log it and return no data for that conference
         logger.warning(f"Status code: {resp.status_code}")
         logger.warning(f"Reason: {resp.reason}")
-        results = paper
+
     else:
         logger.debug(f"request successful for {url}, parsing data")
-        extras = parse_paper(resp.content)
-        results = paper.update(**extras)
+        extras = parse_paper(resp.text)
+        paper.update(**extras)
 
-    return results
+    return paper
 
 ############################### Data Extraction Functions ##################
 #FUNCTION Filter result
@@ -299,11 +298,22 @@ def parse_conf(xml:str):
         results[key]["abstract"] = paper.find("description").text
         results[key]["url"] = paper.find("link").text
         results[key]["id"] = paper.find("guid").text
+        user = url.split("/")[-1].split(".")[0]
+        results[key]["pdf"] = url[:url.rindex(".")] + "/" + user + ".pdf"
 
     return results
 
-def parse_paper():
-    pass
+def parse_paper(page_text:str):
+    temp = {}
+    bs4ob = BeautifulSoup(page_text, features="xml")
+    authors = bs4ob.find_all("span", class_="authors")
+    if authors:
+        for author in authors:
+            temp["authors"][author] = ""
+
+    #Things I need
+    # Authors, github, poster url
+
     #NOTE Needs to return updated dictionary
     #Also might need bs4 to parse the HTML..  Need to look for json build.
 
