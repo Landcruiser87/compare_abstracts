@@ -28,7 +28,7 @@ from support import console, logger, log_time
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
-FUN_STATUS_UPDATE = cycle(["Patience Iago", "Help is on the way dear", "Books, i've read these books", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
+FUN_STATUS_UPDATE = cycle(["Patience Iago", "Help is on the way dear", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
 
 #FUNCTION Request Conference
 def request_conf(conference:str, year:int=None, version:str=""):
