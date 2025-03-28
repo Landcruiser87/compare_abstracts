@@ -283,7 +283,6 @@ def main():
                 result = request_conf(conference, year)
                 if result:
                     support.save_data(result, conference, year)		
-                    logger.info(f"{conference:7s}:{year} saved")
                 else:
                     logger.warning(f"{conference:7s}:{year} not available.")
                 support.add_spin_subt(prog, "[yellow]200's all day errday[/yellow]", np.random.randint(3, 6))
