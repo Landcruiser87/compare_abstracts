@@ -213,8 +213,8 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             else:
                 icon = "🔫 "
             tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
-        
-        idx += 1    
+        idx += 1
+
     return paths#, paper_count
 
 ########################## Global Variables to return ##########################################
