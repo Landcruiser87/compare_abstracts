@@ -304,13 +304,39 @@ def parse_conf(xml:str):
     return results
 
 def parse_paper(page_text:str):
-    temp = {}
-    bs4ob = BeautifulSoup(page_text, features="xml")
-    authors = bs4ob.find_all("span", class_="authors")
+    temp = {
+        "authors":{},
+        "pmlr_pdf":"",
+        "github_url":"",
+        "conf_info":"",
+        "supplemental":""
+    }
+    bs4ob = BeautifulSoup(page_text, features="lxml")
+    authors = bs4ob.find("span", class_="authors")
     if authors:
-        for author in authors:
-            temp["authors"][author] = ""
+        auth_l = authors.text.split(",")
+        for idx, author in enumerate(auth_l):
+            temp["authors"][str(idx) + "_" + author.strip()] = author.strip()
 
+    extras = bs4ob.find_all("li")
+    if extras:
+        pullbacks = ["Software", "Download PDF", "Supplementary PDF"]
+        for extra in extras:
+            if extra.text in pullbacks:
+                funstuff = extra.find("a").get("href")
+                if extra.text == "Software":
+                    temp["github_url"] = funstuff
+                elif extra.text == "Download PDF":
+                    temp["pmlr_pdf"] = funstuff
+                elif extra.text == "Supplmentary PDF":
+                    temp["supplemental"] = funstuff
+
+    #Pull in Conf into as well
+    info = bs4ob.find("div", id="info")
+    if info:
+        temp["conf_info"] = info.text.strip()
+
+    return temp
     #Things I need
     # Authors, github, poster url
 
