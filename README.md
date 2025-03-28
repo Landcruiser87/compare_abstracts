@@ -145,9 +145,10 @@ python tui/__main__.py
 
 ### Possible modeling paths
 1. Clustering
-2. Cosine similarity to a particular subject.
-3. Bert embedding into PCA.  
-   1. Look at first two components to find the subject topics that are most in variation.
+2. Cosine similarity to a particular abstract
+3. Gemma / Bert embedding
+   1. tsne
+   2. Look at first two components to find the subject topics that are most in variation.
 
 
 ### TUI
@@ -168,4 +169,3 @@ python tui/__main__.py
 - [ ] Citation impact factor analysis
   - Tom Arnold idea.  Build a graph network from the citations of each paper
   - Analyze who is getting cited most often and driving a particular area of research.  Really like this
-- [ ] 
