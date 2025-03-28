@@ -3,6 +3,7 @@ import datetime
 import time
 import logging
 import os
+import json
 from rich import print
 from rich.tree import Tree
 from rich.text import Text
@@ -101,12 +102,6 @@ def get_time():
     current_t_s = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
     current_t = datetime.datetime.strptime(current_t_s, "%m-%d-%Y-%H-%M-%S")
     return current_t
-
-########################## Global Variables to return ##########################################
-date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
-console = Console(color_system="auto", stderr=True)
-logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
-
 ########################## Saving funcs ##########################################
 # #FUNCTION save results
 # def save_result(name:str, processed:pd.DataFrame, logger:logging):
@@ -138,6 +133,13 @@ def getfoldersize(folder:Path):
 
     return sizeofobject(fsize)
 
+def getpapercount(file:Path):
+    with open(file, "r") as jfile:
+        jfile = json.loads(jfile.read())
+        numpapers = len(jfile.keys())
+
+    return numpapers
+
 ################################# TUI Funcs ############################################
 
 #FUNCTION Launch TUI
@@ -152,9 +154,9 @@ def launch_tui():
             f":open_file_folder: [link file://{directory}]{directory}",
             guide_style="bold bright_blue",
         )
-        files = walk_directory(Path(directory), tree)
+        files, pcount = walk_directory(Path(directory), tree)
         print(tree)
-        
+    # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
     file_choice = console.input(f"{question}")
     if file_choice.isnumeric():
@@ -179,6 +181,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
         key=lambda path: (path.is_file(), path.name.lower()),
     )
     idx = 1
+    paper_count = 0
     for path in paths:
         # Remove hidden files
         if path.name.startswith("."):
@@ -195,6 +198,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             
             # walk_directory(path, branch)
         else:
+            paper_count += getpapercount(path)
             text_filename = Text(path.name, "green")
             text_filename.highlight_regex(r"\..*$", "bold red")
             text_filename.stylize(f"link file://{path}")
@@ -211,4 +215,10 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
         
         idx += 1    
-    return paths
+    return paths, paper_count
+
+########################## Global Variables to return ##########################################
+date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
+console = Console(color_system="auto", stderr=True)
+logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
+

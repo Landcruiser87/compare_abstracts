@@ -96,15 +96,17 @@ if __name__ == "__main__":
     #maybe think of filtering like Zotero?
     #NoSQL won't really be available...  
     #could parse the topic field
-    #Could do a similarity to a selected paper. 
-    #Institution grouping
+
+    
+    
         #partially done in the explore.py
     #year filtering
     #load all function. 
-
-    #hieracrhy research of common cited sources!!! Create knowledge graph of similar sourcing. 
-
-    #google scholar ?  hindex and impact scores???
+    #IDEA similarity search to a selected paper. 
+    #IDEA Institution frequency graph
+    #IDEA hieracrhy research of common cited sources!!! Create knowledge graph of similar sourcing. 
+    #IDEA google scholar ?  hindex and impact scores???
+    #IDEA Send selected file from JSON to Zotero
 
 #Layout
 #1. Sidebar popout that controls each page.  
