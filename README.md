@@ -162,7 +162,13 @@ python tui/__main__.py
     - Defaults to the summary tab (JSONDocumentView) when navigating the tree.  Keyboard binding trigger to load search tab...  
     - Types of search
     - [ ] Cosine Sim search
-      - Easy first win for search.  Do sim search by abstract.  Return top 10 papers for exploration.  (redraw the tree? Will need a full reset function if so)
+      - Easy first win for search.  Do cos sim search by abstract.  Return top 10 papers for exploration.  
+      - Things I want to be able to search by... 
+        1. Abstract
+        2. keywords - (will need a warning for empty keywords aren't present)
+        3. topic
+        4. Free text search
+        
     - [ ] Regex Search  
       - Enter word, highlight which other members of the tree might have those searchwords?
       - 

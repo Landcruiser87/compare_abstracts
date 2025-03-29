@@ -260,11 +260,11 @@ def parse_all(xml:str, year_limit:int=2010) -> dict:
     """parses xml from initial RSS feed of possible conferences
 
     Args:
-        xml (str): _description_
+        xml (str): Biiiiig old text dump
         year_limit (int, optional): _description_. Defaults to 2016.
 
     Returns:
-        dict: _description_
+        dict: Returns dictionary of PMLR data. Order + Paper title == key
     """    
     results = {}
     root = ET.fromstring(xml)
