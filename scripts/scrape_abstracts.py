@@ -28,7 +28,7 @@ from support import console, logger, log_time
 #     authors          : dict = field(default_factory=lambda:{})
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES   =  ["COLT"]#, "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
+SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 FUN_STATUS_UPDATE = cycle(["Patience Iago", "Phenominal COSMIC POWER", "Iiiiiity bitty living space", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
 
 #FUNCTION Request Conference
@@ -349,7 +349,7 @@ def parse_paper(page_text:str):
 @log_time
 def main():
     """Main driver code for program"""
-    years = range(2022, 2023)
+    years = range(2022, 2025)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
     global prog, task
@@ -383,7 +383,7 @@ def main():
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
                 logger.info(f"parsing {title}")
-                support.add_spin_subt(prog, f"[green]{title}[/green]", np.random.randint(1, 8))
+                support.add_spin_subt(prog, f"[green]{title:30s}[/green]", np.random.randint(1, 8))
 
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
