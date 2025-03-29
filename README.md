@@ -156,6 +156,8 @@ python tui/__main__.py
   - How is that search going to look... native dropdowns?
   - Sidebar that expands from the left/right?
   - Window popup.
+  - Button that pops up when a certain type of field is selected??
+  - Need to be able to search other JSONs
   - Keep the tree on the left.. Tabbed Panel on the right with summary or search functions
     - Defaults to the summary tab (JSONDocumentView) when navigating the tree.  Keyboard binding trigger to load search tab...  
     - Types of search
