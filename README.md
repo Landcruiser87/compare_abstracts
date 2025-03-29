@@ -114,7 +114,7 @@ $ cd ..
 ## TUI
 
 This repo also comes with a TUI (Terminal User Interface) that allows you to
-explore the scraped JSON objects for each year.  This repo was forked from
+explore the JSON objects for each conference / year.  This repo was forked from
 [here](https://github.com/oleksis/jtree) and updated with a ScrollableContainer
 on the right panel instead of the previous output.  Thank you to
 [oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
