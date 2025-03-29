@@ -349,7 +349,7 @@ def parse_paper(page_text:str):
 @log_time
 def main():
     """Main driver code for program"""
-    years = range(2022, 2025)
+    years = range(2017, 2025)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
     global prog, task
@@ -376,14 +376,14 @@ def main():
             conf = conf.strip()
             prog.update(task_id=task, description=f"[green]{year}[/green]:[yellow]{conf}[/yellow]", advance=1)
             version = link.split("/")[-1]
-            logger.info(f"{conf:7s}:{year} searching")
+            logger.info(f"{conf}:{year} searching")
             results = request_conf(link, version=version)
             
             #Author / Git extraction
             for title, paperinfo in results.items():
                 results[title] = request_paper(paperinfo, version)
                 logger.info(f"parsing {title}")
-                support.add_spin_subt(prog, f"[green]{title:30s}[/green]", np.random.randint(1, 8))
+                support.add_spin_subt(prog, f"[green]{title:<30s}[/green]", np.random.randint(1, 8))
 
             support.save_data(results, conf, year)
             support.add_spin_subt(prog, f"[yellow]{next(FUN_STATUS_UPDATE)}[/yellow]", np.random.randint(3, 6))
