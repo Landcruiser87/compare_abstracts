@@ -28,7 +28,7 @@ from support import console, logger, log_time
 #     authors          : dict = field(default_factory=lambda:{})
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
+SUB_CONFERENCES   =  ["COLT"]#, "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 FUN_STATUS_UPDATE = cycle(["Patience Iago", "Phenominal COSMIC POWER", "Iiiiiity bitty living space", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
 
 #FUNCTION Request Conference
@@ -291,7 +291,7 @@ def parse_conf(xml:str):
     for idx, paper in enumerate(root.findall("channel/item")):
         key = paper.find("title").text
         key = "".join(str(x) for x in key if x.isalnum() | x.isspace())
-        key = str(idx) + "_" + key
+        key = str(idx) + "_" + key.strip()
         url = paper.find("link").text
         results[key] = {}
         results[key]["title"] = paper.find("title").text
@@ -349,7 +349,7 @@ def parse_paper(page_text:str):
 @log_time
 def main():
     """Main driver code for program"""
-    years = range(2021, 2025)
+    years = range(2022, 2023)
     logger.debug("searching PMLR")
     PMLR = request_conf("PMLR", year=years.start)
     global prog, task
@@ -392,6 +392,7 @@ def main():
 if __name__ == "__main__":
     main()
 
+#TODO - remember to fix the keys up to 2022.  Somehow you forgot to include the space in front of the title.  doh!
 
     #Go here to scrape other conferences. 
         #https://proceedings.mlr.press/
