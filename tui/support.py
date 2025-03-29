@@ -204,10 +204,10 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             text_filename.stylize(f"link file://{path}")
             file_size = path.stat().st_size
             text_filename.append(f" ({decimal(file_size)})", "blue")
-            if path.suffix == ".py":
+            if path.name.split(".")[0].split("_")[1] in MAIN_CONFERENCES:
+                icon = "🔥 "
+            elif path.name.split(".")[0].split("_")[1] in SUB_CONFERENCES:
                 icon = "🐍 "
-            elif path.suffix == ".json":
-                icon = "📄 "
             elif path.suffix == ".mib":
                 icon = "👽 "
             else:
@@ -218,7 +218,10 @@ def walk_directory(directory: Path, tree: Tree) -> None:
     return paths#, paper_count
 
 ########################## Global Variables to return ##########################################
+
+MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
+SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
+
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
 logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
-

@@ -163,7 +163,7 @@ python tui/__main__.py
     - Types of search
     - [ ] Cosine Sim search
       - Easy first win for search.  Do cos sim search by abstract.  Return top 10 papers for exploration.  
-      - Things I want to be able to search by... 
+      - Things I want to be able to search by... (maybe have a dropdown where you select which one?)
         1. Abstract
         2. keywords - (will need a warning for empty keywords aren't present)
         3. topic
