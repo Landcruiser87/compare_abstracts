@@ -88,8 +88,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
 #IDEA
 #Grab all of above
 #Need a better way to search. 

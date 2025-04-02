@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "jtree_ML"
-__version__ = "0.2.8"   
+__version__ = "0.2.8"
 
 class JSONTreeApp(App):
     TITLE = __prog_name__
@@ -75,7 +75,7 @@ class JSONTreeApp(App):
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
         self.selected_node_data = event.node.data
-    
+
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
         json_docview = self.query_one(JSONDocumentView)
