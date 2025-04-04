@@ -1,0 +1,237 @@
+{
+  "0_Continual Causal Abstractions": {
+    "title": "Continual Causal Abstractions",
+    "abstract": "This short paper discusses continually updated causal abstractions as a potential direction of future research. The key idea is to revise the existing level of causal abstraction to a different level of detail that is both consistent with the history of observed data and more effective in solving a given task.",
+    "url": "https://proceedings.mlr.press/v208/zecevic23a.html",
+    "id": "https://proceedings.mlr.press/v208/zecevic23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/zecevic23a/zecevic23a.pdf",
+    "authors": {
+      "0_Matej Ze\u010devi\u0107": "Matej Ze\u010devi\u0107",
+      "1_Moritz Willig": "Moritz Willig",
+      "2_Florian Peter Busch": "Florian Peter Busch",
+      "3_Jonas Seng": "Jonas Seng"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/zecevic23a/zecevic23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:45-51,\u00a02023.",
+    "supplemental": ""
+  },
+  "1_Causal Concept Identification in Open World Environments": {
+    "title": "Causal Concept Identification in Open World Environments",
+    "abstract": "The ability to continually discover novel concepts is a core task in open world learning. For classical learning tasks new samples might be identified via manual labeling. Since this is a labor intensive task, this paper proposes to utilize causal information for doing so. Image data provides us with the ability to directly observe the physical, real-world appearance of concepts. However, the information presented in images is usually of noisy and unstructured nature. In this position paper we propose to leverage causal information to both structure and causally connect visual representations. Specifically, we discuss the possibilities of using causal models as a knowledge source for identifying novel concepts in the visual domain.",
+    "url": "https://proceedings.mlr.press/v208/willig23a.html",
+    "id": "https://proceedings.mlr.press/v208/willig23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/willig23a/willig23a.pdf",
+    "authors": {
+      "0_Moritz Willig": "Moritz Willig",
+      "1_Matej Ze\u010devi\u0107": "Matej Ze\u010devi\u0107",
+      "2_Jonas Seng": "Jonas Seng",
+      "3_Florian Peter Busch": "Florian Peter Busch"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/willig23a/willig23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:52-58,\u00a02023.",
+    "supplemental": ""
+  },
+  "2_Treatment Effect Estimation to Guide Model Optimization in Continual Learning": {
+    "title": "Treatment Effect Estimation to Guide Model Optimization in Continual Learning",
+    "abstract": "Continual Learning systems are faced with a potentially large numbers of tasks to be learned while the models employed have only limited capacity available, which makes it potentially impossible to learn all required tasks within a single model. In order to detect on when a model might break we propose to use treatment effect estimation techniques to estimate the effect of training a model on a new task w.r.t. some suitable performance measure.",
+    "url": "https://proceedings.mlr.press/v208/seng23a.html",
+    "id": "https://proceedings.mlr.press/v208/seng23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/seng23a/seng23a.pdf",
+    "authors": {
+      "0_Jonas Seng": "Jonas Seng",
+      "1_Florian Peter Busch": "Florian Peter Busch",
+      "2_Matej Ze\u010devi\u0107": "Matej Ze\u010devi\u0107",
+      "3_Moritz Willig": "Moritz Willig"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/seng23a/seng23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:38-44,\u00a02023.",
+    "supplemental": ""
+  },
+  "3_From IID to the Independent Mechanisms assumption in continual learning": {
+    "title": "From IID to the Independent Mechanisms assumption in continual learning",
+    "abstract": "Current machine learning algorithms are successful in learning clearly defined tasks from large i.i.d. data. Continual learning (CL) requires learning without iid-ness and developing algorithms capable of knowledge retention and transfer, the latter can be boosted through systematic generalization. Dropping the i.i.d. assumption requires replacing it with another hypothesis. While there are several candidates, here we advocate that the independent mechanism assumption (IM) (Scho \u0308lkopf et al. 2012) is a useful hypothesis for representing knowledge in a form, that makes it easy to adapt to new tasks in CL. Specifically, we review several types of distribution shifts that are common in CL and point out in which way a system that represents knowledge in form of causal modules may outperform monolithic counterparts in CL. Intuitively, the efficacy of IM solution emerges since: (i) causal modules learn mechanisms invariant across domains; (ii) if causal mechanisms must be up- dated, modularity can enable efficient and sparse updates.",
+    "url": "https://proceedings.mlr.press/v208/ostapenko23a.html",
+    "id": "https://proceedings.mlr.press/v208/ostapenko23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/ostapenko23a/ostapenko23a.pdf",
+    "authors": {
+      "0_Oleksiy Ostapenko": "Oleksiy Ostapenko",
+      "1_Pau Rodr\u00edguez": "Pau Rodr\u00edguez",
+      "2_Alexandre Lacoste": "Alexandre Lacoste",
+      "3_Laurent Charlin": "Laurent Charlin"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/ostapenko23a/ostapenko23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:25-29,\u00a02023.",
+    "supplemental": ""
+  },
+  "4_Never Ending Reasoning and Learning Opportunities and Challenges": {
+    "title": "Never Ending Reasoning and Learning: Opportunities and Challenges",
+    "abstract": "Inspired by the motivation behind the Never-Ending Language Learner (NELL), a continual learning system that reads the web, we propose the never-ending reasoning and learning paradigm and one instance: the  Never-Ending Reasoner and Learner (NERL), which continuously learns and reasons with causal models by actively interacting with domain experts.  NERL necessitates tight synergistic interaction between different communities\u2014continual learning, causal modeling, statistical relational AI, and human-allied AI communities. We motivate NERL using the real, high-impact problem of global mitigation of adverse pregnancy outcomes, present the challenges in this system, and  highlight the potential opportunities that provide for interdisciplinary collaborations.",
+    "url": "https://proceedings.mlr.press/v208/natarajan23a.html",
+    "id": "https://proceedings.mlr.press/v208/natarajan23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/natarajan23a/natarajan23a.pdf",
+    "authors": {
+      "0_Sriraam Natarajan": "Sriraam Natarajan",
+      "1_Kristian Kersting": "Kristian Kersting"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/natarajan23a/natarajan23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:71-74,\u00a02023.",
+    "supplemental": ""
+  },
+  "5_Continual Causality A Retrospective of the Inaugural AAAI23 Bridge Program": {
+    "title": "Continual Causality: A Retrospective of the Inaugural AAAI-23 Bridge Program",
+    "abstract": "Both of the fields of continual learning and causality investigate complementary aspects of human cognition and are fundamental components of artificial intelligence if it is to reason and generalize in complex environments. Despite the burgeoning interest in investigating the intersection of the two fields, it is currently unclear how causal models may describe continuous streams of data and vice versa, how continual learning may exploit learned causal structure.   We proposed to bridge this gap through the inaugural AAAI-23 \u201cContinual Causality\u201d bridge program, where our aim was to take the initial steps towards a unified treatment of these fields by providing a space for learning, discussions, and to build a diverse community to connect researchers. The activities ranged from traditional tutorials and software labs, invited vision talks, and contributed talks based on submitted position papers, as well as a panel and breakout discussions. Whereas materials are publicly disseminated as a foundation for the community: https://www.continualcausality.org, respectively discussed ideas, challenges, and prospects beyond the inaugural bridge are summarized in this retrospective paper.",
+    "url": "https://proceedings.mlr.press/v208/mundt23a.html",
+    "id": "https://proceedings.mlr.press/v208/mundt23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/mundt23a/mundt23a.pdf",
+    "authors": {
+      "0_Martin Mundt": "Martin Mundt",
+      "1_Keiland W. Cooper": "Keiland W. Cooper",
+      "2_Devendra Singh Dhami": "Devendra Singh Dhami",
+      "3_Ad\u00e9le Ribeiro": "Ad\u00e9le Ribeiro",
+      "4_James Seale Smith": "James Seale Smith",
+      "5_Alexis Bellot": "Alexis Bellot",
+      "6_Tyler Hayes": "Tyler Hayes"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/mundt23a/mundt23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:1-10,\u00a02023.",
+    "supplemental": ""
+  },
+  "6_Spurious Features in Continual Learning": {
+    "title": "Spurious Features in Continual Learning",
+    "abstract": "Continual Learning (CL) is the research field addressing training settings where the data distribution is not static. One of the core problems CL addresses is learning without forgetting. To solve problems, continual learning algorithms need to learn robust and stable representations based only on a subset of the data. Those representations are necessarily biased and should be revisited when new data becomes available. This paper studies spurious features\u2019 influence on continual learning algorithms. We show that in continual learning, algorithms have to deal with local spurious features that correlate well with labels within a task only but which are not good representations for the concept to learn. One of the big challenges of continual learning algorithms is to discover causal relationships between features and labels under distribution shifts.",
+    "url": "https://proceedings.mlr.press/v208/lesort23a.html",
+    "id": "https://proceedings.mlr.press/v208/lesort23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/lesort23a/lesort23a.pdf",
+    "authors": {
+      "0_Timoth\u00e9e Lesort": "Timoth\u00e9e Lesort"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/lesort23a/lesort23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:59-62,\u00a02023.",
+    "supplemental": ""
+  },
+  "7_Issues for Continual Learning in the Presence of Dataset Bias": {
+    "title": "Issues for Continual Learning in the Presence of Dataset Bias",
+    "abstract": "While most continual learning algorithms have focused on tackling the stability-plasticity dilemma, they have overlooked the effects of the knowledge transfer when the dataset is biased \u2014 namely, when some unintended spurious correlations, not the true causal structures, of the tasks are learned from the biased dataset. In that case, how would they affect learning future tasks or the knowledge already learned from the past tasks? In this work, we design systematic experiments with a synthetic biased dataset and try to answer the above question from our empirical findings. Namely, we first show that standard continual learning methods that are unaware of dataset bias can transfer biases from one task to another, both forward and backward. In addition, we find that naively using existing debiasing methods after each continual learning step can lead to significant forgetting of past tasks and reduced overall continual learning performance. These findings highlight the need for a causality-aware design of continual learning algorithms to prevent both bias transfers and catastrophic forgetting.",
+    "url": "https://proceedings.mlr.press/v208/lee23a.html",
+    "id": "https://proceedings.mlr.press/v208/lee23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/lee23a/lee23a.pdf",
+    "authors": {
+      "0_Donggyu Lee": "Donggyu Lee",
+      "1_Sangwon Jung": "Sangwon Jung",
+      "2_Taesup Moon": "Taesup Moon"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/lee23a/lee23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:92-99,\u00a02023.",
+    "supplemental": ""
+  },
+  "8_Modeling Uplift from Observational TimeSeries in Continual Scenarios": {
+    "title": "Modeling Uplift from Observational Time-Series in Continual Scenarios",
+    "abstract": "As the importance of causality in machine learning grows, we expect the model to learn the correct causal mechanism for robustness even under distribution shifts. Since most of the prior benchmarks focused on vision and language tasks, domain or temporal shifts in causal inference tasks have not been well explored. To this end, we introduce Backend-TS dataset for modeling uplift in continual learning scenarios. We build the dataset with CRUD data and propose continual learning tasks under temporal and domain shifts.",
+    "url": "https://proceedings.mlr.press/v208/kim23a.html",
+    "id": "https://proceedings.mlr.press/v208/kim23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/kim23a/kim23a.pdf",
+    "authors": {
+      "0_Sanghyun Kim": "Sanghyun Kim",
+      "1_Jungwon Choi": "Jungwon Choi",
+      "2_NamHee Kim": "NamHee Kim",
+      "3_Jaesung Ryu": "Jaesung Ryu",
+      "4_Juho Lee": "Juho Lee"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/kim23a/kim23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:75-84,\u00a02023.",
+    "supplemental": ""
+  },
+  "9_Prospects of Continual Causality for Industrial Applications": {
+    "title": "Prospects of Continual Causality for Industrial Applications",
+    "abstract": "We have been investigating the causal analysis of industrial plant process data and its various applications, such as material quantity optimization utilizing intervention effects. However, process data often comes with various problems such as non-stationary characteristics including distribution shifts, which make such applications difficult. When combined with the idea of continual learning, causal models may be able to solve these problems. We present the potential and prospects for industrial applications of continual causality, showing previous work. We also briefly introduce our causal discovery method utilizing a continual framework.",
+    "url": "https://proceedings.mlr.press/v208/fujiwara23a.html",
+    "id": "https://proceedings.mlr.press/v208/fujiwara23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/fujiwara23a/fujiwara23a.pdf",
+    "authors": {
+      "0_Daigo Fujiwara": "Daigo Fujiwara",
+      "1_Kazuki Koyama": "Kazuki Koyama",
+      "2_Keisuke Kiritoshi": "Keisuke Kiritoshi",
+      "3_Tomomi Okawachi": "Tomomi Okawachi",
+      "4_Tomonori Izumitani": "Tomonori Izumitani",
+      "5_Shohei Shimizu": "Shohei Shimizu"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/fujiwara23a/fujiwara23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:18-24,\u00a02023.",
+    "supplemental": ""
+  },
+  "10_Towards Causal Replay for Knowledge Rehearsal in Continual Learning": {
+    "title": "Towards Causal Replay for Knowledge Rehearsal in Continual Learning",
+    "abstract": "Given the challenges associated with the real-world deployment of Machine Learning (ML) models, especially towards efficiently integrating novel information on-the-go, both Continual Learning (CL) and Causality have been proposed and investigated individually as potent solutions. Despite their complimentary nature, the bridge between them is still largely unexplored. In this work, we focus on causality to improve the learning and knowledge preservation capabilities of CL models. In particular, positing Causal Replay for knowledge rehearsal, we discuss how CL-based models can benefit from causal interventions towards improving their ability to replay past knowledge in order to mitigate forgetting.",
+    "url": "https://proceedings.mlr.press/v208/churamani23a.html",
+    "id": "https://proceedings.mlr.press/v208/churamani23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/churamani23a/churamani23a.pdf",
+    "authors": {
+      "0_Nikhil Churamani": "Nikhil Churamani",
+      "1_Jiaee Cheong": "Jiaee Cheong",
+      "2_Sinan Kalkan": "Sinan Kalkan",
+      "3_Hatice Gunes": "Hatice Gunes"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/churamani23a/churamani23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:63-70,\u00a02023.",
+    "supplemental": ""
+  },
+  "11_Continual Treatment Effect Estimation Challenges and Opportunities": {
+    "title": "Continual Treatment Effect Estimation: Challenges and Opportunities",
+    "abstract": "A further understanding of cause and effect within observational data is critical across many domains, such as economics, health care, public policy, web mining, online advertising, and marketing campaigns. Although significant advances have been made to overcome the challenges in causal effect estimation with observational data, such as missing counterfactual outcomes and selection bias between treatment and control groups, the existing methods mainly focus on source-specific and stationary observational data. Such learning strategies assume that all observational data are already available during the training phase and from only one source. This practical concern of accessibility is ubiquitous in various academic and industrial applications. That\u2019s what it boiled down to: in the era of big data, we face new challenges in causal inference with observational data, i.e., the extensibility for incrementally available observational data, the adaptability for extra domain adaptation problem except for the imbalance between treatment and control groups, and the accessibility for an enormous amount of data. In this position paper, we formally define the problem of continual treatment effect estimation, describe its research challenges, and then present possible solutions to this problem. Moreover, we will discuss future research directions on this topic.",
+    "url": "https://proceedings.mlr.press/v208/chu23a.html",
+    "id": "https://proceedings.mlr.press/v208/chu23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/chu23a/chu23a.pdf",
+    "authors": {
+      "0_Zhixuan Chu": "Zhixuan Chu",
+      "1_Sheng Li": "Sheng Li"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/chu23a/chu23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:11-17,\u00a02023.",
+    "supplemental": ""
+  },
+  "12_From Continual Learning to Causal Discovery in Robotics": {
+    "title": "From Continual Learning to Causal Discovery in Robotics",
+    "abstract": "Reconstructing accurate causal models of dynamic systems from time-series of sensor data is a key problem in many real-world scenarios. In this paper, we present an overview based on our experience about practical challenges that the causal analysis encounters when applied to autonomous robots and how Continual Learning\u00a0(CL) could help to overcome them. We propose a possible way to leverage the CL paradigm to make causal discovery feasible for robotics applications where the computational resources are limited, while at the same time exploiting the robot as an active agent that helps to increase the quality of the reconstructed causal models.",
+    "url": "https://proceedings.mlr.press/v208/castri23a.html",
+    "id": "https://proceedings.mlr.press/v208/castri23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/castri23a/castri23a.pdf",
+    "authors": {
+      "0_Luca Castri": "Luca Castri",
+      "1_Sariah Mghames": "Sariah Mghames",
+      "2_Nicola Bellotto": "Nicola Bellotto"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/castri23a/castri23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:85-91,\u00a02023.",
+    "supplemental": ""
+  },
+  "13_Continually Updating Neural Causal Models": {
+    "title": "Continually Updating Neural Causal Models",
+    "abstract": "A common assumption in causal modelling is that the relations between variables are fixed mechanisms. But in reality, these mechanisms often change over time and new data might not fit the original model as well. But is it reasonable to regularly train new models or can we update a single model continually instead? We propose utilizing the field of continual learning to help keep causal models updated over time.",
+    "url": "https://proceedings.mlr.press/v208/busch23a.html",
+    "id": "https://proceedings.mlr.press/v208/busch23a.html",
+    "pdf": "https://proceedings.mlr.press/v208/busch23a/busch23a.pdf",
+    "authors": {
+      "0_Florian Peter Busch": "Florian Peter Busch",
+      "1_Jonas Seng": "Jonas Seng",
+      "2_Moritz Willig": "Moritz Willig",
+      "3_Matej Ze\u010devi\u0107": "Matej Ze\u010devi\u0107"
+    },
+    "pmlr_pdf": "https://proceedings.mlr.press/v208/busch23a/busch23a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of The First AAAI Bridge Program on Continual Causality,\u00a0PMLR 208:30-37,\u00a02023.",
+    "supplemental": ""
+  }
+}

@@ -1,0 +1,736 @@
+{
+  "0_Daily Physical Activity Monitoring Adaptive Learning from Multisource Motion Sensor Data": {
+    "title": "Daily Physical Activity Monitoring: Adaptive Learning from Multi-source Motion Sensor Data",
+    "abstract": "In healthcare applications, there is a growing need to develop machine learning models that use data from a single source, such as that from a wrist wearable device, to monitor physical activities, assess health risks, and provide immediate health recommendations or interventions. However, the limitation of using single-source data often compromises the model\u2019s accuracy, as it fails to capture the full scope of human activities. While a more comprehensive dataset can be gathered in a lab setting using multiple sensors attached to various body parts, this approach is not practical for everyday use due to the impracticality of wearing multiple sensors. To address this challenge, we introduce a transfer learning framework that optimizes machine learning models for everyday applications by leveraging multi-source data collected in a laboratory setting. We introduce a novel metric to leverage the inherent relationship between these multiple data sources, as they are all paired to capture aspects of the same physical activity. Through numerical experiments, our framework outperforms existing methods in classification accuracy and robustness to noise, offering a promising avenue for the enhancement of daily activity monitoring.",
+    "url": "https://proceedings.mlr.press/v248/zhang24a.html",
+    "id": "https://proceedings.mlr.press/v248/zhang24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/zhang24a/zhang24a.pdf",
+    "authors": {
+      "0_Haoting Zhang": "Haoting Zhang",
+      "1_Donglin Zhan": "Donglin Zhan",
+      "2_Yunduan Lin": "Yunduan Lin",
+      "3_Jinghai He": "Jinghai He",
+      "4_Qing Zhu": "Qing Zhu",
+      "5_Zuo-Jun Shen": "Zuo-Jun Shen",
+      "6_Zeyu Zheng": "Zeyu Zheng"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/zhang24a/zhang24a.pdf",
+    "github_url": "https://github.com/Oceanjinghai/HealthTimeSerial",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:39-54,\u00a02024.",
+    "supplemental": ""
+  },
+  "1_Dynamic Survival Analysis for Early Event Prediction": {
+    "title": "Dynamic Survival Analysis for Early Event Prediction",
+    "abstract": "This study advances Early Event Prediction (EEP) in healthcare through Dynamic Survival Analysis (DSA), offering a novel approach by integrating risk localization into alarm policies to enhance clinical event metrics. By adapting and evaluating DSA models against traditional EEP benchmarks, our research demonstrates their ability to match EEP models on a time-step level and significantly improve event-level metrics through a new alarm prioritization scheme (up to 11% AuPRC difference). This approach represents a significant step forward in predictive healthcare, providing a more nuanced and actionable framework for early event prediction and management.",
+    "url": "https://proceedings.mlr.press/v248/yeche24a.html",
+    "id": "https://proceedings.mlr.press/v248/yeche24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/yeche24a/yeche24a.pdf",
+    "authors": {
+      "0_Hugo Y\u00e8che": "Hugo Y\u00e8che",
+      "1_Manuel Burger": "Manuel Burger",
+      "2_Dinara Veshchezerova": "Dinara Veshchezerova",
+      "3_Gunnar Ratsch": "Gunnar Ratsch"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/yeche24a/yeche24a.pdf",
+    "github_url": "https://github.com/ratschlab/dsa-for-eep",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:540-557,\u00a02024.",
+    "supplemental": ""
+  },
+  "2_SQUWA Signal Quality Aware DNN Architecture for Enhanced Accuracy in Atrial Fibrillation Detection from Noisy PPG Signals": {
+    "title": "SQUWA: Signal Quality Aware DNN Architecture for Enhanced Accuracy in Atrial Fibrillation Detection from Noisy PPG Signals",
+    "abstract": "Atrial fibrillation (AF), a common cardiac arrhythmia, significantly increases the risk of stroke, heart disease, and mortality. Photoplethysmography (PPG) offers a promising solution for continuous AF monitoring, due to its cost efficiency and integration into wearable devices. Nonetheless, PPG signals are susceptible to corruption from motion artifacts and other factors often encountered in ambulatory settings. Conventional approaches typically discard corrupted segments or attempt to reconstruct original signals, allowing for the use of standard machine learning techniques. However, this reduces dataset size and introduces biases, compromising prediction accuracy and the effectiveness of continuous monitoring. We propose a novel deep learning model, \\textbf{\\underline{S}}ignal \\textbf{\\underline{Qu}}ality \\textbf{\\underline{W}}eighted Fusion of \\textbf{\\underline{A}}ttentional Convolution and Recurrent Neural Network (SQUWA), designed to learn how to retain accurate predictions from partially corrupted PPG. Specifically, SQUWA innovatively integrates an attention mechanism that directly considers signal quality during the learning process, dynamically adjusting the weights of time series segments based on their quality. This approach enhances the influence of higher-quality segments while reducing that of lower-quality ones, effectively utilizing partially corrupted segments. This approach represents a departure from the conventional methods that exclude such segments, enabling the utilization of a broader range of data, which has great implications for less disruption when monitoring of AF risks and more accurate estimation of AF burdens. Moreover, SQUWA utilizes variable-sized convolutional kernels to capture complex PPG signal patterns across different resolutions for enhanced learning. Our extensive experiments show that SQUWA outperform existing PPG-based models, achieving the highest AUCPR of 0.89 with label noise mitigation. This also exceeds the 0.86 AUCPR of models trained with using both electrocardiogram (ECG) and PPG data.",
+    "url": "https://proceedings.mlr.press/v248/yan24a.html",
+    "id": "https://proceedings.mlr.press/v248/yan24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/yan24a/yan24a.pdf",
+    "authors": {
+      "0_Runze Yan": "Runze Yan",
+      "1_Cheng Ding": "Cheng Ding",
+      "2_Ran Xiao": "Ran Xiao",
+      "3_Alex Fedorov": "Alex Fedorov",
+      "4_Randall J Lee": "Randall J Lee",
+      "5_Fadi Nahab": "Fadi Nahab",
+      "6_Xiao Hu": "Xiao Hu"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/yan24a/yan24a.pdf",
+    "github_url": "https://github.com/Runz96/SQUWA",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:105-119,\u00a02024.",
+    "supplemental": ""
+  },
+  "3_From Basic to Extra Features Hypergraph Transformer PretrainthenFinetuning for Balanced Clinical Predictions on EHR": {
+    "title": "From Basic to Extra Features: Hypergraph Transformer Pretrain-then-Finetuning for Balanced Clinical Predictions on EHR",
+    "abstract": "Electronic Health Records (EHRs) contain rich patient information and are crucial for clinical research and practice.  In recent years, deep learning models have been applied to EHRs, but they often rely on massive features, which may not be readily available for all patients. We propose \\ours{}\\footnote{Short for \\textbf{H}ypergraph \\textbf{T}ransformer \\textbf{P}retrain-then-Finetuning with \\textbf{S}moo\\textbf{t}hness-induced regularization \\textbf{a}nd \\textbf{R}eweighting.}, which leverages hypergraph structures with a pretrain-then-finetune framework for modeling EHR data, enabling seamless integration of additional features.  Additionally, we design two techniques, namely (1) \\emph{Smoothness-inducing Regularization} and (2) \\emph{Group-balanced Reweighting}, to enhance the model\u2019s robustness during finetuning. Through experiments conducted on two real EHR datasets, we demonstrate that \\ours{} consistently outperforms va",
+    "url": "https://proceedings.mlr.press/v248/xu24a.html",
+    "id": "https://proceedings.mlr.press/v248/xu24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/xu24a/xu24a.pdf",
+    "authors": {
+      "0_Ran Xu": "Ran Xu",
+      "1_Yiwen Lu": "Yiwen Lu",
+      "2_Chang Liu": "Chang Liu",
+      "3_Yong Chen": "Yong Chen",
+      "4_Yan Sun": "Yan Sun",
+      "5_Xiao Hu": "Xiao Hu",
+      "6_Joyce C Ho": "Joyce C Ho",
+      "7_Carl Yang": "Carl Yang"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/xu24a/xu24a.pdf",
+    "github_url": "https://github.com/ritaranx/HTP-Star",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:182-197,\u00a02024.",
+    "supplemental": ""
+  },
+  "4_Regulating AI Adaptation An Analysis of AI Medical Device Updates": {
+    "title": "Regulating AI Adaptation: An Analysis of AI Medical Device Updates",
+    "abstract": "While the pace of development of AI has rapidly progressed in recent years, the implementation of safe and effective regulatory frameworks has lagged behind. In particular, the adaptive nature of AI models presents unique challenges to regulators as updating a model can improve its performance but also introduce safety risks. In the US, the Food and Drug Administration (FDA) has been a forerunner in regulating and approving hundreds of AI medical devices. To better understand how AI is updated and its regulatory considerations, we systematically analyze the frequency and nature of updates in FDA-approved AI medical devices. We find that less than 2% of all devices report having been updated by being re-trained on new data. Meanwhile, nearly a quarter of devices report updates in the form of new functionality and marketing claims. As an illustrative case study, we analyze pneumothorax detection models and find that while model performance can degrade by as much as 0.18 AUC when evaluated on new sites, re-training on site-specific data can mitigate this performance drop, recovering up to 0.23 AUC. However, we also observed significant degradation on the original site after re-training using data from new sites, providing insight from one example that challenges the current one-model-fits-all approach to regulatory approvals. Our analysis provides an in-depth look at the current state of FDA-approved AI device updates and insights for future regulatory policies toward model updating and adaptive AI.",
+    "url": "https://proceedings.mlr.press/v248/wu24a.html",
+    "id": "https://proceedings.mlr.press/v248/wu24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/wu24a/wu24a.pdf",
+    "authors": {
+      "0_Kevin Wu": "Kevin Wu",
+      "1_Eric Wu": "Eric Wu",
+      "2_Kit Rodolfa": "Kit Rodolfa",
+      "3_Daniel E Ho": "Daniel E Ho",
+      "4_James Zou": "James Zou"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/wu24a/wu24a.pdf",
+    "github_url": "https://github.com/kevinwu23/AIUpdating",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:477-488,\u00a02024.",
+    "supplemental": ""
+  },
+  "5_Temporally MultiScale Sparse SelfAttention for Physical Activity Data Imputation": {
+    "title": "Temporally Multi-Scale Sparse Self-Attention for Physical Activity Data Imputation",
+    "abstract": "Wearable sensors enable health researchers to continuously collect data pertaining to the physiological state of individuals in real-world settings. However, such data can be subject to extensive missingness due to a complex combination of factors. In this work, we study the problem of imputation of missing step count data, one of the most ubiquitous forms of wearable sensor data. We construct a novel and large scale data set consisting of a training set with over 3 million hourly step count observations and a test set with over 2.5 million hourly step count observations. We propose a domain knowledge-informed sparse self-attention model for this task that captures the temporal multi-scale nature of step-count data. We assess the performance of the model relative to baselines and conduct ablation studies to verify our specific model designs.",
+    "url": "https://proceedings.mlr.press/v248/wei24a.html",
+    "id": "https://proceedings.mlr.press/v248/wei24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/wei24a/wei24a.pdf",
+    "authors": {
+      "0_Hui Wei": "Hui Wei",
+      "1_Maxwell A Xu": "Maxwell A Xu",
+      "2_Colin Samplawski": "Colin Samplawski",
+      "3_James Matthew Rehg": "James Matthew Rehg",
+      "4_Santosh Kumar": "Santosh Kumar",
+      "5_Benjamin Marlin": "Benjamin Marlin"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/wei24a/wei24a.pdf",
+    "github_url": "https://github.com/reml-lab/allofus-imputation",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:137-154,\u00a02024.",
+    "supplemental": ""
+  },
+  "6_Addressing Wearable Sleep Tracking Inequity A New Dataset and Novel Methods for a Population with Sleep Disorders": {
+    "title": "Addressing Wearable Sleep Tracking Inequity: A New Dataset and Novel Methods for a Population with Sleep Disorders",
+    "abstract": "Sleep is crucial for health, and recent advances in wearable technology and machine learning offer promising methods for monitoring sleep outside the clinical setting. However, sleep tracking using wearables is challenging, particularly for those with irregular sleep patterns or sleep disorders. In this study, we introduce a dataset collected from 100 patients from the Duke Sleep Disorders Center who wore an Empatica E4 smartwatch during an overnight sleep study with concurrent clinical-grade polysomnography (PSG) recording. This dataset encompasses diverse demographics and medical conditions. We further introduce a new methodology that addresses the limitations of existing modeling methods when applied on patients with sleep disorders. Namely, we address the inability of existing models to account for 1) temporal relationships while leveraging relatively small data, by introducing a LSTM post-processing method, and 2) group-wise characteristics that impact classification task performance (i.e., random effects), by ensembling mixed-effects boosted tree models. This approach was highly successful for sleep onset and wakefulness detection in this sleep disordered population, achieving an F1 score of 0.823 \u00b1 0.019, an AUROC of 0.926 \u00b1 0.016, and a 0.695 \u00b1 0.025 Cohen\u2019s Kappa. Overall, we demonstrate the utility of both the data that we collected, as well as our unique approach to address the existing gap in wearable-based sleep tracking in sleep disordered populations.",
+    "url": "https://proceedings.mlr.press/v248/wang24a.html",
+    "id": "https://proceedings.mlr.press/v248/wang24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/wang24a/wang24a.pdf",
+    "authors": {
+      "0_Will Ke Wang": "Will Ke Wang",
+      "1_Jiamu Yang": "Jiamu Yang",
+      "2_Leeor Hershkovich": "Leeor Hershkovich",
+      "3_Hayoung Jeong": "Hayoung Jeong",
+      "4_Bill Chen": "Bill Chen",
+      "5_Karnika Singh": "Karnika Singh",
+      "6_Ali R Roghanizad": "Ali R Roghanizad",
+      "7_Md Mobashir Hasan Shandhi": "Md Mobashir Hasan Shandhi",
+      "8_Andrew R Spector": "Andrew R Spector",
+      "9_Jessilyn Dunn": "Jessilyn Dunn"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/wang24a/wang24a.pdf",
+    "github_url": "https://github.com/WillKeWang/DREAMT_FE",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:380-396,\u00a02024.",
+    "supplemental": ""
+  },
+  "7_Systematic Evaluation of SelfSupervised Learning Approaches for WearableBased Fatigue Recognition": {
+    "title": "Systematic Evaluation of Self-Supervised Learning Approaches for Wearable-Based Fatigue Recognition",
+    "abstract": "Fatigue is one of the most prevalent symptoms of chronic diseases, such as Multiple Sclerosis, Alzheimer\u2019s, and Parkinson\u2019s. Recently researchers have explored unobtrusive and continuous ways of fatigue monitoring using mobile and wearable devices. However, data quality and limited labeled data availability in the wearable health domain pose significant challenges to progress in the field. In this work, we perform a systematic evaluation of self-supervised learning (SSL) tasks for fatigue recognition using wearable sensor data. To establish our benchmark, we use Homekit2020, which is a large-scale dataset collected using Fitbit devices in everyday life settings. Our results show that the majority of the SSL tasks outperform fully supervised baselines for fatigue recognition, even in limited labeled data scenarios. In particular, the domain features and multi-task learning achieve 0.7371 and 0.7323 AUROC, which are higher than the other SSL tasks and supervised learning baselines. In most of the pre-training tasks, the performance is higher when using at least one data augmentation that reflects the potentially low quality of wearable data (e.g., missing data).  Our findings open up promising opportunities for continuous assessment of fatigue in real settings and can be used to guide the design and development of health monitoring systems.",
+    "url": "https://proceedings.mlr.press/v248/visy24a.html",
+    "id": "https://proceedings.mlr.press/v248/visy24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/visy24a/visy24a.pdf",
+    "authors": {
+      "0_Tam\u00e1s Visy": "Tam\u00e1s Visy",
+      "1_Rita Kuznetsova": "Rita Kuznetsova",
+      "2_Christian Holz": "Christian Holz",
+      "3_Shkurta Gashi": "Shkurta Gashi"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/visy24a/visy24a.pdf",
+    "github_url": "https://github.com/tamas-visy/SSLA-WBFR",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:582-596,\u00a02024.",
+    "supplemental": ""
+  },
+  "8_Simulation of Health Time Series with Nonstationarity": {
+    "title": "Simulation of Health Time Series with Nonstationarity",
+    "abstract": "Limited access to health data remains a challenge for developing machine learning (ML) models. Health data is difficult to share due to privacy concerns and often does not have ground truth. Simulated data is often used for evaluating algorithms, as it can be shared freely and generated with ground truth. However, for simulated data to be used as an alternative to real data, algorithmic performance must be similar to that of real data. Existing simulation approaches are either black boxes or rely solely on expert knowledge, which may be incomplete. These methods generate data that often overstates performance, as they do not simulate many of the properties that make real data challenging. Nonstationarity, where a system\u2019s properties or parameters change over time, is pervasive in health data with changing health status of patients, standards of care, and populations. This makes ML challenging and can lead to reduced model generalizability, yet there have not been ways to systematically simulate realistic nonstationary data. This paper introduces a modular approach for learning dataset-specific models of nonstationarity in real data and augmenting simulated data with these properties to generate realistic synthetic datasets. We show that our simulation approach brings performance closer to that of real data in stress classification and glucose forecasting in people with diabetes.",
+    "url": "https://proceedings.mlr.press/v248/toye24a.html",
+    "id": "https://proceedings.mlr.press/v248/toye24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/toye24a/toye24a.pdf",
+    "authors": {
+      "0_Adedolapo Aishat Toye": "Adedolapo Aishat Toye",
+      "1_Louis Gomez": "Louis Gomez",
+      "2_Samantha Kleinberg": "Samantha Kleinberg"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/toye24a/toye24a.pdf",
+    "github_url": "https://github.com/health-ai-lab/Nonstationarity-Simulation",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:217-232,\u00a02024.",
+    "supplemental": ""
+  },
+  "9_Learning Social Fairness Preferences from NonExpert Stakeholder Opinions in Kidney Placement": {
+    "title": "Learning Social Fairness Preferences from Non-Expert Stakeholder Opinions in Kidney Placement",
+    "abstract": "Modern kidney placement incorporates several intelligent recommendation systems which exhibit social discrimination due to biases inherited from training data. Although initial attempts were made in the literature to study algorithmic fairness in kidney placement, these methods replace true outcomes with surgeons\u2019 decisions due to the long delays involved in recording such outcomes reliably. However, the replacement of true outcomes with surgeons\u2019 decisions disregards expert stakeholders\u2019 biases as well as social opinions of other stakeholders who do not possess medical expertise. This paper alleviates the latter concern and designs a novel fairness feedback survey to evaluate an acceptance rate predictor (ARP) that predicts a kidney\u2019s acceptance rate in a given kidney-match pair. The survey is launched on Prolific, a crowdsourcing platform, and public opinions are collected from 85 anonymous crowd participants. A novel social fairness preference learning algorithm is proposed based on minimizing social feedback regret computed using a novel logit-based fairness feedback model. The proposed model and learning algorithm are both validated using simulation experiments as well as Prolific data. Public preferences towards group fairness notions in the context of kidney placement have been estimated and discussed in detail. The specific ARP tested in the Prolific survey has been deemed fair by the participants.",
+    "url": "https://proceedings.mlr.press/v248/telukunta24a.html",
+    "id": "https://proceedings.mlr.press/v248/telukunta24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/telukunta24a/telukunta24a.pdf",
+    "authors": {
+      "0_Mukund Telukunta": "Mukund Telukunta",
+      "1_Sukruth Rao": "Sukruth Rao",
+      "2_Gabriella Stickney": "Gabriella Stickney",
+      "3_Venkata Sriram Siddhardh Nadendla": "Venkata Sriram Siddhardh Nadendla",
+      "4_Casey Canfield": "Casey Canfield"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/telukunta24a/telukunta24a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:683-695,\u00a02024.",
+    "supplemental": ""
+  },
+  "10_sSuStaIn Scaling subtype and stage inference via simultaneous clustering of subjects and biomarkers": {
+    "title": "s-SuStaIn: Scaling subtype and stage inference via simultaneous clustering of subjects and biomarkers",
+    "abstract": "Event-based models (EBM) provide an important platform for modeling disease progression. This work successfully extends previous EBM approaches to work with larger sets of biomarkers while simultaneously modeling heterogeneity in disease progression trajectories. We develop and validate the s-SuStain method for scalable event-based modeling of disease progression subtypes using large numbers of features. s-SuStaIn is typically an order of magnitude faster than its predecessor (SuStaIn). Moreover, we perform a case study with s-SuStaIn using open access cross-sectional Alzheimer\u2019s Disease Neuroimaging (ADNI) data to stage AD patients into four subtypes based on dynamic disease progression. s-SuStaIn shows that the inferred subtypes and stages predict progression to AD among MCI subjects. The subtypes show difference in AD incidence-rates and reveal clinically meaningful progression trajectories when mapped to a brain atlas.",
+    "url": "https://proceedings.mlr.press/v248/tandon24a.html",
+    "id": "https://proceedings.mlr.press/v248/tandon24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/tandon24a/tandon24a.pdf",
+    "authors": {
+      "0_Raghav Tandon": "Raghav Tandon",
+      "1_James J Lah": "James J Lah",
+      "2_Cassie S Mitchell": "Cassie S Mitchell"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/tandon24a/tandon24a.pdf",
+    "github_url": "https://github.com/pathology-dynamics/s-SuStaIn",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:461-476,\u00a02024.",
+    "supplemental": ""
+  },
+  "11_Contextual Unsupervised Deep Clustering in Digital Pathology": {
+    "title": "Contextual Unsupervised Deep Clustering in Digital Pathology",
+    "abstract": "Clustering can be used in medical imaging research to identify different domains within a specific dataset, aiding in a better understanding of subgroups or strata that may not have been annotated. Moreover, in digital pathology, clustering can be used to effectively sample image patches from whole slide images (WSI). In this work, we conduct a comparative analysis of three deep clustering algorithms \u2013 a simple two-step approach applying K-means onto a learned feature space, an end-to-end deep clustering method (DEC), and a Graph Convolutional Network (GCN) based method \u2013 in application to a digital pathology dataset of endometrial biopsy WSIs. For consistency, all methods use the same Autoencoder (AE) architecture backbone that extracts features from image patches. The GCN-based model, specifically, stands out as a deep clustering algorithm that considers spatial contextual information in predicting clusters. Our study highlights the computation of graphs for WSIs and emphasizes the impact of these graphs on the formation of clusters. The main finding of our research indicates that GCN-based deep clustering demonstrates heightened spatial awareness compared to the other methods, resulting in higher cluster agreement with previous clinical annotations of WSIs.",
+    "url": "https://proceedings.mlr.press/v248/sidulova24a.html",
+    "id": "https://proceedings.mlr.press/v248/sidulova24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/sidulova24a/sidulova24a.pdf",
+    "authors": {
+      "0_Mariia Sidulova": "Mariia Sidulova",
+      "1_Seyed Kahaki": "Seyed Kahaki",
+      "2_Ian Hagemann": "Ian Hagemann",
+      "3_Alexej Gossmann": "Alexej Gossmann"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/sidulova24a/sidulova24a.pdf",
+    "github_url": "https://github.com/DIDSR/DomId",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:558-565,\u00a02024.",
+    "supplemental": ""
+  },
+  "12_DDoS A Graph neural Network Based Drug Synergy Prediction Algorithm": {
+    "title": "DDoS: A Graph neural Network Based Drug Synergy Prediction Algorithm",
+    "abstract": "Drug synergy arises when the combined impact of two drugs exceeds the sum of their individual effects. While single-drug effects on cell lines are well-documented, the scarcity of data on drug synergy, considering the vast array of potential drug combinations, prompts a growing interest in computational approaches for predicting synergies in untested drug pairs. We introduce a Graph Neural Network (\\textit{GNN}) based model for drug synergy prediction, which utilizes drug chemical structures and cell line gene expression data. We extract data from the largest available drug combination database (DrugComb) and generate multiple synergy scores (commonly used in the literature) to create seven datasets that serve as a reliable benchmark with high confidence. In contrast to conventional models relying on pre-computed chemical features, our GNN-based approach learns task-specific drug representations directly from the graph structure of the drugs, providing superior performance in predicting drug synergies. Our work suggests that learning task-specific drug representations and leveraging a diverse dataset is a promising approach to advancing our understanding of drug-drug interaction and synergy.",
+    "url": "https://proceedings.mlr.press/v248/schwarz24a.html",
+    "id": "https://proceedings.mlr.press/v248/schwarz24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/schwarz24a/schwarz24a.pdf",
+    "authors": {
+      "0_Kyriakos Schwarz": "Kyriakos Schwarz",
+      "1_Pliego Mendieta Alicia": "Pliego Mendieta Alicia",
+      "2_Amina Mollaysa": "Amina Mollaysa",
+      "3_Planas-Paz Lara": "Planas-Paz Lara",
+      "4_Chantal Pauli": "Chantal Pauli",
+      "5_Ahmed Allam": "Ahmed Allam",
+      "6_Michael Krauthammer": "Michael Krauthammer"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/schwarz24a/schwarz24a.pdf",
+    "github_url": "https://github.com/uzh-dqbm-cmi/graphnn",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:24-38,\u00a02024.",
+    "supplemental": ""
+  },
+  "13_Development of Error Passing Network for Optimizing the Prediction of VO2 peak in Childhood Acute Leukemia Survivors": {
+    "title": "Development of Error Passing Network for Optimizing the Prediction of VO$_2$ peak in Childhood Acute Leukemia Survivors",
+    "abstract": "Approximately two-thirds of survivors of childhood acute lymphoblastic leukemia (ALL) cancer develop late adverse effects post-treatment. Prior studies explored prediction models for personalized follow-up, but none integrated the usage of neural networks to date. In this work, we propose the Error Passing Network (EPN), a graph-based method that leverages relationships between samples to propagate residuals and adjust predictions of any machine learning model. We tested our approach to estimate patients\u2019 \\vo peak, a reliable indicator of their cardiac health. We used the EPN in conjunction with several baseline models and observed up to 12.16% improvement in the mean average percentage error compared to the last established equation predicting \\vo peak in childhood ALL survivors. Along with this performance improvement, our final model is more efficient considering that it relies only on clinical variables that can be self-reported by patients, therefore removing the previous need of executing a resource-consuming physical test. ",
+    "url": "https://proceedings.mlr.press/v248/raymond24a.html",
+    "id": "https://proceedings.mlr.press/v248/raymond24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/raymond24a/raymond24a.pdf",
+    "authors": {
+      "0_Nicolas Raymond": "Nicolas Raymond",
+      "1_Hakima Laribi": "Hakima Laribi",
+      "2_Maxime Caru": "Maxime Caru",
+      "3_Mehdi Mitiche": "Mehdi Mitiche",
+      "4_Valerie Marcil": "Valerie Marcil",
+      "5_Maja Krajinovic": "Maja Krajinovic",
+      "6_Daniel Curnier": "Daniel Curnier",
+      "7_Daniel Sinnett": "Daniel Sinnett",
+      "8_Martin Valli\u00e8res": "Martin Valli\u00e8res"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/raymond24a/raymond24a.pdf",
+    "github_url": "https://github.com/Rayn2402/ErrorPassingNetwork",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:506-521,\u00a02024.",
+    "supplemental": ""
+  },
+  "14_A Machine Learning Approach for Predicting Upper Limb Motion Intentions with Multimodal Data": {
+    "title": "A Machine Learning Approach for Predicting Upper Limb Motion Intentions with Multimodal Data",
+    "abstract": "Over the last decade, there has been significant progress in the field of interactive virtual rehabilitation. Physical therapy (PT) stands as a highly effective approach for enhancing physical impairments. However, patient motivation and progress tracking in rehabilitation outcomes remain a challenge. This work addresses the gap through a machine learning-based approach to objectively measure outcomes of the upper limb virtual therapy system in a user study with non-clinical participants. In this study, we use virtual reality to perform several tracing tasks while collecting motion and movement data using a KinArm robot and a custom-made wearable sleeve sensor. We introduce a two-step machine learning architecture to predict the motion intention of participants. The first step predicts \\textbf{reaching task segments} to which the participant-marked points belonged using gaze, while the second step employs a Long Short-Term Memory (LSTM) model to predict \\textbf{directional movements} based on resistance change values from the wearable sensor and the KinArm. We specifically propose to transpose our raw resistance data to the time-domain which significantly improves the accuracy of the models by 34.6%. To evaluate the effectiveness of our model, we compared different classification techniques with various data configurations. The results show that our proposed computational method is exceptional at predicting participant\u2019s actions with accuracy values of 96.72% for diamond reaching task, and 97.44% for circle reaching task, which demonstrates the great promise of using multimodal data, including eye-tracking and resistance change, to objectively measure the performance and intention in virtual rehabilitation settings.",
+    "url": "https://proceedings.mlr.press/v248/ravva24a.html",
+    "id": "https://proceedings.mlr.press/v248/ravva24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/ravva24a/ravva24a.pdf",
+    "authors": {
+      "0_Pavan Uttej Ravva": "Pavan Uttej Ravva",
+      "1_Pinar Kullu": "Pinar Kullu",
+      "2_Mohammad Fahim Abrar": "Mohammad Fahim Abrar",
+      "3_Roghayeh Leila Barmaki": "Roghayeh Leila Barmaki"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/ravva24a/ravva24a.pdf",
+    "github_url": "https://github.com/pavanravva/A-Machine-Learning-Approach-for-Predicting-Upper-Limb-Motion-Intentions-with-Multimodal-Data",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:169-181,\u00a02024.",
+    "supplemental": ""
+  },
+  "15_Conference on Health Inference and Learning CHIL 2024": {
+    "title": "Conference on Health, Inference, and Learning (CHIL) 2024",
+    "abstract": "The Conference on Health, Inference, and Learning (CHIL), brings together a cross-disciplinary group of clinicians and researchers, from industry and academia, with the goal of advancing machine learning for health. CHIL has been an official conference of the Association for Health Learning and Inference (AHLI) since 2022. This volume contains proceedings of the fifth annual CHIL conference, held at Cornell Tech in New York City, US.",
+    "url": "https://proceedings.mlr.press/v248/pollard24a.html",
+    "id": "https://proceedings.mlr.press/v248/pollard24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/pollard24a/pollard24a.pdf",
+    "authors": {
+      "0_Tom Pollard": "Tom Pollard",
+      "1_Edward Choi": "Edward Choi",
+      "2_Pankhuri Singhal": "Pankhuri Singhal",
+      "3_Michael Hughes": "Michael Hughes",
+      "4_Elena Sizikova": "Elena Sizikova",
+      "5_Bobak Mortazavi": "Bobak Mortazavi",
+      "6_Irene Chen": "Irene Chen",
+      "7_Fei Wang": "Fei Wang",
+      "8_Tasmie Sarker": "Tasmie Sarker",
+      "9_Matthew McDermott": "Matthew McDermott",
+      "10_Marzyeh Ghassemi": "Marzyeh Ghassemi"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/pollard24a/pollard24a.pdf",
+    "github_url": "https://github.com/ahli-org/chil-proceedings-2024",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:1-6,\u00a02024.",
+    "supplemental": ""
+  },
+  "16_DoseMate A Realworld Evaluation of Machine Learning Classification of Pill Taking Using Wristworn Motion Sensors": {
+    "title": "DoseMate: A Real-world Evaluation of Machine Learning Classification of Pill Taking Using Wrist-worn Motion Sensors",
+    "abstract": "Non-adherence to medication is a complex behavioral issue that costs hundreds of billions of dollars annually in the United States alone. Existing solutions to improve medication adherence are limited in their effectiveness and require significant user involvement. To address this, a minimally invasive mobile health system called \\myname{} is proposed, which can provide quantifiable adherence data and imposes minimal user burden. To classify a motion time-series that defines pill-taking, we adopt transfer-learning and data augmentation based techniques that uses captured pill-taking gestures along with other open datasets that represent negative labels of other wrist motions. The paper also provides a design methodology \\updated{that generalizes to other} systems and describes a first-of-its-kind, in-the-wild, unobtrusively obtained dataset that contains unrestricted pill-related motion data from a diverse set of users.",
+    "url": "https://proceedings.mlr.press/v248/nzeyimana24a.html",
+    "id": "https://proceedings.mlr.press/v248/nzeyimana24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/nzeyimana24a/nzeyimana24a.pdf",
+    "authors": {
+      "0_Antoine Nzeyimana": "Antoine Nzeyimana",
+      "1_Anthony Campbell": "Anthony Campbell",
+      "2_James M Scanlan": "James M Scanlan",
+      "3_Joanne D Stekler": "Joanne D Stekler",
+      "4_Jenna Marquard": "Jenna Marquard",
+      "5_Barry G Saver": "Barry G Saver",
+      "6_Jeremy Gummeson": "Jeremy Gummeson"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/nzeyimana24a/nzeyimana24a.pdf",
+    "github_url": "https://gitlab.com/umass-smelt-lab/dosemate",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:566-581,\u00a02024.",
+    "supplemental": ""
+  },
+  "17_Regularizing and Interpreting Vision Transformer by Patch Selection on Echocardiography Data": {
+    "title": "Regularizing and Interpreting Vision Transformer by Patch Selection on Echocardiography Data",
+    "abstract": "This work introduces a novel approach to model regularization and explanation in \\Glspl{vit}, particularly beneficial for small-scale but high-dimensional data regimes, such as in healthcare. We introduce stochastic embedded feature selection in the context of echocardiography video analysis, specifically focusing on the EchoNet-Dynamic dataset for the prediction of \\gls{lvef}. Our proposed method, termed \\Glspl{gvit}, augments \\Glspl{vvit}, a performant transformer architecture for videos with \\Glspl{cae}, a common dataset-level feature selection technique, to enhance \\gls{vvit}\u2019s generalization and interpretability. The key contribution lies in the incorporation of stochastic token selection individually for each video frame during training. Such token selection regularizes the training of \\gls{vvit}, improves its interpretability, and is achieved by differentiable sampling of categoricals using the Gumbel-Softmax distribution. Our experiments on EchoNet-Dynamic demonstrate a consistent and notable regularization effect. The \\gls{gvit} model outperforms both a random selection baseline and standard \\gls{vvit}. % using multiple evaluation metrics. The \\gls{gvit} is also compared against recent works on EchoNet-Dynamic where it exhibits state-of-the-art performance among end-to-end learned methods. Finally, we explore model explainability by visualizing selected patches, providing insights into how the \\gls{gvit} utilizes regions known to be crucial for \\gls{lvef} prediction for humans. This proposed approach, therefore, extends beyond regularization, offering enhanced interpretability for \\gls{vit}s. ",
+    "url": "https://proceedings.mlr.press/v248/nilsson24a.html",
+    "id": "https://proceedings.mlr.press/v248/nilsson24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/nilsson24a/nilsson24a.pdf",
+    "authors": {
+      "0_Alfred Nilsson": "Alfred Nilsson",
+      "1_Hossein Azizpour": "Hossein Azizpour"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/nilsson24a/nilsson24a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:155-168,\u00a02024.",
+    "supplemental": ""
+  },
+  "18_Datadriven Subgrouping of Patient Trajectories with Chronic Diseases Evidence from Low Back Pain": {
+    "title": "Data-driven Subgrouping of Patient Trajectories with Chronic Diseases: Evidence from Low Back Pain",
+    "abstract": "Clinical data informs the personalization of health care with a potential for more effective disease management. In practice, this is achieved by \\emph{subgrouping}, whereby clusters with similar patient characteristics are identified and then receive customized treatment plans with the goal of targeting subgroup-specific disease dynamics. In this paper, we propose a novel mixture hidden Markov model for subgrouping patient trajectories from \\emph{chronic diseases}. Our model is probabilistic and carefully designed to capture different trajectory phases of chronic diseases (i.e., \u201csevere\u201d, \u201cmoderate\u201d, and \u201cmild\u201d) through tailored latent states. We demonstrate our subgrouping framework based on a longitudinal study across 847 patients with non-specific low back pain. Here, our subgrouping framework identifies 8 subgroups. Further, we show that our subgrouping framework outperforms common baselines in terms of cluster validity indices. Finally, we discuss the applicability of the model to other chronic and long-lasting diseases. ",
+    "url": "https://proceedings.mlr.press/v248/naumzik24a.html",
+    "id": "https://proceedings.mlr.press/v248/naumzik24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/naumzik24a/naumzik24a.pdf",
+    "authors": {
+      "0_Christof Friedrich Naumzik": "Christof Friedrich Naumzik",
+      "1_Alice Kongsted": "Alice Kongsted",
+      "2_Werner Vach": "Werner Vach",
+      "3_Stefan Feuerriegel": "Stefan Feuerriegel"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/naumzik24a/naumzik24a.pdf",
+    "github_url": "https://github.com/sfeuerriegel/PatientSubgrouping",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:251-279,\u00a02024.",
+    "supplemental": ""
+  },
+  "19_Enhancing Collaborative Medical Outcomes through Private Synthetic Hypercube Augmentation PriSHA": {
+    "title": "Enhancing Collaborative Medical Outcomes through Private Synthetic Hypercube Augmentation: PriSHA",
+    "abstract": "Data sharing across multiple health systems has the significant challenge of maintaining data privacy. Access to detailed, high-quality data is important for machine learning models trained to predict clinically relevant outcomes to generalize across different patient populations. However, health systems often are limited to patient data within their networks, which may not adequately represent the breadth of patient populations. This limitation is especially pronounced in the case of patients with rare or unique characteristics, resulting in decreased accuracy for this minority group. To address these challenges, our work introduces a framework designed to enhance existing clinical models, Private Synthetic Hypercube Augmentation (PriSHA). We use generative models to produce synthetic data as a means to augment these models while adhering to strict privacy standards. This approach has the potential to improve model performance without compromising patient confidentiality. To our knowledge, our framework is the first synthetic data augmentation framework that merges privacy-preserving tabular data and real data from multiple sources.",
+    "url": "https://proceedings.mlr.press/v248/nakamura-sakai24a.html",
+    "id": "https://proceedings.mlr.press/v248/nakamura-sakai24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/nakamura-sakai24a/nakamura-sakai24a.pdf",
+    "authors": {
+      "0_Shinpei Nakamura Sakai": "Shinpei Nakamura Sakai",
+      "1_Dennis Shung": "Dennis Shung",
+      "2_Jasjeet S Sekhon": "Jasjeet S Sekhon"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/nakamura-sakai24a/nakamura-sakai24a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:55-71,\u00a02024.",
+    "supplemental": ""
+  },
+  "20_Adaptive Interventions with UserDefined Goals for Health Behavior Change": {
+    "title": "Adaptive Interventions with User-Defined Goals for Health Behavior Change",
+    "abstract": "Promoting healthy lifestyle behaviors remains a major public health concern, particularly due to their crucial role in preventing chronic conditions such as cancer, heart disease, and type 2 diabetes. Mobile health applications present a promising avenue for low-cost, scalable health behavior change promotion. Researchers are increasingly exploring adaptive algorithms that personalize interventions to each person\u2019s unique context.  However, in empirical studies, mobile health applications often suffer from small effect sizes and low adherence rates, particularly in comparison to human coaching.  Tailoring advice to a person\u2019s unique goals, preferences, and life circumstances is a critical component of health coaching that has been underutilized in adaptive algorithms for mobile health interventions. To address this, we introduce a new Thompson sampling algorithm that can accommodate personalized reward functions (i.e., goals, preferences, and constraints), while also leveraging data sharing across individuals to more quickly be able to provide effective recommendations. We prove that our modification incurs only a constant penalty on cumulative regret while preserving the sample complexity benefits of data sharing. We present empirical results on synthetic and semi-synthetic physical activity simulators, where in the latter we conducted an online survey to solicit preference data relating to physical activity, which we use to construct realistic reward models that leverages historical data from another study. Our algorithm achieves substantial performance improvements compared to baselines that do not share data or do not optimize for individualized rewards.",
+    "url": "https://proceedings.mlr.press/v248/mandyam24a.html",
+    "id": "https://proceedings.mlr.press/v248/mandyam24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/mandyam24a/mandyam24a.pdf",
+    "authors": {
+      "0_Aishwarya Mandyam": "Aishwarya Mandyam",
+      "1_Matthew J\u00f6rke": "Matthew J\u00f6rke",
+      "2_William Denton": "William Denton",
+      "3_Barbara E. Engelhardt": "Barbara E. Engelhardt",
+      "4_Emma Brunskill": "Emma Brunskill"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/mandyam24a/mandyam24a.pdf",
+    "github_url": "https://github.com/StanfordAI4HI/adaptive-interventions-with-goals",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:597-618,\u00a02024.",
+    "supplemental": ""
+  },
+  "21_Tuning In Comparative Analysis of Audio Classifier Performance in Clinical Settings with Limited Data": {
+    "title": "Tuning In: Comparative Analysis of Audio Classifier Performance in Clinical Settings with Limited Data",
+    "abstract": "This study assesses deep learning models for audio classification in a clinical setting with the constraint of small datasets reflecting the prospective collection of real-world data. We analyze CNNs, including DenseNet and ConvNeXt, alongside transformer models like ViT, and SWIN, and compare them against pretrained audio models such as AST, YAMNet and VGGish. Our method highlights the benefits of pretraining on large datasets before fine-tuning on specific clinical data. We prospectively collected two first-of-its-kind patient audio datasets from stroke patients. We investigated various preprocessing techniques, finding that RGB and grayscale spectrogram transformations affect model performance differently based on the priors they learn from pretraining. Our findings indicate CNNs can match or exceed transformer models in small dataset contexts, with DenseNet-Contrastive and AST models showing notable performance. This study highlights the significance of incremental marginal gains through model selection, pretraining, and preprocessing in sound classification; this offers valuable insights for clinical diagnostics that rely on audio classification.",
+    "url": "https://proceedings.mlr.press/v248/mahdi24a.html",
+    "id": "https://proceedings.mlr.press/v248/mahdi24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/mahdi24a/mahdi24a.pdf",
+    "authors": {
+      "0_Hamza Mahdi": "Hamza Mahdi",
+      "1_Eptehal Nashnoush": "Eptehal Nashnoush",
+      "2_Rami Saab": "Rami Saab",
+      "3_Arjun Balachandar": "Arjun Balachandar",
+      "4_Rishit Dagli": "Rishit Dagli",
+      "5_Lucas Perri": "Lucas Perri",
+      "6_Houman Khosravani": "Houman Khosravani"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/mahdi24a/mahdi24a.pdf",
+    "github_url": "https://github.com/UofTNeurology",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:446-460,\u00a02024.",
+    "supplemental": ""
+  },
+  "22_VisionLanguage Generative Model for ViewSpecific Chest Xray Generation": {
+    "title": "Vision-Language Generative Model for View-Specific Chest X-ray Generation",
+    "abstract": "Synthetic medical data generation has opened up new possibilities in the healthcare domain, offering a powerful tool for simulating clinical scenarios, enhancing diagnostic and treatment quality, gaining granular medical knowledge, and accelerating the development of unbiased algorithms. In this context, we present a novel approach called ViewXGen, designed to overcome the limitations of existing methods that rely on general domain pipelines using only radiology reports to generate frontal-view chest X-rays. Our approach takes into consideration the diverse view positions found in the dataset, enabling the generation of chest X-rays with specific views, which marks a significant advancement in the field. To achieve this, we introduce a set of specially designed tokens for each view position, tailoring the generation process to the user\u2019s preferences. Furthermore, we leverage multi-view chest X-rays as input, incorporating valuable information from different views within the same study. This integration rectifies potential errors and contributes to faithfully capturing abnormal findings in chest X-ray generation. To validate the effectiveness of our approach, we conducted statistical analyses, evaluating its performance in a clinical efficacy metric on the MIMIC-CXR dataset. Also, human evaluation demonstrates the remarkable capabilities of ViewXGen, particularly in producing realistic view-specific X-rays that closely resemble the original images.",
+    "url": "https://proceedings.mlr.press/v248/lee24a.html",
+    "id": "https://proceedings.mlr.press/v248/lee24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/lee24a/lee24a.pdf",
+    "authors": {
+      "0_Hyungyung Lee": "Hyungyung Lee",
+      "1_Da Young Lee": "Da Young Lee",
+      "2_Wonjae Kim": "Wonjae Kim",
+      "3_Jin-Hwa Kim": "Jin-Hwa Kim",
+      "4_Tackeun Kim": "Tackeun Kim",
+      "5_Jihang Kim": "Jihang Kim",
+      "6_Leonard Sunwoo": "Leonard Sunwoo",
+      "7_Edward Choi": "Edward Choi"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/lee24a/lee24a.pdf",
+    "github_url": "https://github.com/ttumyche/UniXGen",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:280-296,\u00a02024.",
+    "supplemental": ""
+  },
+  "23_Using Expert Gaze for SelfSupervised and Supervised Contrastive Learning of Glaucoma from OCT Data": {
+    "title": "Using Expert Gaze for Self-Supervised and Supervised Contrastive Learning of Glaucoma from OCT Data",
+    "abstract": "In this work, we address the challenge of limited data availability common in healthcare settings by using clinician (ophthalmologist) gaze data on optical coherence tomography (OCT) report images as they diagnose glaucoma, a top cause of irreversible blindness worldwide. We directly learn gaze representations with our \u2018GazeFormerMD\u2019 model to generate pseudo-labels using a novel multi-task objective, combining triplet and cross-entropy losses. We use these pseudo-labels for weakly supervised contrastive learning (WSupCon) to detect glaucoma from a partially-labeled dataset of OCT report images. Our natural-language-inspired region-based-encoding GazeFormerMD model pseudo-labels, trained using our multi-task objective, enable downstream glaucoma detection accuracy via WSupCon exceeding 91% even with only 70% labeled training data. Furthermore, a model pre-trained with GazeFormerMD-generated pseudo-labels and used for linear evaluation on an unseen OCT-report dataset achieved comparable performance to a fully-supervised, trained-from-scratch model while using only 25% labeled data.",
+    "url": "https://proceedings.mlr.press/v248/lau24a.html",
+    "id": "https://proceedings.mlr.press/v248/lau24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/lau24a/lau24a.pdf",
+    "authors": {
+      "0_Wai Tak Lau": "Wai Tak Lau",
+      "1_Ye Tian": "Ye Tian",
+      "2_Roshan Kenia": "Roshan Kenia",
+      "3_Saanvi Aima": "Saanvi Aima",
+      "4_Kaveri A Thakoor": "Kaveri A Thakoor"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/lau24a/lau24a.pdf",
+    "github_url": "https://github.com/AI4VSLab/Expert-Gaze-4-Supervised-Contrastive-Learning",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:427-445,\u00a02024.",
+    "supplemental": ""
+  },
+  "24_Multiple Instance Learning with Absolute Position Information": {
+    "title": "Multiple Instance Learning with Absolute Position Information",
+    "abstract": "Most past work in multiple instance learning (MIL), which maps a group or bag of instances to a classification label, has focused on settings in which the order of instances does not contain information. In this paper, we define MIL with \\textit{absolute} position information: tasks in which instances of importance remain in similar positions across bags. Such problems arise, for example, in MIL with medical images in which there exists a common global alignment across images (e.g., in chest x-rays the heart is in a similar location). We also evaluate the performance of existing MIL methods on a set of new benchmark tasks and two real data tasks with varying amounts of absolute position information. We find that, despite being less computationally efficient than other approaches, transformer-based MIL methods are more accurate at classifying tasks with absolute position information. Thus, we investigate the ability of positional encodings, a mechanism typically only used in transformers, to improve the accuracy of other MIL approaches. Applied to the task of identifying pathological findings in chest x-rays, when augmented with positional encodings, standard MIL approaches perform significantly better than without (AUROC of 0.799, 95% CI: [0.791, 0.806] vs. 0.782, 95% CI: [0.774, 0.789]) and on-par with transformer-based methods (AUROC of 0.797, 95% CI: [0.790, 0.804]) while being 10 times faster. Our results suggest that one can efficiently and accurately classify MIL data with absolute position information using standard approaches by simply including positional encodings.",
+    "url": "https://proceedings.mlr.press/v248/krishnamoorthy24a.html",
+    "id": "https://proceedings.mlr.press/v248/krishnamoorthy24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/krishnamoorthy24a/krishnamoorthy24a.pdf",
+    "authors": {
+      "0_Meera Krishnamoorthy": "Meera Krishnamoorthy",
+      "1_Jenna Wiens": "Jenna Wiens"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/krishnamoorthy24a/krishnamoorthy24a.pdf",
+    "github_url": "https://github.com/MLD3/MILwAPI",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:88-104,\u00a02024.",
+    "supplemental": ""
+  },
+  "25_HealthLLM Large Language Models for Health Prediction via Wearable Sensor Data": {
+    "title": "Health-LLM: Large Language Models for Health Prediction via Wearable Sensor Data",
+    "abstract": "Large language models (LLMs) are capable of many natural language tasks, yet they are far from perfect. In health applications, grounding and interpreting domain-specific and non-linguistic data is crucial. This paper investigates the capacity of LLMs to make inferences about health based on contextual information (e.g. user demographics, health knowledge) and physiological data (e.g. resting heart rate, sleep minutes). We present a comprehensive evaluation of 12 state-of-the-art LLMs with prompting and fine-tuning techniques on four public health datasets (PMData, LifeSnaps, GLOBEM and AW_FB). Our experiments cover 10 consumer health prediction tasks in mental health, activity, metabolic, and sleep assessment. Our fine-tuned model, HealthAlpaca exhibits comparable performance to much larger models (GPT-3.5, GPT-4 and Gemini-Pro), achieving the best performance in \\textbf{8 out of 10} tasks. Ablation studies highlight the effectiveness of context enhancement strategies. Notably, we observe that our context enhancement can yield up to \\textbf{23.8%} improvement in performance. While constructing contextually rich prompts (combining user context, health knowledge and temporal information) exhibits synergistic improvement, the inclusion of health knowledge context in prompts significantly enhances overall performance.",
+    "url": "https://proceedings.mlr.press/v248/kim24b.html",
+    "id": "https://proceedings.mlr.press/v248/kim24b.html",
+    "pdf": "https://proceedings.mlr.press/v248/kim24b/kim24b.pdf",
+    "authors": {
+      "0_Yubin Kim": "Yubin Kim",
+      "1_Xuhai Xu": "Xuhai Xu",
+      "2_Daniel McDuff": "Daniel McDuff",
+      "3_Cynthia Breazeal": "Cynthia Breazeal",
+      "4_Hae Won Park": "Hae Won Park"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/kim24b/kim24b.pdf",
+    "github_url": "https://github.com/mitmedialab/Health-LLM",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:522-539,\u00a02024.",
+    "supplemental": ""
+  },
+  "26_Integrating ChatGPT into Secure Hospital Networks A Case Study on Improving Radiology Report Analysis": {
+    "title": "Integrating ChatGPT into Secure Hospital Networks: A Case Study on Improving Radiology Report Analysis",
+    "abstract": "This study demonstrates the first in-hospital adaptation of a cloud-based AI, similar to ChatGPT, into a secure model for analyzing radiology reports, prioritizing patient data privacy. By employing a unique sentence-level knowledge distillation method through contrastive learning, we achieve over 95% accuracy in detecting anomalies. The model also accurately flags uncertainties in its predictions, enhancing its reliability and interpretability for physicians with certainty indicators. Despite limitations in data privacy during the training phase, such as requiring de-identification or IRB permission, our study is significant in addressing this issue in the inference phase (once the local model is trained), without the need for human annotation throughout the entire process. These advancements represent a new direction for developing secure and efficient AI tools for healthcare with minimal supervision, paving the way for a promising future of in-hospital AI applications.",
+    "url": "https://proceedings.mlr.press/v248/kim24a.html",
+    "id": "https://proceedings.mlr.press/v248/kim24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/kim24a/kim24a.pdf",
+    "authors": {
+      "0_Kyungsu Kim": "Kyungsu Kim",
+      "1_Junhyun Park": "Junhyun Park",
+      "2_Saul Langarica": "Saul Langarica",
+      "3_Adham Mahmoud Alkhadrawi": "Adham Mahmoud Alkhadrawi",
+      "4_Synho Do": "Synho Do"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/kim24a/kim24a.pdf",
+    "github_url": "https://github.com/MGH-LMIC/LLM_normal",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:72-87,\u00a02024.",
+    "supplemental": ""
+  },
+  "27_A crossstudy Analysis of Wearable Datasets and the Generalizability of Acute Illness Monitoring Models": {
+    "title": "A cross-study Analysis of Wearable Datasets and the Generalizability of Acute Illness Monitoring Models",
+    "abstract": "Large-scale wearable datasets are increasingly being used for biomedical research and to develop machine learning (ML) models for longitudinal health monitoring applications. However, it is largely unknown whether biases in these datasets lead to findings that do not generalize. Here, we present the first comparison of the data underlying multiple longitudinal, wearable-device-based datasets. We examine participant-level resting heart rate (HR) from four studies, each with thousands of wearable device users. We demonstrate that multiple regression, a community standard statistical approach, leads to conflicting conclusions about important demographic variables (age vs resting HR) and significant intra- and inter-dataset differences in HR. We then directly test the cross-dataset generalizability of a commonly used ML model trained for three existing day-level monitoring tasks: prediction of testing positive for a respiratory virus, flu symptoms, and fever symptoms. Regardless of task, most models showed relative performance loss on external datasets; most of this performance change can be attributed to concept shift between datasets. These findings suggest that research using large-scale, pre-existing wearable datasets might face bias and generalizability challenges similar to research in more established biomedical and ML disciplines. We hope that the findings from this study will encourage discussion in the wearable-ML community around standards that anticipate and account for challenges in dataset bias and model generalizability.",
+    "url": "https://proceedings.mlr.press/v248/kasl24a.html",
+    "id": "https://proceedings.mlr.press/v248/kasl24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/kasl24a/kasl24a.pdf",
+    "authors": {
+      "0_Patrick Kasl": "Patrick Kasl",
+      "1_Severine Soltani": "Severine Soltani",
+      "2_Lauryn Keeler Bruce": "Lauryn Keeler Bruce",
+      "3_Varun Kumar Viswanath": "Varun Kumar Viswanath",
+      "4_Wendy Hartogensis": "Wendy Hartogensis",
+      "5_Amarnath Gupta": "Amarnath Gupta",
+      "6_Ilkay Altintas": "Ilkay Altintas",
+      "7_Stephan Dilchert": "Stephan Dilchert",
+      "8_Frederick M Hecht": "Frederick M Hecht",
+      "9_Ashley Mason": "Ashley Mason",
+      "10_Benjamin L Smarr": "Benjamin L Smarr"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/kasl24a/kasl24a.pdf",
+    "github_url": "https://github.com/chil-submission/wearable_generalizability",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:644-682,\u00a02024.",
+    "supplemental": ""
+  },
+  "28_FAMEWS a Fairness Auditing tool for Medical EarlyWarning Systems": {
+    "title": "FAMEWS: a Fairness Auditing tool for Medical Early-Warning Systems",
+    "abstract": "Machine learning applications hold promise to aid clinicians in a wide range of clinical tasks, from diagnosis to prognosis, treatment, and patient monitoring. These potential applications are accompanied by a surge of ethical concerns surrounding the use of Machine Learning (ML) models in healthcare, especially regarding fairness and non-discrimination. While there is an increasing number of regulatory policies to ensure the ethical and safe integration of such systems, the translation from policies to practices remains an open challenge. Algorithmic frameworks, aiming to bridge this gap, should be tailored to the application to enable the translation from fundamental human-right principles into accurate statistical analysis, capturing the inherent complexity and risks associated with the system.  In this work, we propose a set of fairness impartial checks especially adapted to ML early-warning systems in the medical context, comprising on top of standard fairness metrics, an analysis of clinical outcomes, and a screening of potential sources of bias in the pipeline. Our analysis is further fortified by the inclusion of event-based and prevalence-corrected metrics, as well as statistical tests to measure biases. Additionally, we emphasize the importance of considering subgroups beyond the conventional demographic attributes. Finally, to facilitate operationalization, we present an open-source tool FAMEWS to generate comprehensive fairness reports. These reports address the diverse needs and interests of the stakeholders involved in integrating ML into medical practice. The use of FAMEWS has the potential to reveal critical insights that might otherwise remain obscured. This can lead to improved model design, which in turn may translate into enhanced health outcomes.",
+    "url": "https://proceedings.mlr.press/v248/hoche24a.html",
+    "id": "https://proceedings.mlr.press/v248/hoche24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/hoche24a/hoche24a.pdf",
+    "authors": {
+      "0_Marine Hoche": "Marine Hoche",
+      "1_Olga Mineeva": "Olga Mineeva",
+      "2_Manuel Burger": "Manuel Burger",
+      "3_Alessandro Blasimme": "Alessandro Blasimme",
+      "4_Gunnar Ratsch": "Gunnar Ratsch"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/hoche24a/hoche24a.pdf",
+    "github_url": "https://github.com/ratschlab/famews",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:297-311,\u00a02024.",
+    "supplemental": ""
+  },
+  "29_A DataCentric Approach To Generate Faithful and High Quality Patient Summaries with Large Language Models": {
+    "title": "A Data-Centric Approach To Generate Faithful and High Quality Patient Summaries with Large Language Models",
+    "abstract": "Patients often face difficulties in understanding their hospitalizations, while healthcare workers have limited resources to provide explanations. In this work, we investigate the potential of large language models to generate patient summaries based on doctors\u2019 notes and study the effect of training data on the faithfulness and quality of the generated summaries. To this end, we release (i) a rigorous labeling protocol for errors in medical texts and (ii) a publicly available dataset of annotated hallucinations in 100 doctor-written and 100 generated summaries. We show that fine-tuning on hallucination-free data effectively reduces hallucinations from 2.60 to 1.55 per summary for Llama 2, while preserving relevant information. We observe a similar effect on GPT-4 (0.70 to 0.40), when the few-shot examples are hallucination-free. We also conduct a qualitative evaluation using hallucination-free and improved training data. We find that common quantitative metrics do not correlate well with faithfulness and quality. Finally, we test GPT-4 for automatic hallucination detection, which clearly outperforms common baselines.",
+    "url": "https://proceedings.mlr.press/v248/hegselmann24a.html",
+    "id": "https://proceedings.mlr.press/v248/hegselmann24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/hegselmann24a/hegselmann24a.pdf",
+    "authors": {
+      "0_Stefan Hegselmann": "Stefan Hegselmann",
+      "1_Zejiang Shen": "Zejiang Shen",
+      "2_Florian Gierse": "Florian Gierse",
+      "3_Monica Agrawal": "Monica Agrawal",
+      "4_David Sontag": "David Sontag",
+      "5_Xiaoyi Jiang": "Xiaoyi Jiang"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/hegselmann24a/hegselmann24a.pdf",
+    "github_url": "https://github.com/stefanhgm/patient_summaries_with_llms",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:339-379,\u00a02024.",
+    "supplemental": ""
+  },
+  "30_Interpretation of Intracardiac Electrograms Through Textual Representations": {
+    "title": "Interpretation of Intracardiac Electrograms Through Textual Representations",
+    "abstract": "Understanding the irregular electrical activity of atrial fibrillation (AFib) has been a key challenge in electrocardiography. For serious cases of AFib, catheter ablations are performed to collect intracardiac electrograms (EGMs). EGMs offer intricately detailed and localized electrical activity of the heart and are an ideal modality for interpretable cardiac studies.  Recent advancements in artificial intelligence (AI) has allowed some works to utilize deep learning frameworks to interpret EGMs during AFib. Additionally, language models (LMs) have shown exceptional performance in being able to generalize to unseen domains, especially in healthcare. In this study, we are the first to leverage pretrained LMs for finetuning of EGM interpolation and AFib classification via masked language modeling. We formulate the EGM as a textual sequence and present competitive performances on AFib classification compared against other representations. Lastly, we provide a comprehensive interpretability study to provide a multi-perspective intuition of the model\u2019s behavior, which could greatly benefit the clinical use.",
+    "url": "https://proceedings.mlr.press/v248/han24a.html",
+    "id": "https://proceedings.mlr.press/v248/han24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/han24a/han24a.pdf",
+    "authors": {
+      "0_William Han": "William Han",
+      "1_Diana Guadalupe Gomez": "Diana Guadalupe Gomez",
+      "2_Avi Alok": "Avi Alok",
+      "3_Chaojing Duan": "Chaojing Duan",
+      "4_Michael A Rosenberg": "Michael A Rosenberg",
+      "5_Douglas J Weber": "Douglas J Weber",
+      "6_Emerson Liu": "Emerson Liu",
+      "7_Ding Zhao": "Ding Zhao"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/han24a/han24a.pdf",
+    "github_url": "https://github.com/willxxy/Text-EGM",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:7-23,\u00a02024.",
+    "supplemental": ""
+  },
+  "31_Explainable and PrivacyPreserving Machine Learning via DomainAware Symbolic Regression": {
+    "title": "Explainable and Privacy-Preserving Machine Learning via Domain-Aware Symbolic Regression",
+    "abstract": "Explainability and privacy are the top concerns in machine learning (ML) for medical applications. In this paper, we propose a novel method, Domain-Aware Symbolic Regression with Homomorphic Encryption (DASR-HE), that addresses both concerns simultaneously by: (i) producing domain-aware, intuitive and explainable models that do not require the end-user to possess ML expertise and (ii) training only on securely encrypted data without access to actual data values or model parameters. DASR-HE is based on Symbolic Regression (SR), which is a first-class ML approach that produces simple and concise equations for regression, requiring no ML expertise to interpret. In our work, we improve the performance of SR algorithms by using existing domain-specific medical equations to augment the search space of equations, decreasing the search complexity and producing equations that are similar in structure to those used in practice. To preserve the privacy of the medical data, we enable our algorithm to learn on data that is homomorphically encrypted (HE), meaning that arithmetic operations can be done in the encrypted space. This makes HE suitable for machine learning algorithms to learn models without access to the actual data values or model parameters. We evaluate DASR-HE on three medical tasks, namely predicting glomerular filtration rate, endotracheal tube (ETT) internal diameter and ETT depth and find that DASR-HE outperforms existing medical equations, other SR ML algorithms and other explainable ML algorithms. ",
+    "url": "https://proceedings.mlr.press/v248/fong24a.html",
+    "id": "https://proceedings.mlr.press/v248/fong24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/fong24a/fong24a.pdf",
+    "authors": {
+      "0_Kei Sen Fong": "Kei Sen Fong",
+      "1_Mehul Motani": "Mehul Motani"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/fong24a/fong24a.pdf",
+    "github_url": "https://github.com/kentridgeai/DASR",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:198-216,\u00a02024.",
+    "supplemental": ""
+  },
+  "32_Unsupervised Domain Adaptation for Medical Image Segmentation with Dynamic Prototypebased Contrastive Learning": {
+    "title": "Unsupervised Domain Adaptation for Medical Image Segmentation with Dynamic Prototype-based Contrastive Learning",
+    "abstract": "Medical image segmentation typically requires numerous dense annotations in the target domain to train models, which is time-consuming and labour-intensive. To alleviate this challenge, unsupervised domain adaptation (UDA) has emerged to enhance model generalization in the target domain by harnessing labeled data from the source domain along with unlabeled data from the target domain. In this paper, we introduce a novel Dynamic Prototype Contrastive Learning (DPCL) framework for UDA on medical image segmentation, which dynamically updates cross-domain global prototypes and excavates implicit discrepancy information in a contrastive manner. DPCL learns cross-domain global feature representations while enhancing the discriminative capability of the segmentation model. Specifically, we design a novel cross-domain prototype evolution module that generates evolved cross-domain prototypes by employing dynamic updating and evolutionary strategies. This module facilitates a gradual transition from the source to the target domain while acquiring cross-domain global guidance knowledge. Moreover, we devise a cross-domain embedding contrastive module that establishes contrastive relationships within the embedding space.  This module captures both homogeneous and heterogeneous information within the same category and among different categories, thereby enhancing the discriminative capability of the segmentation model. Experimental results demonstrate that the proposed DPCL is effective and outperforms the state-of-the-art methods.",
+    "url": "https://proceedings.mlr.press/v248/en24a.html",
+    "id": "https://proceedings.mlr.press/v248/en24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/en24a/en24a.pdf",
+    "authors": {
+      "0_Qing En": "Qing En",
+      "1_Yuhong Guo": "Yuhong Guo"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/en24a/en24a.pdf",
+    "github_url": "https://github.com/EnQing626/DPCL",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:312-325,\u00a02024.",
+    "supplemental": ""
+  },
+  "33_Algorithmic Changes Are Not Enough Evaluating the Removal of Race Adjustment From the eGFR Equation": {
+    "title": "Algorithmic Changes Are Not Enough: Evaluating the Removal of Race Adjustment From the eGFR Equation",
+    "abstract": "Changing clinical algorithms to remove race adjustment has been proposed and implemented for multiple health conditions. Removing race adjustment from estimated glomerular filtration rate (eGFR) equations may reduce disparities in chronic kidney disease (CKD), but has not been studied in clinical practice after implementation. Here, we assessed whether implementing an eGFR equation (CKD-EPI 2021) without adjustment for Black or African American race modified quarterly rates of nephrology referrals and visits within a single healthcare system, Stanford Health Care (SHC). Our cohort study analyzed 547,194 adult patients aged 21 and older who had at least one recorded serum creatinine or serum cystatin C between January 1, 2019 and September 1, 2023.  During the study period, implementation of CKD-EPI 2021 did not modify rates of quarterly nephrology referrals in those documented as Black or African American or in the overall cohort. After adjusting for capacity at SHC nephrology clinics, estimated rates of nephrology referrals and visits with CKD-EPI 2021 were 34 (95% CI 29, 39) and 188 (175, 201) per 10,000 patients documented as Black or African American. If race adjustment had not been removed, estimated rates were nearly identical: 38 (95% CI: 28, 53) and 189 (165, 218) per 10,000 patients. Changes to the eGFR equation are likely insufficient to achieve health equity in CKD care decision-making as many other structural inequities remain.",
+    "url": "https://proceedings.mlr.press/v248/cusick24a.html",
+    "id": "https://proceedings.mlr.press/v248/cusick24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/cusick24a/cusick24a.pdf",
+    "authors": {
+      "0_Marika M Cusick": "Marika M Cusick",
+      "1_Glenn M Chertow": "Glenn M Chertow",
+      "2_Douglas K Owens": "Douglas K Owens",
+      "3_Michelle Y Williams": "Michelle Y Williams",
+      "4_Sherri Rose": "Sherri Rose"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/cusick24a/cusick24a.pdf",
+    "github_url": "https://github.com/StanfordHPDS/egfr_equation_shc",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:619-643,\u00a02024.",
+    "supplemental": ""
+  },
+  "34_An Improved Bayesian Permutation Entropy Estimator with WassersteinOptimized Hierarchical Priors": {
+    "title": "An Improved Bayesian Permutation Entropy Estimator with Wasserstein-Optimized Hierarchical Priors",
+    "abstract": "We introduce a novel hierarchical Bayesian permutation entropy (PermEn) estimator designed to improve biomedical time series entropy assessments, especially for short signals. Unlike existing methods requiring a substantial number of observations or which impose restrictive priors, our non-centered, Wasserstein optimized hierarchical approach enables efficient MCMC inference and a broader range of PermEn priors. Evaluations on synthetic and secondary benchmark data demonstrate superior performance over the current state-of-the-art, including 13.33-63.67% lower estimation error, 8.16-47.77% lower posterior variance, and 47-60.83% lower prior construction error ($p \\leq 2.42 \\times 10^{-10}$). Applied to cardiopulmonary exercise test oxygen uptake signals, we reveal a previously unreported 1.55% (95% credible interval: [0.62%, 2.52%]) entropy difference between obese and lean subjects that diminishes as exercise capacity increases. For individuals capable of completing at least 7.5 minutes of testing, the 95% credible interval contained zero, suggesting potential insights into physiological complexity, exercise tolerance, and obesity. Our estimator refines biomedical signal PermEn estimation and underscores entropy\u2019s potential value as a health biomarker, opening avenues for further physiological and biomedical exploration.",
+    "url": "https://proceedings.mlr.press/v248/blanks24a.html",
+    "id": "https://proceedings.mlr.press/v248/blanks24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/blanks24a/blanks24a.pdf",
+    "authors": {
+      "0_Zachary Blanks": "Zachary Blanks",
+      "1_Donald E Brown": "Donald E Brown",
+      "2_Marc A Adams": "Marc A Adams",
+      "3_Siddhartha S Angadi": "Siddhartha S Angadi"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/blanks24a/blanks24a.pdf",
+    "github_url": "",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:120-136,\u00a02024.",
+    "supplemental": ""
+  },
+  "35_FlowCyt A Comparative Study of Deep Learning Approaches for MultiClass Classification in Flow Cytometry Benchmarking": {
+    "title": "FlowCyt: A Comparative Study of Deep Learning Approaches for Multi-Class Classification in Flow Cytometry Benchmarking",
+    "abstract": "This paper presents FlowCyt, the first comprehensive benchmark for multi-class single-cell classification in flow cytometry data. The dataset comprises bone marrow samples from 30 patients, with each cell characterized by twelve markers. Ground truth labels identify five hematological cell types: T lymphocytes, B lymphocytes, Monocytes, Mast cells, and Hematopoietic Stem/Progenitor Cells (HSPCs). Experiments utilize supervised inductive learning and semi-supervised transductive learning on up to 1 million cells per patient. Baseline methods include Gaussian Mixture Models, XGBoost, Random Forests, Deep Neural Networks, and Graph Neural Networks (GNNs). GNNs demonstrate superior performance by exploiting spatial relationships in graph-encoded data. The benchmark allows standardized evaluation of clinically relevant classification tasks, along with exploratory analyses to gain insights into hematological cell phenotypes. This represents the first public flow cytometry benchmark with a richly annotated, heterogeneous dataset. It will empower the development and rigorous assessment of novel methodologies for single-cell analysis.",
+    "url": "https://proceedings.mlr.press/v248/bini24a.html",
+    "id": "https://proceedings.mlr.press/v248/bini24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/bini24a/bini24a.pdf",
+    "authors": {
+      "0_Lorenzo Bini": "Lorenzo Bini",
+      "1_Fatemeh Nassajian Mojarrad": "Fatemeh Nassajian Mojarrad",
+      "2_Margarita Liarou": "Margarita Liarou",
+      "3_Thomas Matthes": "Thomas Matthes",
+      "4_Stephane Marchand-Maillet": "Stephane Marchand-Maillet"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/bini24a/bini24a.pdf",
+    "github_url": "https://viper.unige.ch/flowcyt",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:326-338,\u00a02024.",
+    "supplemental": ""
+  },
+  "36_BrainMamba Encoding Brain Activity via Selective State Space Models": {
+    "title": "Brain-Mamba: Encoding Brain Activity via Selective State Space Models",
+    "abstract": "Representation learning of brain activity is a key step toward unleashing machine learning models for use in the diagnosis of neurological diseases/disorders. Diagnosis of different neurological diseases/disorders, however, might require paying more attention to either spatial or temporal resolutions of brain activity. Accordingly, a generalized brain activity learner requires the ability of learning from both resolutions. Most existing studies, however, use domain knowledge to design brain encoders, and so are limited to a single neuroimage modality (e.g., EEG or fMRI) and its single resolution. Furthermore, their architecture design either: (1) uses self-attention mechanism with quadratic time with respect to input size, making its scalability limited, (2) is \\emph{purely} based on message-passing graph neural networks, missing long-range dependencies and temporal resolution, and/or (3) encode brain activity in each unit of brain (e.g., voxel) separately, missing the dependencies of brain regions. In this study, we present BrainMamba, an attention free, scalable, and powerful framework to learn brain activity multivariate timeseries. BrainMamba uses two modules: (i) A novel multivariate timeseries encoder that leverage an MLP to fuse information across variates and an Selective Structured State Space (S4) architecture to encode each timeseries. (ii) A novel graph learning framework that leverage message-passing neural networks along with S4 architecture to selectively choose important brain regions. Our experiments on 7 real-world datasets with 3 modalities show that BrainMamba attains outstanding performance and outperforms all baselines in different downstream tasks.",
+    "url": "https://proceedings.mlr.press/v248/behrouz24a.html",
+    "id": "https://proceedings.mlr.press/v248/behrouz24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/behrouz24a/behrouz24a.pdf",
+    "authors": {
+      "0_Ali Behrouz": "Ali Behrouz",
+      "1_Farnoosh Hashemi": "Farnoosh Hashemi"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/behrouz24a/behrouz24a.pdf",
+    "github_url": "https://github.com/GraphMamba/BrainMamba",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:233-250,\u00a02024.",
+    "supplemental": ""
+  },
+  "37_Interpretable breast cancer classification using CNNs on mammographic images": {
+    "title": "Interpretable breast cancer classification using CNNs on mammographic images",
+    "abstract": "Deep learning models have achieved promising results in breast cancer classification, yet their \u2019black-box\u2019 nature raises interpretability concerns. This research addresses the crucial need to gain insights into the decision-making process of convolutional neural networks (CNNs) for mammogram classification, specifically focusing on the underlying reasons for the CNN\u2019s predictions of breast cancer. For CNNs trained on the Mammographic Image Analysis Society (MIAS) dataset, we compared the post-hoc interpretability techniques LIME, Grad-CAM, and Kernel SHAP in terms of explanatory depth and computational efficiency. The results of this analysis indicate that Grad-CAM, in particular, provides comprehensive insights into the behavior of the CNN, revealing distinctive patterns in normal, benign, and malignant breast tissue. We discuss the implications of the current findings for the use of machine learning models and interpretation techniques in clinical practice.",
+    "url": "https://proceedings.mlr.press/v248/balve24a.html",
+    "id": "https://proceedings.mlr.press/v248/balve24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/balve24a/balve24a.pdf",
+    "authors": {
+      "0_Ann-Kristin Balve": "Ann-Kristin Balve",
+      "1_Peter Hendrix": "Peter Hendrix"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/balve24a/balve24a.pdf",
+    "github_url": "https://github.com/annkristinbalve/Interpretable_Breast_Cancer_Classification",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:410-426,\u00a02024.",
+    "supplemental": ""
+  },
+  "38_FETCH A Fast and Efficient Technique for Channel Selection in EEG Wearable Systems": {
+    "title": "FETCH: A Fast and Efficient Technique for Channel Selection in EEG Wearable Systems",
+    "abstract": "The rapid development of wearable biomedical systems now enables real-time monitoring of electroencephalography (EEG) signals. Acquisition of these signals relies on electrodes. These systems must meet the design challenge of selecting an optimal set of electrodes that balances performance and usability constraints.  The search for the optimal subset of electrodes from a larger set is a problem with combinatorial complexity. While existing research has primarily focused on search strategies that only explore limited combinations, our methodology proposes a computationally efficient way to explore all combinations. To avoid the computational burden associated with training the model for each combination, we leverage an innovative approach inspired by few-shot learning. Remarkably, this strategy covers all the wearable electrode combinations while significantly reducing training time compared to retraining the network on each possible combination. In the context of an epileptic seizure detection task, the proposed method achieves an AUC value of 0.917 with configurations using eight electrodes. This performance matches that of prior research but is achieved in significantly less time, transforming a process that would span months into a matter of hours on a single GPU device. Our work allows comprehensive exploration of electrode configurations in wearable biomedical device design, yielding insights that enhance performance and real-world feasibility.",
+    "url": "https://proceedings.mlr.press/v248/amirshahi24a.html",
+    "id": "https://proceedings.mlr.press/v248/amirshahi24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/amirshahi24a/amirshahi24a.pdf",
+    "authors": {
+      "0_Alireza Amirshahi": "Alireza Amirshahi",
+      "1_Jonathan Dan": "Jonathan Dan",
+      "2_Jose Angel Miranda": "Jose Angel Miranda",
+      "3_Amir Aminifar": "Amir Aminifar",
+      "4_David Atienza": "David Atienza"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/amirshahi24a/amirshahi24a.pdf",
+    "github_url": "https://github.com/esl-epfl/FETCH",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:397-409,\u00a02024.",
+    "supplemental": ""
+  },
+  "39_Retrieving Evidence from EHRs with LLMs Possibilities and Challenges": {
+    "title": "Retrieving Evidence from EHRs with LLMs: Possibilities and Challenges",
+    "abstract": "Unstructured data in Electronic Health Records (EHRs) often contains critical information\u2014complementary to imaging\u2014that could inform radiologists\u2019 diagnoses.  But the large volume of notes often associated with patients together with time constraints renders manually identifying relevant evidence practically infeasible. In this work we propose and evaluate a zero-shot strategy for using LLMs as a mechanism to efficiently retrieve and summarize unstructured evidence in patient EHR relevant to a given query.   Our method entails tasking an LLM to infer whether a patient has, or is at risk of, a particular condition on the basis of associated notes; if so, we ask the model to summarize the supporting evidence.  Under expert evaluation, we find that this LLM-based approach provides outputs consistently preferred to a pre-LLM information retrieval baseline.  Manual evaluation is expensive, so we also propose and validate a method using an LLM to evaluate (other) LLM outputs for this task, allowing us to scale up evaluation. Our findings indicate the promise of LLMs as interfaces to EHR, but also highlight the outstanding challenge posed by \u201challucinations\u201d. In this setting, however, we show that model confidence in outputs strongly correlates with faithful summaries, offering a practical means to limit confabulations.",
+    "url": "https://proceedings.mlr.press/v248/ahsan24a.html",
+    "id": "https://proceedings.mlr.press/v248/ahsan24a.html",
+    "pdf": "https://proceedings.mlr.press/v248/ahsan24a/ahsan24a.pdf",
+    "authors": {
+      "0_Hiba Ahsan": "Hiba Ahsan",
+      "1_Denis Jered McInerney": "Denis Jered McInerney",
+      "2_Jisoo Kim": "Jisoo Kim",
+      "3_Christopher A Potter": "Christopher A Potter",
+      "4_Geoffrey Young": "Geoffrey Young",
+      "5_Silvio Amir": "Silvio Amir",
+      "6_Byron C Wallace": "Byron C Wallace"
+    },
+    "pmlr_pdf": "https://raw.githubusercontent.com/mlresearch/v248/main/assets/ahsan24a/ahsan24a.pdf",
+    "github_url": "https://github.com/hibaahsan/chil_diagnosis_evidence/",
+    "conf_info": "Proceedings of the fifth Conference on Health, Inference, and Learning,\u00a0PMLR 248:489-505,\u00a02024.",
+    "supplemental": ""
+  }
+}
