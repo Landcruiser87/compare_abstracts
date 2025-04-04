@@ -142,10 +142,23 @@ if __name__ == "__main__":
 #Logic here will be more complex.  
 #Idea is i want a search box to type in queries
 #I want to be able to select what field i want to search. 
+#And also select what metric I want to use for comparison and search.
+#basically have a hotload for 
+#Probably need an input box too for limiting results. 
+
+#When a comparison run is made. 
+#Add that node to the root node with the other datasets.  
+#Also, save it to a separate data folder to allow for exploration later or a compairs of results
+    #This means i'll have to update the loader function to look across both
+    #folders, but that too can be something you select at the beginning just
+    #with another file listing of the two folders
 
 #!ISSUE
     #How do you handle conferences that don't have certain fields filled out?
-    #!Do i want to be maninpulating the underlying datasets?....
+    #abstraact and title are pretty good...  
+    #authors would be fun, but I have no idea what will look like.
+    #
+    #!Do i want to be maninpulating the underlying datasets?....probably not
         # Ways to pull that info
         #1. Zotero connection.  Have it run throughpyzotero and grab any 
             # extra information that way.  

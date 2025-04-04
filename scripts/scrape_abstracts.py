@@ -8,25 +8,6 @@ from bs4 import BeautifulSoup
 from itertools import cycle
 from support import console, logger, log_time
 
-# I might be able to do this with just dictionaries. 
-# Keeping for now, just in case.
-# # from dataclasses import dataclass, field
-# #Dataclass container
-# @dataclass
-# class ML_Paper():
-#     id          : str
-#     url         : str
-#     title       : str
-#     abstract    : str
-#     topic       : str
-#     session     : str
-#     conference  : str
-#     event_type  : str
-#     paper_url   : str
-#     pub_date    : datetime.datetime
-#     virtual_site_url : str
-#     authors          : dict = field(default_factory=lambda:{})
-
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 FUN_STATUS_UPDATE = cycle(["Patience Iago", "Phenominal COSMIC POWER", "Iiiiiity bitty living space", "Books, i've read these books", "Your conclusions were all wrong Ryan", "Let it go Indiana", "Duuuude", "wheres my car", "I wanna talk to sampson!!"])
