@@ -118,17 +118,22 @@ if __name__ == "__main__":
     #TODO - Search action
 
 
+
+
+##########  V 0.3.0 ###############################
 #Updated workflow
 # 1. Load up app traditional way.
     # Select number of conf you want to load.  
         # ?Maybe add an option for all... 
-        #? Or maybe!!! you could submit a list of ID's load as tree nodes / roots
+        #? Or maybe!!! you could submit a list of ID's load as tree nodes / roots.  Search for if comma's are in the string, split it and iterate the loop
             #winner winner chicken dinner
 # 2. First panels up will be the jsontree (left) and regular results conainter but as the first tab of of a tabbed content widget. 
 # 3a. You can navigate normally and arrow through the json tree
 # 3b. Or click the search to allow for saerches
+# 4.  Add or remove datasets 
 
 
+###########  Tabbed Content ##########################
 # Dataset Tab
 # When you load the tab (which should be when on_mount creates the object), 
 # on_mount
@@ -143,7 +148,6 @@ if __name__ == "__main__":
 #Idea is i want a search box to type in queries
 #I want to be able to select what field i want to search. 
 #And also select what metric I want to use for comparison and search.
-#basically have a hotload for 
 #Probably need an input box too for limiting results. 
 
 #When a comparison run is made. 
@@ -160,8 +164,8 @@ if __name__ == "__main__":
     #
     #!Do i want to be maninpulating the underlying datasets?....probably not
         # Ways to pull that info
-        #1. Zotero connection.  Have it run throughpyzotero and grab any 
-            # extra information that way.  
+        #1. Zotero connection.  Have it run through pyzotero and grab the extra info
         #2. Basic google scholar search?
         #3. ORCID search?
-    #abstract is really the only field that is mostly filled out.    
+        #I'm not sure i can be doing this, but save this for the next iteration. 
+    #title/abstract is really the only field that is always filled out.    
