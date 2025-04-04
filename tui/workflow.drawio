@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="_SHoM_jc9M1xb17bczq4" name="Page-1">
-        <mxGraphModel dx="1316" dy="1909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1185" dy="1909" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -42,7 +42,7 @@
                 <mxCell id="27" value="Could have an all function&lt;div&gt;That loads all the json dictionaries&lt;/div&gt;&lt;div&gt;Then lets you filter which years&lt;/div&gt;&lt;div&gt;confs you want to look at&lt;/div&gt;&lt;div&gt;search across.&amp;nbsp;&amp;nbsp;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Going to be very slow though...&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Might be easier to load and&amp;nbsp;&lt;/div&gt;&lt;div&gt;embed for RAG retreival&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;So I&#39;d need a dropdown or radio&lt;/div&gt;&lt;div&gt;button situation.&amp;nbsp; Easy port of gpu settings&lt;/div&gt;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="120" y="-250" width="430" height="350" as="geometry"/>
                 </mxCell>
-                <mxCell id="47" value="#on_mount" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#990000);" parent="1" vertex="1">
+                <mxCell id="47" value="Results&lt;div&gt;&lt;font color=&quot;#ffffff&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;div&gt;#on_mount&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#990000);" parent="1" vertex="1">
                     <mxGeometry x="520" y="180" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="49" value="Search&lt;br&gt;Tab" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">

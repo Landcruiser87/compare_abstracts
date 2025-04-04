@@ -89,31 +89,17 @@ if __name__ == "__main__":
     main()
 
 #IDEA
-#Grab all of above
-#Need a better way to search. 
-    #maybe think of filtering like Zotero?
-    #NoSQL won't really be available...  
-    #could parse the topic field
-
-        #partially done in the explore.py
-    #year filtering
-    #Add multiple conf
-    #load all function. 
-    #TODO - similarity search from a selected paper. 
-        #Within conference?  
-            #Main goal is to pull back the top 10 similar papers
-            #Make this a keybinding when you search on the abstract. 
-            #shift f.
-            #Behavior is add another node on the root tree (toggle to root or something)
-                #Add the node as the next node.
-                #Or fill out a tab in the other side with... another tree node?
-                #You'll want to read the other papers right. soooo.  
+#TODO - similarity search from a selected paper. 
+    #Within conference?  
+        #Main goal is to pull back the top 10 similar papers
+        #Make this a keybinding when you search on the abstract. 
+        #shift f.
+        #Behavior is add another node on the root tree (toggle to root or something)
+            #Add the node as the next node.
+            #Or fill out a tab in the other side with... another tree node?
+            #You'll want to read the other papers right. soooo.  
                 
         #Against other conferences?
-    #TODO - 
-    #IDEA Institution frequency graph
-        #Separate metrics for ICML, ICLR AND neurips as they have way more info.  And the 
-        #only one's I can identify university.   DOH!
     #IDEA hieracrhy research of common cited sources!!! Create knowledge graph of similar sourcing. 
     #IDEA google scholar ?  hindex and impact scores???
     #IDEA Send selected file from JSON to Zotero
@@ -124,3 +110,45 @@ if __name__ == "__main__":
     #Select conf dropdown?
     #Select similarity measure?
 #2. Activate new source item (left pane) when 
+
+
+    
+#List of App upgrades
+    #TODO - layouts for tabbed content and checkboxes for each
+    #TODO - Search action
+
+
+#Updated workflow
+# 1. Load up app traditional way.
+    # Select number of conf you want to load.  
+        # ?Maybe add an option for all... 
+        #? Or maybe!!! you could submit a list of ID's load as tree nodes / roots
+            #winner winner chicken dinner
+# 2. First panels up will be the jsontree (left) and regular results conainter but as the first tab of of a tabbed content widget. 
+# 3a. You can navigate normally and arrow through the json tree
+# 3b. Or click the search to allow for saerches
+
+
+# Dataset Tab
+# When you load the tab (which should be when on_mount creates the object), 
+# on_mount
+    #Load all the available datasets in the data/conferences folder
+    #into the checklist widget
+# You have two buttons to the left.  One that add's datasets, one that removes them.  
+    # For that function, have it cycle through the checklist box and grab the enabled 
+    # triggers.  (like the gpu_monitor) 
+
+#Search Tab
+#Logic here will be more complex.  
+#Idea is i want a search box to type in queries
+#I want to be able to select what field i want to search. 
+
+#!ISSUE
+    #How do you handle conferences that don't have certain fields filled out?
+    #!Do i want to be maninpulating the underlying datasets?....
+        # Ways to pull that info
+        #1. Zotero connection.  Have it run throughpyzotero and grab any 
+            # extra information that way.  
+        #2. Basic google scholar search?
+        #3. ORCID search?
+    #abstract is really the only field that is mostly filled out.    
