@@ -141,6 +141,11 @@ poetry run python tui/__main__.py
 python tui/__main__.py 
 ```
 
+## Disclaimer. 
+
+Current product version is 0.2.8.  tui folder is currently under construction so run any TUI commands from the backup/0.2.8 folder.  
+
+
 # Project Todo list
 
 ### Possible modeling paths

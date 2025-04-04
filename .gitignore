@@ -129,7 +129,7 @@ dmypy.json
 .pyre/
 
 #Project specific folders
-/backup/*
+
 /data/backup
 /data/cleaned
 /data/files
