@@ -12,8 +12,6 @@
     border: dodgerblue;
 } 
 
-
-
 #json-document {
     height: auto;
     border: mediumvioletred;

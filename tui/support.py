@@ -220,7 +220,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
 ########################## Global Variables to return ##########################################
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] 
+SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)

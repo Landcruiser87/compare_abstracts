@@ -89,17 +89,31 @@ if __name__ == "__main__":
     main()
 
 #IDEA
-#TODO - similarity search from a selected paper. 
-    #Within conference?  
-        #Main goal is to pull back the top 10 similar papers
-        #Make this a keybinding when you search on the abstract. 
-        #shift f.
-        #Behavior is add another node on the root tree (toggle to root or something)
-            #Add the node as the next node.
-            #Or fill out a tab in the other side with... another tree node?
-            #You'll want to read the other papers right. soooo.  
+#Grab all of above
+#Need a better way to search. 
+    #maybe think of filtering like Zotero?
+    #NoSQL won't really be available...  
+    #could parse the topic field
+
+        #partially done in the explore.py
+    #year filtering
+    #Add multiple conf
+    #load all function. 
+    #TODO - similarity search from a selected paper. 
+        #Within conference?  
+            #Main goal is to pull back the top 10 similar papers
+            #Make this a keybinding when you search on the abstract. 
+            #shift f.
+            #Behavior is add another node on the root tree (toggle to root or something)
+                #Add the node as the next node.
+                #Or fill out a tab in the other side with... another tree node?
+                #You'll want to read the other papers right. soooo.  
                 
         #Against other conferences?
+    #TODO - 
+    #IDEA Institution frequency graph
+        #Separate metrics for ICML, ICLR AND neurips as they have way more info.  And the 
+        #only one's I can identify university.   DOH!
     #IDEA hieracrhy research of common cited sources!!! Create knowledge graph of similar sourcing. 
     #IDEA google scholar ?  hindex and impact scores???
     #IDEA Send selected file from JSON to Zotero
@@ -110,14 +124,6 @@ if __name__ == "__main__":
     #Select conf dropdown?
     #Select similarity measure?
 #2. Activate new source item (left pane) when 
-
-
-    
-#List of App upgrades
-    #TODO - layouts for tabbed content and checkboxes for each
-    #TODO - Search action
-
-
 
 
 ##########  V 0.3.0 ###############################

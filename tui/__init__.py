@@ -8,7 +8,7 @@ from textual.app import App, ComposeResult
 from textual.binding import Binding
 from textual.reactive import reactive
 from textual.containers import Container
-from textual.widgets import Footer, Header, Tree, TabbedContent
+from textual.widgets import Footer, Header, Tree
 from support import logger
 from utils import clean_string_values, get_c_time
 from widgets import JSONDocumentView, JSONTree, TreeView

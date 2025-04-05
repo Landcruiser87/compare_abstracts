@@ -12,6 +12,9 @@
 
 The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
 
+## Disclaimer 
+
+Current product version is 0.2.8.  Tui folder is currently under construction so run any TUI commands from the backup/0.2.8 folder.  
 
 ## Requirements
 - Python >= 3.11
@@ -141,9 +144,6 @@ poetry run python tui/__main__.py
 python tui/__main__.py 
 ```
 
-## Disclaimer. 
-
-Current product version is 0.2.8.  tui folder is currently under construction so run any TUI commands from the backup/0.2.8 folder.  
 
 
 # Project Todo list
