@@ -32,7 +32,7 @@ __version__ = "0.2.8"
 
 class PaperSearch(App):
     TITLE = __prog_name__
-    SUB_TITLE = f"A JSON Tree Viewer for Machine Learning Papers ({__version__})"
+    SUB_TITLE = f"A JSON Tree exploration tool for influential Machine Learning Papers ({__version__})"
     CSS_PATH = "css/layout.tcss"
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
@@ -46,9 +46,10 @@ class PaperSearch(App):
             show=True,
         ),
     ]
-    root_data_dir = var(Path("./data/conferences"))
-    json_data: reactive[str] = reactive("")
+    
     json_name: str = ""
+    json_data: reactive[str] = reactive("")
+    root_data_dir = var(Path("./data/conferences"))
     selected_node_data:  reactive[object | None] = reactive(None)
 
     def __init__(
@@ -74,34 +75,31 @@ class PaperSearch(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
-        with Horizontal(id="main-container"):
-            # Left side: JSON Tree
+        with Container(id="app-grid"):
+            # Left side - JSON Tree
             with VerticalScroll(id="tree-container"):
-                yield JSONTree(
-                    self.root_data_dir.get(), # Pass initial data path
-                    id="json-tree"
-                )
-            # Right side: Tabbed Content
-            with TabbedContent(id="right-tabs", initial="document-tab"): # Set initial active tab
-                # Tab 1: Document View
-                with TabPane("Document", id="document-tab"):
+                yield TreeView(id="tree-view")
+            # Right side - Tabbed Content
+            with TabbedContent(id="tab-container", initial="contents-tab"): 
+                # Tab 1 - Document View
+                with TabPane("Document", id="contents-tab"):
                     yield JSONDocumentView(id="json-document-view")
-                # Tab 2: Search (Placeholder)
+                # Tab 2 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
                     yield Static("Search functionality will be implemented here.", id="search-placeholder")
-                # Tab 3: Manage Data (Placeholder)
+                # Tab 3 - Manage Data (Placeholder)
                 with TabPane("Manage Data", id="manage-data-tab"):
                      yield Static("Add/Remove data functionality will be implemented here.", id="manage-data-placeholder")
         yield Footer()
 
-    def on_mount(self) -> None:
-        """Called when the app is mounted."""
-        logger.info("App mounted.")
-        try:
-            self.query_one(JSONTree).focus()
-            logger.debug("Focused JSONTree on mount.")
-        except Exception as e:
-            logger.error(f"Error focusing JSONTree on mount: {e}")
+    # def on_mount(self) -> None:
+    #     """Called when the app is mounted."""
+    #     logger.info("App mounted.")
+    #     try:
+    #         self.query_one(JSONTree).focus()
+    #         logger.debug("Focused JSONTree on mount.")
+    #     except Exception as e:
+    #         logger.error(f"Error focusing JSONTree on mount: {e}")
 
 
     def on_mount(self) -> None:

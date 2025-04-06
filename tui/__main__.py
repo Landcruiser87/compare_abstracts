@@ -12,7 +12,7 @@ if sys.version_info < (3, 8):
 else:
     import importlib.metadata as importlib_metadata
 
-from __init__ import JSONTreeApp, __prog_name__, __version__
+from __init__ import PaperSearch, __prog_name__, __version__
 
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
@@ -75,7 +75,7 @@ def main():
         if not WINDOWS:
             sys.stdin = open("/dev/tty", "r")
         
-        app = JSONTreeApp(args.path)
+        app = PaperSearch(args.path)
         app.run()
 
         if not sys.stdin.closed:

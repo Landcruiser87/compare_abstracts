@@ -9,6 +9,7 @@ from textual.containers import ScrollableContainer
 from textual.widget import Widget
 from textual.widgets import Static, Tree
 from textual.widgets.tree import TreeNode
+from support import logger
 
 highlighter = ReprHighlighter()
 

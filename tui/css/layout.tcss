@@ -1,18 +1,33 @@
 #app-grid {
-    layout: vertical;
-    /* border: greenyellow; */
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 1fr;
+    grid-rows: 1fr;
+    border: green;
+}
+#tree-container > TreeView {
+    margin-bottom: 1;
+    padding: 1;
 }
 
-#tree-view {
+
+#tree-container {
+    width: 100%;
+    height: 100%;
     background: $panel;
-    border-right: wide $background;
     dock:left;
-    width: 0.5fr;
     overflow-x: auto;
     border: dodgerblue;
 } 
+
+#tab-container {
+    height: auto;
+    border: yellow;
+    border:magenta;
+}
 
 #json-document {
     height: auto;
     border: mediumvioletred;
 }
+
