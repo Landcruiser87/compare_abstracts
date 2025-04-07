@@ -30,3 +30,22 @@
     border: mediumvioletred;
 }
 
+#dataset-conatiner {
+    layout: grid;
+    grid-size: 2;
+    grid-columns: 1fr 1fr;
+    grid-rows: 1fr;
+    border: blue;
+}
+
+Button {
+    height: 10;
+    width: 10;
+    padding: 1;
+}
+
+.label {
+    height: auto;
+    content-align: center middle;
+    width: auto;
+}

@@ -146,8 +146,22 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
 
-#######################Dataset tab  Widgets #############################
+####################### Dataset tab  Widgets #############################
 
 #TODO - Add Dataset button
 #TODO - Remove Dataset Button
 #TODO - Dataset checklist 
+
+#Main functionality is that when you press the add dataset.  It cycles through the checklist object and 
+#adds those datasets to the root node. Subtract does the opposite.  
+
+#Checklist should refresh on the mount?  Or the page activation.... Probably the latter. 
+    #As you sometimes will want to remove any searches
+    #So i'll need the refresh to cycle over both the data/conferences and data/search_results.  
+
+
+
+####################### Search tab Widgets #############################
+
+#NOTE - Save for Search Tab
+    #You'll need a checkbox here to indicate if you want to save a search to the root node / and the data/search_results folder 

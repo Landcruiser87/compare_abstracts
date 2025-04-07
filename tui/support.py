@@ -217,6 +217,28 @@ def walk_directory(directory: Path, tree: Tree) -> None:
 
     return paths#, paper_count
 
+def list_datasets(paths:list) -> list[tuple]:
+    """Main function is list available datasources
+
+    Args:
+        paths list[Path]: List of pathlib Path's
+
+    Returns:
+        results list[tuple]: Returns a list of file names with their index as tuples
+    """
+
+    results = []
+    paths = [Path("./data/conferences/"), Path("./data/search_results/")]
+    for directory in paths:
+        paths = sorted(
+            directory.iterdir(),
+            key=lambda path: (path.is_file(), path.name.lower()),
+        )
+        paths = [(val.stem, idx) for idx, val in enumerate(paths)]
+        results.extend(paths)
+    return results
+
+
 ########################## Global Variables to return ##########################################
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]

@@ -4,20 +4,21 @@ import json
 import sys
 from typing import TYPE_CHECKING, Optional
 
+from support import list_datasets
 from pathlib import Path
-from textual.app import App, ComposeResult
 from textual.binding import Binding
+from textual.app import App, ComposeResult
 from textual.reactive import reactive, var
-from support import logger
+
 from utils import clean_string_values, get_c_time
 from widgets import JSONDocumentView, JSONTree, TreeView
-from textual.containers import Container, Horizontal, VerticalScroll
+from textual.containers import Container
 from textual.widgets import (
-    DirectoryTree, 
+    Button, 
     Footer,
     Header,
     Static,
-    Markdown, 
+    SelectionList, 
     TabbedContent, 
     TabPane,       
     Tree
@@ -38,19 +39,15 @@ class PaperSearch(App):
         ("ctrl+t", "toggle_root", "Toggle root"),
         ("enter", "display_selected", "Display Selected"),  
         Binding("q", "app.quit", "Quit"),
-        Binding(
-            key="ctrl+r",
-            action="load_root_tree",
-            description="Reload Data",
-            show=True,
-        ),
     ]
     
     json_name: str = ""
     json_data: reactive[str] = reactive("")
     root_data_dir = var(Path("./data/conferences"))
     selected_node_data:  reactive[object | None] = reactive(None)
-
+    all_dataset: list[Path] = list_datasets([root_data_dir, Path("./data/search_results/")])
+    dataset_list: SelectionList[int] =  SelectionList(*all_dataset)
+    
     def __init__(
         self,
         json_file: TextIOWrapper,
@@ -86,19 +83,15 @@ class PaperSearch(App):
                 with TabPane("Search", id="search-tab"):
                     yield Static("Search functionality will be implemented here.", id="search-placeholder")
                 # Tab 3 - Manage Datasets (Placeholder)
-                with TabPane("Manage Datasets", id="manage-data-tab"):
-                    yield Static("Add/Remove data functionality will be implemented here.", id="manage-data-placeholder")
+                with TabPane("Manage Datasets", id="manage-tab"):
+                    with Container(id="dataset-container"):
+                        yield Button("Add Dataset", id="add-button")
+                        yield Button("Remove Dataset", id="rem-button")
+                        yield Static("Available Datasets", id="data-title", classes="header")
+                        yield Static("Select Stuff", id="datasets")
+                        # yield SelectionList("Dataset List", id="dataset-list")
+
         yield Footer()
-
-    # def on_mount(self) -> None:
-    #     """Called when the app is mounted."""
-    #     logger.info("App mounted.")
-    #     try:
-    #         self.query_one(JSONTree).focus()
-    #         logger.debug("Focused JSONTree on mount.")
-    #     except Exception as e:
-    #         logger.error(f"Error focusing JSONTree on mount: {e}")
-
 
     def on_mount(self) -> None:
         tree_view = self.query_one(TreeView)
