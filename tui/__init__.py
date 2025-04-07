@@ -23,16 +23,15 @@ from textual.widgets import (
     Tree
 )
 
-
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "jtree_ML"
-__version__ = "0.2.8"
+__version__ = "0.3.0"
 
 class PaperSearch(App):
     TITLE = __prog_name__
-    SUB_TITLE = f"A JSON Tree exploration tool for influential Machine Learning Papers ({__version__})"
+    SUB_TITLE = f"A JSON exploration tool for influential Machine Learning Papers ({__version__})"
     CSS_PATH = "css/layout.tcss"
     BINDINGS = [
         ("ctrl+s", "app.screenshot()", "Screenshot"),
@@ -77,19 +76,18 @@ class PaperSearch(App):
         yield Header()
         with Container(id="app-grid"):
             # Left side - JSON Tree
-            with VerticalScroll(id="tree-container"):
-                yield TreeView(id="tree-view")
+            yield TreeView(id="tree-container")
             # Right side - Tabbed Content
-            with TabbedContent(id="tab-container", initial="contents-tab"): 
+            with TabbedContent(id="tab-container", initial="content-tab"):
                 # Tab 1 - Document View
-                with TabPane("Document", id="contents-tab"):
+                with TabPane("Document", id="content-tab"):
                     yield JSONDocumentView(id="json-document-view")
                 # Tab 2 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
                     yield Static("Search functionality will be implemented here.", id="search-placeholder")
-                # Tab 3 - Manage Data (Placeholder)
-                with TabPane("Manage Data", id="manage-data-tab"):
-                     yield Static("Add/Remove data functionality will be implemented here.", id="manage-data-placeholder")
+                # Tab 3 - Manage Datasets (Placeholder)
+                with TabPane("Manage Datasets", id="manage-data-tab"):
+                    yield Static("Add/Remove data functionality will be implemented here.", id="manage-data-placeholder")
         yield Footer()
 
     # def on_mount(self) -> None:

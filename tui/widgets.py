@@ -13,6 +13,50 @@ from support import logger
 
 highlighter = ReprHighlighter()
 
+###############################  Tree node widgets ##############################
+
+class JSONTree(Tree):
+    def add_node(self, name: str, node: TreeNode, data: object) -> None:
+        """Adds a node to the tree.
+
+        Args:
+            name (str): Name of the node.
+            node (TreeNode): Parent node.
+            data (object): Data associated with the node.
+        """
+        if isinstance(data, dict):
+            node._label = Text(f"{{}} {name}")
+            for key, value in data.items():
+                new_node = node.add("")
+                self.add_node(key, new_node, value)
+                new_node.data = value
+
+        elif isinstance(data, list):
+            node._label = Text(f"{name}")
+            for index, value in enumerate(data):
+                new_node = node.add("")
+                self.add_node(str(index), new_node, value)
+                new_node.data = value
+        else:
+            node._allow_expand = False
+            if name:
+                label = Text.assemble(
+                    Text.from_markup(f"[b]{name}[/b]="), highlighter(repr(data))
+                )
+            else:
+                label = Text(repr(data))
+            node._label = label
+            node.data = data
+
+class TreeView(Widget, can_focus_children=True):
+    def compose(self) -> ComposeResult:
+        tree = JSONTree("Root")
+        tree.show_root = False
+        yield tree
+
+#######################TabbedContent Widgets #############################
+
+#######################Content tab  Widgets #############################
 class JSONDocument(ScrollableContainer):
     """Widget to display JSON data (as plain text) with scrolling.
 
@@ -102,42 +146,8 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
 
+#######################Dataset tab  Widgets #############################
 
-class JSONTree(Tree):
-    def add_node(self, name: str, node: TreeNode, data: object) -> None:
-        """Adds a node to the tree.
-
-        Args:
-            name (str): Name of the node.
-            node (TreeNode): Parent node.
-            data (object): Data associated with the node.
-        """
-        if isinstance(data, dict):
-            node._label = Text(f"{{}} {name}")
-            for key, value in data.items():
-                new_node = node.add("")
-                self.add_node(key, new_node, value)
-                new_node.data = value
-
-        elif isinstance(data, list):
-            node._label = Text(f"{name}")
-            for index, value in enumerate(data):
-                new_node = node.add("")
-                self.add_node(str(index), new_node, value)
-                new_node.data = value
-        else:
-            node._allow_expand = False
-            if name:
-                label = Text.assemble(
-                    Text.from_markup(f"[b]{name}[/b]="), highlighter(repr(data))
-                )
-            else:
-                label = Text(repr(data))
-            node._label = label
-            node.data = data
-
-class TreeView(Widget, can_focus_children=True):
-    def compose(self) -> ComposeResult:
-        tree = JSONTree("Root")
-        tree.show_root = False
-        yield tree
+#TODO - Add Dataset button
+#TODO - Remove Dataset Button
+#TODO - Dataset checklist 

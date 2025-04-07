@@ -1,7 +1,7 @@
 #app-grid {
     layout: grid;
     grid-size: 2;
-    grid-columns: 1fr;
+    grid-columns: 1.1fr 0.9fr;
     grid-rows: 1fr;
     border: green;
 }
@@ -10,12 +10,9 @@
     padding: 1;
 }
 
-
 #tree-container {
-    width: 100%;
-    height: 100%;
+    height:auto;
     background: $panel;
-    dock:left;
     overflow-x: auto;
     border: dodgerblue;
 } 
@@ -23,10 +20,12 @@
 #tab-container {
     height: auto;
     border: yellow;
+    width: 1fr;
+    background: $panel;
     border:magenta;
 }
 
-#json-document {
+#json-document-view {
     height: auto;
     border: mediumvioletred;
 }
