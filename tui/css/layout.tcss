@@ -17,9 +17,8 @@
     border: dodgerblue;
 } 
 
-#tab-container {
+#tab-container TabbedContent {
     height: auto;
-    border: yellow;
     width: 1fr;
     background: $panel;
     border:magenta;
@@ -30,22 +29,32 @@
     border: mediumvioletred;
 }
 
-#dataset-conatiner {
+#dataset-container > Static {
+    height:100%;
     layout: grid;
     grid-size: 2;
-    grid-columns: 1fr 1fr;
+    grid-columns: 1fr;
     grid-rows: 1fr;
     border: blue;
 }
 
+
+#data-title > Static {
+    height: 100%;
+}
+
+#datasets > Static {
+    height: 100%;
+}
+
 Button {
     height: 10;
-    width: 10;
+    width: 20;
     padding: 1;
 }
 
 .label {
     height: auto;
-    content-align: center middle;
     width: auto;
+    content-align: center middle;
 }

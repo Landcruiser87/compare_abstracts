@@ -82,7 +82,7 @@ class PaperSearch(App):
                 # Tab 2 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
                     yield Static("Search functionality will be implemented here.", id="search-placeholder")
-                # Tab 3 - Manage Datasets (Placeholder)
+                # Tab 3 - Manage Datasets - Buttons and SelectionList
                 with TabPane("Manage Datasets", id="manage-tab"):
                     with Container(id="dataset-container"):
                         yield Button("Add Dataset", id="add-button")
@@ -102,7 +102,9 @@ class PaperSearch(App):
         tree.add_node(root_name, json_node, json_data)
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
-        tree.focus()
+        tabbed_doc = self.query(TabbedContent)
+        tabbed_doc.focus()
+        # tree.focus()
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
