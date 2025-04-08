@@ -236,6 +236,7 @@ def list_datasets(paths:list) -> list[tuple]:
         )
         paths = [(val.stem, idx) for idx, val in enumerate(paths)]
         results.extend(paths)
+    
     return results
 
 

@@ -29,19 +29,24 @@
     border: mediumvioletred;
 }
 
-#dataset-container {
-    height:100%;
-    layout: grid;
-    grid-size: 2;
-    grid-columns: 1fr;
-    grid-rows: 1fr;
-    border: red;
-    background: $panel;
+#dataset-container > Screen {
+    width: auto;
+    height: auto;
+    margin-right: 1;
+    background: $boost;
+}
+
+#dc-leftside {
+    height: 100%;
+}
+
+#dc-rightside {
+    height: 100%;
 }
 
 Button {
     height: 1fr;
-    width: 1fr;
+    width: 0.7fr;
 }
 
 .label {
@@ -50,7 +55,29 @@ Button {
     content-align: center middle;
 }
 
-#datasets > Static {
-    height: 100%;
-    width: 100%;
+#add-button {
+    border: green;
+    margin-bottom: 1;
+    margin-left: 2;
+}
+
+#rem-button {
+    border: red;
+    margin-bottom: 1;
+    margin-left: 2;
+}
+
+#data-title {
+    height: 20%;
+    width: 0.8fr;
+    background: $boost;
+    text-style: bold;
+    content-align: center middle;
+}
+
+#datasets {
+    width: 0.8fr;
+    background: $panel;
+    content-align: left middle;
+    overflow-y: auto;
 }

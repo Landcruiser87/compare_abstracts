@@ -12,7 +12,7 @@ from textual.reactive import reactive, var
 
 from utils import clean_string_values, get_c_time
 from widgets import JSONDocumentView, JSONTree, TreeView
-from textual.containers import Container
+from textual.containers import Container, Horizontal, VerticalScroll
 from textual.widgets import (
     Button, 
     Footer,
@@ -46,8 +46,8 @@ class PaperSearch(App):
     root_data_dir = var(Path("./data/conferences"))
     srch_data_dir = var(Path("./data/search_results/"))
     selected_node_data:  reactive[object | None] = reactive(None)
-    all_dataset: list[Path] = list_datasets([root_data_dir, srch_data_dir])
-    dataset_list: SelectionList[int] =  SelectionList(*all_dataset)
+    all_datasets: list[Path] = list_datasets([root_data_dir, srch_data_dir])
+    # dataset_list: SelectionList[int] =  SelectionList(*all_dataset)
     
     def __init__(
         self,
@@ -85,12 +85,14 @@ class PaperSearch(App):
                     yield Static("Search functionality will be implemented here.", id="search-placeholder")
                 # Tab 3 - Manage Datasets - Buttons and SelectionList
                 with TabPane("Manage Datasets", id="manage-tab"):
-                    with Container(id="dataset-container"):
-                        yield Button("Add Dataset", id="add-button")
-                        yield Static("Available Datasets", id="data-title", classes="header")
-                        yield Button("Remove Dataset", id="rem-button")
-                        yield Static("Select Stuff", id="datasets")
-                        # yield SelectionList("Dataset List", id="dataset-list")
+                    with Horizontal(id="dataset-container"):
+                        with Container(id="dc-leftside"):
+                            yield Button("Add Dataset", id="add-button")
+                            yield Button("Remove Dataset", id="rem-button")
+                        with Container(id="dc-rightside"):
+                            yield Static("Available Datasets", id="data-title", classes="header")
+                            # yield Static("Select Stuff", id="datasets")
+                            yield SelectionList(*self.all_datasets, name="Dataset List", id="datasets")
 
         yield Footer()
 
@@ -104,6 +106,7 @@ class PaperSearch(App):
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
         tabbed_doc = self.query(TabbedContent)
+        # self.query_one(SelectionList).border_title = "Please choose a dataset"
         tabbed_doc.focus()
         # tree.focus()
 
