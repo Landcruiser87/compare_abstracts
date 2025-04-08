@@ -138,3 +138,5 @@ class PaperSearch(App):
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
+
+    
