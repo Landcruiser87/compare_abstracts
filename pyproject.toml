@@ -16,6 +16,7 @@ dependencies = [
     "pyzotero (>=1.6.11,<2.0.0)",
     "beautifulsoup4 (>=4.13.3,<5.0.0)",
     "lxml (>=5.3.1,<6.0.0)",
+    "textual-dev (>=1.7.0,<2.0.0)",
 ]
 
 [build-system]

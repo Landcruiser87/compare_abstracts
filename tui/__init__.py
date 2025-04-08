@@ -44,8 +44,9 @@ class PaperSearch(App):
     json_name: str = ""
     json_data: reactive[str] = reactive("")
     root_data_dir = var(Path("./data/conferences"))
+    srch_data_dir = var(Path("./data/search_results/"))
     selected_node_data:  reactive[object | None] = reactive(None)
-    all_dataset: list[Path] = list_datasets([root_data_dir, Path("./data/search_results/")])
+    all_dataset: list[Path] = list_datasets([root_data_dir, srch_data_dir])
     dataset_list: SelectionList[int] =  SelectionList(*all_dataset)
     
     def __init__(
@@ -86,8 +87,8 @@ class PaperSearch(App):
                 with TabPane("Manage Datasets", id="manage-tab"):
                     with Container(id="dataset-container"):
                         yield Button("Add Dataset", id="add-button")
-                        yield Button("Remove Dataset", id="rem-button")
                         yield Static("Available Datasets", id="data-title", classes="header")
+                        yield Button("Remove Dataset", id="rem-button")
                         yield Static("Select Stuff", id="datasets")
                         # yield SelectionList("Dataset List", id="dataset-list")
 
@@ -109,7 +110,7 @@ class PaperSearch(App):
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
         self.selected_node_data = event.node.data
-
+        
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
         json_docview = self.query_one(JSONDocumentView)
@@ -119,6 +120,13 @@ class PaperSearch(App):
                 json_docview.update_document(new_data)
         else:
              json_docview.update_document("")
+        activetab = self.query_one(TabbedContent)
+        tree = self.query_one(TreeView)
+        if not activetab.active == "content-tab" :
+            tree_view = self.query_one(TreeView)
+            tree = tree_view.query_one(JSONTree)
+            json_docview.focus()
+            tree.focus()
 
     def action_screenshot(self):
         current_time = get_c_time()

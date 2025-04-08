@@ -29,32 +29,28 @@
     border: mediumvioletred;
 }
 
-#dataset-container > Static {
+#dataset-container {
     height:100%;
     layout: grid;
     grid-size: 2;
     grid-columns: 1fr;
     grid-rows: 1fr;
-    border: blue;
-}
-
-
-#data-title > Static {
-    height: 100%;
-}
-
-#datasets > Static {
-    height: 100%;
+    border: red;
+    background: $panel;
 }
 
 Button {
-    height: 10;
-    width: 20;
-    padding: 1;
+    height: 1fr;
+    width: 1fr;
 }
 
 .label {
     height: auto;
     width: auto;
     content-align: center middle;
+}
+
+#datasets > Static {
+    height: 100%;
+    width: 100%;
 }
