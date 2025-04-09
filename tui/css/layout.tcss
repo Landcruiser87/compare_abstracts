@@ -29,6 +29,75 @@
     border: mediumvioletred;
 }
 
+
+
+
+
+#srch-container {
+    layout: grid;
+    grid-size: 3 3;
+    grid-columns: 0.8fr 1.1fr 1.1fr;
+    grid-rows: 1fr 0.5fr 1.4fr;
+    border: dodgerblue;
+    background: $panel;
+}
+
+#search-input {
+    height: 0.8fr;
+    column-span: 4;
+}
+
+#search-button {
+    width: 1fr;
+    border: green;
+    margin-right: 1;
+    margin-top: 1;
+}
+
+#field-hdr {
+    tint: magenta 40%;
+    content-align: center middle;
+    height: 1fr;
+    width: 1fr;
+    margin-left: 1;
+    margin-right: 1;
+}
+
+#metric-hdr {
+    tint: magenta 40%;
+    height: 1fr;
+    content-align: center middle;
+    margin-left: 1;
+    margin-right: 1;
+}
+
+#RadioSet {
+    background: $boost;
+    width: 1fr;
+}
+
+.label {
+    
+}
+
+#radio-fields {
+    height: 1fr;
+    width: 1fr;
+}
+
+#radio-metrics {
+    height: 1fr;
+    width: 1fr;
+}
+
+#input-limit {
+    width: 1fr;
+    margin-right:1;
+    border: green;
+}
+
+
+
 #dataset-container > Screen {
     width: 100%;
     height: 100%;
@@ -60,7 +129,6 @@ Button {
     border: green;
     margin-bottom: 1;
     margin-left: 4;
-    
 }
 
 #rem-button {

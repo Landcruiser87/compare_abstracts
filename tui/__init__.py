@@ -17,8 +17,11 @@ from textual.widgets import (
     Button, 
     Footer,
     Header,
+    Input,
     Static,
     SelectionList, 
+    RadioButton, 
+    RadioSet,
     TabbedContent, 
     TabPane,       
     Tree
@@ -26,7 +29,7 @@ from textual.widgets import (
 
 #Custom Imports
 from utils import clean_string_values, get_c_time
-from support import list_datasets
+from support import list_datasets, SEARCH_KEYS, SEARCH_METRICS
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -51,7 +54,7 @@ class PaperSearch(App):
     srch_data_dir = var(Path("./data/search_results/"))
     selected_node_data:  reactive[object | None] = reactive(None)
     all_datasets: list[Path] = list_datasets([root_data_dir, srch_data_dir])
-    
+
     def __init__(
         self,
         json_file: TextIOWrapper,
@@ -85,9 +88,21 @@ class PaperSearch(App):
                     yield JSONDocumentView(id="json-document-view")
                 # Tab 2 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
-                    # with Container(id="srch-grid"):
-                        # yield 
-                    yield Static("Search functionality will be implemented here.", id="search-placeholder")
+                    with Container(id="srch-container"):
+                        yield Input("Type search here", id="search-input")
+                        yield Static("Search Field", id="field-hdr", classes="header")
+                        yield Static("Search Metrics", id="metric-hdr", classes="header")
+                        yield Input("Result Limit", id="input-limit")
+                        with RadioSet(id="radio-fields", classes="header"):
+                            for field in SEARCH_KEYS:
+                                yield RadioButton(field)
+                        with RadioSet(id="radio-metrics", classes="header"):
+                            for field in SEARCH_METRICS:
+                                yield RadioButton(field)
+                        yield Button("Search Datasets", id="search-button")
+                        
+
+                    # yield Static("Search functionality will be implemented here.", id="search-placeholder")
                 # Tab 3 - Manage Datasets - Buttons and SelectionList
                 with TabPane("Manage Datasets", id="manage-tab"):
                     with Horizontal(id="dataset-container"):
@@ -112,7 +127,7 @@ class PaperSearch(App):
         # tree.loading = False
         tree.focus()
 
-    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict) -> None:
+    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict) -> dict | None:
         json_node = json_tree.root.add(root_name)
         json_data = clean_string_values(json.loads(json_data))
         json_tree.add_node(root_name, json_node, json_data)
