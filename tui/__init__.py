@@ -121,6 +121,7 @@ class PaperSearch(App):
         selected = datasets.selected
         
         if button_id == "add-button":
+            event.button.loading = True
             for itemid in selected:
                 new_json = datasets.options[itemid].prompt._text[0] + ".json"
                 json_node = tree.root.add(new_json)
@@ -128,13 +129,16 @@ class PaperSearch(App):
                 json_data = open(json_path, mode="r", encoding="utf-8").read()
                 json_data = clean_string_values(json.loads(json_data))
                 tree.add_node(new_json, json_node, json_data)
-        
+            event.button.loading = False
+
         elif button_id == "rem-button":
+            event.button.loading = True
             for itemid in selected:
-                new_json = datasets.options[itemid].prompt._text[0] + ".json"
+                rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
                 for node in tree.root.children:
-                    if new_json in node._label:
+                    if rem_conf in node._label:
                         node.remove()
+            event.button.loading = False
 
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
