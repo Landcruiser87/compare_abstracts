@@ -46,7 +46,7 @@
 
 Button {
     height: 1fr;
-    width: 0.7fr;
+    
 }
 
 .label {
@@ -56,12 +56,15 @@ Button {
 }
 
 #add-button {
+    width: 0.7fr;
     border: green;
     margin-bottom: 1;
     margin-left: 4;
+    
 }
 
 #rem-button {
+    width: 0.7fr;
     border: red;
     margin-bottom: 1;
     margin-left: 4;

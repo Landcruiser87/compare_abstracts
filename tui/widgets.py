@@ -52,8 +52,6 @@ class JSONTree(Tree):
             node._label = label
             node.data = data
             
-    #TODO - Add remove node function
-
 class TreeView(Widget, can_focus_children=True):
     def compose(self) -> ComposeResult:
         tree = JSONTree("Root")
@@ -152,9 +150,7 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
 
-
 ####################### Dataset tab  Widgets #############################
-
 
 # class DatasetList(SelectionList): 
 #     """Container for the JSON document.
