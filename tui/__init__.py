@@ -5,14 +5,14 @@ import sys
 from typing import TYPE_CHECKING, Optional
 
 from support import list_datasets
-from pathlib import Path
+from pathlib import Path, PurePath
 from textual.binding import Binding
 from textual.app import App, ComposeResult
 from textual.reactive import reactive, var
 
 from utils import clean_string_values, get_c_time
 from widgets import JSONDocumentView, JSONTree, TreeView
-from textual.containers import Container, Horizontal, VerticalScroll
+from textual.containers import Container, Horizontal
 from textual.widgets import (
     Button, 
     Footer,
@@ -47,7 +47,6 @@ class PaperSearch(App):
     srch_data_dir = var(Path("./data/search_results/"))
     selected_node_data:  reactive[object | None] = reactive(None)
     all_datasets: list[Path] = list_datasets([root_data_dir, srch_data_dir])
-    # dataset_list: SelectionList[int] =  SelectionList(*all_dataset)
     
     def __init__(
         self,
@@ -105,15 +104,37 @@ class PaperSearch(App):
         tree.add_node(root_name, json_node, json_data)
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
-        tabbed_doc = self.query(TabbedContent)
-        # self.query_one(SelectionList).border_title = "Please choose a dataset"
-        tabbed_doc.focus()
-        # tree.focus()
+        # tabbed_doc = self.query(TabbedContent)
+        # tabbed_doc.focus()
+        tree.focus()
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
         self.selected_node_data = event.node.data
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Called when a button is pressed."""
+        #get the button event
+        button_id = event.button.id
+        tree_view = self.query_one(TreeView)
+        tree = tree_view.query_one(JSONTree)
+        datasets = self.query_one(SelectionList)
+        selected = datasets.selected
         
+        if button_id == "add-button":
+            for itemid in selected:
+                new_json = datasets.options[itemid].prompt._text[0] + ".json"
+                json_node = tree.root.add(new_json)
+                json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
+                json_data = open(json_path, mode="r", encoding="utf-8").read()
+                json_data = clean_string_values(json.loads(json_data))
+                tree.add_node(new_json, json_node, json_data)
+        
+        elif button_id == "rem-button":
+            for itemid in selected:
+                new_json = datasets.options[itemid].prompt._text[0] + ".json"
+                json_node = tree.root.add(new_json)
+    
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
         json_docview = self.query_one(JSONDocumentView)
@@ -123,6 +144,7 @@ class PaperSearch(App):
                 json_docview.update_document(new_data)
         else:
              json_docview.update_document("")
+        
         activetab = self.query_one(TabbedContent)
         tree = self.query_one(TreeView)
         if not activetab.active == "content-tab" :
@@ -138,5 +160,3 @@ class PaperSearch(App):
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
-
-    

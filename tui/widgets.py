@@ -7,7 +7,11 @@ from rich.pretty import pretty_repr
 from textual.app import ComposeResult
 from textual.containers import ScrollableContainer
 from textual.widget import Widget
-from textual.widgets import Static, Tree
+from textual.widgets import (
+    Static, 
+    Tree, 
+    SelectionList
+)
 from textual.widgets.tree import TreeNode
 from support import logger
 
@@ -47,6 +51,8 @@ class JSONTree(Tree):
                 label = Text(repr(data))
             node._label = label
             node.data = data
+            
+    #TODO - Add remove node function
 
 class TreeView(Widget, can_focus_children=True):
     def compose(self) -> ComposeResult:
@@ -146,7 +152,32 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
 
+
 ####################### Dataset tab  Widgets #############################
+
+
+# class DatasetList(SelectionList): 
+#     """Container for the JSON document.
+
+#     Args:
+#         DatasetList (Widget): Inherits from the SelectionList Class
+
+#     Yields:
+#         Widget : The SelectionList Widget
+#     """    
+#     # DEFAULT_CSS = """
+#     #    JSONDocumentView {
+#     #        height: 1fr;
+#     #        width: 1fr;
+#     #    }
+#     #    """
+
+#     def compose(self) -> ComposeResult:
+#         """Compose the JSONDocument widget."""
+#         yield SelectionList(id="json-document")
+
+    #NOTE - Not sure if i need this. 
+
 
 #TODO - Add Dataset button
 #TODO - Remove Dataset Button

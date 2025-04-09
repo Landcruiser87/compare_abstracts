@@ -226,7 +226,6 @@ def list_datasets(paths:list) -> list[tuple]:
     Returns:
         results list[tuple]: Returns a list of file names with their index as tuples
     """
-
     results = []
     paths = [Path("./data/conferences/"), Path("./data/search_results/")]
     for directory in paths:
