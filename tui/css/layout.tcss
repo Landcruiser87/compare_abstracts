@@ -77,7 +77,9 @@ Button {
 
 #datasets {
     width: 0.9fr;
+    height: 80%;
     background: $panel;
     content-align: left middle;
     overflow-y: auto;
+    margin-bottom: 1;
 }
