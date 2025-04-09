@@ -90,7 +90,6 @@ class PaperSearch(App):
                             yield Button("Remove Dataset", id="rem-button")
                         with Container(id="dc-rightside"):
                             yield Static("Available Datasets", id="data-title", classes="header")
-                            # yield Static("Select Stuff", id="datasets")
                             yield SelectionList(*self.all_datasets, name="Dataset List", id="datasets")
 
         yield Footer()
@@ -133,8 +132,10 @@ class PaperSearch(App):
         elif button_id == "rem-button":
             for itemid in selected:
                 new_json = datasets.options[itemid].prompt._text[0] + ".json"
-                json_node = tree.root.add(new_json)
-    
+                for node in tree.root.children:
+                    if new_json in node._label:
+                        node.remove()
+
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
         json_docview = self.query_one(JSONDocumentView)
