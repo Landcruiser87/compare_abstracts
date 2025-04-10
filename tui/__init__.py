@@ -92,7 +92,7 @@ class PaperSearch(App):
                         yield Input("Type search here", id="search-input")
                         yield Static("Search Field", id="field-hdr", classes="header")
                         yield Static("Search Metrics", id="metric-hdr", classes="header")
-                        yield Input("Result Limit", id="input-limit")
+                        yield Input("Result Limit", id="input-limit", type="integer")
                         with RadioSet(id="radio-fields", classes="header"):
                             for field in SEARCH_KEYS:
                                 yield RadioButton(field)
@@ -147,14 +147,14 @@ class PaperSearch(App):
         selected = datasets.selected
         
         if button_id == "add-button":
-            # button = self.query_one("#add-button", Button)
-            # button.loading = True
+            button = self.query_one("#add-button", Button)
+            button.loading = True
             for itemid in selected:
                 new_json = datasets.options[itemid].prompt._text[0] + ".json"
                 json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
                 json_data = open(json_path, mode="r", encoding="utf-8").read()
                 self.load_data(tree, new_json, json_data)
-            # button.loading = False
+            button.loading = False
 
         elif button_id == "rem-button":
             for itemid in selected:
@@ -188,3 +188,18 @@ class PaperSearch(App):
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
+
+
+#TODO - Add Clustering tab to results.  
+#TODO - Add LoadingIndicator for button widgets
+    #look at venvkiller for how he did that. probalby a custom class
+
+#Search workflow. 
+#- When you select a search field. 
+    #Other fields in the search metrics will enable/disable
+#- That way you won't have unmapped search paths
+
+#Possible Search paths
+#1. Basic text match searching.  
+    #This can be run with the following
+
