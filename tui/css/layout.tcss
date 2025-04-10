@@ -21,7 +21,6 @@
     height: auto;
     width: 1fr;
     background: $panel;
-    border:magenta;
 }
 
 #json-document-view {
@@ -48,13 +47,14 @@
 }
 
 #search-button {
+    height: 1fr;
     width: 1fr;
     border: green;
     margin-right: 1;
 }
 
 #field-hdr {
-    tint: magenta 40%;
+    tint: magenta 50%;
     content-align: center middle;
     height: 1fr;
     width: 1fr;
@@ -77,9 +77,6 @@
     width: 1fr;
 }
 
-.label {
-    
-}
 
 #radio-fields {
     height: 1fr;
@@ -92,14 +89,13 @@
 }
 
 #input-limit {
+    content-align: center middle;
     width: 1fr;
     height: 1fr;
     margin-right: 1;
     margin-bottom: 1;
-    border: green;
+    border: magenta;
 }
-
-
 
 #dataset-container > Screen {
     width: 100%;
@@ -117,8 +113,7 @@
 }
 
 Button {
-    height: 1fr;
-    
+    height: auto;
 }
 
 .label {
@@ -128,25 +123,29 @@ Button {
 }
 
 #add-button {
-    width: 0.7fr;
+    height: 1fr;
+    width: 0.8fr;
     border: green;
     margin-bottom: 1;
     margin-left: 4;
 }
 
 #rem-button {
-    width: 0.7fr;
+    height: 1fr;
+    width: 0.8fr;
     border: red;
     margin-bottom: 1;
     margin-left: 4;
 }
 
 #data-title {
+    tint: magenta 40%;
     height: 20%;
-    width: 0.9fr;
-    background: $boost;
+    width: 0.88fr;
     text-style: bold;
     content-align: center middle;
+    margin-left: 5;
+    margin-bottom: 1;
 }
 
 #datasets {
@@ -156,4 +155,5 @@ Button {
     content-align: left middle;
     overflow-y: auto;
     margin-bottom: 1;
+    margin-left: 5;
 }
