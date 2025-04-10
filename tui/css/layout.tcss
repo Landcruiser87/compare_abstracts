@@ -1,7 +1,7 @@
 #app-grid {
     layout: grid;
     grid-size: 2;
-    grid-columns: 1.1fr 0.9fr;
+    grid-columns: 0.9fr 1.1fr;
     grid-rows: 1fr;
     border: green;
 }
