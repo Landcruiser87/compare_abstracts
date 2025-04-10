@@ -90,14 +90,14 @@ class PaperSearch(App):
                 with TabPane("Search", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="search-input")
-                        yield Static("Search Field", id="field-hdr", classes="header")
                         yield Static("Search Metrics", id="metric-hdr", classes="header")
+                        yield Static("Search Field", id="field-hdr", classes="header")
                         yield Input("Result Limit", id="input-limit", type="integer")
-                        with RadioSet(id="radio-fields", classes="header"):
-                            for field in SEARCH_KEYS:
-                                yield RadioButton(field)
                         with RadioSet(id="radio-metrics", classes="header"):
                             for field in SEARCH_METRICS:
+                                yield RadioButton(field)
+                        with RadioSet(id="radio-fields", classes="header"):
+                            for field in SEARCH_KEYS:
                                 yield RadioButton(field)
                         yield Button("Search Datasets", id="search-button")
                         
