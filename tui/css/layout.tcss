@@ -35,7 +35,7 @@
 #srch-container {
     layout: grid;
     grid-size: 3 3;
-    grid-columns: 0.8fr 1.1fr 1.1fr;
+    grid-columns: 1.1fr 0.8fr 1.1fr;
     grid-rows: 0.8fr 0.6fr 1.4fr;
     border: dodgerblue;
     background: $panel;
@@ -64,7 +64,7 @@
 }
 
 #metric-hdr {
-    tint: magenta 40%;
+    tint: magenta 50%;
     height: 1fr;
     content-align: center middle;
     margin-left: 1;
@@ -95,6 +95,7 @@
     margin-bottom: 1;
     border: magenta;
     content-align: center middle;
+    
 }
 
 #dataset-container  {
@@ -143,13 +144,12 @@ Button {
 
 #data-title {
     tint: magenta 40%;
-    height: 15%;
+    height: 20%;
     width: 1fr;
     text-style: bold;
     content-align: center middle;
     margin-left: 6;
     margin-bottom: 1;
-    margin-top: 1;
 }
 
 #datasets {
