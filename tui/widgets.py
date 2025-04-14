@@ -137,7 +137,7 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
 class LoadingIndicator(Static):
     """Custom loading indicator widget."""
 
-    def __init__(self, message="Adding Datasets..."):
+    def __init__(self, message="Add/Remove Datasets..."):
         super().__init__()
         self.message = message
         self.count = 0
@@ -162,20 +162,12 @@ class LoadingIndicator(Static):
             )
             progress_text = f"{self.count}/{self.total} datasets ({progress_percent}%)\n{progress_bar}"
 
-        return f"[bold]{self.message}[/bold]\n\n[bold]{progress_text}[/bold]\n\n[blink]⏳[/blink]"
+        return f"[bold]{self.message}[/bold]\n\n[bold]{progress_text}[/bold]"
+        # \n\n[blink]⏳[/blink]"  -removed from end of above string as 
+        # it was causing rendering weirdness. (Doubled the title border)
 
 
-
-
-
-#TODO - Add Dataset button
-#TODO - Remove Dataset Button
-#TODO - Dataset checklist 
-
-#Main functionality is that when you press the add dataset.  It cycles through the checklist object and 
-#adds those datasets to the root node. Subtract does the opposite.  
-
-#Checklist should refresh on the mount?  Or the page activation.... Probably the latter. 
+#?Checklist should refresh on the mount?  Or the page activation.... Probably the latter. 
     #As you sometimes will want to remove any searches
     #So i'll need the refresh to cycle over both the data/conferences and data/search_results.  
 

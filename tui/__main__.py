@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import argparse
 import logging
 import platform
@@ -19,7 +18,7 @@ DEBUGPY_PORT = 5678
 
 def main():
     parser = argparse.ArgumentParser(
-        prog=__prog_name__, description="Json Tree - ML Conference", epilog=f"v{__version__}"
+        prog=__prog_name__, description="Json Tree for ML Conferences", epilog=f"v{__version__}"
     )
 
     parser.add_argument(
@@ -85,5 +84,7 @@ def main():
         logger.warning(f"Unable to read {args.path!r}; {error}")
         sys.exit(-1)
 
+
 if __name__ == "__main__":
     main()
+
