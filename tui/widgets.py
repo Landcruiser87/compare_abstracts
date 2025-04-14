@@ -137,7 +137,7 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
 class LoadingIndicator(Static):
     """Custom loading indicator widget."""
 
-    def __init__(self, message="Add/Remove Datasets..."):
+    def __init__(self, message="Updating..."):
         super().__init__()
         self.message = message
         self.count = 0

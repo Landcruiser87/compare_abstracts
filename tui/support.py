@@ -243,7 +243,7 @@ def list_datasets(paths:list) -> list[tuple]:
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
-SEARCH_KEYS = ["Title", "Keywords", "Topic", "Abstract", "Selected abstract" ]
+SEARCH_KEYS = ["title", "keyword", "topic", "abstract", "selected"]
 SEARCH_METRICS = ["Basic text search", "Cosine sim", "Levenstein", "Hamming", "Jaccard", "LCS (Longest Common Subsequence)"]
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")

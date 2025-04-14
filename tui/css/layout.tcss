@@ -56,17 +56,11 @@ JSONDocument Static {
 }
 
 
-#search-input {
+#input-search {
     height: 0.8fr;
     column-span: 3;
 }
 
-#search-button {
-    height: 1fr;
-    width: 1fr;
-    border: green;
-    margin-right: 1;
-}
 
 #hdr-field {
     tint: magenta 50%;
@@ -123,22 +117,31 @@ JSONDocument Static {
 
 #input-limit {
     border: magenta 50%;
-    width: 1fr;
-    height: 1fr;
+    width: 100%;
+    height: auto;
     margin-right: 1;
     margin-bottom: 1;
+    margin-left: 1;
     content-align: center middle;
 }
 
 #input-thres {
     border: magenta 50%;
-    width: 1fr;
-    height: 1fr;
+    width: 100%;
+    height: auto;
     margin-right: 1;
     margin-bottom: 1;
+    margin-left: 1;
     content-align: center middle;
 }
 
+#search-button {
+    height: 1fr;
+    width: 1fr;
+    border: green;
+    margin-right: 1;
+    row-span: 2;
+}
 
 
 /* ############## Datasets Page ################### */

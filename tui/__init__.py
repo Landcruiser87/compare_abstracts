@@ -11,6 +11,7 @@ from textual.app import App, ComposeResult
 from textual.reactive import reactive, var
 from widgets import JSONDocumentView, JSONTree, TreeView, LoadingIndicator
 from textual.containers import Container, Horizontal, Vertical
+from textual.fuzzy import Matcher
 from textual.widgets import (
     Button, 
     Footer,
@@ -87,7 +88,7 @@ class PaperSearch(App):
                 # Tab 2 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
                     with Container(id="srch-container"):
-                        yield Input("Type search here", id="search-input")
+                        yield Input("Type search here", id="input-search")
                         yield Static("Search Metrics", id="hdr-metric", classes="header")
                         yield Static("Search Field", id="hdr-field", classes="header")
                         yield Static("Search Params", id="hdr-param", classes="header")
@@ -100,8 +101,8 @@ class PaperSearch(App):
                                 yield RadioButton(field)
                         with Container(id="sub-container"):
                             with Vertical(id="srch-fields"):
-                                yield Input("Result Limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
-                                yield Input("Threshold", tooltip="Threshold the appropriate metric", id="input-thres")
+                                yield Input("res limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
+                                yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", id="search-button")
                 # Tab 3 - Manage Datasets - Buttons and SelectionList
                 with TabPane("Manage Datasets", id="manage-tab"):
@@ -149,12 +150,36 @@ class PaperSearch(App):
         loading_container.mount(loading)
 
         async def manage_data_task():        
+            def dataset_search(srch_text:str, metric:str, field:str, conf:str, tree:TreeView):
+                result = {}
+                search_dict = {
+                    "Basic text search": Matcher(srch_text), 
+                    "Cosine sim":"", 
+                    "Levenstein":"", 
+                    "Hamming":"", 
+                    "Jaccard":"",
+                    "LCS (Longest Common Subsequence)":""
+                }
+
+                for child in node.children:                        
+                    if field in child.keys():
+                        match = search_dict.get(metric)
+                        if match > 0.90:
+                            result[conf][field]
+
+                #Noooooooooooooot sure what to do here. 
+                #1. First I need the path of the data i'm searching
+                #2. Loop through each record in the JSON. 
+                #3. See if search metric is in the keys.
+                #4. Run fuzzy matching on all fiels.  
+                #5. Return results as new JSON
+                
             if button_id == "add-button":
                 for itemid in selected:
                     new_json = datasets.options[itemid].prompt._text[0] + ".json"
                     loading.message = f"Loading {new_json}"
                     json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
-                    json_data = open(json_path,     mode="r", encoding="utf-8").read()
+                    json_data = open(json_path, mode="r", encoding="utf-8").read()
                     self.load_data(tree, new_json, json_data)
                     await asyncio.sleep(0.01)
                     loading.count += 1
@@ -170,6 +195,26 @@ class PaperSearch(App):
                         await asyncio.sleep(0.2)
                     loading.count += 1
                     loading.update_progress(loading.count, len(selected))
+
+            elif button_id == "search-button":
+                metric = self.query_one("#radio-metrics", RadioSet)._selected
+                field = self.query_one("#radio-metrics", RadioSet)._selected
+                srch_text = self.query_one("#input-search", Input).value
+                results = {}
+                for node in tree.root.children:
+                    conf = node._label
+                    loading.message = f"Searching {conf}"
+                    result = dataset_search(srch_text, metric, field, conf, node)
+                    if result:
+                        results.update(**result)
+                    else:
+                        loading.message = f"No results found in {conf}"
+                    await asyncio.sleep(0.2)
+                    loading.count += 1
+                    loading.update_progress(loading.count, len(selected))
+
+                    
+
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)

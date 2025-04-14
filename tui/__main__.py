@@ -20,7 +20,7 @@ def main():
     parser = argparse.ArgumentParser(
         prog=__prog_name__, description="Json Tree for ML Conferences", epilog=f"v{__version__}"
     )
-
+    
     parser.add_argument(
         "-V",
         "--version",
