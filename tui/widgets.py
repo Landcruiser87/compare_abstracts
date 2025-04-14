@@ -137,26 +137,13 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
 class LoadingIndicator(Static):
     """Custom loading indicator widget."""
 
-    DEFAULT_CSS = """
-    LoadingIndicator {
-        width: 80%;
-        height: 11;
-        background: $boost;
-        border: panel $accent;
-        border-title-color: $accent;
-        padding: 1 2;
-        margin: 1 1;
-        content-align: center middle;
-    }
-    """
-
     def __init__(self, message="Adding Datasets..."):
         super().__init__()
         self.message = message
         self.count = 0
         self.total = 0
-        self.border_title = "ML_Tree"
-
+        self.border_title = "ML_JTree"
+        
     def update_progress(self, count, total=None):
         """Update the progress count."""
         self.count = count

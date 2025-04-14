@@ -5,7 +5,7 @@
     grid-size: 2;
     grid-columns: 0.9fr 1.1fr;
     grid-rows: 1fr;
-    border: green;
+    padding: 1 2;
 }
 
 /* ############## Document Page ################### */
@@ -210,11 +210,11 @@ Button {
 /* ############## Loading Indicator ################### */
 
 LoadingIndicator {
-    width: 50%;
-    height: 12;
+    width: 40%;
+    height: 10;
     background: $boost;
-    border: panel $accent;
-    border-title-color: magenta $accent;
+    border: heavy $accent magenta;
+    border-title-color: $accent white;
     padding: 1 2;
     margin: 1 1;
     content-align: center middle;

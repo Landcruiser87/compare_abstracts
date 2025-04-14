@@ -32,7 +32,7 @@ from support import list_datasets, SEARCH_KEYS, SEARCH_METRICS
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
-__prog_name__ = "jtree_ML"
+__prog_name__ = "ML_Jtree"
 __version__ = "0.3.0"
 
 class PaperSearch(App):
@@ -147,18 +147,18 @@ class PaperSearch(App):
         loading = LoadingIndicator()
         self.mount(loading_container)
         loading_container.mount(loading)
+
         async def manage_data_task():        
-            count = 0
             if button_id == "add-button":
                 for itemid in selected:
                     new_json = datasets.options[itemid].prompt._text[0] + ".json"
                     loading.message = f"Loading {new_json}"
                     json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
-                    json_data = open(json_path, mode="r", encoding="utf-8").read()
+                    json_data = open(json_path,     mode="r", encoding="utf-8").read()
                     self.load_data(tree, new_json, json_data)
-                    count += 1
-                    loading.update_progress(count, len(selected))
                     await asyncio.sleep(0.01)
+                    loading.count += 1
+                    loading.update_progress(loading.count, len(selected))
 
             elif button_id == "rem-button":
                 for itemid in selected:
@@ -168,8 +168,8 @@ class PaperSearch(App):
                         if rem_conf in node._label:
                             node.remove()
                         await asyncio.sleep(0.2)
-                    count -= 1
-                    loading.update_progress(count, len(selected))
+                    loading.count += 1
+                    loading.update_progress(loading.count, len(selected))
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)
