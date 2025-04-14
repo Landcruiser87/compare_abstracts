@@ -2,17 +2,15 @@ from __future__ import annotations
 #Main imports
 import json
 import sys
-import numpy as np
+import asyncio
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
 #Textual Imports
 from textual.binding import Binding
 from textual.app import App, ComposeResult
 from textual.reactive import reactive, var
-from textual import work
-from asyncio import sleep
-from widgets import JSONDocumentView, JSONTree, TreeView
-from textual.containers import Container, Horizontal
+from widgets import JSONDocumentView, JSONTree, TreeView, LoadingIndicator
+from textual.containers import Container, Horizontal, Vertical
 from textual.widgets import (
     Button, 
     Footer,
@@ -90,19 +88,21 @@ class PaperSearch(App):
                 with TabPane("Search", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="search-input")
-                        yield Static("Search Metrics", id="metric-hdr", classes="header")
-                        yield Static("Search Field", id="field-hdr", classes="header")
-                        yield Input("Result Limit", id="input-limit", type="integer")
+                        yield Static("Search Metrics", id="hdr-metric", classes="header")
+                        yield Static("Search Field", id="hdr-field", classes="header")
+                        yield Static("Search Params", id="hdr-param", classes="header")
+                        
                         with RadioSet(id="radio-metrics", classes="header"):
                             for field in SEARCH_METRICS:
                                 yield RadioButton(field)
                         with RadioSet(id="radio-fields", classes="header"):
                             for field in SEARCH_KEYS:
                                 yield RadioButton(field)
-                        yield Button("Search Datasets", id="search-button")
-                        
-
-                    # yield Static("Search functionality will be implemented here.", id="search-placeholder")
+                        with Container(id="sub-container"):
+                            with Vertical(id="srch-fields"):
+                                yield Input("Result Limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
+                                yield Input("Threshold", tooltip="Threshold the appropriate metric", id="input-thres")
+                            yield Button("Search Datasets", id="search-button")
                 # Tab 3 - Manage Datasets - Buttons and SelectionList
                 with TabPane("Manage Datasets", id="manage-tab"):
                     with Horizontal(id="dataset-container"):
@@ -119,12 +119,10 @@ class PaperSearch(App):
     def on_mount(self) -> None:
         tree_view = self.query_one(TreeView)
         tree = tree_view.query_one(JSONTree)
-        # tree.loading = True
         root_name = self.json_name
         json_data = self.load_data(tree, root_name, self.json_data)
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
-        # tree.loading = False
         tree.focus()
 
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict) -> dict | None:
@@ -145,23 +143,36 @@ class PaperSearch(App):
         tree = tree_view.query_one(JSONTree)
         datasets = self.query_one(SelectionList)
         selected = datasets.selected
-        
-        if button_id == "add-button":
-            button = self.query_one("#add-button", Button)
-            button.loading = True
-            for itemid in selected:
-                new_json = datasets.options[itemid].prompt._text[0] + ".json"
-                json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
-                json_data = open(json_path, mode="r", encoding="utf-8").read()
-                self.load_data(tree, new_json, json_data)
-            button.loading = False
+        loading_container = Container(id="loading-container")
+        loading = LoadingIndicator()
+        self.mount(loading_container)
+        loading_container.mount(loading)
+        async def manage_data_task():        
+            count = 0
+            if button_id == "add-button":
+                for itemid in selected:
+                    new_json = datasets.options[itemid].prompt._text[0] + ".json"
+                    loading.message = f"Loading {new_json}"
+                    json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
+                    json_data = open(json_path, mode="r", encoding="utf-8").read()
+                    self.load_data(tree, new_json, json_data)
+                    count += 1
+                    loading.update_progress(count, len(selected))
+                    await asyncio.sleep(0.01)
 
-        elif button_id == "rem-button":
-            for itemid in selected:
-                rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
-                for node in tree.root.children:
-                    if rem_conf in node._label:
-                        node.remove()
+            elif button_id == "rem-button":
+                for itemid in selected:
+                    rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
+                    loading.message = f"Removing {rem_conf}"
+                    for node in tree.root.children:
+                        if rem_conf in node._label:
+                            node.remove()
+                        await asyncio.sleep(0.2)
+                    count -= 1
+                    loading.update_progress(count, len(selected))
+            loading_container.remove()
+        
+        self.run_worker(manage_data_task, thread=True)
 
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
@@ -192,6 +203,15 @@ class PaperSearch(App):
 
 #TODO - Add Clustering tab to results.  
 #TODO - Add LoadingIndicator for button widgets
+    #Use venvkiller framework.  Load a custom screen
+
+#TODO - Figure out search storage. 
+    #First idea is to add the search as a new json to the treeview
+    #label it with date and search keywords.  
+        #?Not sure how to store the selected datasets at the time. 
+        #Maybe i can do it as a global
+
+
     #look at venvkiller for how he did that. probalby a custom class
 
 #Search workflow. 

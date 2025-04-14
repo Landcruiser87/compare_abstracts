@@ -58,9 +58,9 @@ class TreeView(Widget, can_focus_children=True):
         tree.show_root = False
         yield tree
 
-#######################TabbedContent Widgets #############################
+#######################TabbedContent #############################
 
-#######################Content tab  Widgets #############################
+#######################Document tab Widgets #############################
 class JSONDocument(ScrollableContainer):
     """Widget to display JSON data (as plain text) with scrolling.
 
@@ -70,18 +70,6 @@ class JSONDocument(ScrollableContainer):
     Returns:
         _type_: _description_
     """    
-
-    DEFAULT_CSS = """
-    JSONDocument {
-        width: 1fr;
-        height: 1fr;
-    }
-    JSONDocument Static {
-        width: 100%;
-        height: auto;
-        padding: 1 2;
-    }
-    """
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -133,13 +121,7 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
 
     Yields:
         Widget : The JSONDocumentView Widget
-    """    
-    DEFAULT_CSS = """
-       JSONDocumentView {
-           height: 1fr;
-           width: 1fr;
-       }
-       """
+    """
 
     def compose(self) -> ComposeResult:
         """Compose the JSONDocument widget."""
@@ -150,29 +132,53 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
         json_doc = self.query_one("#json-document", JSONDocument)
         json_doc.load(json_data)
 
-####################### Dataset tab  Widgets #############################
+####################### Loading Widget #############################
 
-# class DatasetList(SelectionList): 
-#     """Container for the JSON document.
+class LoadingIndicator(Static):
+    """Custom loading indicator widget."""
 
-#     Args:
-#         DatasetList (Widget): Inherits from the SelectionList Class
+    DEFAULT_CSS = """
+    LoadingIndicator {
+        width: 80%;
+        height: 11;
+        background: $boost;
+        border: panel $accent;
+        border-title-color: $accent;
+        padding: 1 2;
+        margin: 1 1;
+        content-align: center middle;
+    }
+    """
 
-#     Yields:
-#         Widget : The SelectionList Widget
-#     """    
-#     # DEFAULT_CSS = """
-#     #    JSONDocumentView {
-#     #        height: 1fr;
-#     #        width: 1fr;
-#     #    }
-#     #    """
+    def __init__(self, message="Adding Datasets..."):
+        super().__init__()
+        self.message = message
+        self.count = 0
+        self.total = 0
+        self.border_title = "ML_Tree"
 
-#     def compose(self) -> ComposeResult:
-#         """Compose the JSONDocument widget."""
-#         yield SelectionList(id="json-document")
+    def update_progress(self, count, total=None):
+        """Update the progress count."""
+        self.count = count
+        if total is not None:
+            self.total = total
+        self.update()
 
-    #NOTE - Not sure if i need this. 
+    def render(self):
+        #ehhh.  mmaybe switch this to rich's actual progress bar instead of making it?  I mean its cool don't get me wrong, but why reinvent the wheel. 
+        """Render the loading indicator with progress."""
+        progress_text = f"{self.count} datasets added"
+        if self.total > 0:
+            progress_percent = min(100, int((self.count / self.total) * 100))
+            progress_bar = "▓" * (progress_percent // 5) + "░" * (
+                20 - (progress_percent // 5)
+            )
+            progress_text = f"{self.count}/{self.total} datasets ({progress_percent}%)\n{progress_bar}"
+
+        return f"[bold]{self.message}[/bold]\n\n[bold]{progress_text}[/bold]\n\n[blink]⏳[/blink]"
+
+
+
 
 
 #TODO - Add Dataset button
