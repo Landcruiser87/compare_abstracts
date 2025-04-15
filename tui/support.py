@@ -227,14 +227,16 @@ def list_datasets() -> list[tuple]:
         results list[tuple]: Returns a list of file names with their index as tuples
     """
     results = []
+    filenum = 0
     s_paths = [Path("./data/conferences/"), Path("./data/searches/")]
     for directory in s_paths:
         paths = sorted(
             directory.iterdir(),
             key=lambda path: (path.is_file(), path.name.lower()),
         )
-        paths = [(val.stem, idx) for idx, val in enumerate(paths)]
-        results.extend(paths)
+        for val in paths:
+            filenum += 1
+            results.append((val.stem, filenum))
     
     return results
 

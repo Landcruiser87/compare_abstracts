@@ -1,7 +1,10 @@
 import contextlib
 import datetime
 import json
-
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
+from scipy.spatial.distance import cosine as scipy_cos
+import pandas as pd
 
 #FUNCTION get time
 def get_c_time():
@@ -32,3 +35,57 @@ def clean_string_values(obj):
         obj = obj.replace("\\r\\n", "").replace('\\"', '"')
 
     return obj
+
+# def vectorizer(srch_text:str):
+#     base_params = {
+#         "binary":False, 
+#         "norm":None,
+#         "use_idf":False, 
+#         "smooth_idf":False,
+#         "lowercase":True, 
+#         "stop_words":"english",
+#         "min_df":1, 
+#         "max_df":1.0, 
+#         "max_features":None,  
+#         "ngram_range":(1, 1)
+#     }
+#     model = TfidfVectorizer(**base_params)
+# 	tsfrm = model.fit_transform(abstracts)
+# 	feats = model.get_feature_names_out()
+# 	tsfrm_df = pd.DataFrame(
+# 		tsfrm.toarray(),
+# 		columns=feats,
+# 		index=DOI
+# 	)
+#     return tsfrm_df
+
+
+def cosine_similarity(tsfrm, ts_type:str):
+	"""Function that allows you to use either sklearns, or scipy's cosine similarity
+	Inputs need to be a sparse array.  Scipy uses np.arrays, but the code 
+	below will handle that. 
+
+	Args:
+		tsfrm (sparse array): Sparse Matrix of Documents
+		ts_type (str): Version of Cosine Similarity you want
+
+	Raises:
+		ValueError: If you don't specify "scipy" or "sklearn", it throws an error.
+
+	Returns:
+		float: Cosine similarity
+	"""	
+    
+	if ts_type == "sklearn":
+		sims = sklearn_cos(tsfrm[0], tsfrm)
+		return sims.flatten()
+	
+	elif ts_type == "scipy":
+		sims = []
+		X = tsfrm[0:1].toarray().flatten()
+		for row in range(tsfrm.shape[0]):
+			y = tsfrm[row].toarray().flatten()
+			sims.append(1 - scipy_cos(X, y))
+		return sims
+	else:
+		raise ValueError (f"{ts_type} not an available cosine transform. Check spelling for scipy or sklearn")

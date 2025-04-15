@@ -5,6 +5,7 @@ import sys
 import asyncio
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
+from collections import deque
 #Textual Imports
 from textual.binding import Binding
 from textual.app import App, ComposeResult
@@ -27,7 +28,7 @@ from textual.widgets import (
 )
 
 #Custom Imports
-from utils import clean_string_values, get_c_time
+from utils import clean_string_values, get_c_time, cosine_similarity#, vectorizer
 from support import list_datasets, save_data, SEARCH_KEYS, SEARCH_METRICS
 
 if TYPE_CHECKING:
@@ -50,7 +51,7 @@ class PaperSearch(App):
     json_name: str = ""
     json_data: reactive[str] = reactive("")
     root_data_dir = var(Path("./data/conferences"))
-    # srch_data_dir = var(Path("./data/searches/"))
+    srch_data_dir = var(Path("./data/searches/"))
     selected_node_data:  reactive[object | None] = reactive(None)
     all_datasets: list = list_datasets()
 
@@ -126,7 +127,7 @@ class PaperSearch(App):
         json_docview.update_document(json_data)
         tree.focus()
 
-    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict) -> dict | None:
+    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
         if isinstance(json_data, str):
             json_data = clean_string_values(json.loads(json_data))
@@ -152,61 +153,63 @@ class PaperSearch(App):
         self.mount(loading_container)
         loading_container.mount(loading)
 
-        async def manage_data_task():        
+        async def manage_data_task():
+            # def launch_cos(srch_txt:str):
+                # tfid = vectorizer(srch_text)
+                # sims = cosine_similarity(tfid, "scipy")
+                # return sims
+            def has_numbers(inputstring):
+                return any(char.isdigit() for char in inputstring)
+
             def dataset_search(srch_text:str, metric:str, field:str):
-                search_dict = {
-                    "Fuzzy": Matcher(srch_text), 
-                    "Cosine sim":"", 
-                    "Levenstein":"", 
-                    "Hamming":"", 
-                    "Jaccard":"",
-                    "LCS (Longest Common Subsequence)":""
-                }
                 results = {}
                 res_limit = int(self.query_one("#input-limit", Input).value)
                 threshold = float(self.query_one("#input-thres", Input).value)
                 srch_field = SEARCH_KEYS[field]
                 srch_type = SEARCH_METRICS[metric]
-                for subkey in node.children: 
-                    labels = [x.label.plain.split("=")[0] for x in subkey.children]                 
-                    if srch_field in labels:
-                        index = labels.index(srch_field)
-                        query = search_dict.get(srch_type)
-                        criteria = subkey.children[index].label.plain.split("=")[1]
-                        if srch_type =="Fuzzy":
-                            match_num = query.match(criteria)
-                            if match_num > threshold:
-                                reskey = subkey.label.plain[3:]
-                                results[reskey] = subkey.data
-                                results[reskey]["metric_match"] = round(match_num, 3)
-                                results[reskey]["metric_thres"] = threshold
+                if srch_type =="Fuzzy":
+                    node_queue = deque(node.children)
+                    while node_queue:
+                        subkey = node_queue.popleft()
+                        labels = [x.label.plain.split("=")[0] for x in subkey.children]                 
+                        if srch_field in labels:
+                            index = labels.index(srch_field)
+                            criteria = subkey.children[index].label.plain.split("=")[1]
 
-                        elif srch_type =="Cosine Sim":
-                            pass
-                        elif srch_type =="Levenstein":
-                            pass
-                        elif srch_type =="Hamming":
-                            pass
-                        elif srch_type =="Jaccard":
-                            pass
-                        elif srch_type == "LCS (Lowest Common Subsquence)":
-                            pass
+                        query = Matcher(srch_text)
+                        match_num = query.match(criteria)
+                        if match_num > threshold:
+                            reskey = subkey.label.plain[3:]
+                            results[reskey] = subkey.data
+                            results[reskey]["metric_match"] = round(match_num, 3)
+                            results[reskey]["metric_thres"] = threshold
+
+                elif srch_type =="Cosine Sim":
+                    pass
+                    # sims = launch_cos(srch_text), 
+
+                elif srch_type =="Levenstein":
+                    pass
+                elif srch_type =="Hamming":
+                    pass
+                elif srch_type =="Jaccard":
+                    pass
+                elif srch_type == "LCS (Lowest Common Subsquence)":
+                    pass
                 
                 res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
                 return dict(res)
             
-                #Noooooooooooooot sure what to do here. 
-                #1. First I need the path of the data i'm searching
-                #2. Loop through each record in the JSON. 
-                #3. See if search metric is in the keys.
-                #4. Run fuzzy matching on all fiels.  
-                #5. Return results as new JSON
                 
             if button_id == "add-button":
                 for itemid in selected:
                     new_json = datasets.options[itemid].prompt._text[0] + ".json"
                     loading.message = f"Loading {new_json}"
-                    json_path = PurePath(Path.cwd(), self.root_data_dir, Path(new_json))
+                    if has_numbers(new_json):
+                        source = self.root_data_dir
+                    else:
+                        source = self.srch_data_dir
+                    json_path = PurePath(Path.cwd(), source, Path(new_json))
                     json_data = open(json_path, mode="r", encoding="utf-8").read()
                     self.load_data(tree, new_json, json_data)
                     await asyncio.sleep(0.01)
@@ -225,6 +228,13 @@ class PaperSearch(App):
                     loading.update_progress(loading.count, len(selected))
 
             elif button_id == "search-button":
+                #Noooooooooooooot sure what to do here. 
+                #1. First I need the path of the data i'm searching
+                #2. Loop through each record in the JSON. 
+                #3. See if search metric is in the keys.
+                #4. Run fuzzy matching on all fiels.  
+                #5. Return results as new JSON
+
                 srch_text = self.query_one("#input-search", Input).value
                 metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
                 field = self.query_one("#radio-fields", RadioSet)._reactive__selected
