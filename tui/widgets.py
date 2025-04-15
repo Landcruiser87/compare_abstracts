@@ -154,7 +154,7 @@ class LoadingIndicator(Static):
     def render(self):
         #ehhh.  mmaybe switch this to rich's actual progress bar instead of making it?  I mean its cool don't get me wrong, but why reinvent the wheel. 
         """Render the loading indicator with progress."""
-        progress_text = f"{self.count} datasets added"
+        progress_text = f"{self.count} datasets"
         if self.total > 0:
             progress_percent = min(100, int((self.count / self.total) * 100))
             progress_bar = "▓" * (progress_percent // 5) + "░" * (

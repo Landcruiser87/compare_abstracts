@@ -50,9 +50,9 @@ class PaperSearch(App):
     json_name: str = ""
     json_data: reactive[str] = reactive("")
     root_data_dir = var(Path("./data/conferences"))
-    srch_data_dir = var(Path("./data/search_results/"))
+    # srch_data_dir = var(Path("./data/searches/"))
     selected_node_data:  reactive[object | None] = reactive(None)
-    all_datasets: list[Path] = list_datasets([root_data_dir, srch_data_dir])
+    all_datasets: list = list_datasets()
 
     def __init__(
         self,
@@ -241,9 +241,12 @@ class PaperSearch(App):
                     await asyncio.sleep(0.2)
                     loading.count += 1
                     loading.update_progress(loading.count, len(selected))
-                
-                self.load_data(tree, root_name, results)
-                save_data(root_name, results)
+                if results:
+                    self.load_data(tree, root_name, results)
+                    save_data(root_name, results)
+                    loading.message = "No results found "
+                    await asyncio.sleep(3)
+                    
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)

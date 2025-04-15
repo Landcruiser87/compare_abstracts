@@ -217,7 +217,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
 
     return paths
 
-def list_datasets(paths:list) -> list[tuple]:
+def list_datasets() -> list[tuple]:
     """Main function is list available datasources
 
     Args:
@@ -227,8 +227,8 @@ def list_datasets(paths:list) -> list[tuple]:
         results list[tuple]: Returns a list of file names with their index as tuples
     """
     results = []
-    paths = [Path("./data/conferences/"), Path("./data/search_results/")]
-    for directory in paths:
+    s_paths = [Path("./data/conferences/"), Path("./data/searches/")]
+    for directory in s_paths:
         paths = sorted(
             directory.iterdir(),
             key=lambda path: (path.is_file(), path.name.lower()),
@@ -242,7 +242,7 @@ def list_datasets(paths:list) -> list[tuple]:
 #FUNCTION save dictionary
 def save_data(search_name:str, data:dict):
     result_json = json.dumps(data, indent=2)
-    with open(f"./data/saved_searches/{search_name}.json", "w") as outf:
+    with open(f"./data/searches/{search_name}.json", "w") as outf:
         outf.write(result_json)
 
 
