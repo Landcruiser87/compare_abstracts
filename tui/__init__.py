@@ -133,7 +133,7 @@ class PaperSearch(App):
             json_path = PurePath(Path.cwd(), source_p, Path(new_json))
             json_data = open(json_path, mode="r", encoding="utf-8").read()
             self.load_data(tree, new_json, json_data)
-            sleep(1)
+            
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
 
@@ -148,7 +148,7 @@ class PaperSearch(App):
             loading.update_progress(loading.count, len(selected))
             sleep(0.2)
 
-    def run_search(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+    def run_search(self, tree:Tree, selected:list, loading:LoadingIndicator) -> None:
             
         # def launch_cos(srch_txt:str, srch_field:str, node):
         #     tfid = clean_vectorize(srch_text, srch_txt, srch_field, node)
@@ -194,13 +194,6 @@ class PaperSearch(App):
             res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
             return dict(res)
 
-        #Noooooooooooooot sure what to do here. 
-        #1. First I need the path of the data i'm searching
-        #2. Loop through each record in the JSON. 
-        #3. See if search metric is in the keys.
-        #4. Run fuzzy matching on all fiels.  
-        #5. Return results as new JSON
-
         srch_text = self.query_one("#input-search", Input).value
         metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
@@ -214,6 +207,7 @@ class PaperSearch(App):
                 results.update(**result)
             else:
                 loading.message = f"No results found in {conf}"
+                sleep(1)
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
 
@@ -222,6 +216,7 @@ class PaperSearch(App):
             save_data(root_name, results)
         else:
             loading.message = "No results found "
+            sleep(1)
 
 
     def on_mount(self) -> None:
@@ -254,20 +249,28 @@ class PaperSearch(App):
         tree = tree_view.query_one(JSONTree)
         datasets = self.query_one(SelectionList)
         selected = datasets.selected
-        loading_container = Container(id="loading-container")
-        loading = LoadingIndicator()
-        self.mount(loading_container)
-        loading_container.mount(loading)
+        if button_id != "search-button":
+            loading_container = Container(id="loading-container")
+            loading = LoadingIndicator()
+            self.mount(loading_container)
+            loading_container.mount(loading)
+        else:
+            pass
+            #TODO - Write in script for here
 
         async def manage_data_task():
             if button_id == "add-button":
                 self.add_datasets(tree, datasets, selected, loading)
-
+                await asyncio.sleep(0.1)
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
-
+                await asyncio.sleep(0.1)
+                
             elif button_id == "search-button":
-                self.run_search(tree, datasets, selected, loading)
+                self.run_search(tree, selected, loading) 
+                #BUG New class
+                    #Make a new class for the loading widget for search. 
+                    #Causing too many problems trying to reuse the same form
 
             loading_container.remove()
         
