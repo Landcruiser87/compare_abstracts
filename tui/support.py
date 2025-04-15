@@ -247,7 +247,6 @@ def save_data(search_name:str, data:dict):
     with open(f"./data/searches/{search_name}.json", "w") as outf:
         outf.write(result_json)
 
-
 ########################## Global Variables to return ##########################################
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]

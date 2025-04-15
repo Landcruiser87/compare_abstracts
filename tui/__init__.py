@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import sys
 import asyncio
+from time import sleep
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
 from collections import deque
@@ -28,7 +29,7 @@ from textual.widgets import (
 )
 
 #Custom Imports
-from utils import clean_string_values, get_c_time, cosine_similarity#, vectorizer
+from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
 from support import list_datasets, save_data, SEARCH_KEYS, SEARCH_METRICS
 
 if TYPE_CHECKING:
@@ -51,7 +52,7 @@ class PaperSearch(App):
     json_name: str = ""
     json_data: reactive[str] = reactive("")
     root_data_dir = var(Path("./data/conferences"))
-    srch_data_dir = var(Path("./data/searches/"))
+    srch_data_dir = var(Path("./data/searches"))
     selected_node_data:  reactive[object | None] = reactive(None)
     all_datasets: list = list_datasets()
 
@@ -117,6 +118,111 @@ class PaperSearch(App):
                             yield Button("Remove Dataset", id="rem-button")
 
         yield Footer()
+    
+    def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+        def has_numbers(inputstring):
+            return any(char.isdigit() for char in inputstring)
+
+        for itemid in selected:
+            new_json = datasets.options[itemid].prompt._text[0] + ".json"
+            loading.message = f"Loading {new_json}"
+            if has_numbers(new_json):
+                source_p = self.root_data_dir
+            else:
+                source_p = self.srch_data_dir
+            json_path = PurePath(Path.cwd(), source_p, Path(new_json))
+            json_data = open(json_path, mode="r", encoding="utf-8").read()
+            self.load_data(tree, new_json, json_data)
+            sleep(1)
+            loading.count += 1
+            loading.update_progress(loading.count, len(selected))
+
+    def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+        for itemid in selected:
+            rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
+            loading.message = f"Removing {rem_conf}"
+            for node in tree.root.children:
+                if rem_conf in node._label:
+                    node.remove()
+            loading.count += 1
+            loading.update_progress(loading.count, len(selected))
+            sleep(0.2)
+
+    def run_search(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+            
+        # def launch_cos(srch_txt:str, srch_field:str, node):
+        #     tfid = clean_vectorize(srch_text, srch_txt, srch_field, node)
+        #     sims = cosine_similarity(tfid, "scipy")
+        #     return sims#, match_num
+        
+
+        def conf_search(srch_text:str, metric:str, field:str, node):
+            results = {}
+            res_limit = int(self.query_one("#input-limit", Input).value)
+            threshold = float(self.query_one("#input-thres", Input).value)
+            srch_field = SEARCH_KEYS[field]
+            srch_type = SEARCH_METRICS[metric]
+
+            if srch_type =="Fuzzy":
+                node_queue = deque(node.children)
+                while node_queue:
+                    paperkey = node_queue.popleft()
+                    labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                    if srch_field in labels:
+                        index = labels.index(srch_field)
+                        criteria = paperkey.children[index].label.plain.split("=")[1]
+                        query = Matcher(srch_text)
+                        match_num = query.match(criteria)
+                        if match_num > threshold:
+                            reskey = paperkey.label.plain[3:]
+                            results[reskey] = paperkey.data
+                            results[reskey]["metric_match"] = round(match_num, 3)
+                            results[reskey]["metric_thres"] = threshold
+
+            # elif srch_type =="Cosine Sim":
+            #     results = launch_cos(srch_text, srch_field, node) #return matchnum too
+
+            elif srch_type =="Levenstein":
+                pass
+            elif srch_type =="Hamming":
+                pass
+            elif srch_type =="Jaccard":
+                pass
+            elif srch_type == "LCS (Lowest Common Subsquence)":
+                pass
+            
+            res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
+            return dict(res)
+
+        #Noooooooooooooot sure what to do here. 
+        #1. First I need the path of the data i'm searching
+        #2. Loop through each record in the JSON. 
+        #3. See if search metric is in the keys.
+        #4. Run fuzzy matching on all fiels.  
+        #5. Return results as new JSON
+
+        srch_text = self.query_one("#input-search", Input).value
+        metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
+        field = self.query_one("#radio-fields", RadioSet)._reactive__selected
+        root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
+        results = {}
+        for node in tree.root.children:
+            conf = node.label.plain.split()[1]
+            loading.message = f"Searching {conf}"
+            result = conf_search(srch_text, metric, field, node)
+            if result:
+                results.update(**result)
+            else:
+                loading.message = f"No results found in {conf}"
+            loading.count += 1
+            loading.update_progress(loading.count, len(selected))
+
+        if results:
+            self.load_data(tree, root_name, results)
+            save_data(root_name, results)
+        else:
+            loading.message = "No results found "
+
 
     def on_mount(self) -> None:
         tree_view = self.query_one(TreeView)
@@ -154,109 +260,15 @@ class PaperSearch(App):
         loading_container.mount(loading)
 
         async def manage_data_task():
-            # def launch_cos(srch_txt:str):
-                # tfid = vectorizer(srch_text)
-                # sims = cosine_similarity(tfid, "scipy")
-                # return sims
-            def has_numbers(inputstring):
-                return any(char.isdigit() for char in inputstring)
-
-            def dataset_search(srch_text:str, metric:str, field:str):
-                results = {}
-                res_limit = int(self.query_one("#input-limit", Input).value)
-                threshold = float(self.query_one("#input-thres", Input).value)
-                srch_field = SEARCH_KEYS[field]
-                srch_type = SEARCH_METRICS[metric]
-                if srch_type =="Fuzzy":
-                    node_queue = deque(node.children)
-                    while node_queue:
-                        subkey = node_queue.popleft()
-                        labels = [x.label.plain.split("=")[0] for x in subkey.children]                 
-                        if srch_field in labels:
-                            index = labels.index(srch_field)
-                            criteria = subkey.children[index].label.plain.split("=")[1]
-
-                        query = Matcher(srch_text)
-                        match_num = query.match(criteria)
-                        if match_num > threshold:
-                            reskey = subkey.label.plain[3:]
-                            results[reskey] = subkey.data
-                            results[reskey]["metric_match"] = round(match_num, 3)
-                            results[reskey]["metric_thres"] = threshold
-
-                elif srch_type =="Cosine Sim":
-                    pass
-                    # sims = launch_cos(srch_text), 
-
-                elif srch_type =="Levenstein":
-                    pass
-                elif srch_type =="Hamming":
-                    pass
-                elif srch_type =="Jaccard":
-                    pass
-                elif srch_type == "LCS (Lowest Common Subsquence)":
-                    pass
-                
-                res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
-                return dict(res)
-            
-                
             if button_id == "add-button":
-                for itemid in selected:
-                    new_json = datasets.options[itemid].prompt._text[0] + ".json"
-                    loading.message = f"Loading {new_json}"
-                    if has_numbers(new_json):
-                        source = self.root_data_dir
-                    else:
-                        source = self.srch_data_dir
-                    json_path = PurePath(Path.cwd(), source, Path(new_json))
-                    json_data = open(json_path, mode="r", encoding="utf-8").read()
-                    self.load_data(tree, new_json, json_data)
-                    await asyncio.sleep(0.01)
-                    loading.count += 1
-                    loading.update_progress(loading.count, len(selected))
+                self.add_datasets(tree, datasets, selected, loading)
 
             elif button_id == "rem-button":
-                for itemid in selected:
-                    rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
-                    loading.message = f"Removing {rem_conf}"
-                    for node in tree.root.children:
-                        if rem_conf in node._label:
-                            node.remove()
-                        await asyncio.sleep(0.2)
-                    loading.count += 1
-                    loading.update_progress(loading.count, len(selected))
+                self.remove_datasets(tree, datasets, selected, loading)
 
             elif button_id == "search-button":
-                #Noooooooooooooot sure what to do here. 
-                #1. First I need the path of the data i'm searching
-                #2. Loop through each record in the JSON. 
-                #3. See if search metric is in the keys.
-                #4. Run fuzzy matching on all fiels.  
-                #5. Return results as new JSON
+                self.run_search(tree, datasets, selected, loading)
 
-                srch_text = self.query_one("#input-search", Input).value
-                metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
-                field = self.query_one("#radio-fields", RadioSet)._reactive__selected
-                root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
-                results = {}
-                for node in tree.root.children:
-                    conf = node.label.plain.split()[1]
-                    loading.message = f"Searching {conf}"
-                    result = dataset_search(srch_text, metric, field)
-                    if result:
-                        results.update(**result)
-                    else:
-                        loading.message = f"No results found in {conf}"
-                    await asyncio.sleep(0.2)
-                    loading.count += 1
-                    loading.update_progress(loading.count, len(selected))
-                if results:
-                    self.load_data(tree, root_name, results)
-                    save_data(root_name, results)
-                    loading.message = "No results found "
-                    await asyncio.sleep(3)
-                    
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)

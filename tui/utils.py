@@ -36,7 +36,8 @@ def clean_string_values(obj):
 
     return obj
 
-# def vectorizer(srch_text:str):
+# def clean_vectorize(srch_text:str, srch_field, node):
+#     data_fields = [x[srch_field] for x in node.children if srch_field in node.children.data.keys()]
 #     base_params = {
 #         "binary":False, 
 #         "norm":None,
@@ -50,12 +51,12 @@ def clean_string_values(obj):
 #         "ngram_range":(1, 1)
 #     }
 #     model = TfidfVectorizer(**base_params)
-# 	tsfrm = model.fit_transform(abstracts)
-# 	feats = model.get_feature_names_out()
-# 	tsfrm_df = pd.DataFrame(
-# 		tsfrm.toarray(),
-# 		columns=feats,
-# 		index=DOI
+#     tsfrm = model.fit_transform(data_fields)
+#     feats = model.get_feature_names_out()
+#     tsfrm_df = pd.DataFrame(
+#         tsfrm.toarray(),
+#         columns=feats,
+#         index=DOI
 # 	)
 #     return tsfrm_df
 
