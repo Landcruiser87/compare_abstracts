@@ -15,12 +15,12 @@ from __init__ import PaperSearch, __prog_name__, __version__
 
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
-
+5
 def main():
     parser = argparse.ArgumentParser(
         prog=__prog_name__, description="Json Tree for ML Conferences", epilog=f"v{__version__}"
     )
-    
+
     parser.add_argument(
         "-V",
         "--version",
@@ -83,7 +83,6 @@ def main():
     except Exception as error:
         logger.warning(f"Unable to read {args.path!r}; {error}")
         sys.exit(-1)
-
 
 if __name__ == "__main__":
     main()

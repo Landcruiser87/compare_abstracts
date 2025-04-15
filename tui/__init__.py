@@ -28,7 +28,7 @@ from textual.widgets import (
 
 #Custom Imports
 from utils import clean_string_values, get_c_time
-from support import list_datasets, SEARCH_KEYS, SEARCH_METRICS
+from support import list_datasets, save_data, SEARCH_KEYS, SEARCH_METRICS
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -127,9 +127,12 @@ class PaperSearch(App):
         tree.focus()
 
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict) -> dict | None:
-        json_node = json_tree.root.add(root_name)
-        json_data = clean_string_values(json.loads(json_data))
-        json_tree.add_node(root_name, json_node, json_data)
+        new_node = json_tree.root.add(root_name)
+        if isinstance(json_data, str):
+            json_data = clean_string_values(json.loads(json_data))
+        elif isinstance(json_data, dict):
+            json_data = clean_string_values(json_data)
+        json_tree.add_node(root_name, new_node, json_data)
         return json_data
 
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
@@ -150,23 +153,48 @@ class PaperSearch(App):
         loading_container.mount(loading)
 
         async def manage_data_task():        
-            def dataset_search(srch_text:str, metric:str, field:str, conf:str, tree:TreeView):
-                result = {}
+            def dataset_search(srch_text:str, metric:str, field:str):
                 search_dict = {
-                    "Basic text search": Matcher(srch_text), 
+                    "Fuzzy": Matcher(srch_text), 
                     "Cosine sim":"", 
                     "Levenstein":"", 
                     "Hamming":"", 
                     "Jaccard":"",
                     "LCS (Longest Common Subsequence)":""
                 }
+                results = {}
+                res_limit = int(self.query_one("#input-limit", Input).value)
+                threshold = float(self.query_one("#input-thres", Input).value)
+                srch_field = SEARCH_KEYS[field]
+                srch_type = SEARCH_METRICS[metric]
+                for subkey in node.children: 
+                    labels = [x.label.plain.split("=")[0] for x in subkey.children]                 
+                    if srch_field in labels:
+                        index = labels.index(srch_field)
+                        query = search_dict.get(srch_type)
+                        criteria = subkey.children[index].label.plain.split("=")[1]
+                        if srch_type =="Fuzzy":
+                            match_num = query.match(criteria)
+                            if match_num > threshold:
+                                reskey = subkey.label.plain[3:]
+                                results[reskey] = subkey.data
+                                results[reskey]["metric_match"] = round(match_num, 3)
+                                results[reskey]["metric_thres"] = threshold
 
-                for child in node.children:                        
-                    if field in child.keys():
-                        match = search_dict.get(metric)
-                        if match > 0.90:
-                            result[conf][field]
-
+                        elif srch_type =="Cosine Sim":
+                            pass
+                        elif srch_type =="Levenstein":
+                            pass
+                        elif srch_type =="Hamming":
+                            pass
+                        elif srch_type =="Jaccard":
+                            pass
+                        elif srch_type == "LCS (Lowest Common Subsquence)":
+                            pass
+                
+                res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
+                return dict(res)
+            
                 #Noooooooooooooot sure what to do here. 
                 #1. First I need the path of the data i'm searching
                 #2. Loop through each record in the JSON. 
@@ -197,14 +225,15 @@ class PaperSearch(App):
                     loading.update_progress(loading.count, len(selected))
 
             elif button_id == "search-button":
-                metric = self.query_one("#radio-metrics", RadioSet)._selected
-                field = self.query_one("#radio-metrics", RadioSet)._selected
                 srch_text = self.query_one("#input-search", Input).value
+                metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
+                field = self.query_one("#radio-fields", RadioSet)._reactive__selected
+                root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
                 results = {}
                 for node in tree.root.children:
-                    conf = node._label
+                    conf = node.label.plain.split()[1]
                     loading.message = f"Searching {conf}"
-                    result = dataset_search(srch_text, metric, field, conf, node)
+                    result = dataset_search(srch_text, metric, field)
                     if result:
                         results.update(**result)
                     else:
@@ -212,9 +241,9 @@ class PaperSearch(App):
                     await asyncio.sleep(0.2)
                     loading.count += 1
                     loading.update_progress(loading.count, len(selected))
-
-                    
-
+                
+                self.load_data(tree, root_name, results)
+                save_data(root_name, results)
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)
@@ -247,8 +276,6 @@ class PaperSearch(App):
 
 
 #TODO - Add Clustering tab to results.  
-#TODO - Add LoadingIndicator for button widgets
-    #Use venvkiller framework.  Load a custom screen
 
 #TODO - Figure out search storage. 
     #First idea is to add the search as a new json to the treeview

@@ -171,8 +171,6 @@ class LoadingIndicator(Static):
     #As you sometimes will want to remove any searches
     #So i'll need the refresh to cycle over both the data/conferences and data/search_results.  
 
-
-
 ####################### Search tab Widgets #############################
 
 #NOTE - Save for Search Tab

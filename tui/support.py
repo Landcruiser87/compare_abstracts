@@ -158,8 +158,8 @@ def launch_tui():
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
-    file_choice = 28 #console.input(f"{question}")
-    if isinstance(file_choice, int):
+    file_choice = "28" #console.input(f"{question}")
+    if file_choice.isnumeric():
         file_to_load = files[int(file_choice) - 1]
         #check output directory exists
         return file_to_load
@@ -215,7 +215,7 @@ def walk_directory(directory: Path, tree: Tree) -> None:
             tree.add(Text(f'{idx} ', "blue") + Text(icon) + text_filename)
         idx += 1
 
-    return paths#, paper_count
+    return paths
 
 def list_datasets(paths:list) -> list[tuple]:
     """Main function is list available datasources
@@ -238,13 +238,20 @@ def list_datasets(paths:list) -> list[tuple]:
     
     return results
 
+########################## Saving funcs ##########################################
+#FUNCTION save dictionary
+def save_data(search_name:str, data:dict):
+    result_json = json.dumps(data, indent=2)
+    with open(f"./data/saved_searches/{search_name}.json", "w") as outf:
+        outf.write(result_json)
+
 
 ########################## Global Variables to return ##########################################
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
-SEARCH_KEYS = ["title", "keyword", "topic", "abstract", "selected"]
-SEARCH_METRICS = ["Basic text search", "Cosine sim", "Levenstein", "Hamming", "Jaccard", "LCS (Longest Common Subsequence)"]
+SEARCH_KEYS = ["title", "keyword", "topic", "abstract", "selected abstract"]
+SEARCH_METRICS = ["Fuzzy", "Cosine sim", "Levenstein", "Hamming", "Jaccard", "LCS (Longest Common Subsequence)"]
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
