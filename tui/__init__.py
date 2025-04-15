@@ -11,7 +11,13 @@ from collections import deque
 from textual.binding import Binding
 from textual.app import App, ComposeResult
 from textual.reactive import reactive, var
-from widgets import JSONDocumentView, JSONTree, TreeView, LoadingIndicator
+from widgets import (
+    JSONDocumentView, 
+    JSONTree, 
+    TreeView, 
+    LoadingIndicator,
+    SearchProgress
+) 
 from textual.containers import Container, Horizontal, Vertical
 from textual.fuzzy import Matcher
 from textual.widgets import (
@@ -146,7 +152,6 @@ class PaperSearch(App):
                     node.remove()
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
-            sleep(0.2)
 
     def run_search(self, tree:Tree, selected:list, loading:LoadingIndicator) -> None:
             
@@ -207,7 +212,7 @@ class PaperSearch(App):
                 results.update(**result)
             else:
                 loading.message = f"No results found in {conf}"
-                sleep(1)
+
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
 
@@ -255,8 +260,10 @@ class PaperSearch(App):
             self.mount(loading_container)
             loading_container.mount(loading)
         else:
-            pass
-            #TODO - Write in script for here
+            loading_container = Container(id="loading-container")
+            loading = SearchProgress()
+            self.mount(loading_container)
+            loading_container.mount(loading)            #TODO - Write in script for here
 
         async def manage_data_task():
             if button_id == "add-button":
@@ -265,7 +272,7 @@ class PaperSearch(App):
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
                 await asyncio.sleep(0.1)
-                
+
             elif button_id == "search-button":
                 self.run_search(tree, selected, loading) 
                 #BUG New class

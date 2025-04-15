@@ -10,7 +10,7 @@ from textual.widget import Widget
 from textual.widgets import (
     Static, 
     Tree, 
-    SelectionList
+    ProgressBar,
 )
 from textual.widgets.tree import TreeNode
 from support import logger
@@ -170,6 +170,40 @@ class LoadingIndicator(Static):
 #?Checklist should refresh on the mount?  Or the page activation.... Probably the latter. 
     #As you sometimes will want to remove any searches
     #So i'll need the refresh to cycle over both the data/conferences and data/search_results.  
+
+
+
+####################### Loading Widget #############################
+
+class SearchProgress(progressbar):
+    """Load a progress bar for searching"""
+
+    def __init__(self, message="Updating..."):
+        super().__init__()
+        self.message = message
+        self.count = 0
+        self.total = 0
+        self.border_title = "ML_JTree"
+        
+    def update_progress(self, count, total=None):
+        """Update the progress count."""
+        self.count = count
+        if total is not None:
+            self.total = total
+        self.update()
+
+    def render(self):
+        #ehhh.  mmaybe switch this to rich's actual progress bar instead of making it?  I mean its cool don't get me wrong, but why reinvent the wheel. 
+        """Render the loading indicator with progress."""
+        progress_text = f"{self.count} datasets"
+        if self.total > 0:
+            progress_percent = min(100, int((self.count / self.total) * 100))
+            progress_bar = "▓" * (progress_percent // 5) + "░" * (
+                20 - (progress_percent // 5)
+            )
+            progress_text = f"{self.count}/{self.total} datasets ({progress_percent}%)\n{progress_bar}"
+
+        return f"[bold]{self.message}[/bold]\n\n[bold]{progress_text}[/bold]"
 
 ####################### Search tab Widgets #############################
 
