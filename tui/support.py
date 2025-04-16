@@ -237,7 +237,7 @@ def list_datasets() -> list[tuple]:
         for val in paths:
             results.append((val.stem, filenum))
             filenum += 1
-            
+
     return results
 
 ########################## Saving funcs ##########################################
@@ -252,7 +252,7 @@ def save_data(search_name:str, data:dict):
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] #"CLDD"-Got an xml error for 2024
 SEARCH_KEYS = ["title", "keyword", "topic", "abstract", "selected abstract"]
-SEARCH_METRICS = ["Fuzzy", "Cosine sim", "Levenstein", "Hamming", "Jaccard", "LCS (Longest Common Subsequence)"]
+SEARCH_METRICS = ["Fuzzy", "Cosine", "Levenstein", "Hamming", "Jaccard", "LCS"]
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)

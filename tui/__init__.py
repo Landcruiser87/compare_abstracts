@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import sys
 import asyncio
+import numpy as np
 from time import sleep
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
@@ -148,6 +149,8 @@ class PaperSearch(App):
 
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         for itemid in selected:
+            #BUG here when removing custom searches.  
+            #My guess is the index is incorrect in the tuple pair
             rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Removing {rem_conf}"
             loading.update()
@@ -159,27 +162,25 @@ class PaperSearch(App):
             loading.update_progress(loading.count, len(selected))
 
     def run_search(self, tree:Tree, datasets:SelectionList, loading:LoadingIndicator) -> None:
-            
-        # def launch_cos(srch_txt:str, srch_field:str, node):
-        #     tfid = clean_vectorize(srch_text, srch_txt, srch_field, node)
-        #     sims = cosine_similarity(tfid, "scipy")
-        #     return sims#, match_num
+        def launch_cos(srch_txt:str, srch_field:str, node:Tree):
+            tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
+            sims = cosine_similarity(tfid, "scipy")
+            return sims, paper_names
         
-
-        def conf_search(srch_text:str, metric:str, field:str, node):
+        
+        def conf_search(srch_text:str, metric:str, field:str, node:Tree, variables:list):
             results = {}
-            res_limit = int(self.query_one("#input-limit", Input).value)
-            threshold = float(self.query_one("#input-thres", Input).value)
-            srch_field = SEARCH_KEYS[field]
-            srch_type = SEARCH_METRICS[metric]
-
-            if srch_type =="Fuzzy":
+            metric = SEARCH_METRICS[variables[0]]
+            field = SEARCH_KEYS[variables[1]]
+            res_limit = int(variables[2])
+            threshold = float(variables[3])
+            if metric =="Fuzzy":
                 node_queue = deque(node.children)
                 while node_queue:
                     paperkey = node_queue.popleft()
                     labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
-                    if srch_field in labels:
-                        index = labels.index(srch_field)
+                    if field in labels:
+                        index = labels.index(field)
                         criteria = paperkey.children[index].label.plain.split("=")[1]
                         query = Matcher(srch_text)
                         match_num = query.match(criteria)
@@ -189,16 +190,28 @@ class PaperSearch(App):
                             results[reskey]["metric_match"] = round(match_num, 3)
                             results[reskey]["metric_thres"] = threshold
 
-            # elif srch_type =="Cosine Sim":
-            #     results = launch_cos(srch_text, srch_field, node) #return matchnum too
-
-            elif srch_type =="Levenstein":
+            elif metric =="Cosine":
+                sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
+                #isolate where the sims are over indexes
+                qual_indexes = np.where(sims >= threshold)[0]
+                filtered_sims = list(filter(lambda p: p >= threshold, sims))
+                papers = paper_names[qual_indexes]
+                results = {paper for paper in papers}
+                node_queue = deque(node.children)
+                while node_queue:
+                    paperkey = node_queue.popleft()
+                    labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                    if field in labels:
+                        index = labels.index(field)
+                        criteria = paperkey.children[index].label.plain.split("=")[1]
+            
+            elif metric =="Levenstein":
                 pass
-            elif srch_type =="Hamming":
+            elif metric =="Hamming":
                 pass
-            elif srch_type =="Jaccard":
+            elif metric =="Jaccard":
                 pass
-            elif srch_type == "LCS (Lowest Common Subsquence)":
+            elif metric == "LCS":
                 pass
             
             res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
@@ -207,13 +220,20 @@ class PaperSearch(App):
         srch_text = self.query_one("#input-search", Input).value
         metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
+        res_limit = self.query_one("#input-thres", Input).value
+        threshold = self.query_one("#input-limit", Input).value
+        variables = [metric, field, res_limit, threshold]
+        if not all(str(var).isnumeric() for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            return 
+
         root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
         results = {}
         loading.render()
         for node in tree.root.children:
             conf = node.label.plain.split()[1]
             self.notify(f"Searching {conf}")
-            result = conf_search(srch_text, metric, field, node)
+            result = conf_search(srch_text, metric, field, node, variables)
             if result:
                 results.update(**result)
             else:

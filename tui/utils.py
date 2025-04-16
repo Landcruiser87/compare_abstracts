@@ -1,7 +1,9 @@
 import contextlib
 import datetime
 import json
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+import requests
+import re
+from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from scipy.spatial.distance import cosine as scipy_cos
 import pandas as pd
@@ -37,10 +39,25 @@ def clean_string_values(obj):
     return obj
 
 def clean_vectorize(srch_text:str, srch_field, node):
-    data_fields = [x[srch_field] for x in node.children if srch_field in node.children.data.keys()]
+    #Pull out the fields into a list
+    data_fields = [x.data.get(srch_field) for x in node.children]
+    paper_names = [x.label.plain.strip("{}").strip() for x in node.children]
+    stopwords_list = requests.get("https://gist.githubusercontent.com/rg089/35e00abf8941d72d419224cfd5b5925d/raw/12d899b70156fd0041fa9778d657330b024b959c/stopwords.txt").text
+    stopwords = set(stopwords_list.splitlines())
+    #Add the search term to the list at the zero index
+    data_fields.insert(0, srch_text)
+    paper_names.insert(0, "papernames")
+
+    #Remove and clean stopwords
+    for idx, abstract in enumerate(data_fields):
+        re_txt = re.sub('[\W_]+', ' ', abstract)
+        l_txt = re_txt.lower().split()
+        s_txt = [word for word in l_txt if word not in stopwords and not word.isnumeric()]
+        data_fields[idx] = " ".join(s_txt)
+
     base_params = {
         "binary":False, 
-        "norm":None,
+        "norm":"l1",
         "use_idf":False, 
         "smooth_idf":False,
         "lowercase":True, 
@@ -56,9 +73,9 @@ def clean_vectorize(srch_text:str, srch_field, node):
     tsfrm_df = pd.DataFrame(
         tsfrm.toarray(),
         columns=feats,
-        index="DOI"
+        index=paper_names
 	)
-    return tsfrm_df
+    return tsfrm_df, paper_names
 
 
 def cosine_similarity(tsfrm, ts_type:str):
@@ -83,9 +100,9 @@ def cosine_similarity(tsfrm, ts_type:str):
 	
 	elif ts_type == "scipy":
 		sims = []
-		X = tsfrm[0:1].toarray().flatten()
+		X = tsfrm.iloc[0]
 		for row in range(tsfrm.shape[0]):
-			y = tsfrm[row].toarray().flatten()
+			y = tsfrm.iloc[row]
 			sims.append(1 - scipy_cos(X, y))
 		return sims
 	else:
