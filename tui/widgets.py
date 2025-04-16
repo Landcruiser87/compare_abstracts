@@ -211,10 +211,15 @@ class SearchProgress(ProgressBar):
         bg = bg * ceil(total, len(bg))
         return bg[: max(done - 1, 0)] + "🎈", bg[done : done + rem]
     
+    def render_minimal(self, done, rem) -> Segment:
+        pre = "━" * done
+        suf = "━" * rem
+        return pre, suf
+
     def render(self) -> Text:
         done = round(self.count / self.total * self.width)
         rem = self.width - done
-        segment = eval(f"self.render_balloon({done}, {rem})")
+        segment = eval(f"self.render_minimal({done}, {rem})")
         return self.style_text(segment)
 
 
