@@ -192,12 +192,12 @@ class SearchProgress(ProgressBar):
         self.color = "magenta"
         self.width = round(0.8 * get_terminal_size()[0])
 
-    def update_progress(self, count, total=None):
-        """Update the progress count."""
-        self.count = count
-        if total is not None:
-            self.total = total
-        self.update()
+    # def update_progress(self, count, total=None):
+    #     """Update the progress count."""
+    #     self.count = count
+    #     if total is not None:
+    #         self.total = total
+    #     self.update()
     
     def style_text(self, segment: Segment) -> Text:
         return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(

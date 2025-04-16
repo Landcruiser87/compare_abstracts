@@ -235,9 +235,9 @@ def list_datasets() -> list[tuple]:
             key=lambda path: (path.is_file(), path.name.lower()),
         )
         for val in paths:
-            filenum += 1
             results.append((val.stem, filenum))
-    
+            filenum += 1
+            
     return results
 
 ########################## Saving funcs ##########################################

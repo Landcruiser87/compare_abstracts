@@ -26,7 +26,7 @@ from textual.widgets import (
     Header,
     Input,
     Static,
-    SelectionList, 
+    SelectionList,
     RadioButton, 
     RadioSet,
     TabbedContent, 
@@ -132,6 +132,7 @@ class PaperSearch(App):
         for itemid in selected:
             new_json = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Loading {new_json}"
+            loading.update()
             if has_numbers(new_json):
                 source_p = self.root_data_dir
             else:
@@ -139,14 +140,17 @@ class PaperSearch(App):
             json_path = PurePath(Path.cwd(), source_p, Path(new_json))
             json_data = open(json_path, mode="r", encoding="utf-8").read()
             self.load_data(tree, new_json, json_data)
-            
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
+            
+            self.notify(f"{new_json} loaded")
+            sleep(0.5)
 
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         for itemid in selected:
             rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Removing {rem_conf}"
+            loading.update()
             for node in tree.root.children:
                 if rem_conf in node._label:
                     node.remove()
@@ -154,7 +158,7 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
 
-    def run_search(self, tree:Tree, selected:list, loading:LoadingIndicator) -> None:
+    def run_search(self, tree:Tree, datasets:SelectionList, loading:LoadingIndicator) -> None:
             
         # def launch_cos(srch_txt:str, srch_field:str, node):
         #     tfid = clean_vectorize(srch_text, srch_txt, srch_field, node)
@@ -216,16 +220,15 @@ class PaperSearch(App):
                 self.notify(f"No results found in {conf}")
             loading.advance(1)
             sleep(0.5)
-            # loading.update_progress(loading.count, len(selected))
 
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
-            self.all_datasets.append(root_name)
+            self.all_datasets.append((root_name, len(self.all_datasets)))
+            datasets.add_option((root_name, len(self.all_datasets)))
         else:
             self.notify("No results found")
             sleep(2)
-
 
     def on_mount(self) -> None:
         tree_view = self.query_one(TreeView)
@@ -275,7 +278,7 @@ class PaperSearch(App):
                 await asyncio.sleep(0.1)
 
             elif button_id == "search-button":
-                self.run_search(tree, selected, loading) 
+                self.run_search(tree, datasets, loading) 
                 #BUG New class
                     #Make a new class for the loading widget for search. 
                     #Causing too many problems trying to reuse the same form
@@ -312,14 +315,12 @@ class PaperSearch(App):
 
 
 #TODO - Add Clustering tab to results.  
-
 #TODO - Figure out search storage. 
+
     #First idea is to add the search as a new json to the treeview
     #label it with date and search keywords.  
         #?Not sure how to store the selected datasets at the time. 
         #Maybe i can do it as a global
-
-
     #look at venvkiller for how he did that. probalby a custom class
 
 #Search workflow. 
