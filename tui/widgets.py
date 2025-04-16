@@ -1,7 +1,7 @@
 from __future__ import annotations
 import json
+from typing import Literal
 from rich.highlighter import ReprHighlighter
-# from rich.syntax import Syntax
 from rich.text import Text
 from rich.pretty import pretty_repr
 from textual.app import ComposeResult
@@ -13,6 +13,7 @@ from textual.widgets import (
     ProgressBar,
 )
 from textual.widgets.tree import TreeNode
+from os import get_terminal_size
 from support import logger
 
 highlighter = ReprHighlighter()
@@ -175,35 +176,110 @@ class LoadingIndicator(Static):
 
 ####################### Loading Widget #############################
 
-class SearchProgress(progressbar):
-    """Load a progress bar for searching"""
+Segment = tuple[str, str]
+def ceil(a, b):
+    return (a + b) // b
 
-    def __init__(self, message="Updating..."):
+class SearchProgress(ProgressBar):
+    """Load a progress bar for searching"""
+    def __init__(self, count, total, message="Updating..."):
         super().__init__()
         self.message = message
-        self.count = 0
-        self.total = 0
-        self.border_title = "ML_JTree"
-        
+        self.count = count
+        self.total = total
+        self.border_title = "Searching.."
+        self.bar_style = "balloon"
+        self.color = "magenta"
+        self.width = round(0.8 * get_terminal_size()[0])
+
     def update_progress(self, count, total=None):
         """Update the progress count."""
         self.count = count
         if total is not None:
             self.total = total
         self.update()
+    
+    def style_text(self, segment: Segment) -> Text:
+        return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(
+            segment[1],
+            style="d black",
+        )
+    
+    def render_balloon(self, done, rem):
+        total = done + rem
+        bg = "⠁⠈⠐⠠⢀⡀⠄⠂"
+        bg = bg * ceil(total, len(bg))
+        return bg[: max(done - 1, 0)] + "🎈", bg[done : done + rem]
+    
+    def render(self) -> Text:
+        done = round(self.count / self.total * self.width)
+        rem = self.width - done
+        segment = eval(f"self.render_balloon({done}, {rem})")
+        return self.style_text(segment)
 
-    def render(self):
-        #ehhh.  mmaybe switch this to rich's actual progress bar instead of making it?  I mean its cool don't get me wrong, but why reinvent the wheel. 
-        """Render the loading indicator with progress."""
-        progress_text = f"{self.count} datasets"
-        if self.total > 0:
-            progress_percent = min(100, int((self.count / self.total) * 100))
-            progress_bar = "▓" * (progress_percent // 5) + "░" * (
-                20 - (progress_percent // 5)
-            )
-            progress_text = f"{self.count}/{self.total} datasets ({progress_percent}%)\n{progress_bar}"
 
-        return f"[bold]{self.message}[/bold]\n\n[bold]{progress_text}[/bold]"
+
+# BarStyle = Literal["minimal", "pacman", "rust", "doge", "balloon"]
+
+# class SearchProgress(ProgressBar):
+#     #Borrowed from here
+#     # https://github.com/NL2Code/CodeS/blob/0b624ab4ef22b0d9d223f274a986eb27fe090c88/repos/termtyper-main/termtyper/ui/widgets/progress_bar.py#L14
+#     def __init__(
+#         self,
+#         total: float,
+#         completed: float,
+#         bar_style: BarStyle = "minimal",
+#         color: str = "white",
+#     ) -> None:
+#         self.total = total
+#         self.completed = completed
+#         self.bar_style = bar_style
+#         self.color = color
+#         self.width = round(0.8 * get_terminal_size()[0])
+
+#     def style_text(self, segment: Segment) -> Text:
+#         return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(
+#             segment[1],
+#             style="d black",
+#         )
+
+#     def render_balloon(self, done, rem):
+#         total = done + rem
+#         bg = "⠁⠈⠐⠠⢀⡀⠄⠂"
+#         bg = bg * ceil(total, len(bg))
+#         return bg[: max(done - 1, 0)] + "🎈", bg[done : done + rem]
+
+#     def render_minimal(self, done, rem) -> Segment:
+#         pre = "━" * done
+#         suf = "━" * rem
+#         return pre, suf
+
+#     def render_doge(self, done, rem):
+#         pre = "$" * (done - 2) + " "
+#         pre += "[yellow]:dog:[/yellow]"
+#         suf = "━" * rem
+#         suf += "🌝"
+#         return pre, suf
+
+#     def render_rust(self, done, rem) -> Segment:
+#         pre = "━" * (done - 1)
+#         pre += ":crab:"
+#         suf = "━" * rem
+#         self.color = "orange1"
+#         return pre, suf
+
+#     def render_pacman(self, done, rem) -> Segment:
+#         pre = ("-" * (done - 1)) + ("c" if done % 2 else "C")
+#         suf = ("● " if done % 2 else " ●") * rem
+#         suf = suf[:rem]
+#         return pre, suf
+
+#     def render(self) -> Text:
+#         done = round(self.completed / self.total * self.width)
+#         rem = self.width - done
+#         segment = eval(f"self.render_{self.bar_style}({done}, {rem})")
+#         return self.style_text(segment)
+
 
 ####################### Search tab Widgets #############################
 

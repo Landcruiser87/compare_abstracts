@@ -150,6 +150,7 @@ class PaperSearch(App):
             for node in tree.root.children:
                 if rem_conf in node._label:
                     node.remove()
+                    self.notify(f"{node._label} removed")
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
 
@@ -204,21 +205,24 @@ class PaperSearch(App):
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
         root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
         results = {}
+        loading.render()
         for node in tree.root.children:
             conf = node.label.plain.split()[1]
-            loading.message = f"Searching {conf}"
+            self.notify(f"Searching {conf}")
             result = conf_search(srch_text, metric, field, node)
             if result:
                 results.update(**result)
             else:
-                loading.message = f"No results found in {conf}"
+                self.notify(f"No results found in {conf}")
 
             loading.count += 1
-            loading.update_progress(loading.count, len(selected))
+            sleep(0.3)
+            # loading.update_progress(loading.count, len(selected))
 
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
+            self.all_datasets.append(root_name)
         else:
             loading.message = "No results found "
             sleep(1)
@@ -254,16 +258,14 @@ class PaperSearch(App):
         tree = tree_view.query_one(JSONTree)
         datasets = self.query_one(SelectionList)
         selected = datasets.selected
+        loading_container = Container(id="loading-container")
         if button_id != "search-button":
-            loading_container = Container(id="loading-container")
             loading = LoadingIndicator()
-            self.mount(loading_container)
-            loading_container.mount(loading)
         else:
-            loading_container = Container(id="loading-container")
-            loading = SearchProgress()
-            self.mount(loading_container)
-            loading_container.mount(loading)            #TODO - Write in script for here
+            loading = SearchProgress(total=len(tree.root.children), count=0)
+
+        self.mount(loading_container)
+        loading_container.mount(loading)
 
         async def manage_data_task():
             if button_id == "add-button":
