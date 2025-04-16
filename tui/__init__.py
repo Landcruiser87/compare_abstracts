@@ -214,9 +214,8 @@ class PaperSearch(App):
                 results.update(**result)
             else:
                 self.notify(f"No results found in {conf}")
-
-            loading.count += 1
-            sleep(0.3)
+            loading.advance(1)
+            sleep(0.5)
             # loading.update_progress(loading.count, len(selected))
 
         if results:
@@ -224,8 +223,8 @@ class PaperSearch(App):
             save_data(root_name, results)
             self.all_datasets.append(root_name)
         else:
-            loading.message = "No results found "
-            sleep(1)
+            self.notify("No results found")
+            sleep(2)
 
 
     def on_mount(self) -> None:
