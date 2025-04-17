@@ -222,7 +222,7 @@ class PaperSearch(App):
         def launch_cos(srch_txt:str, srch_field:str, node:Tree):
             tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
             sims = cosine_similarity(tfid, "scipy")
-            return sims, paper_names
+            return sims[1:], paper_names[1:]
 
         #FUNCTION conf search
         def conf_search(
@@ -258,19 +258,25 @@ class PaperSearch(App):
             elif metric == "Cosine":
                 sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
                 #isolate where the sims are over indexes
+                #?Not sure if i should index out the match query just yet
                 arr = np.array(sims, dtype=np.float32)
                 qual_indexes = np.where(arr >= threshold)[0]
-                filtered_sims = list(filter(lambda p: p >= threshold, sims))
-                papers = paper_names[qual_indexes]
-                results = {paper for paper in papers}
-                node_queue = deque(node.children)
-                while node_queue:
-                    paperkey = node_queue.popleft()
-                    labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
-                    if field in labels:
-                        index = labels.index(field)
-                        criteria = paperkey.children[index].label.plain.split("=")[1]
-            
+                if qual_indexes.shape[0] > 0:
+                    papers = [paper_names[idx] for idx in qual_indexes]
+                    node_queue = deque(node.children)
+                    while node_queue:
+                        paperkey = node_queue.popleft()
+                        label = paperkey.label.plain.strip("{}").strip()
+                        if label in papers:
+                            labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                            if field in labels:
+                                index = labels.index(field)
+                                results[label] = paperkey.data
+                                results[label]["metric_match"] = round(arr[int(label.split("_")[0])].item(), 3)
+                                results[label]["metric_thres"] = threshold
+                                results[label]["conference"] = conf
+
+
             elif metric == "Levenstein":
                 self.notify(f"{metric} search currently not available")
             elif metric == "Hamming":
