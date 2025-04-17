@@ -35,7 +35,7 @@ from textual.widgets import (
     TabPane,       
     Tree
 )
-
+from textual.widgets.selection_list import Selection
 #Custom Imports
 from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
 from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS
@@ -145,9 +145,10 @@ class PaperSearch(App):
         new_node = json_tree.root.add(root_name)
         if isinstance(json_data, str):
             json_data = clean_string_values(json.loads(json_data))
+            json_tree.add_node(root_name, new_node, json_data)
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
-        json_tree.add_node(root_name, new_node, json_data)
+            json_tree.add_node(root_name+".json", new_node, json_data)
         return json_data
     
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
@@ -172,6 +173,7 @@ class PaperSearch(App):
             loading.update_progress(loading.count, len(selected))
             self.notify(f"{new_json} loaded")
             sleep(0.5)
+
     #FUNCTION - Remove Data
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         for itemid in selected:
@@ -189,6 +191,7 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             sleep(0.5)
+
     #FUNCTION - run search
     def run_search(self, tree:Tree, datasets:SelectionList, loading:LoadingIndicator) -> None:
         #FUNCTION - launch cos sim
@@ -204,11 +207,13 @@ class PaperSearch(App):
                 variables:list,
                 conf:str
             ):
+            #Load variables
             results = {}
             metric = SEARCH_METRICS[variables[0]]
             field = SEARCH_FIELDS[variables[1]]
             res_limit = int(variables[2])
             threshold = float(variables[3])
+            #Decide metric
             if metric == "Fuzzy":
                 node_queue = deque(node.children)
                 while node_queue:
@@ -280,8 +285,8 @@ class PaperSearch(App):
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
-            self.all_datasets.append((root_name, len(self.all_datasets)))
-            datasets.add_option((root_name, len(self.all_datasets)))
+            # self.all_datasets.append((root_name, len(self.all_datasets)))
+            # datasets.add_option((root_name, len(self.all_datasets)))
         else:
             self.notify("No results found")
             sleep(2)
@@ -322,10 +327,17 @@ class PaperSearch(App):
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
                 await asyncio.sleep(0.1)
-
             elif button_id == "search-button":
                 self.run_search(tree, datasets, loading) 
-
+                await asyncio.sleep(0.1)
+            #Manually refresh SelectionList options to avoid index errors
+            datasets.clear_options()
+            self.all_datasets = list_datasets()
+            new_datasets = [
+                Selection(s[0], s[1], False)
+                for s in self.all_datasets
+            ]
+            datasets.add_options(new_datasets)
             loading_container.remove()
         
         self.run_worker(manage_data_task, thread=True)
@@ -348,6 +360,7 @@ class PaperSearch(App):
             tree = tree_view.query_one(JSONTree)
             json_docview.focus()
             tree.focus()
+
     #FUNCTION Screenshot
     def action_screenshot(self):
         current_time = get_c_time()
