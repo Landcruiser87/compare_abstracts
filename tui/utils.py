@@ -49,7 +49,6 @@ def clean_vectorize(srch_text:str, srch_field, node):
     paper_names.insert(0, "papernames")
 
     #Remove and clean stopwords
-    cleaned = []
     for idx, abstract in enumerate(data_fields):
         if abstract != None:
             re_txt = re.sub('[\W_]+', ' ', abstract)

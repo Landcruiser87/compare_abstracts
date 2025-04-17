@@ -4,6 +4,7 @@ import time
 import logging
 import os
 import json
+import numpy as np
 from rich import print
 from rich.tree import Tree
 from rich.text import Text
@@ -12,6 +13,8 @@ from rich.filesize import decimal
 from rich.console import Console
 from rich.logging import RichHandler
 from pathlib import Path, PurePath
+
+
 
 ################################# Logger functions ####################################
 #FUNCTION Logging Futures
@@ -241,9 +244,32 @@ def list_datasets() -> list[tuple]:
     return results
 
 ########################## Saving funcs ##########################################
+
+class NumpyArrayEncoder(json.JSONEncoder):
+    """Custom numpy JSON Encoder.  Takes in any type from an array and formats it to something that can be JSON serialized. Source Code found here. https://pynative.com/python-serialize-numpy-ndarray-into-json/
+    
+    Args:
+        json (object): Json serialized format
+    """	
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        elif isinstance(obj, dict):
+            return obj.__dict__
+        elif isinstance(obj, str):
+            return str(obj)
+        elif isinstance(obj, datetime.datetime):
+            return datetime.datetime.strftime(obj, "%m-%d-%Y-%H-%M-%S")
+        else:
+            return super(NumpyArrayEncoder, self).default(obj)
+    
 #FUNCTION save dictionary
 def save_data(search_name:str, data:dict):
-    result_json = json.dumps(data, indent=2)
+    result_json = json.dumps(data, indent=2, cls=NumpyArrayEncoder)
     with open(f"./data/searches/{search_name}.json", "w") as outf:
         outf.write(result_json)
 

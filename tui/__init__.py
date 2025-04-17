@@ -187,7 +187,7 @@ class PaperSearch(App):
             for node in tree.root.children:
                 if rem_conf in node.label.plain:
                     node.remove()
-                    self.notify(f"{node._label} removed")
+                    self.notify(f"{rem_conf} removed")
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             sleep(0.5)
@@ -257,22 +257,27 @@ class PaperSearch(App):
 
             elif metric == "Cosine":
                 sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
-                #isolate where the sims are over indexes
-                #?Not sure if i should index out the match query just yet
                 arr = np.array(sims, dtype=np.float32)
                 qual_indexes = np.where(arr >= threshold)[0]
                 if qual_indexes.shape[0] > 0:
-                    papers = [paper_names[idx] for idx in qual_indexes]
+                                   #Index,paper_name,     sim)
+                    paper_info = [(idx, paper_names[idx], arr[idx]) for idx in qual_indexes]
+                    
+                    
+                    
+                    
                     node_queue = deque(node.children)
                     while node_queue:
                         paperkey = node_queue.popleft()
                         label = paperkey.label.plain.strip("{}").strip()
+                        papers = [x[1] for x in paper_info]
                         if label in papers:
                             labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
                             if field in labels:
                                 index = labels.index(field)
                                 results[label] = paperkey.data
-                                results[label]["metric_match"] = round(arr[int(label.split("_")[0])].item(), 3)
+                                similarity = paper_info[papers.index(label)][2].item()
+                                results[label]["metric_match"] = round(similarity, 4)
                                 results[label]["metric_thres"] = threshold
                                 results[label]["conference"] = conf
 
@@ -319,7 +324,7 @@ class PaperSearch(App):
             # self.all_datasets.append((root_name, len(self.all_datasets)))
             # datasets.add_option((root_name, len(self.all_datasets)))
         else:
-            self.notify("No results found")
+            self.notify("No results found in all datasets")
             sleep(2)
 
     #FUNCTION Tree Node select
