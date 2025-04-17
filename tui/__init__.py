@@ -262,10 +262,6 @@ class PaperSearch(App):
                 if qual_indexes.shape[0] > 0:
                                    #Index,paper_name,     sim)
                     paper_info = [(idx, paper_names[idx], arr[idx]) for idx in qual_indexes]
-                    
-                    
-                    
-                    
                     node_queue = deque(node.children)
                     while node_queue:
                         paperkey = node_queue.popleft()
