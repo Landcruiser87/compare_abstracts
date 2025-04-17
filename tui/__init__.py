@@ -8,6 +8,7 @@ from time import sleep
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
 from collections import deque
+
 #Textual Imports
 from textual.binding import Binding
 from textual.app import App, ComposeResult
@@ -37,7 +38,7 @@ from textual.widgets import (
 
 #Custom Imports
 from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
-from support import list_datasets, save_data, SEARCH_KEYS, SEARCH_METRICS
+from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -45,6 +46,7 @@ if TYPE_CHECKING:
 __prog_name__ = "ML_Jtree"
 __version__ = "0.3.0"
 
+#CLASS - Load Data
 class PaperSearch(App):
     TITLE = __prog_name__
     SUB_TITLE = f"A JSON exploration tool for influential Machine Learning Papers ({__version__})"
@@ -83,6 +85,7 @@ class PaperSearch(App):
         elif "\\" in json_file.name:
             self.json_name = json_file.name.split("\\")[-1]
 
+    #FUNCTION - Load Data
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header()
@@ -103,10 +106,10 @@ class PaperSearch(App):
                         yield Static("Search Params", id="hdr-param", classes="header")
                         
                         with RadioSet(id="radio-metrics", classes="header"):
-                            for field in SEARCH_METRICS:
-                                yield RadioButton(field)
+                            for metric in SEARCH_METRICS:
+                                yield RadioButton(metric)
                         with RadioSet(id="radio-fields", classes="header"):
-                            for field in SEARCH_KEYS:
+                            for field in SEARCH_FIELDS:
                                 yield RadioButton(field)
                         with Container(id="sub-container"):
                             with Vertical(id="srch-fields"):
@@ -125,6 +128,26 @@ class PaperSearch(App):
                             yield Button("Remove Dataset", id="rem-button")
 
         yield Footer()
+
+    #FUNCTION - onmount
+    def on_mount(self) -> None:
+        tree_view = self.query_one(TreeView)
+        tree = tree_view.query_one(JSONTree)
+        root_name = self.json_name
+        json_data = self.load_data(tree, root_name, self.json_data)
+        json_docview = self.query_one(JSONDocumentView)
+        json_docview.update_document(json_data)
+        tree.focus()
+
+    #FUNCTION - Load Data
+    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
+        new_node = json_tree.root.add(root_name)
+        if isinstance(json_data, str):
+            json_data = clean_string_values(json.loads(json_data))
+        elif isinstance(json_data, dict):
+            json_data = clean_string_values(json_data)
+        json_tree.add_node(root_name, new_node, json_data)
+        return json_data
     
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         def has_numbers(inputstring):
@@ -143,10 +166,9 @@ class PaperSearch(App):
             self.load_data(tree, new_json, json_data)
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
-            
             self.notify(f"{new_json} loaded")
             sleep(0.5)
-
+    #FUNCTION - Remove Data
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         for itemid in selected:
             #BUG here when removing custom searches.  
@@ -155,23 +177,32 @@ class PaperSearch(App):
             loading.message = f"Removing {rem_conf}"
             loading.update()
             for node in tree.root.children:
-                if rem_conf in node._label:
+                if rem_conf in node.label.plain:
                     node.remove()
                     self.notify(f"{node._label} removed")
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
-
+            sleep(0.5)
+    #FUNCTION - run search
     def run_search(self, tree:Tree, datasets:SelectionList, loading:LoadingIndicator) -> None:
+        #FUNCTION - launch cos sim
         def launch_cos(srch_txt:str, srch_field:str, node:Tree):
             tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
             sims = cosine_similarity(tfid, "scipy")
             return sims, paper_names
-        
-        
-        def conf_search(srch_text:str, metric:str, field:str, node:Tree, variables:list):
+
+        #FUNCTION conf search
+        def conf_search(
+                srch_text:str, 
+                metric:str, 
+                field:str, 
+                node:Tree, 
+                variables:list,
+                conf:str
+            ):
             results = {}
             metric = SEARCH_METRICS[variables[0]]
-            field = SEARCH_KEYS[variables[1]]
+            field = SEARCH_FIELDS[variables[1]]
             res_limit = int(variables[2])
             threshold = float(variables[3])
             if metric =="Fuzzy":
@@ -189,6 +220,7 @@ class PaperSearch(App):
                             results[reskey] = paperkey.data
                             results[reskey]["metric_match"] = round(match_num, 3)
                             results[reskey]["metric_thres"] = threshold
+                            results[reskey]["conference"] = conf
 
             elif metric =="Cosine":
                 sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
@@ -224,16 +256,16 @@ class PaperSearch(App):
         threshold = self.query_one("#input-limit", Input).value
         variables = [metric, field, res_limit, threshold]
         if not all(str(var).isnumeric() for var in variables):
-            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return 
 
-        root_name = f"{SEARCH_METRICS[metric]}_{SEARCH_KEYS[field]}_{srch_text}"
+        root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{srch_text.lower()}"
         results = {}
         loading.render()
         for node in tree.root.children:
             conf = node.label.plain.split()[1]
             self.notify(f"Searching {conf}")
-            result = conf_search(srch_text, metric, field, node, variables)
+            result = conf_search(srch_text, metric, field, node, variables, conf)
             if result:
                 results.update(**result)
             else:
@@ -250,28 +282,12 @@ class PaperSearch(App):
             self.notify("No results found")
             sleep(2)
 
-    def on_mount(self) -> None:
-        tree_view = self.query_one(TreeView)
-        tree = tree_view.query_one(JSONTree)
-        root_name = self.json_name
-        json_data = self.load_data(tree, root_name, self.json_data)
-        json_docview = self.query_one(JSONDocumentView)
-        json_docview.update_document(json_data)
-        tree.focus()
-
-    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
-        new_node = json_tree.root.add(root_name)
-        if isinstance(json_data, str):
-            json_data = clean_string_values(json.loads(json_data))
-        elif isinstance(json_data, dict):
-            json_data = clean_string_values(json_data)
-        json_tree.add_node(root_name, new_node, json_data)
-        return json_data
-
+    #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
         self.selected_node_data = event.node.data
-
+    
+    #FUNCTION Button press event
     def on_button_pressed(self, event: Button.Pressed) -> None:
         """Called when a button is pressed."""
         #Get references to necessary widgets / data
@@ -288,7 +304,7 @@ class PaperSearch(App):
 
         self.mount(loading_container)
         loading_container.mount(loading)
-
+        #FUNCTION Async data task
         async def manage_data_task():
             if button_id == "add-button":
                 self.add_datasets(tree, datasets, selected, loading)
@@ -307,6 +323,7 @@ class PaperSearch(App):
         
         self.run_worker(manage_data_task, thread=True)
 
+    #FUNCTION watch data node
     def watch_selected_node_data(self, new_data: object | None) -> None:
         """Watches for changes to selected_node_data and updates the display."""
         json_docview = self.query_one(JSONDocumentView)
@@ -324,18 +341,18 @@ class PaperSearch(App):
             tree = tree_view.query_one(JSONTree)
             json_docview.focus()
             tree.focus()
-
+    #FUNCTION Screenshot
     def action_screenshot(self):
         current_time = get_c_time()
         self.save_screenshot(f"{current_time}.svg", "./data/screenshots/" )
-
+    
+    #FUNCTION toggle root
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
 
 
 #TODO - Add Clustering tab to results.  
-#TODO - Figure out search storage. 
 
     #First idea is to add the search as a new json to the treeview
     #label it with date and search keywords.  
