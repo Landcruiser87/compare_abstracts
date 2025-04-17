@@ -112,7 +112,7 @@ JSONDocument Static {
 #input-limit {
     border: magenta 50%;
     width: 100%;
-    height: auto;
+    height: 50%;
     margin-right: 1;
     margin-left: 1;
     margin-bottom: 1;
@@ -122,7 +122,7 @@ JSONDocument Static {
 #input-thres {
     border: magenta 50%;
     width: 100%;
-    height: auto;
+    height: 50%;
     margin-right: 1;
     margin-left: 1;
     content-align: center middle;

@@ -193,7 +193,31 @@ class PaperSearch(App):
             sleep(0.5)
 
     #FUNCTION - run search
-    def run_search(self, tree:Tree, datasets:SelectionList, loading:LoadingIndicator) -> None:
+    def run_search(self, tree:Tree, loading:LoadingIndicator) -> None:
+
+        def is_numeric_string(s: str) -> bool:
+            """
+            Checks if a string represents a valid integer or float.
+
+            Handles integers, floats, scientific notation, and leading/trailing whitespace.
+            Note: Also returns True for 'inf', '-inf', and 'nan'.
+
+            Args:
+                s: The string to check.
+
+            Returns:
+                True if the string can be converted to a float, False otherwise.
+            """
+            if not isinstance(s, str):
+                return False # Ensure input is a string
+            try:
+                float(s)
+                return True
+            except ValueError:
+                return False
+            except TypeError: 
+                return False
+            
         #FUNCTION - launch cos sim
         def launch_cos(srch_txt:str, srch_field:str, node:Tree):
             tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
@@ -234,7 +258,8 @@ class PaperSearch(App):
             elif metric == "Cosine":
                 sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
                 #isolate where the sims are over indexes
-                qual_indexes = np.where(sims >= threshold)[0]
+                arr = np.array(sims, dtype=np.float32)
+                qual_indexes = np.where(arr >= threshold)[0]
                 filtered_sims = list(filter(lambda p: p >= threshold, sims))
                 papers = paper_names[qual_indexes]
                 results = {paper for paper in papers}
@@ -264,7 +289,7 @@ class PaperSearch(App):
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
         variables = [metric, field, res_limit, threshold]
-        if not all(str(var).isnumeric() for var in variables):
+        if not all(is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return 
 
@@ -328,8 +353,9 @@ class PaperSearch(App):
                 self.remove_datasets(tree, datasets, selected, loading)
                 await asyncio.sleep(0.1)
             elif button_id == "search-button":
-                self.run_search(tree, datasets, loading) 
+                self.run_search(tree, loading) 
                 await asyncio.sleep(0.1)
+            
             #Manually refresh SelectionList options to avoid index errors
             datasets.clear_options()
             self.all_datasets = list_datasets()
