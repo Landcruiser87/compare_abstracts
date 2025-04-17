@@ -134,7 +134,8 @@ class PaperSearch(App):
         tree_view = self.query_one(TreeView)
         tree = tree_view.query_one(JSONTree)
         root_name = self.json_name
-        json_data = self.load_data(tree, root_name, self.json_data)
+        if root_name:
+            json_data = self.load_data(tree, root_name, self.json_data)
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
         tree.focus()
@@ -154,6 +155,9 @@ class PaperSearch(App):
             return any(char.isdigit() for char in inputstring)
 
         for itemid in selected:
+            #BS way to get around list index errors for last selected item
+            # if itemid == len(datasets.options):
+            #     itemid -= 1
             new_json = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Loading {new_json}"
             loading.update()
@@ -172,7 +176,9 @@ class PaperSearch(App):
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
         for itemid in selected:
             #BUG here when removing custom searches.  
-            #My guess is the index is incorrect in the tuple pair
+            #BS way to get around list index errors for last selected item
+            # if itemid == len(datasets.options):
+            #     itemid -= 1
             rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Removing {rem_conf}"
             loading.update()
@@ -194,8 +200,6 @@ class PaperSearch(App):
         #FUNCTION conf search
         def conf_search(
                 srch_text:str, 
-                metric:str, 
-                field:str, 
                 node:Tree, 
                 variables:list,
                 conf:str
@@ -205,7 +209,7 @@ class PaperSearch(App):
             field = SEARCH_FIELDS[variables[1]]
             res_limit = int(variables[2])
             threshold = float(variables[3])
-            if metric =="Fuzzy":
+            if metric == "Fuzzy":
                 node_queue = deque(node.children)
                 while node_queue:
                     paperkey = node_queue.popleft()
@@ -222,7 +226,7 @@ class PaperSearch(App):
                             results[reskey]["metric_thres"] = threshold
                             results[reskey]["conference"] = conf
 
-            elif metric =="Cosine":
+            elif metric == "Cosine":
                 sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
                 #isolate where the sims are over indexes
                 qual_indexes = np.where(sims >= threshold)[0]
@@ -237,14 +241,14 @@ class PaperSearch(App):
                         index = labels.index(field)
                         criteria = paperkey.children[index].label.plain.split("=")[1]
             
-            elif metric =="Levenstein":
-                pass
-            elif metric =="Hamming":
-                pass
-            elif metric =="Jaccard":
-                pass
+            elif metric == "Levenstein":
+                self.notify(f"{metric} search currently not available")
+            elif metric == "Hamming":
+                self.notify(f"{metric} search currently not available")
+            elif metric == "Jaccard":
+                self.notify(f"{metric} search currently not available")
             elif metric == "LCS":
-                pass
+                self.notify(f"{metric} search currently not available")
             
             res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
             return dict(res)
@@ -252,20 +256,20 @@ class PaperSearch(App):
         srch_text = self.query_one("#input-search", Input).value
         metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
-        res_limit = self.query_one("#input-thres", Input).value
-        threshold = self.query_one("#input-limit", Input).value
+        res_limit = self.query_one("#input-limit", Input).value
+        threshold = self.query_one("#input-thres", Input).value
         variables = [metric, field, res_limit, threshold]
         if not all(str(var).isnumeric() for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return 
 
-        root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{srch_text.lower()}"
+        root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         results = {}
         loading.render()
         for node in tree.root.children:
             conf = node.label.plain.split()[1]
             self.notify(f"Searching {conf}")
-            result = conf_search(srch_text, metric, field, node, variables, conf)
+            result = conf_search(srch_text, node, variables, conf)
             if result:
                 results.update(**result)
             else:
@@ -296,14 +300,20 @@ class PaperSearch(App):
         tree = tree_view.query_one(JSONTree)
         datasets = self.query_one(SelectionList)
         selected = datasets.selected
+
+        #Progress bar loading
         loading_container = Container(id="loading-container")
         if button_id != "search-button":
             loading = LoadingIndicator()
         else:
             loading = SearchProgress(total=len(tree.root.children), count=0)
-
         self.mount(loading_container)
         loading_container.mount(loading)
+        #BUG- Index Error
+            #I think... i'm getting this error because i'm not reloading the 
+            #SelectionList with all available datasets?
+            #Think about implementing an update func to the list
+
         #FUNCTION Async data task
         async def manage_data_task():
             if button_id == "add-button":
@@ -315,9 +325,6 @@ class PaperSearch(App):
 
             elif button_id == "search-button":
                 self.run_search(tree, datasets, loading) 
-                #BUG New class
-                    #Make a new class for the loading widget for search. 
-                    #Causing too many problems trying to reuse the same form
 
             loading_container.remove()
         

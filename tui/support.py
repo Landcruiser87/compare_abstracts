@@ -158,7 +158,7 @@ def launch_tui():
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
-    file_choice = "28" #console.input(f"{question}")
+    file_choice = "22"# console.input(f"{question}")
     if file_choice.isnumeric():
         file_to_load = files[int(file_choice) - 1]
         #check output directory exists
