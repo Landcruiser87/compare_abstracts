@@ -256,11 +256,10 @@ class PaperSearch(App):
                             results[reskey]["conference"] = conf
 
             elif metric == "Cosine":
-                sims, paper_names = launch_cos(srch_text, field, node) #return matchnum too
+                sims, paper_names = launch_cos(srch_text, field, node) 
                 arr = np.array(sims, dtype=np.float32)
                 qual_indexes = np.where(arr >= threshold)[0]
                 if qual_indexes.shape[0] > 0:
-                                   #Index,paper_name,     sim)
                     paper_info = [(idx, paper_names[idx], arr[idx]) for idx in qual_indexes]
                     node_queue = deque(node.children)
                     while node_queue:
@@ -317,7 +316,7 @@ class PaperSearch(App):
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
-            self.notify(f"{len(results.keys())} found in {conf}")
+            self.notify(f"{len(results.keys())} found in {len(tree.root.children)} conferences")
 
         else:
             self.notify("No results found in all datasets")
