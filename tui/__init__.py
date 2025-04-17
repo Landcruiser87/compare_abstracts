@@ -317,8 +317,8 @@ class PaperSearch(App):
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
-            # self.all_datasets.append((root_name, len(self.all_datasets)))
-            # datasets.add_option((root_name, len(self.all_datasets)))
+            self.notify(f"{len(results.keys())} found in {conf}")
+
         else:
             self.notify("No results found in all datasets")
             sleep(2)
