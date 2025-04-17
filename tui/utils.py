@@ -50,10 +50,11 @@ def clean_vectorize(srch_text:str, srch_field, node):
 
     #Remove and clean stopwords
     for idx, abstract in enumerate(data_fields):
-        re_txt = re.sub('[\W_]+', ' ', abstract)
-        l_txt = re_txt.lower().split()
-        s_txt = [word for word in l_txt if word not in stopwords and not word.isnumeric()]
-        data_fields[idx] = " ".join(s_txt)
+        if abstract:
+            re_txt = re.sub('[\W_]+', ' ', abstract)
+            l_txt = re_txt.lower().split()
+            s_txt = [word for word in l_txt if word not in stopwords and not word.isnumeric()]
+            data_fields[idx] = " ".join(s_txt)
 
     base_params = {
         "binary":False, 
