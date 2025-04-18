@@ -316,7 +316,7 @@ class PaperSearch(App):
         if results:
             self.load_data(tree, root_name, results)
             save_data(root_name, results)
-            self.notify(f"{len(results.keys())} found in {len(tree.root.children)} conferences")
+            self.notify(f"{len(results.keys())} papers found in {len(tree.root.children)} conferences")
 
         else:
             self.notify("No results found in all datasets")
