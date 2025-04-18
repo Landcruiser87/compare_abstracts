@@ -143,7 +143,7 @@ class LoadingIndicator(Static):
         self.message = message
         self.count = 0
         self.total = 0
-        self.border_title = "ML_JTree"
+        self.border_title = "ML_Tree"
         
     def update_progress(self, count, total=None):
         """Update the progress count."""

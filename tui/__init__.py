@@ -43,7 +43,7 @@ from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
-__prog_name__ = "ML_Jtree"
+__prog_name__ = "ML_Tree"
 __version__ = "0.3.0"
 
 #CLASS - Load Data
@@ -194,7 +194,7 @@ class PaperSearch(App):
 
     #FUNCTION - run search
     def run_search(self, tree:Tree, loading:LoadingIndicator) -> None:
-
+        #FUNCTION - Is numeric string
         def is_numeric_string(s: str) -> bool:
             """
             Checks if a string represents a valid integer or float.
@@ -209,7 +209,7 @@ class PaperSearch(App):
                 True if the string can be converted to a float, False otherwise.
             """
             if not isinstance(s, str):
-                return False # Ensure input is a string
+                return False
             try:
                 float(s)
                 return True
