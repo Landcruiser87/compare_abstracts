@@ -8,11 +8,10 @@ from time import sleep
 from typing import TYPE_CHECKING, Optional
 from pathlib import Path, PurePath
 from collections import deque
-
 #Textual Imports
+from textual import work, on, events
 from textual.binding import Binding
 from textual.app import App, ComposeResult
-from textual.reactive import reactive, var
 from widgets import (
     JSONDocumentView, 
     JSONTree, 
@@ -20,13 +19,16 @@ from widgets import (
     LoadingIndicator,
     SearchProgress
 ) 
-from textual.containers import Container, Horizontal, Vertical
+from textual.containers import Container, Horizontal, Vertical, Grid
 from textual.fuzzy import Matcher
+
+from textual.reactive import reactive, var
 from textual.widgets import (
     Button, 
     Footer,
     Header,
     Input,
+    ProgressBar,
     Static,
     SelectionList,
     RadioButton, 
@@ -150,15 +152,59 @@ class PaperSearch(App):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name+".json", new_node, json_data)
         return json_data
-    
-    def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Called when a button is pressed."""
+        #Get references to necessary widgets / data
+        button_id = event.button.id
+        tree_view = self.query_one(TreeView)
+        tree = tree_view.query_one(JSONTree)
+        datasets = self.query_one(SelectionList)
+        selected = datasets.selected
+
+        #Progress bar loading
+        loading_container = Container(id="loading-container")
+        if button_id != "search-button":
+            loading = LoadingIndicator()
+        else:
+            loading = SearchProgress(total=len(tree.root.children), count=0)
+        self.mount(loading_container)
+        loading_container.mount(loading)
+        #BUG- Index Error
+            #I think... i'm getting this error because i'm not reloading the 
+            #SelectionList with all available datasets?
+            #Think about implementing an update func to the list
+
+        #FUNCTION Async data task
+        async def manage_data_task():
+            if button_id == "add-button":
+                self.add_datasets(tree, datasets, selected, loading)
+                await asyncio.sleep(0.1)
+            elif button_id == "rem-button":
+                self.remove_datasets(tree, datasets, selected, loading)
+                await asyncio.sleep(0.1)
+            elif button_id == "search-button":
+                self.run_search(tree, loading) 
+                await asyncio.sleep(0.1)
+            
+            #Manually refresh SelectionList options to avoid index errors
+            datasets.clear_options()
+            self.all_datasets = list_datasets()
+            new_datasets = [
+                Selection(s[0], s[1], False)
+                for s in self.all_datasets
+            ]
+            datasets.add_options(new_datasets)
+            loading_container.remove()
+        
+        self.run_worker(manage_data_task, thread=True)
+
+
+    def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
         def has_numbers(inputstring):
             return any(char.isdigit() for char in inputstring)
 
         for itemid in selected:
-            #BS way to get around list index errors for last selected item
-            # if itemid == len(datasets.options):
-            #     itemid -= 1
             new_json = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Loading {new_json}"
             loading.update()
@@ -172,15 +218,17 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             self.notify(f"{new_json} loaded")
-            sleep(0.5)
+        datasets.clear_options()
+        self.all_datasets = list_datasets()
+        new_datasets = [
+            Selection(s[0], s[1], False)
+            for s in self.all_datasets
+        ]
+        datasets.add_options(new_datasets)
 
     #FUNCTION - Remove Data
-    def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator) -> None:
+    def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
         for itemid in selected:
-            #BUG here when removing custom searches.  
-            #BS way to get around list index errors for last selected item
-            # if itemid == len(datasets.options):
-            #     itemid -= 1
             rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Removing {rem_conf}"
             loading.update()
@@ -191,6 +239,7 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             sleep(0.5)
+        datasets.clear_options()
 
     #FUNCTION - run search
     def run_search(self, tree:Tree, loading:LoadingIndicator) -> None:
@@ -322,57 +371,11 @@ class PaperSearch(App):
             self.notify("No results found in all datasets")
             sleep(2)
 
+    ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
         """Called when a node in the tree is selected."""
         self.selected_node_data = event.node.data
-    
-    #FUNCTION Button press event
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        """Called when a button is pressed."""
-        #Get references to necessary widgets / data
-        button_id = event.button.id
-        tree_view = self.query_one(TreeView)
-        tree = tree_view.query_one(JSONTree)
-        datasets = self.query_one(SelectionList)
-        selected = datasets.selected
-
-        #Progress bar loading
-        loading_container = Container(id="loading-container")
-        if button_id != "search-button":
-            loading = LoadingIndicator()
-        else:
-            loading = SearchProgress(total=len(tree.root.children), count=0)
-        self.mount(loading_container)
-        loading_container.mount(loading)
-        #BUG- Index Error
-            #I think... i'm getting this error because i'm not reloading the 
-            #SelectionList with all available datasets?
-            #Think about implementing an update func to the list
-
-        #FUNCTION Async data task
-        async def manage_data_task():
-            if button_id == "add-button":
-                self.add_datasets(tree, datasets, selected, loading)
-                await asyncio.sleep(0.1)
-            elif button_id == "rem-button":
-                self.remove_datasets(tree, datasets, selected, loading)
-                await asyncio.sleep(0.1)
-            elif button_id == "search-button":
-                self.run_search(tree, loading) 
-                await asyncio.sleep(0.1)
-            
-            #Manually refresh SelectionList options to avoid index errors
-            datasets.clear_options()
-            self.all_datasets = list_datasets()
-            new_datasets = [
-                Selection(s[0], s[1], False)
-                for s in self.all_datasets
-            ]
-            datasets.add_options(new_datasets)
-            loading_container.remove()
-        
-        self.run_worker(manage_data_task, thread=True)
 
     #FUNCTION watch data node
     def watch_selected_node_data(self, new_data: object | None) -> None:
@@ -405,19 +408,5 @@ class PaperSearch(App):
 
 
 #TODO - Add Clustering tab to results.  
-
-    #First idea is to add the search as a new json to the treeview
-    #label it with date and search keywords.  
-        #?Not sure how to store the selected datasets at the time. 
-        #Maybe i can do it as a global
-    #look at venvkiller for how he did that. probalby a custom class
-
-#Search workflow. 
-#- When you select a search field. 
-    #Other fields in the search metrics will enable/disable
-#- That way you won't have unmapped search paths
-
-#Possible Search paths
-#1. Basic text match searching.  
-    #This can be run with the following
-
+#TODO - Add Arxiv API search tab
+#TODO - Domain specific scrape tab

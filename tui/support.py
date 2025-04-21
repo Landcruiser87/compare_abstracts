@@ -66,9 +66,9 @@ def get_logger(console:Console, log_dir:Path)->logging.Logger:
     file_handler.setLevel(logging.DEBUG)
     logger.addHandler(file_handler)
     #Load rich handler for how to display the log in the console
-    rich_handler = get_rich_handler(console)
-    rich_handler.setLevel(logging.INFO)
-    logger.addHandler(rich_handler)
+    # rich_handler = get_rich_handler(console)
+    # rich_handler.setLevel(logging.INFO)
+    # logger.addHandler(rich_handler)
     logger.propagate = False
     return logger
 
@@ -161,7 +161,7 @@ def launch_tui():
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
-    file_choice = console.input(f"{question}")
+    file_choice = "1"#console.input(f"{question}")
     if file_choice.isnumeric():
         file_to_load = files[int(file_choice) - 1]
         #check output directory exists
