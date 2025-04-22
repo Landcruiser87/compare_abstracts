@@ -170,22 +170,15 @@ class PaperSearch(App):
             loading = SearchProgress(total=len(tree.root.children), count=0)
         self.mount(loading_container)
         loading_container.mount(loading)
-        #BUG- Index Error
-            #I think... i'm getting this error because i'm not reloading the 
-            #SelectionList with all available datasets?
-            #Think about implementing an update func to the list
 
         #FUNCTION Async data task
         async def manage_data_task():
             if button_id == "add-button":
                 self.add_datasets(tree, datasets, selected, loading)
-                await asyncio.sleep(0.1)
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
-                await asyncio.sleep(0.1)
             elif button_id == "search-button":
                 self.run_search(tree, loading) 
-                await asyncio.sleep(0.1)
             
             #Manually refresh SelectionList options to avoid index errors
             datasets.clear_options()
@@ -197,7 +190,7 @@ class PaperSearch(App):
             datasets.add_options(new_datasets)
             loading_container.remove()
         
-        self.run_worker(manage_data_task, thread=True)
+        self.run_worker(manage_data_task, thread=True, exclusive=True)
 
 
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
