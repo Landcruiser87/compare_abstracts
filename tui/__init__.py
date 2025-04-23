@@ -21,7 +21,7 @@ from widgets import (
 ) 
 from textual.containers import Container, Horizontal, Vertical, Grid
 from textual.fuzzy import Matcher
-
+from textual.worker import Worker
 from textual.reactive import reactive, var
 from textual.widgets import (
     Button, 
@@ -40,7 +40,7 @@ from textual.widgets import (
 from textual.widgets.selection_list import Selection
 #Custom Imports
 from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
-from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS
+from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS, logger
 
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -149,10 +149,11 @@ class PaperSearch(App):
         if isinstance(json_data, str):
             json_data = clean_string_values(json.loads(json_data))
             json_tree.add_node(root_name, new_node, json_data)
+            return json_data
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name+".json", new_node, json_data)
-        return json_data
+        
         
     #FUNCTION - Reload Selections
     def reload_selectionlist(self, datasets:SelectionList) -> None:
@@ -165,50 +166,70 @@ class PaperSearch(App):
         ]
         datasets.add_options(new_datasets)
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        async def manage_data_task(payload:tuple) -> None:
-            button_id:str = payload[0]
-            tree:Tree = payload[1]
-            datasets:SelectionList = payload[2]
-            selected:list = payload[3]
-            loading:LoadingIndicator = payload[4]
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        #FUNCTION Async data task
+        """Called when a button is pressed."""
+        #Get references to necessary widgets / data
+        button_id:str = event.button.id
+        tree_view:TreeView = self.query_one(TreeView)
+        tree     :Tree = tree_view.query_one(JSONTree)
+        datasets :SelectionList = self.query_one(SelectionList)
+        selected :list = datasets.selected
+
+        if button_id != "search-button":
+            loading = LoadingIndicator()
+        else:
+            loading = SearchProgress(total=len(tree.root.children), count=0)
+        #Progress bar loading
+        loading_container = Container(loading, id="loading-container")
+        self.mount(loading_container)
+        payload = (button_id, tree, datasets, selected, loading)
+        worker: Worker = self.run_worker(
+            self.manage_data_task(payload), 
+            exclusive=True,
+            thread=True
+        )
+        try:
+            await worker.wait()
+        except Exception as e:
+            self.notify(f"Worker has failed {e}")
+            logger.warning(f"Error {e}")
+        finally:
+            if loading_container.parent:
+                loading_container.remove()
+            self.reload_selectionlist(datasets)
+    
+    async def manage_data_task(self, payload:tuple) -> None:
+        button_id:str = payload[0]
+        tree:Tree = payload[1]
+        datasets:SelectionList = payload[2]
+        selected:list = payload[3]
+        loading:LoadingIndicator = payload[4]
+        try:
             if button_id == "add-button":
                 self.add_datasets(tree, datasets, selected, loading)
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
             elif button_id == "search-button":
-                self.run_search(tree, loading) 
-
-            self.reload_selectionlist(datasets)
-            loading_container.remove()
-
-        #FUNCTION Async data task
-        """Called when a button is pressed."""
-        #Get references to necessary widgets / data
-        button_id = event.button.id
-        tree_view = self.query_one(TreeView)
-        tree = tree_view.query_one(JSONTree)
-        datasets = self.query_one(SelectionList)
-        selected = datasets.selected
-
-        #Progress bar loading
-        loading_container = Container(id="loading-container")
-        if button_id != "search-button":
-            loading = LoadingIndicator()
-        else:
-            loading = SearchProgress(total=len(tree.root.children), count=0)
-        self.mount(loading_container)
-        loading_container.mount(loading)
-        payload = (button_id, tree, datasets, selected, loading)
-
-        self.run_worker(manage_data_task(payload), exclusive=True, thread=True)
+                self.run_search(tree, loading)
         
-
-
+        except Exception as e:
+            self.notify(f"Error within worker task {button_id}")
+            logger.warning(f"Error message {e}")
+            raise e
+        
+    def _refresh_loading(self, loading_widget):
+        if loading_widget.parent and loading_widget.is_mounted:
+           loading_widget.refresh()
+           
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
         def has_numbers(inputstring):
             return any(char.isdigit() for char in inputstring)
-
+        
+        def _update_tree_add(tree, root_name, json_data):
+            self.load_data(tree, root_name, json_data)
+            self.notify(f"{root_name} loaded")
+            
         for itemid in selected:
             new_json = datasets.options[itemid].prompt._text[0] + ".json"
             loading.message = f"Loading {new_json}"
@@ -217,12 +238,23 @@ class PaperSearch(App):
                 source_p = self.root_data_dir
             else:
                 source_p = self.srch_data_dir
-            json_path = PurePath(Path.cwd(), source_p, Path(new_json))
-            json_data = open(json_path, mode="r", encoding="utf-8").read()
-            self.load_data(tree, new_json, json_data)
+
+            try:
+                json_path = PurePath(Path.cwd(), source_p, Path(new_json))
+                with open(json_path, mode="r", encoding="utf-8") as f:
+                    json_data = f.read()
+                _update_tree_add(tree, new_json, json_data)
+
+            except FileNotFoundError:
+                logger.warning(f"Error: {new_json} not found")
+               
+            except Exception as e:
+                logger.warning(f"Error loading {new_json}: {e}")
+
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
-            self.notify(f"{new_json} loaded")
+            loading.render()
+            sleep(0.1)
 
     #FUNCTION - Remove Data
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
@@ -236,7 +268,8 @@ class PaperSearch(App):
                     self.notify(f"{rem_conf} removed")
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
-            sleep(0.5)
+            loading.render()
+            sleep(0.1)
 
     #FUNCTION - run search
     def run_search(self, tree:Tree, loading:LoadingIndicator) -> None:
@@ -357,7 +390,7 @@ class PaperSearch(App):
             else:
                 self.notify(f"No results found in {conf}")
             loading.advance(1)
-            sleep(0.5)
+            sleep(0.1)
 
         if results:
             self.load_data(tree, root_name, results)
