@@ -142,6 +142,7 @@ class PaperSearch(App):
         json_docview.update_document(json_data)
         tree.focus()
 
+
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
@@ -152,8 +153,23 @@ class PaperSearch(App):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name+".json", new_node, json_data)
         return json_data
+        
+    #FUNCTION - Reload Selections
+    def reload_selectionlist(self, datasets:SelectionList) -> None:
+        #Manually refresh SelectionList options to avoid index errors
+        datasets.clear_options()
+        self.all_datasets = list_datasets()
+        new_datasets = [
+            Selection(s[0], s[1], False)
+            for s in self.all_datasets
+        ]
+        datasets.add_options(new_datasets)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+
+            
+
+        #FUNCTION Async data task
         """Called when a button is pressed."""
         #Get references to necessary widgets / data
         button_id = event.button.id
@@ -170,27 +186,26 @@ class PaperSearch(App):
             loading = SearchProgress(total=len(tree.root.children), count=0)
         self.mount(loading_container)
         loading_container.mount(loading)
+        payload = (button_id, tree, datasets, selected, loading)
 
-        #FUNCTION Async data task
-        async def manage_data_task():
+        async def manage_data_task(payload:tuple) -> None:
+            button_id:str = payload[0]
+            tree:Tree = payload[1]
+            datasets:SelectionList = payload[2]
+            selected:list = payload[3]
+            loading:LoadingIndicator = payload[4]
             if button_id == "add-button":
                 self.add_datasets(tree, datasets, selected, loading)
             elif button_id == "rem-button":
                 self.remove_datasets(tree, datasets, selected, loading)
             elif button_id == "search-button":
                 self.run_search(tree, loading) 
-            
-            #Manually refresh SelectionList options to avoid index errors
-            datasets.clear_options()
-            self.all_datasets = list_datasets()
-            new_datasets = [
-                Selection(s[0], s[1], False)
-                for s in self.all_datasets
-            ]
-            datasets.add_options(new_datasets)
+
+            self.reload_selectionlist(datasets)
             loading_container.remove()
+
+        self.run_worker(manage_data_task(payload), exclusive=True, thread=True)
         
-        self.run_worker(manage_data_task, thread=True, exclusive=True)
 
 
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
@@ -211,13 +226,6 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             self.notify(f"{new_json} loaded")
-        datasets.clear_options()
-        self.all_datasets = list_datasets()
-        new_datasets = [
-            Selection(s[0], s[1], False)
-            for s in self.all_datasets
-        ]
-        datasets.add_options(new_datasets)
 
     #FUNCTION - Remove Data
     def remove_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
@@ -232,7 +240,6 @@ class PaperSearch(App):
             loading.count += 1
             loading.update_progress(loading.count, len(selected))
             sleep(0.5)
-        datasets.clear_options()
 
     #FUNCTION - run search
     def run_search(self, tree:Tree, loading:LoadingIndicator) -> None:
