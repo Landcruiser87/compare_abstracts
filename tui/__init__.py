@@ -166,8 +166,21 @@ class PaperSearch(App):
         datasets.add_options(new_datasets)
 
     def on_button_pressed(self, event: Button.Pressed) -> None:
+        async def manage_data_task(payload:tuple) -> None:
+            button_id:str = payload[0]
+            tree:Tree = payload[1]
+            datasets:SelectionList = payload[2]
+            selected:list = payload[3]
+            loading:LoadingIndicator = payload[4]
+            if button_id == "add-button":
+                self.add_datasets(tree, datasets, selected, loading)
+            elif button_id == "rem-button":
+                self.remove_datasets(tree, datasets, selected, loading)
+            elif button_id == "search-button":
+                self.run_search(tree, loading) 
 
-            
+            self.reload_selectionlist(datasets)
+            loading_container.remove()
 
         #FUNCTION Async data task
         """Called when a button is pressed."""
@@ -187,22 +200,6 @@ class PaperSearch(App):
         self.mount(loading_container)
         loading_container.mount(loading)
         payload = (button_id, tree, datasets, selected, loading)
-
-        async def manage_data_task(payload:tuple) -> None:
-            button_id:str = payload[0]
-            tree:Tree = payload[1]
-            datasets:SelectionList = payload[2]
-            selected:list = payload[3]
-            loading:LoadingIndicator = payload[4]
-            if button_id == "add-button":
-                self.add_datasets(tree, datasets, selected, loading)
-            elif button_id == "rem-button":
-                self.remove_datasets(tree, datasets, selected, loading)
-            elif button_id == "search-button":
-                self.run_search(tree, loading) 
-
-            self.reload_selectionlist(datasets)
-            loading_container.remove()
 
         self.run_worker(manage_data_task(payload), exclusive=True, thread=True)
         
