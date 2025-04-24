@@ -165,7 +165,8 @@ class PaperSearch(App):
             for s in self.all_datasets
         ]
         datasets.add_options(new_datasets)
-
+    
+    #FUNCTION - Button Press Event
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         #FUNCTION Async data task
         """Called when a button is pressed."""
@@ -199,6 +200,7 @@ class PaperSearch(App):
                 loading_container.remove()
             self.reload_selectionlist(datasets)
     
+    #FUNCTION Manage Data Task
     async def manage_data_task(self, payload:tuple) -> None:
         button_id:str = payload[0]
         tree:Tree = payload[1]
@@ -225,10 +227,6 @@ class PaperSearch(App):
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
         def has_numbers(inputstring):
             return any(char.isdigit() for char in inputstring)
-        
-        def _update_tree_add(tree, root_name, json_data):
-            self.load_data(tree, root_name, json_data)
-            self.notify(f"{root_name} loaded")
             
         for itemid in selected:
             new_json = datasets.options[itemid].prompt._text[0] + ".json"
@@ -243,7 +241,8 @@ class PaperSearch(App):
                 json_path = PurePath(Path.cwd(), source_p, Path(new_json))
                 with open(json_path, mode="r", encoding="utf-8") as f:
                     json_data = f.read()
-                _update_tree_add(tree, new_json, json_data)
+                self.load_data(tree, new_json, json_data)
+                # self.notify(f"{new_json} loaded")
 
             except FileNotFoundError:
                 logger.warning(f"Error: {new_json} not found")

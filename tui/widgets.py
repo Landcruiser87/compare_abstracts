@@ -53,6 +53,7 @@ class JSONTree(Tree):
             else:
                 label = Text(repr(data))
             node._label = label
+            # node.set_label(label)
             node.data = data
             
 class TreeView(Widget, can_focus_children=True):
