@@ -154,7 +154,6 @@ class PaperSearch(App):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name+".json", new_node, json_data)
         
-        
     #FUNCTION - Reload Selections
     def reload_selectionlist(self, datasets:SelectionList) -> None:
         #Manually refresh SelectionList options to avoid index errors
@@ -196,7 +195,7 @@ class PaperSearch(App):
             self.notify(f"Worker has failed {e}")
             logger.warning(f"Error {e}")
         finally:
-            if loading_container.parent:
+            if loading_container.parent and loading_container.is_mounted:
                 loading_container.remove()
             self.reload_selectionlist(datasets)
     
@@ -220,10 +219,6 @@ class PaperSearch(App):
             logger.warning(f"Error message {e}")
             raise e
         
-    def _refresh_loading(self, loading_widget):
-        if loading_widget.parent and loading_widget.is_mounted:
-           loading_widget.refresh()
-           
     def add_datasets(self, tree:Tree, datasets:SelectionList, selected:list, loading:LoadingIndicator|SearchProgress) -> None:
         def has_numbers(inputstring):
             return any(char.isdigit() for char in inputstring)
@@ -434,7 +429,6 @@ class PaperSearch(App):
     def action_toggle_root(self) -> None:
         tree = self.query_one(JSONTree)
         tree.show_root = not tree.show_root
-
 
 #TODO - Add Clustering tab to results.  
 #TODO - Add Arxiv API search tab
