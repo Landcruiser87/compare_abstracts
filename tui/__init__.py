@@ -5,7 +5,7 @@ import sys
 import asyncio
 import numpy as np
 from time import sleep
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, List, Tuple, Dict, Any 
 from pathlib import Path, PurePath
 from collections import deque
 #Textual Imports
@@ -21,7 +21,7 @@ from widgets import (
 ) 
 from textual.containers import Container, Horizontal, Vertical, Widget
 from textual.fuzzy import Matcher
-from textual.worker import Worker
+from textual.worker import Worker, get_current_worker
 from textual.reactive import reactive, var
 from textual.widgets import (
     Button, 
@@ -182,56 +182,110 @@ class PaperSearch(App):
             json_tree.add_node(root_name, new_node, json_data)
             return json_data
 
-    #FUNCTION - Dynamic Data Load - While app is running
-    @work(thread=True, exclusive=True)
-    async def load_data_dynamic(self, tree:Tree, ds_name:str, json_data:dict):
-        self.app.notify(f"Loading {ds_name}")
-        try:
-            new_node = tree.root.add(ds_name)
-            tree.add_node(ds_name, new_node, json_data)
-            await asyncio.sleep(0.1)
-
-        except Exception as e:
-            self.app.notify(f"Error adding Node: {e}", title="Worker Error", severity="error", timeout=5)
-            raise RuntimeError(f"Node add Error: {e}") from e
-    
     def add_datasets(self):
-        def has_numbers(inputstring):
-            return any(char.isdigit() for char in inputstring)
-        
-        def open_file(json_path) -> dict:
-            try:
-                with open(json_path, mode="r", encoding="utf-8") as f:
-                    json_data = f.read()
-                    json_data = clean_string_values(json.loads(json_data))
-                    return json_data
-                
-            except json.JSONDecodeError as e:
-                self.app.notify(f"Error parsing JSON: {e}", severity="error", timeout=5)
-                raise RuntimeError(f"JSON parsing failed: {e}") from e
-            
+        """Handles the 'Add Dataset' button press by launching a worker."""
+        datasets_widget: SelectionList = self.query_one("#datasets", SelectionList)
+        selected_indices: list[int] = datasets_widget.selected
 
-        tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        tree: Tree = tree_view.query_one(Tree)
-        datasets: SelectionList = self.query_one("#datasets", SelectionList)
-        selected: list = datasets.selected
-        
-        if len(selected) > 1:
-            for item in selected:        
-                ds_name = datasets.options[item].prompt._text[0] + ".json"
-                source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
-                json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-                json_data = open_file(json_path)
-                self.load_data_dynamic(tree, ds_name, json_data)
-                
+        if not selected_indices:
+            self.notify("No datasets selected to add.", severity="warning")
+            return
+
+        datasets_to_load: List[Tuple[str, PurePath]] = []
+        for index in selected_indices:
+            # Ensure index is valid
+            if index < len(datasets_widget.options):
+                # Safely access the prompt text
+                prompt_text_list = getattr(datasets_widget.options[index].prompt, '_text', None)
+                if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
+                    ds_name_base = prompt_text_list[0]
+                    ds_name = ds_name_base + ".json"
+                    # Determine source path based on whether the base name has numbers
+                    has_numbers = any(char.isdigit() for char in ds_name_base)
+                    source_p = self.root_data_dir if has_numbers else self.srch_data_dir
+                    json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
+                    datasets_to_load.append((ds_name, json_path))
+                else:
+                     self.notify(f"Could not retrieve name for selection index {index}.", severity="warning")
+
+            else:
+                 self.notify(f"Selection index {index} is out of bounds.", severity="warning")
+
+
+        if datasets_to_load:
+            self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
+            # Pass the list of datasets to the worker
+            self._add_multiple_datasets_worker(datasets_to_load)
         else:
-            ds_name = datasets.options[selected[0]].prompt._text[0] + ".json"
-            source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
-            json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-            json_data = open_file(json_path)
-            self.load_data_dynamic(tree, ds_name, json_data)
+             self.notify("No valid datasets found to load.", severity="warning")
+        datasets_widget.deselect_all()
 
-        datasets.deselect_all()
+
+    @work(thread=True, exclusive=True, group="dataset_loading")
+    async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
+        """
+        Worker thread to load multiple JSON files and update the tree safely.
+
+        Args:
+            datasets_info: A list of tuples, where each tuple contains
+                           (dataset_name, dataset_path).
+        """
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        # Ensure we get the actual JSONTree instance
+        tree: JSONTree = tree_view.query_one(JSONTree) # Changed Tree to JSONTree
+        worker = get_current_worker()
+        total_datasets = len(datasets_info)
+
+        for i, (ds_name, json_path) in enumerate(datasets_info):
+            if worker.is_cancelled:
+                self.app.call_from_thread(self.notify, "Dataset loading cancelled.")
+                break
+
+            self.app.call_from_thread(self.notify, f"Loading ({i+1}/{total_datasets}): {ds_name}")
+
+            try:
+                # Perform file I/O and JSON parsing in the worker thread
+                with open(json_path, mode="r", encoding="utf-8") as f:
+                    json_data_str = f.read()
+                json_data = json.loads(json_data_str)
+                cleaned_data = clean_string_values(json_data)
+
+                # Update UI from the main thread ---
+                # Define a helper function to perform the UI updates
+                def update_tree_ui(name: str, data: Dict[str, Any]):
+                    try:
+                        # Check if node already exists to prevent duplicates if needed
+                        # (Simple check based on label, might need refinement for robustness)
+                        existing_labels = {node.label.plain for node in tree.root.children}
+                        if name not in existing_labels:
+                            new_node = tree.root.add(name) # Add the top-level node
+                            tree.add_node(name, new_node, data) # Populate the node recursively
+                            self.app.notify(f"Successfully added {name} to the tree.")
+                        else:
+                             self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
+                    except Exception as ui_e:
+                         # Log UI update errors specifically
+                         logger.error(f"Error updating tree UI for {name}: {ui_e}")
+                         self.app.notify(f"Error adding {name} to UI: {ui_e}", severity="error")
+
+                # Schedule the UI update function to run on the main thread
+                self.app.call_from_thread(update_tree_ui, name=ds_name, data=cleaned_data)
+                # Take a power nap to allow UI thread processing time if needed
+                await asyncio.sleep(0.05)
+
+            except FileNotFoundError:
+                 logger.error(f"File not found for dataset: {ds_name} at {json_path}")
+                 self.app.call_from_thread(self.notify, f"Error: File not found for {ds_name}", severity="error")
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON parsing error for {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error parsing JSON for {ds_name}: {e}", severity="error")
+            except Exception as e:
+                # Catch other potential errors during file reading or processing
+                logger.error(f"Error loading dataset {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=5)
+
+        self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
+
 
     #FUNCTION - Remove Data
     def remove_datasets(self) -> None:
