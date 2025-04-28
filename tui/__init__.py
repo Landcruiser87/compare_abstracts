@@ -212,13 +212,12 @@ class PaperSearch(App):
                 source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
                 json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
                 self.load_data_dynamic(tree, ds_name, json_path)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.01)
         else:
             ds_name = datasets.options[selected[0]].prompt._text[0] + ".json"
             source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
             json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
             self.load_data_dynamic(tree, ds_name, json_path)
-            await asyncio.sleep(0.1)
 
         datasets.deselect_all()
 
@@ -492,9 +491,3 @@ class PaperSearch(App):
         # tree = self.query_one(JSONTree)
         tree = self.query_one(TreeView)
         tree.show_root = not tree.show_root
-
-#TODO - Add Clustering tab to results.  
-#TODO - Add Arxiv API search tab
-#TODO - Zotero search
-#TODO - Journal search
-#TODO - Domain specific scrape tab
