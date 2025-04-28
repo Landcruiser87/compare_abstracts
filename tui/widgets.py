@@ -247,6 +247,24 @@ def ceil(a, b):
     return (a + b) // b
 
 class SearchProgress(ProgressBar):
+    DEFAULT_CSS = '''
+    SearchProgress {
+        width: 40%;
+        height: 60%;
+        background: $boost;
+        border: heavy $accent magenta;
+        border-title-color: $accent white;
+        padding: 1 2;
+        margin: 1 1;
+        content-align: center middle;
+    }
+
+    #loading-container {
+        width: 100%;
+        height: 100%;
+        align: center middle;
+    }
+    '''
     """Load a progress bar for searching"""
     def __init__(self, count, total, message="Updating..."):
         super().__init__()
@@ -254,22 +272,15 @@ class SearchProgress(ProgressBar):
         self.count = count
         self.total = total
         self.border_title = "Searching.."
-        self.bar_style = "balloon"
+        self.bar_style = "minimal"
         self.color = "magenta"
         self.width = round(0.8 * get_terminal_size()[0])
 
-    
     def style_text(self, segment: Segment) -> Text:
         return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(
             segment[1],
             style="d black",
         )
-    
-    def render_balloon(self, done, rem):
-        total = done + rem
-        bg = "⠁⠈⠐⠠⢀⡀⠄⠂"
-        bg = bg * ceil(total, len(bg))
-        return bg[: max(done - 1, 0)] + "🎈", bg[done : done + rem]
     
     def render_minimal(self, done, rem) -> Segment:
         pre = "━" * done
