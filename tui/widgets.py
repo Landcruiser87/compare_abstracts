@@ -22,7 +22,13 @@ highlighter = ReprHighlighter()
 
 ###############################  Tree node widgets ##############################
 
-class JSONTree(Tree):
+# Define the type hint for the tree node data
+JSONNodeData = dict | list | str | int | float | bool | None
+
+class JSONTree(Tree[JSONNodeData]):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
     def add_node(self, name: str, node: TreeNode, data: object) -> None:
         """Adds a node to the tree.
 
@@ -32,14 +38,14 @@ class JSONTree(Tree):
             data (object): Data associated with the node.
         """
         if isinstance(data, dict):
-            node._label = Text(f"{{}} {name}")
+            node.set_label(Text(f"{{}} {name}"))
             for key, value in data.items():
                 new_node = node.add("")
                 self.add_node(key, new_node, value)
                 new_node.data = value
 
         elif isinstance(data, list):
-            node._label = Text(f"{name}")
+            node.set_label = Text(f"{name}")
             for index, value in enumerate(data):
                 new_node = node.add("")
                 self.add_node(str(index), new_node, value)
@@ -52,11 +58,57 @@ class JSONTree(Tree):
                 )
             else:
                 label = Text(repr(data))
-            node._label = label
-            # node.set_label(label)
+            node.set_label(label)
             node.data = data
+
+# class JSONTree(Tree):
+
+#     def add_node(self, name: str, node: TreeNode, data: object) -> None:
+#         """Adds a node to the tree.
+
+#         Args:
+#             name (str): Name of the node.
+#             node (TreeNode): Parent node.
+#             data (object): Data associated with the node.
+#         """
+#         if isinstance(data, dict):
+#             node._label = Text(f"{{}} {name}")
+#             for key, value in data.items():
+#                 new_node = node.add("")
+#                 self.add_node(key, new_node, value)
+#                 new_node.data = value
+
+#         elif isinstance(data, list):
+#             node._label = Text(f"{name}")
+#             for index, value in enumerate(data):
+#                 new_node = node.add("")
+#                 self.add_node(str(index), new_node, value)
+#                 new_node.data = value
+#         else:
+#             node._allow_expand = False
+#             if name:
+#                 label = Text.assemble(
+#                     Text.from_markup(f"[b]{name}[/b]="), highlighter(repr(data))
+#                 )
+#             else:
+#                 label = Text(repr(data))
+#             node._label = label
+#             # node.set_label(label)
+#             node.data = data
             
+# class TreeView(Widget, can_focus_children=True):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+
+#     def compose(self) -> ComposeResult:
+#         tree = JSONTree()
+#         tree.show_root = False
+#         yield tree
+
 class TreeView(Widget, can_focus_children=True):
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+        
     def compose(self) -> ComposeResult:
         tree = JSONTree("Root")
         tree.show_root = False
@@ -141,6 +193,24 @@ class JSONDocumentView(JSONDocument): #ScrollableContainer
 #Old Widget. 
 class LoadingIndicator(Static):
     """Custom loading indicator widget."""
+    DEFAULT_CSS = '''
+    LoadingIndicator {
+        width: 40%;
+        height: 60%;
+        background: $boost;
+        border: heavy $accent magenta;
+        border-title-color: $accent white;
+        padding: 1 2;
+        margin: 1 1;
+        content-align: center middle;
+    }
+
+    #loading-container {
+        width: 100%;
+        height: 100%;
+        align: center middle;
+    }
+    '''
 
     def __init__(self, message="Updating..."):
         super().__init__()
