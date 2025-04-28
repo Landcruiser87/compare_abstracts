@@ -181,25 +181,35 @@ class PaperSearch(App):
             json_data = clean_string_values(json.loads(json_data))
             json_tree.add_node(root_name, new_node, json_data)
             return json_data
-    
+
     #FUNCTION - Dynamic Data Load - While app is running
-    def load_data_dynamic(self, tree:Tree, ds_name:str, json_path:str):
+    @work(thread=True, exclusive=True)
+    async def load_data_dynamic(self, tree:Tree, ds_name:str, json_data:dict):
+        self.app.notify(f"Loading {ds_name}")
         try:
-            self.app.notify(f"Loading {ds_name}")
-            with open(json_path, mode="r", encoding="utf-8") as f:
-                json_data = f.read()
-                json_data = clean_string_values(json.loads(json_data))
-                new_node = tree.root.add(ds_name)
-                tree.add_node(ds_name, new_node, json_data)
+            new_node = tree.root.add(ds_name)
+            tree.add_node(ds_name, new_node, json_data)
+            await asyncio.sleep(0.1)
 
-        except json.JSONDecodeError as e:
-            self.app.notify(f"Error parsing JSON: {e}", title="Worker Error", severity="error", timeout=10)
-            raise RuntimeError(f"JSON parsing failed: {e}") from e
-
-    @work(thread=True, exclusive=True)    
-    async def add_datasets(self):
+        except Exception as e:
+            self.app.notify(f"Error adding Node: {e}", title="Worker Error", severity="error", timeout=5)
+            raise RuntimeError(f"Node add Error: {e}") from e
+    
+    def add_datasets(self):
         def has_numbers(inputstring):
             return any(char.isdigit() for char in inputstring)
+        
+        def open_file(json_path) -> dict:
+            try:
+                with open(json_path, mode="r", encoding="utf-8") as f:
+                    json_data = f.read()
+                    json_data = clean_string_values(json.loads(json_data))
+                    return json_data
+                
+            except json.JSONDecodeError as e:
+                self.app.notify(f"Error parsing JSON: {e}", severity="error", timeout=5)
+                raise RuntimeError(f"JSON parsing failed: {e}") from e
+            
 
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
@@ -211,19 +221,20 @@ class PaperSearch(App):
                 ds_name = datasets.options[item].prompt._text[0] + ".json"
                 source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
                 json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-                self.call_from_thread(self.load_data_dynamic(tree, ds_name, json_path))
-                await asyncio.sleep(0.01)
+                json_data = open_file(json_path)
+                self.load_data_dynamic(tree, ds_name, json_data)
+                
         else:
             ds_name = datasets.options[selected[0]].prompt._text[0] + ".json"
             source_p = self.root_data_dir if has_numbers(ds_name) else self.srch_data_dir
             json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-            self.call_from_thread(self.load_data_dynamic(tree, ds_name, json_path))
+            json_data = open_file(json_path)
+            self.load_data_dynamic(tree, ds_name, json_data)
 
         datasets.deselect_all()
 
     #FUNCTION - Remove Data
-    @work(thread=True, exclusive=True)
-    async def remove_datasets(self) -> None:
+    def remove_datasets(self) -> None:
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
         datasets: SelectionList = self.query_one("#datasets", SelectionList)
@@ -234,17 +245,16 @@ class PaperSearch(App):
                 rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
                 for node in tree.root.children:
                     if rem_conf in node.label.plain:
-                        self.notify(f"Removing {rem_conf}")
+                        self.app.notify(f"Removing {rem_conf}")
                         node.remove()
-                await asyncio.sleep(0.1)
+                        sleep(0.1)
         else:
             rem_conf = datasets.options[selected[0]].prompt._text[0] + ".json"
             for node in tree.root.children:
                 if rem_conf in node.label.plain:
-                    self.notify(f"Removing {rem_conf}")
+                    self.app.notify(f"Removing {rem_conf}")
                     node.remove()
-                await asyncio.sleep(0.1)
-
+                    sleep(0.1)
         datasets.deselect_all()
 
     #FUNCTION - Reload Selections
