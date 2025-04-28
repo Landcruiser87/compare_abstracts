@@ -183,6 +183,10 @@ class PaperSearch(App):
             json_data = clean_string_values(json.loads(json_data))
             json_tree.add_node(root_name, new_node, json_data)
             return json_data
+        elif isinstance(json_data, dict):
+            new_node = json_tree.root.add(root_name)
+            json_data = clean_string_values(json_data)
+            json_tree.add_node(root_name, new_node, json_data)
 
     def add_datasets(self):
         """Handles the 'Add Dataset' button press by launching a worker."""
@@ -233,8 +237,7 @@ class PaperSearch(App):
                            (dataset_name, dataset_path).
         """
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        # Ensure we get the actual JSONTree instance
-        tree: JSONTree = tree_view.query_one(JSONTree) # Changed Tree to JSONTree
+        tree: JSONTree = tree_view.query_one(JSONTree) 
         worker = get_current_worker()
         total_datasets = len(datasets_info)
 
@@ -420,13 +423,14 @@ class PaperSearch(App):
             return
         
         #Progress bar loading
-        searchbar = SearchProgress(total=len(tree.root.children), count=0)
-        search_container = Container(searchbar, id="loading-container")
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
+        searchbar = SearchProgress(total=len(tree.root.children), count=0)
+        search_container = Container(searchbar, id="loading-container")
+
         root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         results = {}
-        self.push_screen(search_container)
+        self.mount(search_container)
         searchbar.render()
 
         for node in tree.root.children:
@@ -449,8 +453,7 @@ class PaperSearch(App):
             self.app.notify("No results found in all datasets")
             sleep(2)
         
-        if search_container.is_mounted:
-            self.pop_screen(search_container)
+        search_container.remove()
         
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

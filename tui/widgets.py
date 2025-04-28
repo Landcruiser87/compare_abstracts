@@ -247,24 +247,6 @@ def ceil(a, b):
     return (a + b) // b
 
 class SearchProgress(ProgressBar):
-    DEFAULT_CSS = '''
-    SearchProgress {
-        width: 40%;
-        height: 60%;
-        background: $boost;
-        border: heavy $accent magenta;
-        border-title-color: $accent white;
-        padding: 1 2;
-        margin: 1 1;
-        content-align: center middle;
-    }
-
-    #loading-container {
-        width: 100%;
-        height: 100%;
-        align: center middle;
-    }
-    '''
     """Load a progress bar for searching"""
     def __init__(self, count, total, message="Updating..."):
         super().__init__()
