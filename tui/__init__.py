@@ -347,6 +347,11 @@ class PaperSearch(App):
         sims = cosine_similarity(tfid, "scipy")
         return sims[1:], paper_names[1:]
 
+    #FUNCTION - launch cos sim
+    def launch_pdist(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
+        tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
+        sims = pdist_func(tfid, metric)
+    
     #FUNCTION conf search
     def conf_search(
             self,
@@ -400,8 +405,12 @@ class PaperSearch(App):
                             results[label]["metric_thres"] = threshold
                             results[label]["conference"] = conf
 
+        elif metric == "Levenshtein":
+            # I think i can use the pdist function here for the rest of the selections
+            
+            pass
 
-        elif metric in ["Levenstein", "Hamming", "Jaccard", "LCS"]:
+        elif metric in ["Hamming", "Jaccard", "LCS", "Embedding"]:
             self.app.notify(f"{metric} search currently not available")
         
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
@@ -461,7 +470,7 @@ class PaperSearch(App):
                 conf_name = node.label.plain.strip("{}").strip()
                 self.app.call_from_thread(self.notify, f"Searching ({srchcount+1}/{total_datasets}): {conf_name}")
                 
-                # Perform file I/O and JSON parsing in the worker thread
+                # Perform JSON parsing in the worker thread
                 result = self.conf_search(srch_text, node, variables, conf_name)
                 if result:
                     all_results.update(**result)
@@ -472,7 +481,6 @@ class PaperSearch(App):
                         try:
                             progress_bar = self.search_container.query_one(SearchProgress)
                             progress_bar.count = current_count
-                            progress_bar.message = f"Searching..{conf_name}"
                             progress_bar.advance(1)
                             progress_bar.refresh() 
 
@@ -499,7 +507,7 @@ class PaperSearch(App):
                     sleep(2)
 
         except Exception as e:
-            # Catch other potential errors during file reading or processing
+            # Catch other potential errors during json traversal
             logger.error(f"Error during worker run: {e}")
             self.app.call_from_thread(self.notify, f"Search Failed {conf_name}: {e}", severity="error", timeout=2)
 
@@ -515,6 +523,7 @@ class PaperSearch(App):
                         logger.error(f"Error removing search progress container: {e}")
                 self.search_container = None 
             self.app.call_from_thread(remove_progress_ui)
+            #Reload SelectionList to include search results
             self.reload_selectionlist()
 
     ##########################  Tree Functions ####################################
