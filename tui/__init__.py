@@ -276,7 +276,7 @@ class PaperSearch(App):
             except Exception as e:
                 # Catch other potential errors during file reading or processing
                 logger.error(f"Error loading dataset {ds_name}: {e}")
-                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=5)
+                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=2)
 
         self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
 
@@ -496,7 +496,7 @@ class PaperSearch(App):
                     self.app.call_from_thread(self.load_data, tree, root_name, all_results)
                     try:
                         save_data(root_name, all_results)
-                        self.app.call_from_thread(self.notify, f"Found {len(all_results.keys)} in {total_datasets} sources.")
+                        self.app.call_from_thread(self.notify, f"Found {len(all_results.keys())} papers in {total_datasets} sources.")
 
                     except Exception as e:
                         logger.error(f"Failed to save saerch results: {e}")
