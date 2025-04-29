@@ -350,7 +350,7 @@ class PaperSearch(App):
     #FUNCTION - launch cos sim
     def launch_pdist(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
         tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
-        sims = pdist_func(tfid, metric)
+        # sims = pdist_func(tfid, metric)
     
     #FUNCTION conf search
     def conf_search(
@@ -407,7 +407,6 @@ class PaperSearch(App):
 
         elif metric == "Levenshtein":
             # I think i can use the pdist function here for the rest of the selections
-            
             pass
 
         elif metric in ["Hamming", "Jaccard", "LCS", "Embedding"]:
