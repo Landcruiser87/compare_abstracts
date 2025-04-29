@@ -110,7 +110,8 @@ While in root directory run commands below
 
 ```
 $ cd data
-$ mkdir logs logs/scrape logs/tui
+$ mkdir data/logs data/logs/scrape data/logs/tui
+# mkdir data/searches 
 $ cd ..
 ```
 
