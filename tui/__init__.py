@@ -290,14 +290,16 @@ class PaperSearch(App):
 
         if len(selected) > 1:
             for itemid in selected:
-                rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
+                rem_conf = getattr(datasets.options[itemid].prompt, '_text', None)[0]
+                # rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
                 for node in tree.root.children:
-                    if rem_conf == node.label.plain:
+                    if rem_conf in node.label.plain:
                         self.app.notify(f"Removing {rem_conf}")
                         node.remove()
                         sleep(0.1)
         else:
-            rem_conf = datasets.options[selected[0]].prompt._text[0] + ".json"
+            rem_conf = getattr(datasets.options[selected[0]].prompt, '_text', None)[0]
+            # rem_conf = datasets.options[selected[0]].prompt._text[0] + ".json"
             for node in tree.root.children:
                 if rem_conf in node.label.plain:
                     self.app.notify(f"Removing {rem_conf}")
@@ -427,30 +429,7 @@ class PaperSearch(App):
         self.search_container = Container(searchbar, id="loading-container")
         root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
-        # searchbar.render()
-
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
-        
-        # for node in tree.root.children:
-        #     conf = node.label.plain.split()[1]
-        #     self.app.notify(f"Searching {conf}")
-        #     result = self.conf_search(srch_text, node, variables, conf)
-        #     if result:
-        #         self.app.notify(f"Loaded {conf} search results")
-        #         results.update(**result)
-        #     else:
-        #         self.app.notify(f"No results found in {conf}")
-        #     searchbar.advance(1)
-        #     sleep(0.1)
-
-        # if results:
-        #     self.load_data(tree, root_name, results)
-        #     save_data(root_name, results)
-        #     self.app.notify(f"{len(results.keys())} papers found in {len(tree.root.children)} conferences")
-
-        # else:
-        #     self.app.notify("No results found in all datasets")
-        #     sleep(2)
 
     @work(thread=True, exclusive=True, group="dataset_searching")
     async def _search_datasets_worker(
@@ -479,7 +458,7 @@ class PaperSearch(App):
                     self.app.call_from_thread(self.notify, "Search cancelled.")
                     break
                 
-                conf_name = node.label.plain    
+                conf_name = node.label.plain.strip("{}").strip()
                 self.app.call_from_thread(self.notify, f"Searching ({srchcount+1}/{total_datasets}): {conf_name}")
                 
                 # Perform file I/O and JSON parsing in the worker thread
@@ -488,20 +467,20 @@ class PaperSearch(App):
                     all_results.update(**result)
                 srchcount += 1
                 # Define a helper function to perform the UI updates
-                def update_progress_ui(current_count):
+                def update_progress_ui(current_count:int, conf_name:str):
                     if self.search_container and self.search_container.is_mounted:
                         try:
                             progress_bar = self.search_container.query_one(SearchProgress)
                             progress_bar.count = current_count
+                            progress_bar.message = f"Searching..{conf_name}"
                             progress_bar.advance(1)
-                            sleep(2)
-                            progress_bar.refresh() # May need explicit refresh
+                            progress_bar.refresh() 
 
                         except Exception as e:
                              logger.error(f"Failed to update search progress bar: {e}")
 
                 # Schedule the UI update function to run on the main thread
-                self.app.call_from_thread(update_progress_ui, srchcount)
+                self.app.call_from_thread(update_progress_ui, srchcount, conf_name)
                 # Take a power nap to allow UI thread processing time
                 await asyncio.sleep(0.1)
 
@@ -571,6 +550,6 @@ class PaperSearch(App):
     
     #FUNCTION toggle root
     def action_toggle_root(self) -> None:
-        # tree = self.query_one(JSONTree)
-        tree = self.query_one(TreeView)
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root

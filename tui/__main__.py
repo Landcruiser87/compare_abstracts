@@ -87,5 +87,6 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TODO Fix selectionlist reload
 #TODO Remove is acting up now
+    #Can remove previous searches / datasets
+    #But can't remove a current search.  Index error
