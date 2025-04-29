@@ -154,17 +154,6 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
-
-    def reload_selectionlist(self, datasets:SelectionList) -> None:
-        #Manually refresh SelectionList options to avoid index errors
-        datasets.clear_options()
-        self.all_datasets = list_datasets()
-        new_datasets = [
-            Selection(s[0], s[1], False)
-            for s in self.all_datasets
-        ]
-        datasets.add_options(new_datasets)
-
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
         self.add_datasets()
@@ -191,8 +180,8 @@ class PaperSearch(App):
 
     def add_datasets(self):
         """Handles the 'Add Dataset' button press by launching a worker."""
-        datasets_widget: SelectionList = self.query_one("#datasets", SelectionList)
-        selected_indices: list[int] = datasets_widget.selected
+        datasets: SelectionList = self.query_one("#datasets", SelectionList)
+        selected_indices: list[int] = datasets.selected
 
         if not selected_indices:
             self.notify("No datasets selected to add.", severity="warning")
@@ -201,9 +190,9 @@ class PaperSearch(App):
         datasets_to_load: List[Tuple[str, PurePath]] = []
         for index in selected_indices:
             # Ensure index is valid
-            if index < len(datasets_widget.options):
+            if index < len(datasets.options):
                 # Safely access the prompt text
-                prompt_text_list = getattr(datasets_widget.options[index].prompt, '_text', None)
+                prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
                 if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
                     ds_name_base = prompt_text_list[0]
                     ds_name = ds_name_base + ".json"
@@ -225,7 +214,7 @@ class PaperSearch(App):
             self._add_multiple_datasets_worker(datasets_to_load)
         else:
              self.notify("No valid datasets found to load.", severity="warning")
-        datasets_widget.deselect_all()
+        datasets.deselect_all()
 
 
     @work(thread=True, exclusive=True, group="dataset_loading")
@@ -303,7 +292,7 @@ class PaperSearch(App):
             for itemid in selected:
                 rem_conf = datasets.options[itemid].prompt._text[0] + ".json"
                 for node in tree.root.children:
-                    if rem_conf in node.label.plain:
+                    if rem_conf == node.label.plain:
                         self.app.notify(f"Removing {rem_conf}")
                         node.remove()
                         sleep(0.1)
@@ -315,6 +304,17 @@ class PaperSearch(App):
                     node.remove()
                     sleep(0.1)
         datasets.deselect_all()
+
+    def reload_selectionlist(self) -> None:
+        #Manually refresh SelectionList options to avoid index errors
+        datasets = self.query_one("#datasets", SelectionList)
+        datasets.clear_options()
+        self.all_datasets = list_datasets()
+        new_datasets = [
+            Selection(s[0], s[1], False)
+            for s in self.all_datasets
+        ]
+        datasets.add_options(new_datasets)
 
     def is_numeric_string(self, s: str) -> bool:
         """
@@ -493,6 +493,8 @@ class PaperSearch(App):
                         try:
                             progress_bar = self.search_container.query_one(SearchProgress)
                             progress_bar.count = current_count
+                            progress_bar.advance(1)
+                            sleep(2)
                             progress_bar.refresh() # May need explicit refresh
 
                         except Exception as e:
@@ -521,6 +523,7 @@ class PaperSearch(App):
             # Catch other potential errors during file reading or processing
             logger.error(f"Error during worker run: {e}")
             self.app.call_from_thread(self.notify, f"Search Failed {conf_name}: {e}", severity="error", timeout=2)
+
         finally:
             # Remove Progress Bar
             def remove_progress_ui():
@@ -528,11 +531,12 @@ class PaperSearch(App):
                     try:
                         self.search_container.remove()
                         logger.info("Search progress container removed.")
+                        
                     except Exception as e:
                         logger.error(f"Error removing search progress container: {e}")
                 self.search_container = None 
             self.app.call_from_thread(remove_progress_ui)
-        
+            self.reload_selectionlist()
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

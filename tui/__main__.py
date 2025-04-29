@@ -87,3 +87,5 @@ def main():
 if __name__ == "__main__":
     main()
 
+#TODO Fix selectionlist reload
+#TODO Remove is acting up now

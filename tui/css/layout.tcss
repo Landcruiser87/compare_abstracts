@@ -206,8 +206,8 @@ Button {
 /* ############## Search Progress Bar ################### */
 
 SearchProgress {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     background: $boost;
     border: heavy $accent magenta;
     border-title-color: $accent white;
@@ -217,7 +217,7 @@ SearchProgress {
 }
 
 #loading-container {
-    width: 100%;
+    width: 80%;
     height: 100%;
     align: center middle;
 }

@@ -254,26 +254,25 @@ class SearchProgress(ProgressBar):
         self.count = count
         self.total = total
         self.border_title = "Searching.."
-        self.bar_style = "minimal"
         self.color = "magenta"
         self.width = round(0.8 * get_terminal_size()[0])
 
-    def style_text(self, segment: Segment) -> Text:
-        return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(
-            segment[1],
-            style="d black",
-        )
+    # def style_text(self, segment: Segment) -> Text:
+    #     return Text.from_markup(segment[0], style=self.color,) + Text.from_markup(
+    #         segment[1],
+    #         style="d black",
+    #     )
     
-    def render_minimal(self, done, rem) -> Segment:
-        pre = "━" * done
-        suf = "━" * rem
-        return pre, suf
+    # def render_minimal(self, done, rem) -> Segment:
+    #     pre = "━" * done
+    #     suf = "━" * rem
+    #     return pre, suf
 
-    def render(self) -> Text:
-        done = round(self.count / self.total * self.width)
-        rem = self.width - done
-        segment = eval(f"self.render_minimal({done}, {rem})")
-        return self.style_text(segment)
+    # def render(self) -> Text:
+    #     done = round(self.count / self.total * self.width)
+    #     rem = self.width - done
+    #     segment = eval(f"self.render_minimal({done}, {rem})")
+    #     return self.style_text(segment)
 
 # BarStyle = Literal["minimal", "pacman", "rust", "doge", "balloon"]
 ####################### Search tab Widgets #############################
