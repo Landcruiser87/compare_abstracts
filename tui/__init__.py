@@ -33,9 +33,10 @@ from textual.widgets import (
     RadioSet,
     TabbedContent, 
     TabPane,       
-    Tree
+    Tree,
 )
 from textual.widgets.selection_list import Selection
+from textual.widgets.tree import TreeNode
 
 #Custom Imports
 from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
@@ -264,7 +265,7 @@ class PaperSearch(App):
                         if name not in existing_labels:
                             new_node = tree.root.add(name) # Add the top-level node
                             tree.add_node(name, new_node, data) # Populate the node recursively
-                            self.app.notify(f"Successfully added {name} to the tree.")
+                            self.app.notify(f"Successfully added {name}")
                         else:
                              self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
                     except Exception as ui_e:
@@ -315,146 +316,224 @@ class PaperSearch(App):
                     sleep(0.1)
         datasets.deselect_all()
 
-    #FUNCTION - run search
-    def run_search(self) -> None:
-        #FUNCTION - Is numeric string
-        def is_numeric_string(s: str) -> bool:
-            """
-            Checks if a string represents a valid integer or float.
+    def is_numeric_string(self, s: str) -> bool:
+        """
+        Checks if a string represents a valid integer or float.
 
-            Handles integers, floats, scientific notation, and leading/trailing whitespace.
-            Note: Also returns True for 'inf', '-inf', and 'nan'.
+        Handles integers, floats, scientific notation, and leading/trailing whitespace.
+        Note: Also returns True for 'inf', '-inf', and 'nan'.
 
-            Args:
-                s: The string to check.
+        Args:
+            s: The string to check.
 
-            Returns:
-                True if the string can be converted to a float, False otherwise.
-            """
-            if not isinstance(s, str):
-                return False
-            try:
-                float(s)
-                return True
-            except ValueError:
-                return False
-            except TypeError: 
-                return False
-            
-        #FUNCTION - launch cos sim
-        def launch_cos(srch_txt:str, srch_field:str, node:Tree):
-            tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
-            sims = cosine_similarity(tfid, "scipy")
-            return sims[1:], paper_names[1:]
+        Returns:
+            True if the string can be converted to a float, False otherwise.
+        """
+        if not isinstance(s, str):
+            return False
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+        except TypeError: 
+            return False
+        
+    #FUNCTION - launch cos sim
+    def launch_cos(self, srch_txt:str, srch_field:str, node:Tree):
+        tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
+        sims = cosine_similarity(tfid, "scipy")
+        return sims[1:], paper_names[1:]
 
-        #FUNCTION conf search
-        def conf_search(
-                srch_text:str, 
-                node:Tree, 
-                variables:list,
-                conf:str
-            ):
-            #Load variables
-            results = {}
-            metric = SEARCH_METRICS[variables[0]]
-            field = SEARCH_FIELDS[variables[1]]
-            res_limit = int(variables[2])
-            threshold = float(variables[3])
-            #Decide metric
-            if metric == "Fuzzy":
+    #FUNCTION conf search
+    def conf_search(
+            self,
+            srch_text:str, 
+            node:Tree, 
+            variables:list,
+            conf:str
+        ):
+        #Load variables
+        results = {}
+        metric = SEARCH_METRICS[variables[0]]
+        field = SEARCH_FIELDS[variables[1]]
+        res_limit = int(variables[2])
+        threshold = float(variables[3])
+        #Decide metric
+        if metric == "Fuzzy":
+            node_queue = deque(node.children)
+            while node_queue:
+                paperkey = node_queue.popleft()
+                labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                if field in labels:
+                    index = labels.index(field)
+                    criteria = paperkey.children[index].label.plain.split("=")[1]
+                    query = Matcher(srch_text)
+                    match_num = query.match(criteria)
+                    if match_num > threshold:
+                        reskey = paperkey.label.plain[3:]
+                        results[reskey] = paperkey.data
+                        results[reskey]["metric_match"] = round(match_num, 3)
+                        results[reskey]["metric_thres"] = threshold
+                        results[reskey]["conference"] = conf
+
+        elif metric == "Cosine":
+            sims, paper_names = self.launch_cos(srch_text, field, node) 
+            arr = np.array(sims, dtype=np.float32)
+            qual_indexes = np.where(arr >= threshold)[0]
+            if qual_indexes.shape[0] > 0:
+                paper_info = [(idx, paper_names[idx], arr[idx]) for idx in qual_indexes]
                 node_queue = deque(node.children)
                 while node_queue:
                     paperkey = node_queue.popleft()
-                    labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
-                    if field in labels:
-                        index = labels.index(field)
-                        criteria = paperkey.children[index].label.plain.split("=")[1]
-                        query = Matcher(srch_text)
-                        match_num = query.match(criteria)
-                        if match_num > threshold:
-                            reskey = paperkey.label.plain[3:]
-                            results[reskey] = paperkey.data
-                            results[reskey]["metric_match"] = round(match_num, 3)
-                            results[reskey]["metric_thres"] = threshold
-                            results[reskey]["conference"] = conf
-
-            elif metric == "Cosine":
-                sims, paper_names = launch_cos(srch_text, field, node) 
-                arr = np.array(sims, dtype=np.float32)
-                qual_indexes = np.where(arr >= threshold)[0]
-                if qual_indexes.shape[0] > 0:
-                    paper_info = [(idx, paper_names[idx], arr[idx]) for idx in qual_indexes]
-                    node_queue = deque(node.children)
-                    while node_queue:
-                        paperkey = node_queue.popleft()
-                        label = paperkey.label.plain.strip("{}").strip()
-                        papers = [x[1] for x in paper_info]
-                        if label in papers:
-                            labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
-                            if field in labels:
-                                index = labels.index(field)
-                                results[label] = paperkey.data
-                                similarity = paper_info[papers.index(label)][2].item()
-                                results[label]["metric_match"] = round(similarity, 4)
-                                results[label]["metric_thres"] = threshold
-                                results[label]["conference"] = conf
+                    label = paperkey.label.plain.strip("{}").strip()
+                    papers = [x[1] for x in paper_info]
+                    if label in papers:
+                        labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                        if field in labels:
+                            index = labels.index(field)
+                            results[label] = paperkey.data
+                            similarity = paper_info[papers.index(label)][2].item()
+                            results[label]["metric_match"] = round(similarity, 4)
+                            results[label]["metric_thres"] = threshold
+                            results[label]["conference"] = conf
 
 
-            elif metric == "Levenstein":
-                self.app.notify(f"{metric} search currently not available")
-            elif metric == "Hamming":
-                self.app.notify(f"{metric} search currently not available")
-            elif metric == "Jaccard":
-                self.app.notify(f"{metric} search currently not available")
-            elif metric == "LCS":
-                self.app.notify(f"{metric} search currently not available")
-            
-            res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
-            return dict(res)
+        elif metric in ["Levenstein", "Hamming", "Jaccard", "LCS"]:
+            self.app.notify(f"{metric} search currently not available")
+        
+        res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
+        return dict(res)
 
+
+    #FUNCTION - run search
+    def run_search(self) -> None:
+        #FUNCTION - Is numeric string
         srch_text = self.query_one("#input-search", Input).value
         metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
         variables = [metric, field, res_limit, threshold]
-        if not all(is_numeric_string(str(var)) for var in variables):
+        if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return
-        
+
         #Progress bar loading
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
-        searchbar = SearchProgress(total=len(tree.root.children), count=0)
-        search_container = Container(searchbar, id="loading-container")
-
+        sources: list = list(tree.root.children)
+        searchbar = SearchProgress(count=0, total=len(sources))
+        self.search_container = Container(searchbar, id="loading-container")
         root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
-        results = {}
-        self.mount(search_container)
-        searchbar.render()
+        self.mount(self.search_container)
+        # searchbar.render()
 
-        for node in tree.root.children:
-            conf = node.label.plain.split()[1]
-            self.app.notify(f"Searching {conf}")
-            result = conf_search(srch_text, node, variables, conf)
-            if result:
-                results.update(**result)
-            else:
-                self.notify(f"No results found in {conf}")
-            searchbar.advance(1)
-            sleep(0.1)
-
-        if results:
-            self.load_data(tree, root_name, results)
-            save_data(root_name, results)
-            self.app.notify(f"{len(results.keys())} papers found in {len(tree.root.children)} conferences")
-
-        else:
-            self.app.notify("No results found in all datasets")
-            sleep(2)
+        self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
         
-        search_container.remove()
+        # for node in tree.root.children:
+        #     conf = node.label.plain.split()[1]
+        #     self.app.notify(f"Searching {conf}")
+        #     result = self.conf_search(srch_text, node, variables, conf)
+        #     if result:
+        #         self.app.notify(f"Loaded {conf} search results")
+        #         results.update(**result)
+        #     else:
+        #         self.app.notify(f"No results found in {conf}")
+        #     searchbar.advance(1)
+        #     sleep(0.1)
+
+        # if results:
+        #     self.load_data(tree, root_name, results)
+        #     save_data(root_name, results)
+        #     self.app.notify(f"{len(results.keys())} papers found in {len(tree.root.children)} conferences")
+
+        # else:
+        #     self.app.notify("No results found in all datasets")
+        #     sleep(2)
+
+    @work(thread=True, exclusive=True, group="dataset_searching")
+    async def _search_datasets_worker(
+        self, 
+        srch_text:str, 
+        variables: list,
+        sources: List[TreeNode],
+        root_name: str,
+        tree: Tree
+        ):
+        """Worker thread to search JSON files.
+
+        Args:
+            srch_text (str): _description_
+            variables (list): _description_
+            sources (List[TreeNode]): _description_
+            root_name (str): _description_
+        """
+        worker = get_current_worker()
+        total_datasets = len(sources)
+        all_results = {}
+        srchcount = 0
+        try:
+            for node in sources:
+                if worker.is_cancelled:
+                    self.app.call_from_thread(self.notify, "Search cancelled.")
+                    break
+                
+                conf_name = node.label.plain    
+                self.app.call_from_thread(self.notify, f"Searching ({srchcount+1}/{total_datasets}): {conf_name}")
+                
+                # Perform file I/O and JSON parsing in the worker thread
+                result = self.conf_search(srch_text, node, variables, conf_name)
+                if result:
+                    all_results.update(**result)
+                srchcount += 1
+                # Define a helper function to perform the UI updates
+                def update_progress_ui(current_count):
+                    if self.search_container and self.search_container.is_mounted:
+                        try:
+                            progress_bar = self.search_container.query_one(SearchProgress)
+                            progress_bar.count = current_count
+                            progress_bar.refresh() # May need explicit refresh
+
+                        except Exception as e:
+                             logger.error(f"Failed to update search progress bar: {e}")
+
+                # Schedule the UI update function to run on the main thread
+                self.app.call_from_thread(update_progress_ui, srchcount)
+                # Take a power nap to allow UI thread processing time
+                await asyncio.sleep(0.1)
+
+            if not worker.is_cancelled:                
+                if all_results:
+                    self.app.call_from_thread(self.load_data, tree, root_name, all_results)
+                    try:
+                        save_data(root_name, all_results)
+                        self.app.call_from_thread(self.notify, f"Found {len(all_results.keys)} in {total_datasets} sources.")
+
+                    except Exception as e:
+                        logger.error(f"Failed to save saerch results: {e}")
+
+                else:
+                    self.app.call_from_thread(self.notify, "Search Complete, No results found")
+                    sleep(2)
+
+        except Exception as e:
+            # Catch other potential errors during file reading or processing
+            logger.error(f"Error during worker run: {e}")
+            self.app.call_from_thread(self.notify, f"Search Failed {conf_name}: {e}", severity="error", timeout=2)
+        finally:
+            # Remove Progress Bar
+            def remove_progress_ui():
+                if self.search_container and self.search_container.is_mounted:
+                    try:
+                        self.search_container.remove()
+                        logger.info("Search progress container removed.")
+                    except Exception as e:
+                        logger.error(f"Error removing search progress container: {e}")
+                self.search_container = None 
+            self.app.call_from_thread(remove_progress_ui)
         
+
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:

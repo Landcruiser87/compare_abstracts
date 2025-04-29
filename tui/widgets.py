@@ -248,7 +248,7 @@ def ceil(a, b):
 
 class SearchProgress(ProgressBar):
     """Load a progress bar for searching"""
-    def __init__(self, count, total, message="Updating..."):
+    def __init__(self, count:int, total:int, message:str="Updating..."):
         super().__init__()
         self.message = message
         self.count = count
