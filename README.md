@@ -146,40 +146,15 @@ python tui/__main__.py
 ```
 
 
-
 # Project Todo list
 
 ### Possible modeling paths
 1. Clustering
-2. Cosine similarity to a particular abstract
-3. Gemma / Bert embedding
+2. Gemma / Bert embedding
    1. tsne
    2. Look at first two components to find the subject topics that are most in variation.
 
 
 ### TUI
-- [ ] Need a more advanced layout for search
-  - How is that search going to look... native dropdowns?
-  - Sidebar that expands from the left/right?
-  - Window popup.
-  - Button that pops up when a certain type of field is selected??
-  - Need to be able to search other JSONs
-  - Keep the tree on the left.. Tabbed Panel on the right with summary or search functions
-    - Defaults to the summary tab (JSONDocumentView) when navigating the tree.  Keyboard binding trigger to load search tab...  
-    - Types of search
-    - [ ] Cosine Sim search
-      - Easy first win for search.  Do cos sim search by abstract.  Return top 10 papers for exploration.  
-      - Things I want to be able to search by... (maybe have a dropdown where you select which one?)
-        1. Abstract
-        2. keywords - (will need a warning for empty keywords aren't present)
-        3. topic
-        4. Free text search
-        
-    - [ ] Regex Search  
-      - Enter word, highlight which other members of the tree might have those searchwords?
-      - 
-- [ ] Zotero Connector.  
-  - Use their OCR for citation grabs from the pdf urls.
-- [ ] Citation impact factor analysis
   - Tom Arnold idea.  Build a graph network from the citations of each paper
-  - Analyze who is getting cited most often and driving a particular area of research.  Really like this
+  - Analyze who is getting cited most often and driving a particular area of research.  Really like this!!
