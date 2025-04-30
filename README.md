@@ -109,10 +109,8 @@ poetry show -T
 While in root directory run commands below
 
 ```
-$ cd data
 $ mkdir data/logs data/logs/scrape data/logs/tui
 # mkdir data/searches 
-$ cd ..
 ```
 
 ## TUI
