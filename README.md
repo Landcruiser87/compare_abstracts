@@ -144,6 +144,7 @@ poetry run python tui/__main__.py
 
 python tui/__main__.py 
 ```
+With the TUI running, it should look something like this. 
 
 
 # Project Todo list
