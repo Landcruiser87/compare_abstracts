@@ -14,7 +14,8 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 
 ## Disclaimer 
 
-Current product version is 0.2.8.  Tui folder is currently under construction so run any TUI commands from the backup/0.2.8 folder.  
+Current product version is 0.3.0.  All function in the TUI folder are operational.  
+
 
 ## Requirements
 - Python >= 3.11

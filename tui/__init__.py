@@ -455,6 +455,7 @@ class PaperSearch(App):
             variables (list): _description_
             sources (List[TreeNode]): _description_
             root_name (str): _description_
+            tree (Tree): _description_
         """
         worker = get_current_worker()
         total_datasets = len(sources)
