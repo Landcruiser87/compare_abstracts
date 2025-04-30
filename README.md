@@ -41,7 +41,7 @@ Launch VSCode if that is IDE of choice.
 In your terminal, navigate to your root folder.
 
 If poetry is not installed, do so in order to continue
-This will install version 1.7.0.  Adjust to your preference
+This will install version 2.0.0.  Adjust to your preference
 
 ```terminal
 curl -sSL https://install.python-poetry.org | python3 - --version 2.0.0
