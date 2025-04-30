@@ -146,6 +146,7 @@ python tui/__main__.py
 ```
 With the TUI running, it should look something like this. 
 
+https://github.com/Landcruiser87/paper_search/issues/1#issue-3031392630
 
 # Project Todo list
 
