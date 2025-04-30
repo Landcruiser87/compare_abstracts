@@ -153,8 +153,9 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 # Project Todo list
 
 ### Possible modeling paths
-1. Clustering
-2. Gemma / Bert embedding
+1. Clustering Tab
+2. LLM Summarization Tab
+3. Gemma / Bert embedding
    1. tsne
    2. Look at first two components to find the subject topics that are most in variation.
 
