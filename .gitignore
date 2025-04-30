@@ -130,7 +130,7 @@ dmypy.json
 
 #Project specific folders
 
-/data/backup
+/data/backup/
 /data/cleaned
 /data/searches
 /data/files
@@ -142,7 +142,6 @@ dmypy.json
 *.log
 *.csv
 *.xlsx
-*.txt
 .Rhistory
 .DS_Store
 
