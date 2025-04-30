@@ -135,7 +135,7 @@ python tui/__main__.py data/scraped/2024_ICML.json
 ```
 
 With no file args, like a madman.  This will launch a file picking application
-that scans the `data/scraped` folder and shows you a list of available files. 
+that scans the `data/conferences` folder and shows you a list of available files. 
 Enter a number of the conference you want, and you're good to go.
 
 ```terminal
