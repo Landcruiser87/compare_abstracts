@@ -39,7 +39,13 @@ from textual.widgets.selection_list import Selection
 from textual.widgets.tree import TreeNode
 
 #Custom Imports
-from utils import clean_string_values, get_c_time, cosine_similarity, clean_vectorize
+from utils import (
+    clean_string_values,
+    get_c_time, 
+    cosine_similarity, 
+    clean_vectorize, 
+    pdist_func
+)
 from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS, logger
 
 if TYPE_CHECKING:
@@ -405,13 +411,9 @@ class PaperSearch(App):
                             results[label]["metric_thres"] = threshold
                             results[label]["conference"] = conf
 
-        elif metric == "Levenshtein":
-            # I think i can use the pdist function here for the rest of the selections
-            pass
-
-        elif metric in ["Hamming", "Jaccard", "LCS", "Embedding"]:
+        else:
             self.app.notify(f"{metric} search currently not available")
-        
+            return
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
 

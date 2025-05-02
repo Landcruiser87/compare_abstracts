@@ -110,3 +110,6 @@ def cosine_similarity(tsfrm, ts_type:str):
 		return sims
 	else:
 		raise ValueError (f"{ts_type} not an available cosine transform. Check spelling for scipy or sklearn")
+
+def pdist_func():
+    pass
