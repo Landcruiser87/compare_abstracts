@@ -40,12 +40,15 @@ from textual.widgets.tree import TreeNode
 
 #Custom Imports
 from utils import (
-    clean_string_values,
+    sbert,
+    word2vec,
+    tfidf,    
     get_c_time, 
+    clean_text, 
     cosine_similarity, 
-    clean_data, 
-    vectorize,
+    clean_string_values,
 )
+
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_METRICS,    #global vars
@@ -215,7 +218,6 @@ class PaperSearch(App):
             else:
                  self.notify(f"Selection index {index} is out of bounds.", severity="warning")
 
-
         if datasets_to_load:
             self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
             # Pass the list of datasets to the worker
@@ -350,10 +352,23 @@ class PaperSearch(App):
         
     #FUNCTION - launch cos sim
     def launch_cos(self, srch_txt:str, srch_field:str, node:Tree):
-        fields, paper_names = clean_data(srch_txt, srch_field, node)
-        tfid, paper_names = vectorize(fields, paper_names)
+        fields, paper_names = clean_text(srch_txt, srch_field, node)
+        tfid, paper_names = tfidf(fields, paper_names)
         sims = cosine_similarity(tfid, "scipy")
         return sims[1:], paper_names[1:]
+
+    #FUNCTION - launch word2vec
+    def launch_word2vec(self, srch_txt:str, srch_field:str, node:Tree):
+        nlp = word2vec()
+        fields, paper_names = clean_text(srch_txt, srch_field, node)
+        target = nlp(srch_txt)
+        sims = []
+        for idx, field in enumerate(fields):
+            corpus = nlp(field)
+            sim = target.similarity(corpus)
+            sims.append(sim)
+
+        return sims, paper_names
 
     #FUNCTION conf search
     def conf_search(
@@ -387,8 +402,14 @@ class PaperSearch(App):
                         results[reskey]["metric_thres"] = threshold
                         results[reskey]["conference"] = conf
 
-        elif metric == "Cosine":
-            sims, paper_names = self.launch_cos(srch_text, field, node) 
+        elif metric == "Cosine" | metric == "Word2Vec":
+            if metric == "Cosine":
+                sims, paper_names = self.launch_cos(srch_text, field, node) 
+            elif metric == "Word2Vec":
+                sims, paper_names = self.launch_word2vec(srch_text, field, node)
+            else:
+                self.app.notify("Something broke", severity="error")
+
             arr = np.array(sims, dtype=np.float32)
             qual_indexes = np.where(arr >= threshold)[0]
             if qual_indexes.shape[0] > 0:
@@ -407,35 +428,28 @@ class PaperSearch(App):
                             results[label]["metric_match"] = round(similarity, 4)
                             results[label]["metric_thres"] = threshold
                             results[label]["conference"] = conf
-
-        elif metric == "Jaccard":
-            #gameplan. 
-            #1. reclean the data. 
-            #2. refactor the cleaning
-            # reduce words to the roots/lemms
-
-            pass
         else:
             self.app.notify(f"{metric} search currently not available")
             return
+        
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
 
 
     #FUNCTION - run search
     def run_search(self) -> None:
-        #FUNCTION - Is numeric string
+        #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
         metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
+        #bind the info together in a tuple
         variables = [metric, field, res_limit, threshold]
         if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return
 
-        #Progress bar loading
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
         sources: list = list(tree.root.children)

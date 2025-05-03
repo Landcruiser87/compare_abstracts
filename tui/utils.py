@@ -2,6 +2,8 @@ import contextlib
 import datetime
 import json
 import re
+import numpy as np
+import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from scipy.spatial.distance import cosine as scipy_cos
@@ -18,14 +20,13 @@ def get_c_time():
     return current_t_s
 
 #FUNCTION Clean String vals
-def clean_string_values(obj):
+def clean_string_values(obj: dict|list|str) -> dict|list|str:
     if isinstance(obj, dict):
         for key, value in obj.items():
             if isinstance(value, str):
                 value = value.replace("\\r\\n", "")
                 with contextlib.suppress(json.JSONDecodeError):
                     value = json.loads(value)
-
             cleaned_value = clean_string_values(value)
             obj[key] = cleaned_value
     elif isinstance(obj, list):
@@ -37,12 +38,12 @@ def clean_string_values(obj):
 
     return obj
 
-def clean_data(srch_text:str, srch_field, node):
+def clean_text(srch_text:str, srch_field, node)-> list:
     #Pull out the fields into a list
     data_fields = [x.data.get(srch_field) for x in node.children]
     paper_names = [x.label.plain.strip("{}").strip() for x in node.children]
     with open("./data/stopwords.txt", "r") as f:
-        stopwords_list = f.read().splitlines()
+        stopwords_list = f.read()
     # stopwords_list = requests.get("https://gist.githubusercontent.com/rg089/35e00abf8941d72d419224cfd5b5925d/raw/12d899b70156fd0041fa9778d657330b024b959c/stopwords.txt").text
     stopwords = set(stopwords_list.splitlines())
     #Add the search term to the list at the zero index
@@ -60,7 +61,8 @@ def clean_data(srch_text:str, srch_field, node):
             data_fields[idx] = ""
     return data_fields, paper_names
 
-def vectorize(data_fields:list, paper_names:list):
+def tfidf(data_fields:list, paper_names:list):
+    #starting off using L1 normlization
     base_params = {
         "binary":False, 
         "norm":"l1",
@@ -86,7 +88,7 @@ def vectorize(data_fields:list, paper_names:list):
 
 def cosine_similarity(tsfrm, ts_type:str):
 	"""Function that allows you to use either sklearns, or scipy's cosine similarity
-	Inputs need to be a sparse array.  Scipy uses np.arrays, but the code 
+	Inputs are already in a sparse array format.  Scipy uses np.arrays, but the code 
 	below will handle that. 
 
 	Args:
@@ -114,5 +116,27 @@ def cosine_similarity(tsfrm, ts_type:str):
 	else:
 		raise ValueError (f"{ts_type} not an available cosine transform. Check spelling for scipy or sklearn")
 
-def pdist_func():
+def embedding_cos_sim(query:str, compare:str):
+    """Manual cosine similarity calculation
+
+    Args:
+        query (str): query text
+        compare (str): text to compare
+
+    Returns:
+        _type_: cosine similarity (-1 to 1)
+    """    
+    return np.dot(query, compare) / (np.linalg.norm(query) * np.linalg.norm(compare))
+
+def word2vec():
+    try:
+        model_name = "en_core_web_md"
+        nlp = spacy.load(model_name)
+        return nlp
+    except Exception as e:
+        raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
+
+
+def sbert():
     pass
+
