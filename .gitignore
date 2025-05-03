@@ -140,7 +140,7 @@ dmypy.json
 /.vscode
 /.pytest_cache
 *.log
-# *.txt
+*.txt
 *.csv
 *.xlsx
 .Rhistory
