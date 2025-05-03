@@ -278,7 +278,7 @@ def save_data(search_name:str, data:dict):
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"] 
-SEARCH_METRICS = ["Fuzzy", "Cosine", "Levenshtein", "Jaccard", "Euclidean"] 
+SEARCH_METRICS = ["Fuzzy", "Cosine", "Jaccard", "Euclidean"] #Levenshtein
 #TODO - Add "selected field" (in the tree) as a search field. 
 #TODO - Add 2 search metrics -> "Word2Vec", "Embedding"
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")

@@ -43,11 +43,13 @@ from utils import (
     clean_string_values,
     get_c_time, 
     cosine_similarity, 
-    clean_vectorize, 
-    pdist_func
+    clean_data, 
+    vectorize,
 )
-from support import list_datasets, save_data, SEARCH_FIELDS, SEARCH_METRICS, logger
-
+from support import (
+    list_datasets, save_data, logger, #functions
+    SEARCH_FIELDS, SEARCH_METRICS,    #global vars
+)
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
@@ -134,7 +136,6 @@ class PaperSearch(App):
                         with Container(id="dc-rightside"):
                             yield Button("Add Dataset", id="add-button")
                             yield Button("Remove Dataset", id="rem-button")
-
         yield Footer()
 
     #FUNCTION - onmount
@@ -160,6 +161,7 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
+
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
         self.add_datasets()
@@ -221,7 +223,6 @@ class PaperSearch(App):
         else:
              self.notify("No valid datasets found to load.", severity="warning")
         datasets.deselect_all()
-
 
     @work(thread=True, exclusive=True, group="dataset_loading")
     async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
@@ -349,15 +350,11 @@ class PaperSearch(App):
         
     #FUNCTION - launch cos sim
     def launch_cos(self, srch_txt:str, srch_field:str, node:Tree):
-        tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
+        fields, paper_names = clean_data(srch_txt, srch_field, node)
+        tfid, paper_names = vectorize(fields, paper_names)
         sims = cosine_similarity(tfid, "scipy")
         return sims[1:], paper_names[1:]
 
-    #FUNCTION - launch cos sim
-    def launch_pdist(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
-        tfid, paper_names = clean_vectorize(srch_txt, srch_field, node)
-        # sims = pdist_func(tfid, metric)
-    
     #FUNCTION conf search
     def conf_search(
             self,
@@ -411,6 +408,13 @@ class PaperSearch(App):
                             results[label]["metric_thres"] = threshold
                             results[label]["conference"] = conf
 
+        elif metric == "Jaccard":
+            #gameplan. 
+            #1. reclean the data. 
+            #2. refactor the cleaning
+            # reduce words to the roots/lemms
+
+            pass
         else:
             self.app.notify(f"{metric} search currently not available")
             return
@@ -564,3 +568,4 @@ class PaperSearch(App):
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
+# ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3

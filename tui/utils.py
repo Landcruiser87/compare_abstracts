@@ -1,7 +1,6 @@
 import contextlib
 import datetime
 import json
-import requests
 import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
@@ -38,11 +37,13 @@ def clean_string_values(obj):
 
     return obj
 
-def clean_vectorize(srch_text:str, srch_field, node):
+def clean_data(srch_text:str, srch_field, node):
     #Pull out the fields into a list
     data_fields = [x.data.get(srch_field) for x in node.children]
     paper_names = [x.label.plain.strip("{}").strip() for x in node.children]
-    stopwords_list = requests.get("https://gist.githubusercontent.com/rg089/35e00abf8941d72d419224cfd5b5925d/raw/12d899b70156fd0041fa9778d657330b024b959c/stopwords.txt").text
+    with open("./data/stopwords.txt", "r") as f:
+        stopwords_list = f.read().splitlines()
+    # stopwords_list = requests.get("https://gist.githubusercontent.com/rg089/35e00abf8941d72d419224cfd5b5925d/raw/12d899b70156fd0041fa9778d657330b024b959c/stopwords.txt").text
     stopwords = set(stopwords_list.splitlines())
     #Add the search term to the list at the zero index
     data_fields.insert(0, srch_text)
@@ -57,7 +58,9 @@ def clean_vectorize(srch_text:str, srch_field, node):
             data_fields[idx] = " ".join(s_txt)
         else:
             data_fields[idx] = ""
-    
+    return data_fields, paper_names
+
+def vectorize(data_fields:list, paper_names:list):
     base_params = {
         "binary":False, 
         "norm":"l1",
