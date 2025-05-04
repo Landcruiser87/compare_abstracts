@@ -279,7 +279,7 @@ MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"] 
 #Metrics for asymetric similarity search
-SEARCH_METRICS = ["Fuzzy", "Cosine", "Word2Vec", "Glove"]
+SEARCH_METRICS = ["Fuzzy", "Cosine", "Word2Vec", "SBert"]
 #TODO - Add "selected field" (in the tree) as a search field. 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
