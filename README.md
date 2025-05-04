@@ -124,10 +124,6 @@ activated` type the following in your terminal. This should install the model
 in your activated environment. You can check by looking for something like
 en_core_web_md-3.8.0.... in your .venv/Lib/site-packages folder.
 
-#### Runtime Notes
-- Search with word2vec takes longer to run.  Patience Iago
-- Fuzzy search on abstract will take even longer
-
 
 ```terminal
 python -m spacy download en_core_web_md
@@ -162,10 +158,16 @@ poetry run python tui/__main__.py
 
 python tui/__main__.py 
 ```
+
+#### Runtime Notes
+
+- Search with word2vec takes longer to run.  Patience Iago
+- Fuzzy search on abstract will take even longer
+
+
 With the TUI running, it should look something like this. 
 
 https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
-
 
 
 # Project Todo list
