@@ -28,6 +28,7 @@ The two search parameters that work best are `title and abstract` as those have 
 - textual
 - requests
 - matplotlib
+- spacy
 
 In `VSCODE` press `CTRL + SHIFT + ~` to open a terminal
 Navigate to the directory where you want to clone the repo. 
@@ -106,6 +107,7 @@ To view only top level library requirements
 ```terminal
 poetry show -T
 ```
+
 ## File Setup
 
 While in root directory run commands below
@@ -113,6 +115,22 @@ While in root directory run commands below
 ```
 $ mkdir data/logs data/logs/scrape data/logs/tui
 # mkdir data/searches 
+```
+
+## Model setup
+If you'd like to use `word2vec` to do your asymetric semantic search, you'll need
+to do a few things before starting.  `In your terminal, with your environment
+activated` type the following in your terminal. This should install the model 
+in your activated environment. You can check by looking for something like
+en_core_web_md-3.8.0.... in your .venv/Lib/site-packages folder.
+
+#### Runtime Notes
+- Search with word2vec takes longer to run.  Patience Iago
+- Fuzzy search on abstract will take even longer
+
+
+```terminal
+python -m spacy download en_core_web_md
 ```
 
 ## TUI
