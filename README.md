@@ -83,7 +83,7 @@ Windows
 
 Mac/Linux
 ```terminal
-source .venv\bin\activate
+source .venv/bin/activate
 ```
 
 To install libraries
@@ -163,6 +163,11 @@ python tui/__main__.py
 
 - Search with word2vec takes longer to run.  Patience Iago
 - Fuzzy search on abstract will take even longer
+
+Suggested operation ranges
+- Fuzzy => 1-10
+- Cosine => -1 to 1
+- Word2vec => -1 to 1
 
 
 With the TUI running, it should look something like this. 
