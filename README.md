@@ -165,10 +165,12 @@ python tui/__main__.py
 - Fuzzy search on abstract will take even longer
 
 Suggested operation ranges
-- Fuzzy => 1-10
+- Fuzzy => 1 to 10
+  - Best results around 5
 - Cosine => -1 to 1
+  - Best results around 0.40
 - Word2vec => -1 to 1
-
+  - Best results around 0.85
 
 With the TUI running, it should look something like this. 
 
