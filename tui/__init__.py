@@ -363,7 +363,7 @@ class PaperSearch(App):
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         target = nlp(srch_txt)
         sims = []
-        for idx, field in enumerate(fields):
+        for field in fields:
             corpus = nlp(field)
             sim = target.similarity(corpus)
             sims.append(sim)
@@ -402,7 +402,7 @@ class PaperSearch(App):
                         results[reskey]["metric_thres"] = threshold
                         results[reskey]["conference"] = conf
 
-        elif metric == "Cosine" | metric == "Word2Vec":
+        elif (metric == "Cosine") | (metric == "Word2Vec"):
             if metric == "Cosine":
                 sims, paper_names = self.launch_cos(srch_text, field, node) 
             elif metric == "Word2Vec":
