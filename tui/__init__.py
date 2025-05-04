@@ -409,7 +409,7 @@ class PaperSearch(App):
                 sims, paper_names = self.launch_word2vec(srch_text, field, node)
             else:
                 self.app.notify("Something broke", severity="error")
-
+                raise ValueError("Something broke, check me! Line 412")
             arr = np.array(sims, dtype=np.float32)
             qual_indexes = np.where(arr >= threshold)[0]
             if qual_indexes.shape[0] > 0:
