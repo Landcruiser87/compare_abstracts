@@ -373,9 +373,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-#TODO - remember to fix the keys up to 2022.  Somehow you forgot to include the space in front of the title.  doh!
-
-    #Go here to scrape other conferences. 
-        #https://proceedings.mlr.press/
-        #Ummm each conf on the above site have RSS feeds.  I can pull papers from all of them!!!
-    #Other future conferences to add
+#TODO - Would it be worth scraping openreview.net for any missing details in my json?

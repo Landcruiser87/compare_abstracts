@@ -583,3 +583,4 @@ class PaperSearch(App):
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
 # ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3
+#TODO - Create selection routine that fires when hovering over the threshold box giving suggested ranges. 

@@ -156,7 +156,7 @@ Enter a number of the conference you want, and you're good to go.
 ```terminal
 poetry run python tui/__main__.py
 
-python tui/__main__.py 
+python tui/__main__.py
 ```
 
 #### Runtime Notes
