@@ -179,10 +179,17 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 # Project Todo list
 
+### Additional Datasets
+
+1. Consider Arxiv API connector or BioRxiv
+2. 
+
 ### Possible modeling paths
-1. Clustering Tab
+
+1. Implement SBert Model
 2. LLM Summarization Tab
-3. Gemma / Bert embedding
+3. Clustering Tab
+4. Gemma / Bert embedding
    1. tsne
    2. Look at first two components to find the subject topics that are most in variation.
 
