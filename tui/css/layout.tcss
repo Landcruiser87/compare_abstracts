@@ -142,7 +142,7 @@ JSONDocument Static {
 #dataset-container  {
     layout: grid;
     grid-size: 2;
-    grid-columns: 0.8fr 1.1fr 1.1fr;
+    grid-columns: 1.7fr 0.6fr 0.6fr;
     grid-rows: 0.8fr 0.6fr 1.4fr;
     border: green;
     background: $panel;
@@ -169,7 +169,7 @@ Button {
 
 #add-button {
     height: 1fr;
-    width: 0.8fr;
+    width: 0.9fr;
     border: green;
     margin-bottom: 1;
     margin-left: 4;
@@ -177,7 +177,7 @@ Button {
 
 #rem-button {
     height: 1fr;
-    width: 0.8fr;
+    width: 0.9fr;
     border: red;
     margin-bottom: 1;
     margin-left: 4;
