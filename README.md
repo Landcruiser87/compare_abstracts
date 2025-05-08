@@ -14,7 +14,7 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 
 ## Disclaimer 
 
-Current product version is 0.3.0.  `__main__.py` in the TUI folder is operational.  Currently the only two working search metrics are `Fuzzy and Cosine sim`.  
+Current product version is 0.3.0.  `__main__.py` in the TUI folder is operational.  Currently the only two working search metrics are `Fuzzy, Cosine, and Word2vec`.  
 The two search parameters that work best are `title and abstract` as those have the least amount of missing values.  (Scraping data isn't always perfect)
 
 
