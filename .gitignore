@@ -131,6 +131,7 @@ dmypy.json
 #Project specific folders
 
 /data/backup/
+/data/screenshots/
 /data/cleaned
 /data/searches
 /data/files
