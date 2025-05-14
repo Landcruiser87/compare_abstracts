@@ -4,6 +4,7 @@ import json
 import sys
 import asyncio
 import numpy as np
+import re
 from time import sleep
 from typing import TYPE_CHECKING, List, Tuple, Dict, Any 
 from pathlib import Path, PurePath
@@ -208,8 +209,8 @@ class PaperSearch(App):
                     ds_name_base = prompt_text_list[0]
                     ds_name = ds_name_base + ".json"
                     # Determine source path based on whether the base name has numbers
-                    has_numbers = any(char.isdigit() for char in ds_name_base)
-                    source_p = self.root_data_dir if has_numbers else self.srch_data_dir
+                    has_a_year = re.search(r"\d{4}", ds_name)
+                    source_p = self.root_data_dir if has_a_year else self.srch_data_dir
                     json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
                     datasets_to_load.append((ds_name, json_path))
                 else:
