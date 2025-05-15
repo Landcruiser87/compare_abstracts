@@ -138,5 +138,10 @@ def word2vec():
 
 
 def sbert():
-    pass
+    try:
+        model_name = "en_core_web_md"
+        nlp = spacy.load(model_name)
+        return nlp
+    except Exception as e:
+        raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
 

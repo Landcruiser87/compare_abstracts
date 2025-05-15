@@ -182,13 +182,12 @@ class PaperSearch(App):
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
+        new_node = json_tree.root.add(root_name)
         if isinstance(json_data, str):
-            new_node = json_tree.root.add(root_name)
             json_data = clean_string_values(json.loads(json_data))
             json_tree.add_node(root_name, new_node, json_data)
             return json_data
         elif isinstance(json_data, dict):
-            new_node = json_tree.root.add(root_name)
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name, new_node, json_data)
 
@@ -373,6 +372,20 @@ class PaperSearch(App):
 
         return sims, paper_names
 
+    #FUNCTION - launch sbert
+    def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree):
+        nlp = sbert()
+        fields, paper_names = clean_text(srch_txt, srch_field, node)
+        target = nlp(srch_txt)
+        sims = []
+        for field in fields:
+            corpus = nlp(field)
+            sim = target.similarity(corpus)
+            sims.append(sim)
+
+        return sims, paper_names
+
+
     #FUNCTION conf search
     def conf_search(
             self,
@@ -410,6 +423,8 @@ class PaperSearch(App):
                 sims, paper_names = self.launch_cos(srch_text, field, node) 
             elif metric == "Word2Vec":
                 sims, paper_names = self.launch_word2vec(srch_text, field, node)
+            elif metric == "SBert":
+                sims, paper_names = self.launch_sbert(srch_text, field, node)
             else:
                 self.app.notify("Something broke", severity="error")
                 raise ValueError("Something broke, check me! Line 412")
