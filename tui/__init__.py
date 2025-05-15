@@ -111,7 +111,19 @@ class PaperSearch(App):
                 # Tab 1 - Document View
                 with TabPane("Document", id="content-tab"):
                     yield JSONDocumentView(id="json-document-view")
-                # Tab 2 - Search (Placeholder)
+
+                # Tab 2 - Manage Datasets - Buttons and SelectionList
+                with TabPane("Manage Datasets", id="manage-tab"):
+                    with Horizontal(id="dataset-container"):
+                        with Container(id="dc-leftside"):
+                            yield Static("Available Datasets", id="data-title", classes="header")
+                            yield SelectionList(*self.all_datasets, name="Dataset List", id="datasets")
+
+                        with Container(id="dc-rightside"):
+                            yield Button("Add Dataset", id="add-button")
+                            yield Button("Remove Dataset", id="rem-button")
+
+                # Tab 3 - Search (Placeholder)
                 with TabPane("Search", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="input-search")
@@ -130,16 +142,6 @@ class PaperSearch(App):
                                 yield Input("res limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", id="search-button")
-                # Tab 3 - Manage Datasets - Buttons and SelectionList
-                with TabPane("Manage Datasets", id="manage-tab"):
-                    with Horizontal(id="dataset-container"):
-                        with Container(id="dc-leftside"):
-                            yield Static("Available Datasets", id="data-title", classes="header")
-                            yield SelectionList(*self.all_datasets, name="Dataset List", id="datasets")
-
-                        with Container(id="dc-rightside"):
-                            yield Button("Add Dataset", id="add-button")
-                            yield Button("Remove Dataset", id="rem-button")
         yield Footer()
 
     #FUNCTION - onmount
