@@ -139,8 +139,9 @@ def word2vec():
 
 def sbert():
     try:
-        model_name = "en_core_web_md"
+        model_name = "all-MiniLM-L6-v2"
         nlp = spacy.load(model_name)
+        #TODO - update toml to spacy-sentence-transformers and sentence-transformers
         return nlp
     except Exception as e:
         raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
