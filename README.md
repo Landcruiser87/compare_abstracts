@@ -45,8 +45,14 @@ In your terminal, navigate to your root folder.
 If poetry is not installed, do so in order to continue
 This will install version 2.0.0.  Adjust to your preference
 
+On Windows
 ```terminal
-curl -sSL https://install.python-poetry.org | python3 - --version 2.0.0
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
+```
+
+On Linux/Mac
+```terminal
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 To check if poetry is installed on your system. Type the following into your terminal
