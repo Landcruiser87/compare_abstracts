@@ -277,7 +277,11 @@ def save_data(search_name:str, data:dict):
 
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] 
-SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"] 
+SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
+ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
+ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
+ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
+
 #Metrics for asymetric similarity search
 SEARCH_METRICS = ["Fuzzy", "Cosine", "Word2Vec", "SBert"]
 #TODO - Add "selected field" (in the tree) as a search field. 

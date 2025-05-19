@@ -51,8 +51,9 @@ from utils import (
 )
 
 from support import (
-    list_datasets, save_data, logger, #functions
-    SEARCH_FIELDS, SEARCH_METRICS,    #global vars
+    list_datasets, save_data, logger,       #functions
+    SEARCH_FIELDS, SEARCH_METRICS,          #global vars
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
