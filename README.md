@@ -191,15 +191,15 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 # Project Todo list
 
+### Search Tab - Modeling paths 
+
+[ ] - Implement SBert Model
+
 ### Additional Datasets
 
 1. arXiv
 2. medarXiv
 3. bioarXiv
-
-### Search Tab - Modeling paths 
-
-1. Implement SBert Model
 
 ### Arxiv Tab
 
@@ -218,6 +218,7 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 ### Possible Features
 1. LLM Summarization Paper Summarization
+  - I bet gemini would be a good free use case
 2. Clustering Tab
 3. Gemma / Bert embedding
    - Tsne

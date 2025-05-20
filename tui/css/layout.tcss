@@ -203,6 +203,10 @@ Button {
     margin-left: 6;
 }
 
+/* ############## arXiv Search Tab ################### */
+
+
+
 /* ############## Search Progress Bar ################### */
 
 SearchProgress {
