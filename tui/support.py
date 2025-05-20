@@ -14,8 +14,6 @@ from rich.console import Console
 from rich.logging import RichHandler
 from pathlib import Path, PurePath
 
-
-
 ################################# Logger functions ####################################
 #FUNCTION Logging Futures
 def get_file_handler(log_dir:Path)->logging.FileHandler:

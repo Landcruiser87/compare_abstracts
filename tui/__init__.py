@@ -157,7 +157,7 @@ class PaperSearch(App):
         tree.focus()
 
 
-    @on(SelectionList.SelectedChanged)
+    @on(SelectionList.SelectedChanged, "#datasets")
     def on_selection(self, event: SelectionList.SelectedChanged) -> None:
         abutton = self.query_one("#add-button", Button)
         rbutton = self.query_one("#rem-button", Button)

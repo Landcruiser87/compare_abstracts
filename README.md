@@ -193,19 +193,34 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 ### Additional Datasets
 
-1. Consider Arxiv API connector or BioRxiv
-2. 
+1. arXiv
+2. medarXiv
+3. bioarXiv
 
-### Possible modeling paths
+### Search Tab - Modeling paths 
 
 1. Implement SBert Model
-2. LLM Summarization Tab
-3. Clustering Tab
-4. Gemma / Bert embedding
-   1. tsne
-   2. Look at first two components to find the subject topics that are most in variation.
 
+### Arxiv Tab
 
-### TUI
-  - Tom Arnold idea.  Build a graph network from the citations of each paper
+1. Need basic search here.  
+  - Functionality
+    - make a query search 
+    - Add data to searched datasets as json
+    - 
+
+### medarxiv / bioarxiv Tab
+
+1. Workflow
+  - Unsure at the current moment
+  - Likely a checkbox that can switch maybe between all 3 arxiv sources?
+  - I think they have different inputs
+
+### Possible Features
+1. LLM Summarization Paper Summarization
+2. Clustering Tab
+3. Gemma / Bert embedding
+   - Tsne
+   - Look at first two components to find the subject topics that are most in variation.
+4. Tom Arnold idea.  Build a graph network from the citations of each paper
   - Analyze who is getting cited most often and driving a particular area of research.  Really like this!!
