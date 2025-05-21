@@ -59,7 +59,7 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "ML_Tree"
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 #CLASS - Load Data
 class PaperSearch(App):
@@ -386,7 +386,6 @@ class PaperSearch(App):
 
         return sims, paper_names
 
-
     #FUNCTION conf search
     def conf_search(
             self,
@@ -454,7 +453,6 @@ class PaperSearch(App):
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
 
-
     #FUNCTION - run search
     def run_search(self) -> None:
         #query needed widgets
@@ -515,19 +513,19 @@ class PaperSearch(App):
                     all_results.update(**result)
                 srchcount += 1
                 # Define a helper function to perform the UI updates
-                def update_progress_ui(current_count:int, conf_name:str):
+                def update_progress_ui(current_count:int):
                     if self.search_container and self.search_container.is_mounted:
                         try:
                             progress_bar = self.search_container.query_one(SearchProgress)
                             progress_bar.count = current_count
                             progress_bar.advance(1)
-                            progress_bar.refresh() 
+                            progress_bar.refresh()
 
                         except Exception as e:
                              logger.error(f"Failed to update search progress bar: {e}")
 
                 # Schedule the UI update function to run on the main thread
-                self.app.call_from_thread(update_progress_ui, srchcount, conf_name)
+                self.app.call_from_thread(update_progress_ui, srchcount)
                 # Take a power nap to allow UI thread processing time
                 await asyncio.sleep(0.1)
 

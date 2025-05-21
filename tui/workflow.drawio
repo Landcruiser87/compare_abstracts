@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="_SHoM_jc9M1xb17bczq4" name="Page-1">
-        <mxGraphModel dx="3467" dy="1391" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="2946" dy="1623" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -499,19 +499,19 @@
                 <mxCell id="276" value="Search API" style="shape=ext;double=1;rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="880" y="1870" width="170" height="140" as="geometry"/>
                 </mxCell>
-                <mxCell id="282" value="Date From:" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="282" value="Date From:" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="760" y="1910" width="100" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="284" value="Date To:" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="284" value="Date To:" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="760" y="1955" width="100" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="286" style="edgeStyle=none;html=1;" edge="1" parent="1" source="285" target="284">
+                <mxCell id="286" style="edgeStyle=none;html=1;" parent="1" source="285" target="284" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="285" value="" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                <mxCell id="285" value="&lt;font style=&quot;font-size: 27px;&quot;&gt;&amp;nbsp;Pops up when&amp;nbsp;&lt;br&gt;date range is&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 27px;&quot;&gt;selected&lt;/font&gt;&lt;/div&gt;" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="770" y="2080" width="280" height="260" as="geometry"/>
                 </mxCell>
-                <mxCell id="287" style="edgeStyle=none;html=1;entryX=0.6;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="285" target="282">
+                <mxCell id="287" style="edgeStyle=none;html=1;entryX=0.6;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="285" target="282" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
             </root>
