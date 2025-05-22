@@ -133,8 +133,8 @@ class PaperSearch(App):
                         yield Static("Search Params", id="hdr-param", classes="header")
                         
                         with RadioSet(id="radio-models", classes="header"):
-                            for metric in SEARCH_MODELS:
-                                yield RadioButton(metric)
+                            for model in SEARCH_MODELS:
+                                yield RadioButton(model)
                         with RadioSet(id="radio-fields", classes="header"):
                             for field in SEARCH_FIELDS:
                                 yield RadioButton(field)
@@ -142,7 +142,7 @@ class PaperSearch(App):
                             with Vertical(id="srch-fields"):
                                 yield Input("res limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
-                            yield Button("Search Datasets", id="search-button")
+                            yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
         yield Footer()
 
     #FUNCTION - onmount
@@ -168,27 +168,29 @@ class PaperSearch(App):
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
 
-    @on(SelectionList.SelectedChanged, "#radio-models")
-    def on_selection(self, event: SelectionList.SelectedChanged) -> None:
-        if event.selection == "Specter":
-            self.reload_metrics(True)
-        else:
-            self.reload_metrics(False)
-
-    def reload_metrics(self, add_extras:bool) -> None:
-        #Manually refresh SelectionList options to avoid index errors
-        metrics_list = self.query_one("#radio-models", SelectionList)
-        metrics_list.clear_options()
-        if add_extras:
-            self.all_metrics = [*SEARCH_METRICS].append("Selected Abstract")
-        else:
-            self.all_metrics = [*SEARCH_METRICS]
-        new_metrics = [
-            Selection(s[0], s[1], False)
-            for s in self.all_datasets
-        ]
-        metrics_list.add_options(new_metrics)
-
+    @on(RadioSet.Changed, "#radio-models")
+    def on_selection(self, event: RadioSet.Changed) -> None:
+        input_thres = self.query_one("#input-thres", Input)
+        if "Fuzzy" in event.pressed.label:
+            met_range = "0 to 10"
+            suggested = 4
+            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+        elif "Cosine" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.5
+            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+        elif "Word2Vec" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.85
+            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+        elif "Marco" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.5
+            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+        elif "Specter" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.5
+            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):

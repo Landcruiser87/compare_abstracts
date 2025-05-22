@@ -278,7 +278,6 @@ SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ICCV"]
 #Metrics for asymetric similarity search
 SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
-#TODO - Add "selected field" (in the tree) as a search field. Make it conditional on Specter
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
