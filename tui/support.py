@@ -280,8 +280,8 @@ SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
 MODEL_DESC = [
     "Fuzzy matching like regex.  Warning: Very slow when run against the abstract field", 
     "Very fast and good for basic retrieval.  Uses TF-IDF with L1 regularization", 
-    "Using the standard spacy pipeline, this also calculates a cosine sim with more detailed embeddings", 
-    "Good for Asymetric Semantic Search.  Slower, but accurate.  Uses Dot Product for similarity",
+    "Using the standard spacy pipeline, calculates a cosine sim with more detailed embeddings", 
+    "Good for Asymetric Semantic Search.  Slower, but more accurate",
     "Meant for comparing paper abstract style material.  Type in complete abstracts for better results"
 ]  
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  

@@ -184,8 +184,8 @@ class PaperSearch(App):
             suggested = 0.85
             input_thres.tooltip = f"Input threshold\nWord2Vec: {met_range}\nSuggested:{suggested}"
         elif "Marco" in event.pressed.label:
-            met_range = "0 to 100"
-            suggested = 80
+            met_range = "-1 to 1"
+            suggested = 0.25
             input_thres.tooltip = f"Input threshold\nMarco: {met_range}\nSuggested:{suggested}"
         elif "Specter" in event.pressed.label:
             met_range = "-1 to 1"
@@ -404,8 +404,8 @@ class PaperSearch(App):
         corpus_embedding = bert.encode(fields, convert_to_tensor=True)
         if metric == "Marco":
             search_res = st_utils.cos_sim(query_embedding, corpus_embedding)
-            sims = search_res.reshape(1, -1)
-            sims = search_res.numpy()
+            # sims = search_res.reshape(1, -1)
+            sims = search_res.numpy().flatten()
             logger.info(f"{metric} {sims.shape}")
             
         elif metric == "Specter":
