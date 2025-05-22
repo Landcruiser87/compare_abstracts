@@ -271,18 +271,18 @@ def save_data(search_name:str, data:dict):
     with open(f"./data/searches/{search_name}.json", "w") as outf:
         outf.write(result_json)
 
-########################## Global Variables to return ##########################################
-
+########################## Global Variables for import ##########################################
+#Confernces
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
-SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ECCV"] 
+SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ICCV"] 
+#Metrics for asymetric similarity search
+SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
+#TODO - Add "selected field" (in the tree) as a search field. Make it conditional on Specter
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 
-#Metrics for asymetric similarity search
-SEARCH_METRICS = ["Fuzzy", "Cosine", "Word2Vec", "SBert"]
-#TODO - Add "selected field" (in the tree) as a search field. 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
 logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
