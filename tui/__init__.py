@@ -19,9 +19,9 @@ from widgets import (
     TreeView, 
     SearchProgress
 ) 
-from textual.containers import Container, Horizontal, Vertical, Widget
+from textual.containers import Container, Horizontal, Vertical
 from textual.fuzzy import Matcher
-from textual.worker import Worker, get_current_worker
+from textual.worker import get_current_worker
 from textual.reactive import reactive, var
 from textual.widgets import (
     Button, 
@@ -38,7 +38,7 @@ from textual.widgets import (
 )
 from textual.widgets.selection_list import Selection
 from textual.widgets.tree import TreeNode
-
+from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
     sbert,
@@ -51,15 +51,15 @@ from utils import (
 )
 
 from support import (
-    list_datasets, save_data, logger,       #functions
-    SEARCH_FIELDS, SEARCH_METRICS,          #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES #arXiv vars
+    list_datasets, save_data, logger,         #functions
+    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES   #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "ML_Tree"
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 
 #CLASS - Load Data
 class PaperSearch(App):
@@ -128,13 +128,13 @@ class PaperSearch(App):
                 with TabPane("Search", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="input-search")
-                        yield Static("Search Metrics", id="hdr-metric", classes="header")
+                        yield Static("Search Models", id="hdr-model", classes="header")
                         yield Static("Search Field", id="hdr-field", classes="header")
                         yield Static("Search Params", id="hdr-param", classes="header")
                         
-                        with RadioSet(id="radio-metrics", classes="header"):
-                            for metric in SEARCH_METRICS:
-                                yield RadioButton(metric)
+                        with RadioSet(id="radio-models", classes="header"):
+                            for model, tip in zip(SEARCH_MODELS, MODEL_DESC):
+                                yield RadioButton(model, tooltip=tip)
                         with RadioSet(id="radio-fields", classes="header"):
                             for field in SEARCH_FIELDS:
                                 yield RadioButton(field)
@@ -142,7 +142,7 @@ class PaperSearch(App):
                             with Vertical(id="srch-fields"):
                                 yield Input("res limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
-                            yield Button("Search Datasets", id="search-button")
+                            yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
         yield Footer()
 
     #FUNCTION - onmount
@@ -156,7 +156,6 @@ class PaperSearch(App):
         json_docview.update_document(json_data)
         tree.focus()
 
-
     @on(SelectionList.SelectedChanged, "#datasets")
     def on_selection(self, event: SelectionList.SelectedChanged) -> None:
         abutton = self.query_one("#add-button", Button)
@@ -168,6 +167,30 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
+
+    @on(RadioSet.Changed, "#radio-models")
+    def on_selection(self, event: RadioSet.Changed) -> None:
+        input_thres = self.query_one("#input-thres", Input)
+        if "Fuzzy" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.25
+            input_thres.tooltip = f"Input threshold\nFuzzy:{met_range}\nSuggested:{suggested}"
+        elif "Cosine" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.5
+            input_thres.tooltip = f"Input threshold\nCosine: {met_range}\nSuggested:{suggested}"
+        elif "Word2Vec" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.85
+            input_thres.tooltip = f"Input threshold\nWord2Vec: {met_range}\nSuggested:{suggested}"
+        elif "Marco" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.25
+            input_thres.tooltip = f"Input threshold\nMarco: {met_range}\nSuggested:{suggested}"
+        elif "Specter" in event.pressed.label:
+            met_range = "-1 to 1"
+            suggested = 0.5
+            input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
@@ -319,7 +342,7 @@ class PaperSearch(App):
                     sleep(0.1)
         datasets.deselect_all()
 
-    def reload_selectionlist(self) -> None:
+    def reload_datasets(self) -> None:
         #Manually refresh SelectionList options to avoid index errors
         datasets = self.query_one("#datasets", SelectionList)
         datasets.clear_options()
@@ -374,18 +397,23 @@ class PaperSearch(App):
         return sims, paper_names
 
     #FUNCTION - launch sbert
-    def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree):
-        nlp = sbert()
+    def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
+        bert = sbert(metric)
         fields, paper_names = clean_text(srch_txt, srch_field, node)
-        target = nlp(srch_txt)
-        sims = []
-        for field in fields:
-            corpus = nlp(field)
-            sim = target.similarity(corpus)
-            sims.append(sim)
-
+        query_embedding = bert.encode(srch_txt, convert_to_tensor=True)
+        corpus_embedding = bert.encode(fields, convert_to_tensor=True)
+        if metric == "Marco":
+            search_res = st_utils.cos_sim(query_embedding, corpus_embedding)
+            # sims = search_res.reshape(1, -1)
+            sims = search_res.numpy().flatten()
+            logger.info(f"{metric} {sims.shape}")
+            
+        elif metric == "Specter":
+            search_res = st_utils.semantic_search(query_embedding, corpus_embedding)
+            search_res = search_res[0]
+            sims = np.array([res["score"] for res in search_res])
+            logger.info(f"{metric} {sims.shape}")
         return sims, paper_names
-
 
     #FUNCTION conf search
     def conf_search(
@@ -397,16 +425,17 @@ class PaperSearch(App):
         ):
         #Load variables
         results = {}
-        metric = SEARCH_METRICS[variables[0]]
+        metric = SEARCH_MODELS[variables[0]]
         field = SEARCH_FIELDS[variables[1]]
         res_limit = int(variables[2])
         threshold = float(variables[3])
+        
         #Decide metric
         if metric == "Fuzzy":
             node_queue = deque(node.children)
             while node_queue:
                 paperkey = node_queue.popleft()
-                labels = [x.label.plain.split("=")[0] for x in paperkey.children]                 
+                labels = [x.label.plain.split("=")[0] for x in paperkey.children]
                 if field in labels:
                     index = labels.index(field)
                     criteria = paperkey.children[index].label.plain.split("=")[1]
@@ -419,13 +448,13 @@ class PaperSearch(App):
                         results[reskey]["metric_thres"] = threshold
                         results[reskey]["conference"] = conf
 
-        elif (metric == "Cosine") | (metric == "Word2Vec"):
+        elif metric in ["Cosine", "Word2Vec", "Marco", "Specter"]:
             if metric == "Cosine":
                 sims, paper_names = self.launch_cos(srch_text, field, node) 
             elif metric == "Word2Vec":
                 sims, paper_names = self.launch_word2vec(srch_text, field, node)
-            elif metric == "SBert":
-                sims, paper_names = self.launch_sbert(srch_text, field, node)
+            elif (metric == "Marco") | (metric == "Specter"):
+                sims, paper_names = self.launch_sbert(srch_text, field, node, metric)
             else:
                 self.app.notify("Something broke", severity="error")
                 raise ValueError("Something broke, check me! Line 412")
@@ -454,12 +483,11 @@ class PaperSearch(App):
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
 
-
     #FUNCTION - run search
     def run_search(self) -> None:
         #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
-        metric = self.query_one("#radio-metrics", RadioSet)._reactive__selected
+        metric = self.query_one("#radio-models", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
@@ -474,7 +502,7 @@ class PaperSearch(App):
         sources: list = list(tree.root.children)
         searchbar = SearchProgress(count=0, total=len(sources))
         self.search_container = Container(searchbar, id="loading-container")
-        root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
+        root_name = f"{SEARCH_MODELS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
 
@@ -515,19 +543,19 @@ class PaperSearch(App):
                     all_results.update(**result)
                 srchcount += 1
                 # Define a helper function to perform the UI updates
-                def update_progress_ui(current_count:int, conf_name:str):
+                def update_progress_ui(current_count:int):
                     if self.search_container and self.search_container.is_mounted:
                         try:
                             progress_bar = self.search_container.query_one(SearchProgress)
                             progress_bar.count = current_count
                             progress_bar.advance(1)
-                            progress_bar.refresh() 
+                            progress_bar.refresh()
 
                         except Exception as e:
                              logger.error(f"Failed to update search progress bar: {e}")
 
                 # Schedule the UI update function to run on the main thread
-                self.app.call_from_thread(update_progress_ui, srchcount, conf_name)
+                self.app.call_from_thread(update_progress_ui, srchcount)
                 # Take a power nap to allow UI thread processing time
                 await asyncio.sleep(0.1)
 
@@ -563,7 +591,7 @@ class PaperSearch(App):
                 self.search_container = None 
             self.app.call_from_thread(remove_progress_ui)
             #Reload SelectionList to include search results
-            self.reload_selectionlist()
+            self.reload_datasets()
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

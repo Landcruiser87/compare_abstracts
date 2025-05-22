@@ -2,12 +2,13 @@ import contextlib
 import datetime
 import json
 import re
-import numpy as np
 import spacy
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
-from scipy.spatial.distance import cosine as scipy_cos
+import numpy as np
 import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from scipy.spatial.distance import cosine as scipy_cos
+from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
+from sentence_transformers import SentenceTransformer, util as t_utils
 
 #FUNCTION get time
 def get_c_time():
@@ -62,7 +63,7 @@ def clean_text(srch_text:str, srch_field, node)-> list:
     return data_fields, paper_names
 
 def tfidf(data_fields:list, paper_names:list):
-    #starting off using L1 normlization
+    #L1 normlization
     base_params = {
         "binary":False, 
         "norm":"l1",
@@ -137,12 +138,15 @@ def word2vec():
         raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
 
 
-def sbert():
+def sbert(model_name:str):
     try:
-        model_name = "all-MiniLM-L6-v2"
-        nlp = spacy.load(model_name)
-        #TODO - update toml to spacy-sentence-transformers and sentence-transformers
-        return nlp
+        if model_name == "Marco": #Polooooooo.  
+            model = SentenceTransformer("msmarco-MiniLM-L6-v3")  #80MB
+        elif model_name == "Specter":
+            model = SentenceTransformer("allenai-specter")
+            # trained on finding similar papers.  
+        return model
+        
     except Exception as e:
-        raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
+        raise ValueError(f"You need to install sentence-transformers for model {model_name}")
 
