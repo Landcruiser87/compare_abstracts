@@ -277,6 +277,13 @@ MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ICCV"] 
 #Metrics for asymetric similarity search
 SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
+MODEL_DESC = [
+    "Fuzzy matching like regex.  Warning: Very slow when run against the abstract field", 
+    "Very fast and good for basic retrieval.  Uses TF-IDF with L1 regularization", 
+    "Using the standard spacy pipeline, this also calculates a cosine sim with more detailed embeddings", 
+    "Good for Asymetric Semantic Search.  Slower, but accurate.  Uses Dot Product for similarity",
+    "Meant for comparing paper abstract style material.  Type in complete abstracts for better results"
+]  
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]

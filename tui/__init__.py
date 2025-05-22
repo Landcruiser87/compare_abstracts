@@ -51,9 +51,9 @@ from utils import (
 )
 
 from support import (
-    list_datasets, save_data, logger,       #functions
-    SEARCH_FIELDS, SEARCH_MODELS,          #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES #arXiv vars
+    list_datasets, save_data, logger,         #functions
+    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES   #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -133,8 +133,8 @@ class PaperSearch(App):
                         yield Static("Search Params", id="hdr-param", classes="header")
                         
                         with RadioSet(id="radio-models", classes="header"):
-                            for model in SEARCH_MODELS:
-                                yield RadioButton(model)
+                            for model, tip in zip(SEARCH_MODELS, MODEL_DESC):
+                                yield RadioButton(model, tooltip=tip)
                         with RadioSet(id="radio-fields", classes="header"):
                             for field in SEARCH_FIELDS:
                                 yield RadioButton(field)
@@ -172,25 +172,25 @@ class PaperSearch(App):
     def on_selection(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
         if "Fuzzy" in event.pressed.label:
-            met_range = "0 to 10"
-            suggested = 4
-            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+            met_range = "-1 to 1"
+            suggested = 0.25
+            input_thres.tooltip = f"Input threshold\nFuzzy:{met_range}\nSuggested:{suggested}"
         elif "Cosine" in event.pressed.label:
             met_range = "-1 to 1"
             suggested = 0.5
-            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+            input_thres.tooltip = f"Input threshold\nCosine: {met_range}\nSuggested:{suggested}"
         elif "Word2Vec" in event.pressed.label:
             met_range = "-1 to 1"
             suggested = 0.85
-            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+            input_thres.tooltip = f"Input threshold\nWord2Vec: {met_range}\nSuggested:{suggested}"
         elif "Marco" in event.pressed.label:
-            met_range = "-1 to 1"
-            suggested = 0.5
-            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+            met_range = "0 to 100"
+            suggested = 80
+            input_thres.tooltip = f"Input threshold\nMarco: {met_range}\nSuggested:{suggested}"
         elif "Specter" in event.pressed.label:
             met_range = "-1 to 1"
             suggested = 0.5
-            input_thres.tooltip = f"Threshold the appropriate metric\n{met_range}\nSuggested:{suggested}"
+            input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
@@ -403,10 +403,16 @@ class PaperSearch(App):
         query_embedding = bert.encode(srch_txt, convert_to_tensor=True)
         corpus_embedding = bert.encode(fields, convert_to_tensor=True)
         if metric == "Marco":
-            sims = st_utils.dot_score(query_embedding, corpus_embedding)
+            search_res = st_utils.cos_sim(query_embedding, corpus_embedding)
+            sims = search_res.reshape(1, -1)
+            sims = search_res.numpy()
+            logger.info(f"{metric} {sims.shape}")
             
         elif metric == "Specter":
-            sims = st_utils.semantic_search(query_embedding, corpus_embedding)
+            search_res = st_utils.semantic_search(query_embedding, corpus_embedding)
+            search_res = search_res[0]
+            sims = np.array([res["score"] for res in search_res])
+            logger.info(f"{metric} {sims.shape}")
         return sims, paper_names
 
     #FUNCTION conf search
@@ -419,7 +425,7 @@ class PaperSearch(App):
         ):
         #Load variables
         results = {}
-        metric = SEARCH_METRICS[variables[0]]
+        metric = SEARCH_MODELS[variables[0]]
         field = SEARCH_FIELDS[variables[1]]
         res_limit = int(variables[2])
         threshold = float(variables[3])
@@ -496,7 +502,7 @@ class PaperSearch(App):
         sources: list = list(tree.root.children)
         searchbar = SearchProgress(count=0, total=len(sources))
         self.search_container = Container(searchbar, id="loading-container")
-        root_name = f"{SEARCH_METRICS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
+        root_name = f"{SEARCH_MODELS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
 

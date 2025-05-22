@@ -145,8 +145,6 @@ def sbert(model_name:str):
         elif model_name == "Specter":
             model = SentenceTransformer("allenai-specter")
             # trained on finding similar papers.  
-            # could have an extra option pop up when its selected to find a
-            # similar paper to what is selected. 
         return model
         
     except Exception as e:
