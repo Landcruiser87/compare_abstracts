@@ -147,28 +147,28 @@ def sbert(model_name:str):
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
         #I'd suggest using the cached version of each model.  
-        #As this reloads constantly.  Instead of a huge refactor this was an easier/cleaner solution.
+        #Trained on a bunch of bing queries
         if model_name == "Marco": #Polooooooo.
-            # local_cache = os.path("./cache")
-            model_path = "./data/models/marco/config.json"
+            model_path = "./data/models/marco/"
             if os.path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")
             else:
+                
                 model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
                 model.save_pretrained("./data/models/marco")
-                #Trained on a bunch of bing queries
+                logger.info("Model loaded and saved dynamically")
 
+        # trained on finding similar papers.  Works better with abstracts
         elif model_name == "Specter":
-            model_path = "./data/models/specter/config.json"
+            model_path = "./data/models/specter"
             if os.path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")                
             else:
                 model = SentenceTransformer("allenai-specter", device = device) #425 MB
                 model.save_pretrained("./data/models/specter")
-                logger.info("Model loaded dynamically")
-                # trained on finding similar papers.  Works better with abstracts
+                logger.info("Model loaded and saved dynamically")
 
         return model, device
         
