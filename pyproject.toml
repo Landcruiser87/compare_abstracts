@@ -1,7 +1,7 @@
 [project]
 name = "paper-search"
 version = "0.1.1"
-description = "For comparing ML papers from major conferences"
+description = "For comparing ML papers from major ML conferences, Arxiv and Zotero"
 authors = [
     {name = "Landcruiser87",email = "andyheroy@gmail.com"}
 ]
@@ -20,6 +20,9 @@ dependencies = [
     "pandas (>=2.2.3,<3.0.0)",
     "wheel (>=0.45.1,<0.46.0)",
     "spacy (>=3.8.5,<4.0.0)",
+    "torch (==2.7.0+cu118)",
+    "torchaudio (==2.7.0+cu118)",
+    "torchvision (==0.22.0+cu118)",
     "sentence-transformers (>=4.1.0,<5.0.0)",
 ]
 
@@ -28,4 +31,13 @@ requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 [tool.poetry.group.dev.dependencies]
 textual-dev = "^1.7.0"
+[[tool.poetry.source]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
 
+
+[tool.poetry.dependencies]
+torch = {source = "pytorch-cuda"}
+torchaudio = {source = "pytorch-cuda"}
+torchvision = {source = "pytorch-cuda"}

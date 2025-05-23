@@ -14,9 +14,8 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 
 ## Disclaimer 
 
-Current product version is 0.3.0.  `__main__.py` in the TUI folder is operational.  Currently the only two working search metrics are `Fuzzy, Cosine, and Word2vec`.  
+Current product version is 0.3.0.  `__main__.py` in the TUI folder is operational.  Currently the only two working search models are `Fuzzy, Cosine, Word2vec, Marco and Specter`.  
 The two search parameters that work best are `title and abstract` as those have the least amount of missing values.  (Scraping data isn't always perfect)
-
 
 ## Requirements
 - Python >= 3.11
@@ -29,6 +28,9 @@ The two search parameters that work best are `title and abstract` as those have 
 - requests
 - matplotlib
 - spacy
+- scikit-learn
+- beautifulsoup4
+- pyzotero
 
 In `VSCODE` press `CTRL + SHIFT + ~` to open a terminal
 Navigate to the directory where you want to clone the repo. 
@@ -98,11 +100,32 @@ Mac/Linux
 source .venv/bin/activate
 ```
 
+### Installation with GPU
+To use your GPU, or not to use your GPU.  That is the question.  If you're lucky enough to have workhorse GPU on your rig, you might be inclined to use it when selecting the "Marco" and "Specter" models.  To do so requires... a few extra annoying steps.  Hopefully you bought into the NVIDIA hype and have one of their GPU's as most of pytorch's implmentations are based on the NVIDIA CUDA drivers.  
+
+First order of business is to see what NVIDIA drivers you can currently operate at.  
+
+```terminal
+nvidia-smi
+```
+
+After running the above look on the top right for `CUDA Version: xx.x`
+This will be the maximum CUDA version you can use with your current installation. If you want to install pytorch, you'll need to install a CUDA toolkit that is `BELOW` that max version.  If you go over it... well that's on you.  
+
+Now you'll need to head over to 
+(pytorchs getting started page)[https://pytorch.org/get-started/locally/]
+
+### Installation without GPU
+
+You'll want to go into the projecttoml files and before you run the command below.  Delete lines #UPDATE THESE ONCE IT FINISHES DOWNLOADING. 
+
 To install libraries
 
 ```terminal
 poetry install --no-root
 ```
+
+
 
 This will read from the poetry lock file that is included
 in this repo and install all necessary packagage versions.  Should other
@@ -193,13 +216,17 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 ### Search Tab - Modeling paths 
 
-[ ] - Implement SBert Model
+[x] - Implement SBert Model
+[x] - Install CUDA toolkit to use GPU
+  [ ] - Update instructions on how to do that
 
-### Additional Datasets
+
+### Additional Tab's to add
 
 1. arXiv
 2. medarXiv
 3. bioarXiv
+4. Local Zotero search
 
 ### Arxiv Tab
 
@@ -215,6 +242,9 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
   - Unsure at the current moment
   - Likely a checkbox that can switch maybe between all 3 arxiv sources?
   - I think they have different inputs
+
+### Zotero Tab
+
 
 ### Possible Features
 1. LLM Summarization Paper Summarization
