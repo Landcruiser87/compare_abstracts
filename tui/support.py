@@ -281,9 +281,10 @@ MODEL_DESC = [
     "Fuzzy matching like regex.  Warning: Very slow when run against the abstract field", 
     "Very fast and good for basic retrieval.  Uses TF-IDF with L1 regularization", 
     "Using the standard spacy pipeline, calculates a cosine sim with more detailed embeddings", 
-    "Good for Asymetric Semantic Search.  Slower, but more accurate",
-    "Meant for comparing paper abstract style material.  Type in complete abstracts for better results"
-]  
+    "Good for Asymetric Semantic Search.  Slower than above, but more accurate",
+    "Meant for comparing scientific papers.   Runs quite slowly on abstracts."
+]
+
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]

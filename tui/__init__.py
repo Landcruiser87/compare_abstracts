@@ -401,32 +401,35 @@ class PaperSearch(App):
         bert, device = sbert(metric)
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         query_embedding = bert.encode(srch_txt, convert_to_tensor=True)
-        corpus_embedding = bert.encode(fields, convert_to_tensor=True)
+        corpus_embedding = bert.encode(fields, convert_to_tensor=True, batch_size=100)
         if metric == "Marco":
             search_res = st_utils.cos_sim(query_embedding, corpus_embedding)
-            # sims = search_res.reshape(1, -1)
             if device == "cpu":
                 sims = search_res.numpy().flatten()
             else:
                 sims = search_res.cpu().numpy().flatten()
-                
             logger.info(f"{metric} {sims.shape}")
             
         elif metric == "Specter":
             search_res = st_utils.semantic_search(query_embedding, corpus_embedding)
             search_res = search_res[0]
             sims = np.array([res["score"] for res in search_res])
+            papers = [paper_names[res["corpus_id"]] for res in search_res]
+            paper_names = papers
             logger.info(f"{metric} {sims.shape}")
+
             #BUG - Check return here. 
                 #I think you might only be returning the top 10.  Which is fine.  But... 
-        del bert
-        #BUG - Model loading. 
-            #Youre unloading and loading even the local model is slowing things down.  
-            #Might be better to refactor and attach the model to the self app as a
-            #variable for you to only have to load once locally . 
 
-            
-        return sims, paper_names
+            #BUG - Specter Model management. 
+                #loading and unloading even the local model is slowing things down.  
+                #Might be better to refactor and attach the model to the self app as a
+                #variable for you to use once at runtime. 
+
+        #Maybe some garage cleanup would help?
+        del bert
+
+        return sims[1:], paper_names[1:]
 
     #FUNCTION conf search
     def conf_search(
