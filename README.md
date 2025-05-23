@@ -115,8 +115,7 @@ This will be the maximum CUDA version you can use with your current installation
 Now you'll need to head over to 
 (pytorchs getting started page)[https://pytorch.org/get-started/locally/]
 
-Go through the selections and see which align with your system.  
-next because poetry is a bit extra, we'll have to add the source for whatever cuda version will fit below your GPU's current NVIDIA drivers.  
+Go through the selections and see which align with your system.  My only options were 11.8 or 12.6.  Since my NVIDIA max driver version is 12.5.  11.8 it is!  Because poetry is a bit extra, we'll have to add the source for whatever cuda version will fit below your GPU's current NVIDIA drivers.  
 
 ```terminal
 poetry source add --priority=explicit pytorch-cuda "https://download.pytorch.org/whl/cu118"
@@ -140,20 +139,14 @@ poetry add sentence-transformers
 
 ### Installation without GPU
 
-You'll want to go into the project.toml file and before you run the command below.  Delete lines `23-25` and `34-44`. Then run the following below.
-
-To update the lock file (first) then install libraries.  Do the following
+You'll want to go into the project.toml file and before you run the command below.  Delete lines `23-25` and `34-44`. Then run the following below.  To update the lock file (first) then install libraries.  Do the following
 
 ```terminal
 poetry lock
 poetry install --no-root
 ```
 
-This will read from the project.toml file that is included
-in this repo and install all necessary packagage versions.  Should other
-versions be needed, the project TOML file will be utilized and packages updated according to your system requirements.  
-
-To view the current libraries installed
+This will read from the project.toml file that is included in this repo and install all necessary packagage versions.  Should other versions be needed, the project TOML file will be utilized and packages updated according to your system requirements. To view the current libraries installed
 
 ```terminal
 poetry show
@@ -175,11 +168,7 @@ $ mkdir data/logs data/logs/scrape data/logs/tui
 ```
 
 ## Model setup
-If you'd like to use `word2vec` to do your asymetric semantic search, you'll need
-to do a few things before starting.  `In your terminal, with your environment
-activated` type the following in your terminal. This should install the model 
-in your activated environment. You can check by looking for something like
-en_core_web_md-3.8.0.... in your .venv/Lib/site-packages folder.
+If you'd like to use `word2vec` to do your asymetric semantic search, you'll need to do a few things before starting.  `In your terminal, with your environment activated` type the following in your terminal. This should install the model in your activated environment. You can check by looking for something like en_core_web_md-3.8.0.... in your .venv/Lib/site-packages folder.
 
 
 ```terminal
@@ -228,6 +217,10 @@ Suggested operation ranges
 - Cosine => -1 to 1
   - Best results around 0.40
 - Word2vec => -1 to 1
+  - Best results around 0.85
+- Marco => -1 to 1
+  - Best results around 0.85
+- Specter => -1 to 1
   - Best results around 0.85
 
 With the TUI running, it should look something like this. 
