@@ -398,14 +398,18 @@ class PaperSearch(App):
 
     #FUNCTION - launch sbert
     def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
-        bert = sbert(metric)
+        bert, device = sbert(metric)
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         query_embedding = bert.encode(srch_txt, convert_to_tensor=True)
         corpus_embedding = bert.encode(fields, convert_to_tensor=True)
         if metric == "Marco":
             search_res = st_utils.cos_sim(query_embedding, corpus_embedding)
             # sims = search_res.reshape(1, -1)
-            sims = search_res.numpy().flatten()
+            if device == "cpu":
+                sims = search_res.numpy().flatten()
+            else:
+                sims = search_res.cpu().numpy().flatten()
+                
             logger.info(f"{metric} {sims.shape}")
             
         elif metric == "Specter":

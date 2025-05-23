@@ -140,18 +140,18 @@ def word2vec():
 
 
 def sbert(model_name:str):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    
     try:
-        #Downloads model dynamically so you don't have to store it. 
-        #Does require interwebs to work
+        
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        # device = "cpu"
+        #Downloads model dynamically so you don't have to store it. Does require interwebs to work
 
         if model_name == "Marco": #Polooooooo.
             model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
         elif model_name == "Specter":
             model = SentenceTransformer("allenai-specter", device = device)
             # trained on finding similar papers.  
-        return model
+        return model, device
         
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")

@@ -117,17 +117,17 @@ Now you'll need to head over to
 
 ### Installation without GPU
 
-You'll want to go into the projecttoml files and before you run the command below.  Delete lines #UPDATE THESE ONCE IT FINISHES DOWNLOADING. 
+You'll want to go into the project.toml file and before you run the command below.  Delete lines `23-25` and `34-44`. Then run the following below.
 
-To install libraries
+To update the lock file (first) then install libraries.  Do the following
 
 ```terminal
+poetry lock
 poetry install --no-root
 ```
 
 
-
-This will read from the poetry lock file that is included
+This will read from the project.toml file that is included
 in this repo and install all necessary packagage versions.  Should other
 versions be needed, the project TOML file will be utilized and packages updated according to your system requirements.  
 
@@ -173,6 +173,7 @@ on the right panel instead of the previous output.  Thank you to
 [oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
 
 To run the TUI with poetry
+
 ```terminal
 poetry run python tui/__main__.py data/scraped/2024_ICML.json 
 #replace year/conf
