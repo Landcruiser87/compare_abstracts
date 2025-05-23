@@ -113,7 +113,7 @@ After running the above look on the top right for `CUDA Version: xx.x`
 This will be the maximum CUDA version you can use with your current installation. If you want to install pytorch, you'll need to install a CUDA toolkit that is `BELOW` that max version.  If you go over it... well that's on you.  
 
 Now you'll need to head over to 
-(pytorchs getting started page)[https://pytorch.org/get-started/locally/]
+[pytorchs getting started page](https://pytorch.org/get-started/locally/)
 
 Go through the selections and see which align with your system.  My only options were 11.8 or 12.6.  Since my NVIDIA max driver version is 12.5.  11.8 it is!  Because poetry is a bit extra, we'll have to add the source for whatever cuda version will fit below your GPU's current NVIDIA drivers.  
 
