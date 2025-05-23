@@ -5,10 +5,11 @@ import re
 import spacy
 import numpy as np
 import pandas as pd
+import torch
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
-from sentence_transformers import SentenceTransformer, util as t_utils
+from sentence_transformers import SentenceTransformer
 
 #FUNCTION get time
 def get_c_time():
@@ -139,11 +140,16 @@ def word2vec():
 
 
 def sbert(model_name:str):
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    
     try:
-        if model_name == "Marco": #Polooooooo.  
-            model = SentenceTransformer("msmarco-MiniLM-L6-v3")  #80MB
+        #Downloads model dynamically so you don't have to store it. 
+        #Does require interwebs to work
+
+        if model_name == "Marco": #Polooooooo.
+            model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
         elif model_name == "Specter":
-            model = SentenceTransformer("allenai-specter")
+            model = SentenceTransformer("allenai-specter", device = device)
             # trained on finding similar papers.  
         return model
         
