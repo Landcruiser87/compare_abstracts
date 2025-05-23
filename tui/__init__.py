@@ -417,6 +417,8 @@ class PaperSearch(App):
             search_res = search_res[0]
             sims = np.array([res["score"] for res in search_res])
             logger.info(f"{metric} {sims.shape}")
+            #BUG - Check return here. 
+                #I think you might only be returning the top 10.  Which is fine.  But... 
         return sims, paper_names
 
     #FUNCTION conf search
@@ -491,12 +493,12 @@ class PaperSearch(App):
     def run_search(self) -> None:
         #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
-        metric = self.query_one("#radio-models", RadioSet)._reactive__selected
+        model = self.query_one("#radio-models", RadioSet)._reactive__selected
         field = self.query_one("#radio-fields", RadioSet)._reactive__selected
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
         #bind the info together in a tuple
-        variables = [metric, field, res_limit, threshold]
+        variables = [model, field, res_limit, threshold]
         if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
             return
@@ -506,7 +508,7 @@ class PaperSearch(App):
         sources: list = list(tree.root.children)
         searchbar = SearchProgress(count=0, total=len(sources))
         self.search_container = Container(searchbar, id="loading-container")
-        root_name = f"{SEARCH_MODELS[metric].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
+        root_name = f"{SEARCH_MODELS[model].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
 

@@ -133,6 +133,7 @@ dmypy.json
 /data/backup/
 /data/screenshots/
 /data/cleaned
+/data/models
 /data/searches
 /data/files
 /data/logs

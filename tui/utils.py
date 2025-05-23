@@ -2,6 +2,7 @@ import contextlib
 import datetime
 import json
 import re
+import os
 import spacy
 import numpy as np
 import pandas as pd
@@ -10,6 +11,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
+from support import logger
+
 
 #FUNCTION get time
 def get_c_time():
@@ -54,8 +57,8 @@ def clean_text(srch_text:str, srch_field, node)-> list:
 
     #Remove and clean stopwords
     for idx, abstract in enumerate(data_fields):
-        if abstract != None:
-            re_txt = re.sub('[\W_]+', ' ', abstract)
+        if (abstract != None) & (isinstance(abstract, str)):
+            re_txt = re.sub(r'[\W_]+', ' ', abstract)
             l_txt = re_txt.lower().split()
             s_txt = [word for word in l_txt if word not in stopwords and not word.isnumeric()]
             data_fields[idx] = " ".join(s_txt)
@@ -141,16 +144,32 @@ def word2vec():
 
 def sbert(model_name:str):
     try:
-        
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
-        #Downloads model dynamically so you don't have to store it. Does require interwebs to work
-
+        #I'd suggest using the cached version of each model.  
+        #As this reloads constantly.  Instead of a huge refactor this was an easier/cleaner solution.
         if model_name == "Marco": #Polooooooo.
-            model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
+            # local_cache = os.path("./cache")
+            model_path = "./data/models/marco/config.json"
+            if os.path.exists(model_path):
+                model = SentenceTransformer(model_path, device = device)
+                logger.info("Model loaded locally")
+            else:
+                model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
+                model.save_pretrained("./data/models/marco")
+                #Trained on a bunch of bing queries
+
         elif model_name == "Specter":
-            model = SentenceTransformer("allenai-specter", device = device)
-            # trained on finding similar papers.  
+            model_path = "./data/models/specter/config.json"
+            if os.path.exists(model_path):
+                model = SentenceTransformer(model_path, device = device)
+                logger.info("Model loaded locally")                
+            else:
+                model = SentenceTransformer("allenai-specter", device = device) #425 MB
+                model.save_pretrained("./data/models/specter")
+                logger.info("Model loaded dynamically")
+                # trained on finding similar papers.  Works better with abstracts
+
         return model, device
         
     except Exception as e:
