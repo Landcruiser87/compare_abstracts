@@ -419,6 +419,13 @@ class PaperSearch(App):
             logger.info(f"{metric} {sims.shape}")
             #BUG - Check return here. 
                 #I think you might only be returning the top 10.  Which is fine.  But... 
+        del bert
+        #BUG - Model loading. 
+            #Youre unloading and loading even the local model is slowing things down.  
+            #Might be better to refactor and attach the model to the self app as a
+            #variable for you to only have to load once locally . 
+
+            
         return sims, paper_names
 
     #FUNCTION conf search
