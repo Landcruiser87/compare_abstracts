@@ -115,6 +115,29 @@ This will be the maximum CUDA version you can use with your current installation
 Now you'll need to head over to 
 (pytorchs getting started page)[https://pytorch.org/get-started/locally/]
 
+Go through the selections and see which align with your system.  
+next because poetry is a bit extra, we'll have to add the source for whatever cuda version will fit below your GPU's current NVIDIA drivers.  
+
+```terminal
+poetry source add --priority=explicit pytorch-cuda "https://download.pytorch.org/whl/cu118"
+```
+
+After the source is added, you should see something like this in your project.toml file.
+
+```
+[[tool.poetry.source]]
+name = "pytorch-cuda"
+url = "https://download.pytorch.org/whl/cu118"
+priority = "explicit"
+```
+
+Now you can install the specific versions of what you'll need to run SBert models on your GPU. In my case, these were the available versions from the 11.8 CUDA Toolkit.
+
+```terminal
+poetry add torch==2.7.0+cu118 torchaudio==2.7.0+cu118 torchvision==0.22.0+cu118 --source pytorch-cuda
+poetry add sentence-transformers
+```
+
 ### Installation without GPU
 
 You'll want to go into the project.toml file and before you run the command below.  Delete lines `23-25` and `34-44`. Then run the following below.
@@ -125,7 +148,6 @@ To update the lock file (first) then install libraries.  Do the following
 poetry lock
 poetry install --no-root
 ```
-
 
 This will read from the project.toml file that is included
 in this repo and install all necessary packagage versions.  Should other
