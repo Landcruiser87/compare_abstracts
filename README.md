@@ -44,8 +44,7 @@ Launch VSCode if that is IDE of choice.
 
 In your terminal, navigate to your root folder.
 
-If poetry is not installed, do so in order to continue
-This will install version 2.0.0.  Adjust to your preference
+If poetry is not installed, do so in order to continue.
 
 On Windows
 ```terminal
@@ -63,7 +62,7 @@ To check if poetry is installed on your system. Type the following into your ter
 poetry -V
 ```
 
-if you see a `version` returned, you have Poetry installed.  The second command is to update poetry if its installed. (Always a good idea). If not, follow this [link](https://python-poetry.org/docs/) and follow installation commands for your systems requirements. If on windows, we recommend the `powershell` option for easiest installation. Using pip to install poetry will lead to problems down the road and we do not recommend that option.  It needs to be installed separately from your standard python installation to manage your many python installations.  `Note: Python 2.7 is not supported`
+if you see a `version` returned, you have Poetry installed.  The second command is to update poetry if its installed. (Always a good idea). If not, follow this [link](https://python-poetry.org/docs/) and follow installation commands for your systems requirements. If on windows, we recommend the `powershell` option for easiest installation. Using pip to install poetry will lead to problems down the road and we do not recommend that option.  It needs to be installed separately from your standard python installation to manage your many python installations.  `Note: Python 2.7 is not supported`.  You are more than welcome to go the pip route but I can't guarantee your dependencies won't clash.
 
 ## Environment storage
 
@@ -162,9 +161,9 @@ poetry show -T
 
 While in root directory run commands below
 
-```
+```terminal
 $ mkdir data/logs data/logs/scrape data/logs/tui
-# mkdir data/searches 
+$ mkdir data/searches data/models/Marco data/models/specter
 ```
 
 ## Model setup
@@ -234,7 +233,7 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 [x] - Implement SBert Model
 [x] - Install CUDA toolkit to use GPU
-  [ ] - Update instructions on how to do that
+  [x] - Update instructions on how to do that
 
 
 ### Additional Tab's to add
