@@ -281,8 +281,8 @@ MODEL_DESC = [
     "Fuzzy matching like regex.  Warning: Very slow when run against the abstract field", 
     "Very fast and good for basic retrieval.  Uses TF-IDF with L1 regularization", 
     "Using the standard spacy pipeline, calculates a cosine sim with more detailed embeddings", 
-    "Good for Asymetric Semantic Search.  Slower than above, but more accurate",
-    "Meant for comparing scientific papers.   Runs quite slowly on abstracts."
+    "Good for Asymetric Semantic Search.  Slower than above, but more accurate. Available for GPU",
+    "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  

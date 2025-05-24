@@ -9,6 +9,7 @@ from time import sleep
 from typing import TYPE_CHECKING, List, Tuple, Dict, Any 
 from pathlib import Path, PurePath
 from collections import deque
+import torch
 #Textual Imports
 from textual import on, work
 from textual.binding import Binding
@@ -394,7 +395,7 @@ class PaperSearch(App):
             sim = target.similarity(corpus)
             sims.append(sim)
 
-        return sims, paper_names
+        return sims[1:], paper_names[1:]
 
     #FUNCTION - launch sbert
     def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
@@ -428,6 +429,8 @@ class PaperSearch(App):
 
         #Maybe some garage cleanup would help?
         del bert
+        if device == "cuda":
+            torch.cuda.empty_cache()
 
         return sims[1:], paper_names[1:]
 
