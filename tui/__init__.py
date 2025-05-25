@@ -126,7 +126,7 @@ class PaperSearch(App):
                             yield Button("Remove Dataset", id="rem-button")
 
                 # Tab 3 - Search (Placeholder)
-                with TabPane("Search", id="search-tab"):
+                with TabPane("Search Datasets", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="input-search")
                         yield Static("Search Models", id="hdr-model", classes="header")
@@ -144,6 +144,7 @@ class PaperSearch(App):
                                 yield Input("res limit", tooltip="Limit the amount of returned results", id="input-limit", type="integer")
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
+
         yield Footer()
 
     #FUNCTION - onmount
