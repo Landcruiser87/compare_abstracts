@@ -145,7 +145,7 @@ class PaperSearch(App):
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
-                # Tab 4 - arXiv search
+                # Tab 4 - arXiv Search
                 with TabPane("Search arXiv", id="search-arxiv"):
                     with Container(id="srch-arx-container"):
                         yield Input("Type search here", id="input-arxiv")
@@ -195,6 +195,7 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
+    
     #TODO - Will need a Radioset.Changed for radio-arx-dates.
         #When date range is selected, I want the date to and date from range inputs to be visible. 
         #Otherwise I want them to be hidden.
@@ -234,6 +235,9 @@ class PaperSearch(App):
     @on(Button.Pressed, "#search-button")
     def search_button_event(self):
         self.run_search()
+    #TODO Will need a button press event here for arxiv search
+        #See if you can store this one in the utils py file.  
+        #It'll just be an API call from the selected ranges so... shouldn't be too bad
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
