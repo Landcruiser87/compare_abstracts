@@ -125,7 +125,7 @@ class PaperSearch(App):
                             yield Button("Add Dataset", id="add-button")
                             yield Button("Remove Dataset", id="rem-button")
 
-                # Tab 3 - Search (Placeholder)
+                # Tab 3 - Datasets Search
                 with TabPane("Search Datasets", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="input-search")
@@ -145,6 +145,32 @@ class PaperSearch(App):
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
+                # Tab 4 - arXiv search
+                with TabPane("Search arXiv", id="search-arxiv"):
+                    with Container(id="srch-arx-container"):
+                        yield Input("Type search here", id="input-arxiv")
+                        yield Static("Search Category", id="hdr-arx-cat", classes="header")
+                        yield Static("Search Subject", id="hdr-arx-sub", classes="header")
+                        yield Static("Search Date Range", id="hdr-arx-date", classes="header")
+                        
+                        with RadioSet(id="radio-arx-cat", classes="header"):
+                            for tip in ARXIV_CATS:
+                                yield RadioButton(model)
+                        with RadioSet(id="radio-arx-sub", classes="header"):
+                            for field in ARXIV_SUBJECTS:
+                                yield RadioButton(field)
+                        with RadioSet(id="radio-arx-dates", classes="header"):
+                            for field in ARXIV_DATES:
+                                yield RadioButton(field)
+
+                        with Container(id="sub-arx-container"):
+                            #?Maybe see if there is a date picker widget?
+                            with Vertical(id="srch-arx-date"):
+                                yield Input("Date From", tooltip="Ex: 4/22/2025", id="input-arx-from", type="text")
+                                yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text")
+                            with Vertical(id="srch-arx-fields"):
+                                yield Input("res limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
+                            yield Button("Search arXiv", tooltip="Patience Iago!!!", id="search-arxiv")
         yield Footer()
 
     #FUNCTION - onmount
@@ -169,7 +195,10 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
-
+    #TODO - Will need a Radioset.Changed for radio-arx-dates.
+        #When date range is selected, I want the date to and date from range inputs to be visible. 
+        #Otherwise I want them to be hidden.
+        
     @on(RadioSet.Changed, "#radio-models")
     def on_selection(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
