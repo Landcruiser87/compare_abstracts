@@ -286,7 +286,7 @@ MODEL_DESC = [
 ]
 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
-ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
+ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id", "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 

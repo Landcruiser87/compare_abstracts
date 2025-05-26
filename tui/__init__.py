@@ -166,8 +166,8 @@ class PaperSearch(App):
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
-                            yield Input("Date From", tooltip="Ex: 4/22/2025", id="input-arx-from", type="text")
-                            yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text")
+                            yield Input("Date From", tooltip="Year Ex:2025\nDate Range Ex: 4/22/2025", id="input-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="Patience Iago!!!", id="search-arxiv")
         yield Footer()
 
@@ -193,11 +193,7 @@ class PaperSearch(App):
         else:
             abutton.label = f"Add Data"
             rbutton.label = f"Remove Data"
-    
-    #TODO - Will need a Radioset.Changed for radio-arx-dates.
-        #When date range is selected, I want the date to and date from range inputs to be visible. 
-        #Otherwise I want them to be hidden.
-        
+
     @on(RadioSet.Changed, "#radio-models")
     def on_selection(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
@@ -221,6 +217,14 @@ class PaperSearch(App):
             met_range = "-1 to 1"
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
+    
+    @on(RadioSet.Changed, "#radio-arx-dates")
+    def on_selection(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
@@ -233,7 +237,9 @@ class PaperSearch(App):
     @on(Button.Pressed, "#search-button")
     def search_button_event(self):
         self.run_search()
-    #TODO Will need a button press event here for arxiv search
+
+    #TODO - arXiv Button Press Event 
+        #Will need a button press event here for arxiv search
         #See if you can store this one in the utils py file.  
         #It'll just be an API call from the selected ranges so... shouldn't be too bad
 
