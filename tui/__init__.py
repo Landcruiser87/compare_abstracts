@@ -157,9 +157,14 @@ class PaperSearch(App):
                         with RadioSet(id="radio-arx-cat", classes="header"):
                             for cat in ARXIV_CATS:
                                 yield RadioButton(cat)
-                        with RadioSet(id="radio-arx-sub", classes="header"):
-                            for subject in ARXIV_SUBJECTS:
-                                yield RadioButton(subject, tooltip='https://arxiv.org/category_taxonomy')
+                        # with RadioSet(id="radio-arx-sub", classes="header"):
+                        #     for subject in ARXIV_SUBJECTS:
+                        #         yield RadioButton(subject, tooltip='https://arxiv.org/category_taxonomy')
+                        yield SelectionList(*ARXIV_SUBJECTS, name="Subject Category", id="arxsubjects")
+
+                        #TODO Update above with Selectionlist. 
+                            #You can select more than one category.  Duh. 
+
                         with RadioSet(id="radio-arx-dates", classes="header"):
                             for dfield in ARXIV_DATES:
                                 yield RadioButton(dfield)
