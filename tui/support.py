@@ -287,7 +287,7 @@ MODEL_DESC = [
 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id", "ORCID"]
-ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
+ARXIV_SUBJECTS = [(y, x) for x, y in enumerate(["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"])]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")

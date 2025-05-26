@@ -160,6 +160,7 @@ class PaperSearch(App):
                         # with RadioSet(id="radio-arx-sub", classes="header"):
                         #     for subject in ARXIV_SUBJECTS:
                         #         yield RadioButton(subject, tooltip='https://arxiv.org/category_taxonomy')
+                        
                         yield SelectionList(*ARXIV_SUBJECTS, name="Subject Category", id="arxsubjects")
 
                         #TODO Update above with Selectionlist. 
