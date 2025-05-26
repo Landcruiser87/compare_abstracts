@@ -60,7 +60,7 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "ML_Tree"
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 #CLASS - Load Data
 class PaperSearch(App):
@@ -146,30 +146,28 @@ class PaperSearch(App):
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
                 # Tab 4 - arXiv Search
-                with TabPane("Search arXiv", id="search-arxiv"):
+                with TabPane("Search arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
                         yield Input("Type search here", id="input-arxiv")
-                        yield Static("Search Category", id="hdr-arx-cat", classes="header")
-                        yield Static("Search Subject", id="hdr-arx-sub", classes="header")
-                        yield Static("Search Date Range", id="hdr-arx-date", classes="header")
-                        
-                        with RadioSet(id="radio-arx-cat", classes="header"):
-                            for tip in ARXIV_CATS:
-                                yield RadioButton(model)
-                        with RadioSet(id="radio-arx-sub", classes="header"):
-                            for field in ARXIV_SUBJECTS:
-                                yield RadioButton(field)
-                        with RadioSet(id="radio-arx-dates", classes="header"):
-                            for field in ARXIV_DATES:
-                                yield RadioButton(field)
+                        yield Static("Category", id="hdr-arx-cat", classes="header")
+                        yield Static("Subject", id="hdr-arx-sub", classes="header")
+                        yield Static("Date Range", id="hdr-arx-date", classes="header")
+                        yield Static("Limits", id="hdr-arx-limit", classes="header")
 
-                        with Container(id="sub-arx-container"):
-                            #?Maybe see if there is a date picker widget?
-                            with Vertical(id="srch-arx-date"):
-                                yield Input("Date From", tooltip="Ex: 4/22/2025", id="input-arx-from", type="text")
-                                yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text")
-                            with Vertical(id="srch-arx-fields"):
-                                yield Input("res limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
+                        with RadioSet(id="radio-arx-cat", classes="header"):
+                            for cat in ARXIV_CATS:
+                                yield RadioButton(cat)
+                        with RadioSet(id="radio-arx-sub", classes="header"):
+                            for subject in ARXIV_SUBJECTS:
+                                yield RadioButton(subject, tooltip='https://arxiv.org/category_taxonomy')
+                        with RadioSet(id="radio-arx-dates", classes="header"):
+                            for dfield in ARXIV_DATES:
+                                yield RadioButton(dfield)
+
+                        with Vertical(id="sub-arx-limit"):
+                            yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
+                            yield Input("Date From", tooltip="Ex: 4/22/2025", id="input-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text")
                             yield Button("Search arXiv", tooltip="Patience Iago!!!", id="search-arxiv")
         yield Footer()
 

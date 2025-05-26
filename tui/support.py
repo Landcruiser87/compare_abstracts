@@ -292,4 +292,4 @@ ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 
 date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
 console = Console(color_system="auto", stderr=True)
-logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
+logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log")
