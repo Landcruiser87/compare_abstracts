@@ -54,8 +54,7 @@ from utils import (
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, #arXiv vars
-    ARXIV_AREAS, CAT_LOAD   
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -164,7 +163,7 @@ class PaperSearch(App):
                                     yield RadioButton(dfield)
 
                         yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
-                        yield SelectionList(*CAT_LOAD, name="Category", id="arx-categories")
+                        yield SelectionList(name="Category", id="arx-categories")
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")

@@ -144,6 +144,8 @@ def word2vec():
 
 
 def sbert(model_name:str):
+    #TODO - UPDATE THIS SO ITS NOT DINGUS MATERIAL
+        #ie the folder creation and download of the models
     try:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"

@@ -270,3 +270,4 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
    - Look at first two components to find the subject topics that are most in variation.
 4. Tom Arnold idea.  Build a graph network from the citations of each paper
   - Analyze who is getting cited most often and driving a particular area of research.  Really like this!!
+5. Nate Idea. Summarize each year (or current datasets) to display top       'keywords' or 'hottest categories'.
