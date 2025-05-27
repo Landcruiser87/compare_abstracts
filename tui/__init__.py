@@ -184,46 +184,9 @@ class PaperSearch(App):
         json_docview.update_document(json_data)
         tree.focus()
 
-    @on(RadioSet.Changed, "#radio-arx-dates")
-    def on_selection(self, event: RadioSet.Changed) -> None:
-        dateto = self.query_one("#input-arx-to", Input)
-        if "Date Range" in event.pressed.label:
-            dateto.disabled = False
-        else:
-            dateto.disabled = True
-
-    # @on(SelectionList.SelectedChanged, "#arx-subjects")
-    # def on_selection(self, event: SelectionList.SelectedChanged) -> None:
-    #     categories = self.query_one("#arx-categories", SelectionList)
-    #     categories.clear_options()
-    #     selections = event.selection_list.selected
-    #     if len(selections) > 0:
-    #         for selection in selections:
-    #             for key, val in ARXIV_AREAS.items():
-    #                 if selection in key:
-    #                     codes = [x for x in val]
-
-
-    @on(Button.Pressed, "#add-button")
-    def add_button_event(self):
-        self.add_datasets()
-
-    @on(Button.Pressed, "#rem-button")
-    def remove_button_event(self):
-        self.remove_datasets()
-
-    @on(Button.Pressed, "#search-button")
-    def search_button_event(self):
-        self.run_search()
-
-
-    @on(Button.Pressed, "#search-arxiv")
-    def arxiv_button_event(self):
-        self.arxiv_search()
-
 
     @on(SelectionList.SelectedChanged, "#datasets")
-    def on_selection(self, event: SelectionList.SelectedChanged) -> None:
+    def on_datasets_selection_changed(self, event: SelectionList.SelectedChanged) -> None:
         abutton = self.query_one("#add-button", Button)
         rbutton = self.query_one("#rem-button", Button)
         selections = len(event.selection_list.selected)
@@ -235,7 +198,7 @@ class PaperSearch(App):
             rbutton.label = f"Remove Data"
 
     @on(RadioSet.Changed, "#radio-models")
-    def on_selection(self, event: RadioSet.Changed) -> None:
+    def on_radio_models_changed(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
         if "Fuzzy" in event.pressed.label:
             met_range = "-1 to 1"
@@ -257,7 +220,43 @@ class PaperSearch(App):
             met_range = "-1 to 1"
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
-    
+
+
+    @on(RadioSet.Changed, "#radio-arx-dates")
+    def on_radioset_arx_dates_changed(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
+
+    @on(SelectionList.SelectedChanged, "#arx-subjects")
+    def on_arx_subjects_changed(self, event: SelectionList.SelectedChanged) -> None:
+        categories = self.query_one("#arx-categories", SelectionList)
+        categories.clear_options()
+        selections = event.selection_list.selected
+        if len(selections) > 0:
+            for selection in selections:
+                for key, val in ARXIV_AREAS.items():
+                    if selection in key:
+                        codes = [x for x in val]
+
+    @on(Button.Pressed, "#add-button")
+    def add_button_event(self):
+        self.add_datasets()
+
+    @on(Button.Pressed, "#rem-button")
+    def remove_button_event(self):
+        self.remove_datasets()
+
+    @on(Button.Pressed, "#search-button")
+    def search_button_event(self):
+        self.run_search()
+
+
+    @on(Button.Pressed, "#search-arxiv")
+    def arxiv_button_event(self):
+        self.arxiv_search()
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
