@@ -229,16 +229,17 @@ class PaperSearch(App):
         else:
             dateto.disabled = True
 
-    @on(SelectionList.SelectedChanged, "#arx-subjects")
-    def on_arx_subjects_changed(self, event: SelectionList.SelectedChanged) -> None:
+    @on(SelectionList.SelectionHighlighted, "#arx-subjects")
+    def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
         categories = self.query_one("#arx-categories", SelectionList)
         categories.clear_options()
         selections = event.selection_list.selected
         if len(selections) > 0:
             for selection in selections:
                 for key, val in ARXIV_AREAS.items():
-                    if selection in key:
-                        codes = [x for x in val]
+                    if ARXIV_SUBJECTS[selection][0] in key:
+                        codes = [(y,x) for x,y in enumerate(val.keys())]
+                        categories.add_options(codes)
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
