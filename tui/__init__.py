@@ -52,9 +52,10 @@ from utils import (
 )
 
 from support import (
-    list_datasets, save_data, logger,                      #functions
-    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC,              #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS   #arXiv vars
+    list_datasets, save_data, logger, #functions
+    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, #arXiv vars
+    ARXIV_AREAS, CAT_LOAD   
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -149,29 +150,25 @@ class PaperSearch(App):
                 with TabPane("Search arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
                         yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
-                        yield Static("Category", id="hdr-arx-cat", classes="header")
+                        yield Static("Search field\nDate Range", id="hdr-arx-cat", classes="header")
                         yield Static("Subject", id="hdr-arx-sub", classes="header")
-                        yield Static("Date Range", id="hdr-arx-date", classes="header")
+                        yield Static("Category", id="hdr-arx-date", classes="header")
                         yield Static("Limits", id="hdr-arx-limit", classes="header")
+                        with Vertical(id="arx-radios"):
+                            with RadioSet(id="radio-arx-cat", classes="header"):
+                                for cat in ARXIV_CATS:
+                                    yield RadioButton(cat)
 
-                        with RadioSet(id="radio-arx-cat", classes="header"):
-                            for cat in ARXIV_CATS:
-                                yield RadioButton(cat)
-                        with RadioSet(id="radio-arx-sub", classes="header"):
-                            for sub in ARXIV_SUBJECTS:
-                                yield RadioButton(sub)
-                        yield SelectionList(*ARXIV_SUBJECTS, name="Subject Category", id="arxsubjects")
+                            with RadioSet(id="radio-arx-dates", classes="header"):
+                                for dfield in ARXIV_DATES:
+                                    yield RadioButton(dfield)
 
-                        #TODO Update above with Selectionlist. 
-                            #You can select more than one category.  Duh. 
-
-                        with RadioSet(id="radio-arx-dates", classes="header"):
-                            for dfield in ARXIV_DATES:
-                                yield RadioButton(dfield)
+                        yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
+                        yield SelectionList(*CAT_LOAD, name="Category", id="arx-categories")
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
-                            yield Input("Date From", tooltip="Year Ex:2025\nDate Range Ex: 4/22/2025", id="input-arx-from", type="text")
+                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: 4/22/2025", id="input-arx-from", type="text")
                             yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
         yield Footer()
@@ -186,6 +183,44 @@ class PaperSearch(App):
         json_docview = self.query_one(JSONDocumentView)
         json_docview.update_document(json_data)
         tree.focus()
+
+    @on(RadioSet.Changed, "#radio-arx-dates")
+    def on_selection(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
+
+    # @on(SelectionList.SelectedChanged, "#arx-subjects")
+    # def on_selection(self, event: SelectionList.SelectedChanged) -> None:
+    #     categories = self.query_one("#arx-categories", SelectionList)
+    #     categories.clear_options()
+    #     selections = event.selection_list.selected
+    #     if len(selections) > 0:
+    #         for selection in selections:
+    #             for key, val in ARXIV_AREAS.items():
+    #                 if selection in key:
+    #                     codes = [x for x in val]
+
+
+    @on(Button.Pressed, "#add-button")
+    def add_button_event(self):
+        self.add_datasets()
+
+    @on(Button.Pressed, "#rem-button")
+    def remove_button_event(self):
+        self.remove_datasets()
+
+    @on(Button.Pressed, "#search-button")
+    def search_button_event(self):
+        self.run_search()
+
+
+    @on(Button.Pressed, "#search-arxiv")
+    def arxiv_button_event(self):
+        self.arxiv_search()
+
 
     @on(SelectionList.SelectedChanged, "#datasets")
     def on_selection(self, event: SelectionList.SelectedChanged) -> None:
@@ -223,37 +258,7 @@ class PaperSearch(App):
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
     
-    @on(RadioSet.Changed, "#radio-arx-dates")
-    def on_selection(self, event: RadioSet.Changed) -> None:
-        dateto = self.query_one("#input-arx-to", Input)
-        if "Date Range" in event.pressed.label:
-            dateto.disabled = False
-        else:
-            dateto.disabled = True
-    
-    #TODO - need another radio change
-    #TODO change subject back to radios
-    #TODO - Add sub field of categories belwo the subject
-    #TODO - change label
 
-
-    @on(Button.Pressed, "#add-button")
-    def add_button_event(self):
-        self.add_datasets()
-
-    @on(Button.Pressed, "#rem-button")
-    def remove_button_event(self):
-        self.remove_datasets()
-
-    @on(Button.Pressed, "#search-button")
-    def search_button_event(self):
-        self.run_search()
-
-
-    @on(Button.Pressed, "#search-arxiv")
-    def arxiv_button_event(self):
-        self.arxiv_search()
-        
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
@@ -698,5 +703,3 @@ class PaperSearch(App):
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
 # ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3
-#TODO - Create hover routine that fires after a SelectionEvent on the metric search.
-    #when hovering over the threshold box give a suggested threshold range for the selected metric. 
