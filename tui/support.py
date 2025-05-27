@@ -329,10 +329,6 @@ def get_categories(result:BeautifulSoup) -> dict:
     return categories
 
 def rebuild_taxonomy() -> dict:
-    # dt = datetime.datetime.now()
-    # day = dt.day
-    # month = dt.strftime("%B").lower()
-    # year = dt.year
 
     url = "https://www.arxiv.org/category_taxonomy"
     referrer = "https://info.arxiv.org/"
@@ -377,9 +373,8 @@ def load_taxonomy(search:bool=False):
             with open(f"./data/conferences/arxiv_cat.json", "w") as outf:
                 outf.write(cat_json)
             
-            #run search from requests
         else:
-            categories = load_json("/data/conferences/arxiv_cat.json")
+            categories = load_json("./data/conferences/arxiv_cat.json")
         return categories
     
     except Exception as e:
@@ -411,4 +406,4 @@ MODEL_DESC = [
 ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id", "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
-ARXIV_AREAS = load_taxonomy(True)
+ARXIV_AREAS = load_taxonomy()
