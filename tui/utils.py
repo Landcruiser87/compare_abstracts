@@ -1,5 +1,6 @@
 import contextlib
 import datetime
+import urllib
 import json
 import re
 import os
@@ -175,3 +176,29 @@ def sbert(model_name:str):
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
 
+def search_arxiv():
+    # main url - http://export.arxiv.org/api/query
+    # NOTE - Can only make a request every 3 seconds. 
+        # Due to speed limitations in our implementation of the API, the maximum
+        # number of results returned from a single call (max_results) is limited to
+        # 30000 in slices of at most 2000 at a time,
+    #Import search params, 
+    #Export search results in JSON format. 
+        #Means I'll need an exporting process too.
+    subj_params = {
+        "prefix": "explanation",
+        "ti": "Title",
+        "au": "Author",
+        "abs": "Abstract",
+        "co": "Comment",
+        "jr": "Journal Reference",
+        "cat": "Subject Category",
+        "rn": "Report Number",
+        "id": "Id (use id_list instead)",
+        "all": "All of the above"
+    }
+
+
+    # Couple of different ways we can go here.  
+    #1.  Use the official Arxiv wrapper built by Lukas Scwab.  Looks like he's still updating it and its fairly useful.  
+    #2.  Build my own.  Much harder route, but we'll see if I care about one more dependency.

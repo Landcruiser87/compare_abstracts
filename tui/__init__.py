@@ -52,9 +52,9 @@ from utils import (
 )
 
 from support import (
-    list_datasets, save_data, logger,         #functions
-    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES   #arXiv vars
+    list_datasets, save_data, logger,                      #functions
+    SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC,              #global vars
+    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS   #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -148,7 +148,7 @@ class PaperSearch(App):
                 # Tab 4 - arXiv Search
                 with TabPane("Search arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
-                        yield Input("Type search here", id="input-arxiv")
+                        yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Category", id="hdr-arx-cat", classes="header")
                         yield Static("Subject", id="hdr-arx-sub", classes="header")
                         yield Static("Date Range", id="hdr-arx-date", classes="header")
@@ -157,10 +157,9 @@ class PaperSearch(App):
                         with RadioSet(id="radio-arx-cat", classes="header"):
                             for cat in ARXIV_CATS:
                                 yield RadioButton(cat)
-                        # with RadioSet(id="radio-arx-sub", classes="header"):
-                        #     for subject in ARXIV_SUBJECTS:
-                        #         yield RadioButton(subject, tooltip='https://arxiv.org/category_taxonomy')
-                        
+                        with RadioSet(id="radio-arx-sub", classes="header"):
+                            for sub in ARXIV_SUBJECTS:
+                                yield RadioButton(sub)
                         yield SelectionList(*ARXIV_SUBJECTS, name="Subject Category", id="arxsubjects")
 
                         #TODO Update above with Selectionlist. 
@@ -174,7 +173,7 @@ class PaperSearch(App):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
                             yield Input("Date From", tooltip="Year Ex:2025\nDate Range Ex: 4/22/2025", id="input-arx-from", type="text")
                             yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text", disabled=True)
-                            yield Button("Search arXiv", tooltip="Patience Iago!!!", id="search-arxiv")
+                            yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
         yield Footer()
 
     #FUNCTION - onmount
@@ -231,6 +230,12 @@ class PaperSearch(App):
             dateto.disabled = False
         else:
             dateto.disabled = True
+    
+    #TODO - need another radio change
+    #TODO change subject back to radios
+    #TODO - Add sub field of categories belwo the subject
+    #TODO - change label
+
 
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
@@ -244,11 +249,11 @@ class PaperSearch(App):
     def search_button_event(self):
         self.run_search()
 
-    #TODO - arXiv Button Press Event 
-        #Will need a button press event here for arxiv search
-        #See if you can store this one in the utils py file.  
-        #It'll just be an API call from the selected ranges so... shouldn't be too bad
 
+    @on(Button.Pressed, "#search-arxiv")
+    def arxiv_button_event(self):
+        self.arxiv_search()
+        
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
