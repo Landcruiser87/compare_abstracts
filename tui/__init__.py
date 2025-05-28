@@ -9,7 +9,7 @@ from time import sleep
 from typing import TYPE_CHECKING, List, Tuple, Dict, Any 
 from pathlib import Path, PurePath
 from collections import deque
-import torch
+from torch.cuda import empty_cache
 #Textual Imports
 from textual import on, work
 from textual.binding import Binding
@@ -46,7 +46,8 @@ from utils import (
     word2vec,
     tfidf,    
     get_c_time, 
-    clean_text, 
+    clean_text,
+    search_arxiv, 
     cosine_similarity, 
     clean_string_values,
 )
@@ -54,7 +55,7 @@ from utils import (
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
+    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -148,22 +149,24 @@ class PaperSearch(App):
                 # Tab 4 - arXiv Search
                 with TabPane("Search arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
-                        yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
-                        yield Static("Search field\nDate Range", id="hdr-arx-cat", classes="header")
+                        yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
+                        yield Static("Search Field\nDate Range", id="hdr-arx-cat", classes="header")
                         yield Static("Subject", id="hdr-arx-sub", classes="header")
                         yield Static("Category", id="hdr-arx-date", classes="header")
                         yield Static("Limits", id="hdr-arx-limit", classes="header")
                         with Vertical(id="arx-radios"):
                             with RadioSet(id="radio-arx-cat", classes="header"):
-                                for cat in ARXIV_CATS:
+                                for cat in ARXIV_FIELDS:
                                     yield RadioButton(cat)
 
                             with RadioSet(id="radio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
-
-                        yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
-                        yield SelectionList(name="Category", id="arx-categories")
+                        with RadioSet(id="radio-arx-subjects", classes="header"):
+                            for subject in ARXIV_SUBJECTS:
+                                yield RadioButton(subject)
+                        # yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
+                        yield SelectionList(name="Category", id="sl-arx-categories")
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
@@ -228,27 +231,38 @@ class PaperSearch(App):
         else:
             dateto.disabled = True
 
-    @on(SelectionList.SelectionHighlighted, "#arx-subjects")
-    def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
-        categories = self.query_one("#arx-categories", SelectionList)
-        categories.clear_options()
-        selections = event.selection_list.selected
-        if len(selections) > 0:
-            for selection in selections:
-                for key, val in ARXIV_AREAS.items():
-                    if ARXIV_SUBJECTS[selection][0] in key:
-                        codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
-                        categories.add_options(codes)
 
-    @on(SelectionList.SelectionHighlighted, "#arx-categories")
+    @on(RadioSet.Changed, "#radio-arx-subjects")
+    def on_radio_subjects_changed(self, event: RadioSet.Changed) -> None:
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        categories.clear_options()
+        pressed = getattr(event.pressed.label, '_text', None)[0]
+        for key, val in ARXIV_AREAS.items():
+            if key == pressed:
+                codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
+                categories.add_options(codes)
+                break
+
+    #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
+    # @on(SelectionList.SelectionHighlighted, "#arx-subjects")
+    # def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
+    #     categories = self.query_one("#sl-arx-categories", SelectionList)
+    #     categories.clear_options()
+    #     selections = event.selection_list.selected
+    #     if len(selections) > 0:
+    #         for selection in selections:
+    #             for key, val in ARXIV_AREAS.items():
+    #                 if ARXIV_SUBJECTS[selection][0] in key:
+    #                     codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
+    #                     categories.add_options(codes)
+
+    @on(SelectionList.SelectionHighlighted, "#sl-arx-categories")
     def on_arx_categories_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
-        categories = self.query_one("#arx-categories", SelectionList)
+        categories = self.query_one("#sl-arx-categories", SelectionList)
         if event.selection_list.selected:
             selected = getattr(categories.options[event.selection_list.selected[-1]].prompt, '_text', None)
             tips = [[(k2, v2) for k2, v2 in v2.items() if k2==selected[0]] for _, v2 in ARXIV_AREAS.items()]
             tips = list(filter(None, tips))
-
-        if selected:
             categories.tooltip = tips[0][0][0]+ "\n" + "\n".join(tips[0][0][1])
         else:
             categories.tooltip = None
@@ -267,7 +281,61 @@ class PaperSearch(App):
 
     @on(Button.Pressed, "#search-arxiv")
     def arxiv_button_event(self):
-        self.arxiv_search()
+        #Load up search variables
+        variables = []
+        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
+        start_date = self.query_one("#input-arx-from", Input)._reactive_value
+        #Need a way to know if this is disabled
+        end_date = self.query_one("#input-arx-to", Input)
+        limit = self.query_one("#input-arx-limit", Input)._reactive_value
+        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
+        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
+        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
+        # getattr(categories.options[index].prompt, '_text', None)
+        #TODO - valiation gates 
+            #[ ] -Need this for Date fields
+            #[x] -Also need something to parse which of the date fields was used in the 
+            #[ ] -Make sure start and end aren't passed current day
+        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
+
+        #bind the info together into a list
+        variables = [limit, field, date_range, subject]
+        if not all(self.is_numeric_string(str(var)) for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            return None
+
+        #Remap the variables with their values        
+        variables = [
+            int(limit),
+            ARXIV_FIELDS[field],
+            ARXIV_SUBJECTS[subject], 
+            [getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            ARXIV_DATES[date_range],
+        ]
+        if not end_date.disabled:
+            variables.extend([start_date, end_date])
+        else:
+            #If equal to specific year
+            if ARXIV_DATES[date_range] == "Specific Year":
+                variables.append(start_date)
+
+        json_data = search_arxiv(variables)
+
+        #load data inputs
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        tree: Tree = tree_view.query_one(Tree)
+        
+        try:
+            #load the JSON into the tree
+            self.load_data(tree, root_name, json_data)
+            #save the search
+            save_data(root_name, json_data)
+            logger.info(f"{len(json_data.keys())} papers found on arXiv")
+
+        except Exception as e:
+            logger.error(f"Failed to save search results: {e}")
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
@@ -292,7 +360,7 @@ class PaperSearch(App):
         datasets_to_load: List[Tuple[str, PurePath]] = []
         for index in selected_indices:
             # Ensure index is valid
-            if index < len(datasets.options):
+            if index <= len(datasets.options):
                 # Safely access the prompt text
                 prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
                 if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
@@ -483,15 +551,14 @@ class PaperSearch(App):
             paper_names = papers
             logger.info(f"{metric} {sims.shape}")
 
-            #BUG - Specter Model management. 
-                #loading and unloading even the local model is slowing things down.  
-                #Might be better to refactor and attach the model to the self app as a
-                #variable for you to use once at runtime. 
-
-        #Maybe some garage cleanup would help?
+            #BUG - Specter Model
+                #The specter model on abstract (what its designed for) is quite slow
+                #Not sure how to speed that up.
+        
+        #Delete the model and empty the cache
         del bert
         if device == "cuda":
-            torch.cuda.empty_cache()
+            empty_cache()
 
         return sims[1:], paper_names[1:]
 

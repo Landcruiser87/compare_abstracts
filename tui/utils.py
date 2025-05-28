@@ -1,6 +1,6 @@
 import contextlib
 import datetime
-import urllib
+import requests
 import json
 import re
 import os
@@ -178,8 +178,25 @@ def sbert(model_name:str):
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
 
-def search_arxiv():
+def search_arxiv(variables:tuple):
+    try:
+        baseurl = "http://export.arxiv.org/api/query?search_query="
+        url = ""
+        response = requests.get(url)
+    except Exception as e:
+        logger.warning(f"A general request error occured.  Check URL\n{e}")
+    if response:
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+    else:
+        logger.warning("No response generated.  Somethings broken to get here")
+        return None
+    
     # main url - http://export.arxiv.org/api/query
+
     # NOTE - Can only make a request every 3 seconds. 
         # Due to speed limitations in our implementation of the API, the maximum
         # number of results returned from a single call (max_results) is limited to
@@ -187,20 +204,20 @@ def search_arxiv():
     #Import search params, 
     #Export search results in JSON format. 
         #Means I'll need an exporting process too.
-    subj_params = {
-        "prefix": "explanation",
-        "ti": "Title",
-        "au": "Author",
-        "abs": "Abstract",
-        "co": "Comment",
-        "jr": "Journal Reference",
-        "cat": "Subject Category",
-        "rn": "Report Number",
-        "id": "Id (use id_list instead)",
-        "all": "All of the above"
-    }
-
-
+    # subj_params = {
+    #     "prefix": "explanation",
+    #     "ti": "Title",
+    #     "au": "Author",
+    #     "abs": "Abstract",
+    #     "co": "Comment",
+    #     "jr": "Journal Reference",
+    #     "cat": "Subject Category",
+    #     "rn": "Report Number",
+    #     "id": "Id (use id_list instead)",
+    #     "all": "All of the above"
+    # }
     # Couple of different ways we can go here.  
-    #1.  Use the official Arxiv wrapper built by Lukas Scwab.  Looks like he's still updating it and its fairly useful.  
-    #2.  Build my own.  Much harder route, but we'll see if I care about one more dependency.
+        # Build my own.  harder route, but we'll see if I care about one more dependency.
+
+    # Arxiv does not track the announcement date.
+    # This is the date the paper was submitted.

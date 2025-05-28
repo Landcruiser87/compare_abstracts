@@ -106,6 +106,7 @@ def get_time():
     current_t_s = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
     current_t = datetime.datetime.strptime(current_t_s, "%m-%d-%Y-%H-%M-%S")
     return current_t
+
 ########################## Saving funcs ##########################################
 # #FUNCTION save results
 # def save_result(name:str, processed:pd.DataFrame, logger:logging):
@@ -290,7 +291,6 @@ def load_json(fp:str)->json:
             return jsondata	
 
 ########################## Web functions ##########################################
-
 def get_categories(result:BeautifulSoup) -> dict:
     """[Ingest XML of summary page for articles info]
 
@@ -298,7 +298,7 @@ def get_categories(result:BeautifulSoup) -> dict:
         result (BeautifulSoup object): html of apartments page
 
     Returns:
-        articles (list): [List of NewCategory objects]
+        categories (dict): [Dictionary of the arXiv categories]
     """
     #Base data container
     categories = {}
@@ -329,7 +329,6 @@ def get_categories(result:BeautifulSoup) -> dict:
     return categories
 
 def rebuild_taxonomy() -> dict:
-
     url = "https://www.arxiv.org/category_taxonomy"
     referrer = "https://info.arxiv.org/"
     chrome_version = np.random.randint(120, 132)
@@ -342,11 +341,7 @@ def rebuild_taxonomy() -> dict:
         'referer': referrer,
         'Content-Type': 'text/html,application/xhtml+xml,application/xml'
     }
-    if url:
-        response = requests.get(url, headers=headers)
-    else:
-        raise ValueError("Your URL isn't being loaded correctly")
-    
+    response = requests.get(url, headers=headers)
     if response.status_code != 200:
         logger.warning(f'Status code: {response.status_code}')
         logger.warning(f'Reason: {response.reason}')
@@ -363,7 +358,7 @@ def rebuild_taxonomy() -> dict:
         return categories
             
     else:
-        logger.warning(f"An error occured and categories could not be located.  Check DOM for updated field names")
+        logger.warning(f"An error occured and categories could not be extracted. Check DOM for updated field names")
 
 def load_taxonomy(search:bool=False):
     try:
@@ -377,6 +372,9 @@ def load_taxonomy(search:bool=False):
             path = "./data/arxiv_cat.json"
             if os.path.exists(path):
                 categories = load_json(path)
+            else:
+                logger.warning(f"An error occured loading the arx-cat.json file")
+
         return categories 
     
     except Exception as e:
@@ -405,8 +403,7 @@ MODEL_DESC = [
     "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
 #arXiv Params
-ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID"]
-ARXIV_SUBJECTS = [(y,x) for x, y in enumerate(["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"])]
+ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID"]
+ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 ARXIV_AREAS = load_taxonomy()
-CAT_LOAD = [(y, x) for x, y  in enumerate(ARXIV_AREAS["Computer Science"])]

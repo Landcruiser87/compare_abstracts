@@ -265,16 +265,17 @@ Button {
     width: 1fr;
 }
 
-#arx-subjects {
+
+#radio-arx-subjects {
     height: 1fr;
     width: 1fr;
 }
 
-#arx-categories {
+
+#sl-arx-categories {
     height: 1fr;
     width: 1fr;
 }
-
 
 #sub-arx-limit {
     background: $panel;
