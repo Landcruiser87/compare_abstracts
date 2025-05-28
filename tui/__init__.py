@@ -19,7 +19,7 @@ from widgets import (
     JSONTree,
     TreeView, 
     SearchProgress
-) 
+)
 from textual.containers import Container, Horizontal, Vertical
 from textual.fuzzy import Matcher
 from textual.worker import get_current_worker
@@ -233,14 +233,27 @@ class PaperSearch(App):
     def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
         categories = self.query_one("#arx-categories", SelectionList)
         categories.clear_options()
+        # subjects = self.query_one("#arx-subjects", SelectionList)
         selections = event.selection_list.selected
         if len(selections) > 0:
             for selection in selections:
                 for key, val in ARXIV_AREAS.items():
                     if ARXIV_SUBJECTS[selection][0] in key:
-                        codes = [(y,x) for x,y in enumerate(val.keys())]
-                        categories.add_options(codes)
+                        codes = [(y, x, z[0], z[1]) for x,(y,z) in enumerate(val.items())]
+                        for code in codes:
+                            id = code[0].replace(".", "-")
+                            prompt = code[1]
+                            temp = categories.add_option((id, prompt))
+                            #BUG - Can't... seem to add a tooltip to a Selection
+                                #I can add them to a selectionlist, 
+                                #but not the actual Selection.  Bumer
+                                #Could switch to radios (those do)
+                                #
+                            # desc = "\n".join((code[2], code[3]))
+                            # temp = self.query_one(f"#{id}")
+                            # temp.tooltip = desc
 
+                    #TODO start here tomorrow
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
         self.add_datasets()
