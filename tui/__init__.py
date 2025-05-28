@@ -183,7 +183,6 @@ class PaperSearch(App):
         json_docview.update_document(json_data)
         tree.focus()
 
-
     @on(SelectionList.SelectedChanged, "#datasets")
     def on_datasets_selection_changed(self, event: SelectionList.SelectedChanged) -> None:
         abutton = self.query_one("#add-button", Button)
@@ -233,27 +232,23 @@ class PaperSearch(App):
     def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
         categories = self.query_one("#arx-categories", SelectionList)
         categories.clear_options()
-        # subjects = self.query_one("#arx-subjects", SelectionList)
         selections = event.selection_list.selected
         if len(selections) > 0:
             for selection in selections:
                 for key, val in ARXIV_AREAS.items():
                     if ARXIV_SUBJECTS[selection][0] in key:
-                        codes = [(y, x, z[0], z[1]) for x,(y,z) in enumerate(val.items())]
-                        for code in codes:
-                            id = code[0].replace(".", "-")
-                            prompt = code[1]
-                            temp = categories.add_option((id, prompt))
-                            #BUG - Can't... seem to add a tooltip to a Selection
-                                #I can add them to a selectionlist, 
-                                #but not the actual Selection.  Bumer
-                                #Could switch to radios (those do)
-                                #
-                            # desc = "\n".join((code[2], code[3]))
-                            # temp = self.query_one(f"#{id}")
-                            # temp.tooltip = desc
+                        codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
+                        categories.add_options(codes)
 
-                    #TODO start here tomorrow
+    @on(SelectionList.SelectionHighlighted, "#arx-categories")
+    def on_arx_categories_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
+        categories = self.query_one("#arx-categories", SelectionList)
+        selected = ARXIV_AREAS[event.selection_list.selected]
+        if len(selected) > 0:
+            categories.tooltip = "Yooooooo"
+        else:
+            categories.tooltip = None
+
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
         self.add_datasets()
@@ -265,7 +260,6 @@ class PaperSearch(App):
     @on(Button.Pressed, "#search-button")
     def search_button_event(self):
         self.run_search()
-
 
     @on(Button.Pressed, "#search-arxiv")
     def arxiv_button_event(self):
@@ -484,9 +478,6 @@ class PaperSearch(App):
             papers = [paper_names[res["corpus_id"]] for res in search_res]
             paper_names = papers
             logger.info(f"{metric} {sims.shape}")
-
-            #BUG - Check return here. 
-                #I think you might only be returning the top 10.  Which is fine.  But... 
 
             #BUG - Specter Model management. 
                 #loading and unloading even the local model is slowing things down.  
