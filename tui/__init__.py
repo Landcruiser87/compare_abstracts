@@ -243,9 +243,13 @@ class PaperSearch(App):
     @on(SelectionList.SelectionHighlighted, "#arx-categories")
     def on_arx_categories_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
         categories = self.query_one("#arx-categories", SelectionList)
-        selected = ARXIV_AREAS[event.selection_list.selected]
-        if len(selected) > 0:
-            categories.tooltip = "Yooooooo"
+        if event.selection_list.selected:
+            selected = getattr(categories.options[event.selection_list.selected[-1]].prompt, '_text', None)
+            tips = [[(k2, v2) for k2, v2 in v2.items() if k2==selected[0]] for _, v2 in ARXIV_AREAS.items()]
+            tips = list(filter(None, tips))
+
+        if selected:
+            categories.tooltip = tips[0][0][0]+ "\n" + "\n".join(tips[0][0][1])
         else:
             categories.tooltip = None
 
