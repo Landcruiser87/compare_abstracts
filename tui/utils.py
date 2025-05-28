@@ -157,7 +157,6 @@ def sbert(model_name:str):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")
             else:
-                
                 model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
                 model.save_pretrained("./data/models/marco")
                 logger.info("Model loaded and saved dynamically")
@@ -178,46 +177,65 @@ def sbert(model_name:str):
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
 
-def search_arxiv(variables:tuple):
-    try:
-        baseurl = "http://export.arxiv.org/api/query?search_query="
-        url = ""
-        response = requests.get(url)
-    except Exception as e:
-        logger.warning(f"A general request error occured.  Check URL\n{e}")
-    if response:
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
+class ArxivCrawl(object):
+    #Go build your castle Eule Brenner. 
+    #TODO - Start here tomorrow
+    def search_arxiv(parameters:dict)->dict:
+        chrome_version = np.random.randint(120, 132)
+        headers = {
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?1',
+            'sec-ch-ua-platform': '"Android"',
+            'referer': 'https://arxiv.org',
+            'Content-Type': 'text/html,application/xhtml+xml,application/xml'
+        }
+        try:
+            baseurl = "http://export.arxiv.org/api/query?search_query="
+            url = baseurl + ""
+            #Sample advanced.  Not sure if the API was meant for this. 
+            #advanced=&terms-0-operator=AND&terms-0-term=Transformers&terms-0-field=title&
+            #classification-economics=y&classification-physics=y&classification-physics_archives=hep-lat&
+            #classification-include_cross_list=include&date-filter_by=past_12&date-year=&
+            #date-from_date=&date-to_date=&date-date_type=submitted_date&
+            #abstracts=show&size=50&order=-announced_date_first
+
+            response = requests.post(url, params=parameters, headers=headers)
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+        if response:
+            if response.status_code != 200:
+                logger.warning(f'Status code: {response.status_code}')
+                logger.warning(f'Reason: {response.reason}')
+                return None
+
+        else:
+            logger.warning("No response generated.  Somethings broken to get here")
             return None
-        
-    else:
-        logger.warning("No response generated.  Somethings broken to get here")
-        return None
-    
-    # main url - http://export.arxiv.org/api/query
 
-    # NOTE - Can only make a request every 3 seconds. 
-        # Due to speed limitations in our implementation of the API, the maximum
-        # number of results returned from a single call (max_results) is limited to
-        # 30000 in slices of at most 2000 at a time,
-    #Import search params, 
-    #Export search results in JSON format. 
-        #Means I'll need an exporting process too.
-    # subj_params = {
-    #     "prefix": "explanation",
-    #     "ti": "Title",
-    #     "au": "Author",
-    #     "abs": "Abstract",
-    #     "co": "Comment",
-    #     "jr": "Journal Reference",
-    #     "cat": "Subject Category",
-    #     "rn": "Report Number",
-    #     "id": "Id (use id_list instead)",
-    #     "all": "All of the above"
-    # }
-    # Couple of different ways we can go here.  
-        # Build my own.  harder route, but we'll see if I care about one more dependency.
+        # main url - http://export.arxiv.org/api/query
+        # NOTE - Can only make a request every 3 seconds. 
+            # Due to speed limitations in our implementation of the API, the maximum
+            # number of results returned from a single call (max_results) is limited to
+            # 30000 in slices of at most 2000 at a time,
+        #Import search params, 
+        #Export search results in JSON format. 
+            #Means I'll need an exporting process too.
+        # subj_params = {
+        #     "prefix": "explanation",
+        #     "ti": "Title",
+        #     "au": "Author",
+        #     "abs": "Abstract",
+        #     "co": "Comment",
+        #     "jr": "Journal Reference",
+        #     "cat": "Subject Category",
+        #     "rn": "Report Number",
+        #     "id": "Id (use id_list instead)",
+        #     "all": "All of the above"
+        # }
+        # Couple of different ways we can go here.  
+            # Build my own.  harder route, but we'll see if I care about one more dependency.
 
-    # Arxiv does not track the announcement date.
-    # This is the date the paper was submitted.
+        # Arxiv does not track the announcement date.
+        # This is the date the paper was submitted.

@@ -42,12 +42,12 @@ from textual.widgets.tree import TreeNode
 from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
+    ArxivCrawl,
     sbert,
     word2vec,
     tfidf,    
     get_c_time, 
     clean_text,
-    search_arxiv, 
     cosine_similarity, 
     clean_string_values,
 )
@@ -293,10 +293,9 @@ class PaperSearch(App):
         subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
-        # getattr(categories.options[index].prompt, '_text', None)
-        #TODO - valiation gates 
+
+        #TODO - Validation gates 
             #[ ] -Need this for Date fields
-            #[x] -Also need something to parse which of the date fields was used in the 
             #[ ] -Make sure start and end aren't passed current day
         root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
 
@@ -307,26 +306,27 @@ class PaperSearch(App):
             return None
 
         #Remap the variables with their values        
-        variables = [
-            int(limit),
-            ARXIV_FIELDS[field],
-            ARXIV_SUBJECTS[subject], 
-            [getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
-            ARXIV_DATES[date_range],
-        ]
+        variables = {
+            "query"     : srch_text,
+            "limit"     : int(limit),
+            "field"     : ARXIV_FIELDS[field],
+            "subject"   : ARXIV_SUBJECTS[subject], 
+            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            "dates"     : ARXIV_DATES[date_range],
+        }
         if not end_date.disabled:
-            variables.extend([start_date, end_date])
+            variables["start_date"] = start_date
+            variables["end_date"] = end_date
         else:
-            #If equal to specific year
             if ARXIV_DATES[date_range] == "Specific Year":
-                variables.append(start_date)
+                variables["start_date"] = start_date
 
-        json_data = search_arxiv(variables)
+        json_data = ArxivCrawl.search_arxiv(variables)
 
         #load data inputs
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
-        
+
         try:
             #load the JSON into the tree
             self.load_data(tree, root_name, json_data)
