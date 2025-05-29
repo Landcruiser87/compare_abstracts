@@ -8,6 +8,7 @@ import spacy
 import numpy as np
 import pandas as pd
 import torch
+from dataclasses import dataclass
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
@@ -177,65 +178,96 @@ def sbert(model_name:str):
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
 
-class ArxivCrawl(object):
-    #Go build your castle Eule Brenner. 
-    #TODO - Start here tomorrow
-    def search_arxiv(parameters:dict)->dict:
+
+@dataclass
+class Paper:
+    title: str
+    authors: list | None = None
+    keywords: list | None = None
+    url: str = ""
+    abstract: str = ""
+    pdf: str = ""
+    date_published: str = ""  # dd-mm-yyyy
+    github_url: str = ""
+    conference_info: str = ""  # e.g. arxiv
+    supplemental: str = ""
+
+class ArxivSearch(object):
+    def __init__(self):
+        self.paper = Paper
+    def date_format(self):
+        pass
+        #TODO - date formatting
+        #Need this routine to format all date "field"
+        #requires them to be passed differently
+    def classification_format():
+        pass
+        #TODO - subject formatting
+        #Need a way to build up the parameter dict 
+        #for whatever specific classes we want to look at
+        #Maybe put logic in there to input "all" if no
+        #subcategory is requested
+
+    def request_papers(self, parameters:dict)->dict:
         chrome_version = np.random.randint(120, 132)
+        baseurl = "https://arxiv.org/search/advanced"
         headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=0, i',
             'Upgrade-Insecure-Requests': '1',
             'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
             'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
-            'sec-ch-ua-mobile': '?1',
-            'sec-ch-ua-platform': '"Android"',
-            'referer': 'https://arxiv.org',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'referer': baseurl,
             'Content-Type': 'text/html,application/xhtml+xml,application/xml'
         }
+
+        params = {
+            'advanced': '',
+            'terms-0-operator': 'AND',
+            'terms-0-term': parameters["query"],
+            'terms-0-field': parameters["abstract"],
+            'classification-computer_science': 'y',
+            'classification-physics_archives': 'all',
+            'classification-include_cross_list': 'include',
+            'date-filter_by': 'past_12',
+            'date-year': '',
+            'date-from_date': '',
+            'date-to_date': '',
+            'date-date_type': 'submitted_date',
+            'abstracts': 'show',
+            'size': '100',
+            'order': '-announced_date_first',
+        }
         try:
-            baseurl = "http://export.arxiv.org/api/query?search_query="
-            url = baseurl + ""
+            response = requests.get(baseurl, headers=headers, params=params)
+
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+
+        # NOTE - Can only make a request every 3 seconds. 
+            # Due to speed limitations in our implementation of the API, the maximum
+            # number of results returned from a single call (max_results) is limited to
+            # 30000 in slices of at most 2000 at a time,
+            
+            # baseurl = "http://export.arxiv.org/api/query?search_query="
+            # baseurl = "https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term="
+            # baseurl += parameters["query"] + "&terms-0-field=title&"
+            # baseurl += parameters["limit"]
             #Sample advanced.  Not sure if the API was meant for this. 
             #advanced=&terms-0-operator=AND&terms-0-term=Transformers&terms-0-field=title&
             #classification-economics=y&classification-physics=y&classification-physics_archives=hep-lat&
             #classification-include_cross_list=include&date-filter_by=past_12&date-year=&
             #date-from_date=&date-to_date=&date-date_type=submitted_date&
             #abstracts=show&size=50&order=-announced_date_first
-
-            response = requests.post(url, params=parameters, headers=headers)
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-        if response:
-            if response.status_code != 200:
-                logger.warning(f'Status code: {response.status_code}')
-                logger.warning(f'Reason: {response.reason}')
-                return None
-
-        else:
-            logger.warning("No response generated.  Somethings broken to get here")
-            return None
-
-        # main url - http://export.arxiv.org/api/query
-        # NOTE - Can only make a request every 3 seconds. 
-            # Due to speed limitations in our implementation of the API, the maximum
-            # number of results returned from a single call (max_results) is limited to
-            # 30000 in slices of at most 2000 at a time,
-        #Import search params, 
-        #Export search results in JSON format. 
-            #Means I'll need an exporting process too.
-        # subj_params = {
-        #     "prefix": "explanation",
-        #     "ti": "Title",
-        #     "au": "Author",
-        #     "abs": "Abstract",
-        #     "co": "Comment",
-        #     "jr": "Journal Reference",
-        #     "cat": "Subject Category",
-        #     "rn": "Report Number",
-        #     "id": "Id (use id_list instead)",
-        #     "all": "All of the above"
-        # }
-        # Couple of different ways we can go here.  
-            # Build my own.  harder route, but we'll see if I care about one more dependency.
-
-        # Arxiv does not track the announcement date.
-        # This is the date the paper was submitted.

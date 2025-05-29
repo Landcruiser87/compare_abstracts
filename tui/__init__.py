@@ -15,41 +15,27 @@ from textual import on, work
 from textual.binding import Binding
 from textual.app import App, ComposeResult
 from widgets import (
-    JSONDocumentView, 
-    JSONTree,
-    TreeView, 
-    SearchProgress
+    JSONDocumentView,JSONTree,
+    TreeView,SearchProgress
 )
 from textual.containers import Container, Horizontal, Vertical
 from textual.fuzzy import Matcher
 from textual.worker import get_current_worker
 from textual.reactive import reactive, var
 from textual.widgets import (
-    Button, 
-    Footer,
-    Header,
-    Input,
-    Static,
-    SelectionList,
-    RadioButton, 
-    RadioSet,
-    TabbedContent, 
-    TabPane,       
-    Tree,
+    Button,Footer,Header,
+    Input,Static,SelectionList,
+    RadioButton,RadioSet, 
+    TabbedContent,TabPane,Tree
 )
 from textual.widgets.selection_list import Selection
 from textual.widgets.tree import TreeNode
 from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
-    ArxivCrawl,
-    sbert,
-    word2vec,
-    tfidf,    
-    get_c_time, 
-    clean_text,
-    cosine_similarity, 
-    clean_string_values,
+    ArxivSearch,sbert,word2vec,
+    tfidf,get_c_time,clean_text,
+    cosine_similarity,clean_string_values
 )
 
 from support import (
@@ -170,8 +156,8 @@ class PaperSearch(App):
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
-                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: 4/22/2025", id="input-arx-from", type="text")
-                            yield Input("Date To", tooltip="Ex: 4/22/2025", id="input-arx-to", type="text", disabled=True)
+                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: 4-22-2025", id="input-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 4-22-2025", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
         yield Footer()
 
@@ -281,61 +267,7 @@ class PaperSearch(App):
 
     @on(Button.Pressed, "#search-arxiv")
     def arxiv_button_event(self):
-        #Load up search variables
-        variables = []
-        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
-        start_date = self.query_one("#input-arx-from", Input)._reactive_value
-        #Need a way to know if this is disabled
-        end_date = self.query_one("#input-arx-to", Input)
-        limit = self.query_one("#input-arx-limit", Input)._reactive_value
-        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
-        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
-        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
-        categories = self.query_one("#sl-arx-categories", SelectionList)
-        selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
-
-        #TODO - Validation gates 
-            #[ ] -Need this for Date fields
-            #[ ] -Make sure start and end aren't passed current day
-        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
-
-        #bind the info together into a list
-        variables = [limit, field, date_range, subject]
-        if not all(self.is_numeric_string(str(var)) for var in variables):
-            self.notify("Search inputs are malformed.\nCheck inputs and try again")
-            return None
-
-        #Remap the variables with their values        
-        variables = {
-            "query"     : srch_text,
-            "limit"     : int(limit),
-            "field"     : ARXIV_FIELDS[field],
-            "subject"   : ARXIV_SUBJECTS[subject], 
-            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
-            "dates"     : ARXIV_DATES[date_range],
-        }
-        if not end_date.disabled:
-            variables["start_date"] = start_date
-            variables["end_date"] = end_date
-        else:
-            if ARXIV_DATES[date_range] == "Specific Year":
-                variables["start_date"] = start_date
-
-        json_data = ArxivCrawl.search_arxiv(variables)
-
-        #load data inputs
-        tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        tree: Tree = tree_view.query_one(Tree)
-
-        try:
-            #load the JSON into the tree
-            self.load_data(tree, root_name, json_data)
-            #save the search
-            save_data(root_name, json_data)
-            logger.info(f"{len(json_data.keys())} papers found on arXiv")
-
-        except Exception as e:
-            logger.error(f"Failed to save search results: {e}")
+        self.search_arxiv()
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
@@ -347,106 +279,6 @@ class PaperSearch(App):
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name, new_node, json_data)
-
-    def add_datasets(self):
-        """Handles the 'Add Dataset' button press by launching a worker."""
-        datasets: SelectionList = self.query_one("#datasets", SelectionList)
-        selected_indices: list[int] = datasets.selected
-
-        if not selected_indices:
-            self.notify("No datasets selected to add.", severity="warning")
-            return
-
-        datasets_to_load: List[Tuple[str, PurePath]] = []
-        for index in selected_indices:
-            # Ensure index is valid
-            if index <= len(datasets.options):
-                # Safely access the prompt text
-                prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
-                if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
-                    ds_name_base = prompt_text_list[0]
-                    ds_name = ds_name_base + ".json"
-                    # Determine source path based on whether the base name has numbers
-                    has_a_year = re.search(r"\d{4}", ds_name)
-                    source_p = self.root_data_dir if has_a_year else self.srch_data_dir
-                    json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-                    datasets_to_load.append((ds_name, json_path))
-                else:
-                     self.notify(f"Could not retrieve name for selection index {index}.", severity="warning")
-
-            else:
-                 self.notify(f"Selection index {index} is out of bounds.", severity="warning")
-
-        if datasets_to_load:
-            self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
-            # Pass the list of datasets to the worker
-            self._add_multiple_datasets_worker(datasets_to_load)
-        else:
-             self.notify("No valid datasets found to load.", severity="warning")
-        datasets.deselect_all()
-
-    @work(thread=True, exclusive=True, group="dataset_loading")
-    async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
-        """
-        Worker thread to load multiple JSON files and update the tree safely.
-
-        Args:
-            datasets_info: A list of tuples, where each tuple contains
-                           (dataset_name, dataset_path).
-        """
-        tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        tree: JSONTree = tree_view.query_one(JSONTree) 
-        worker = get_current_worker()
-        total_datasets = len(datasets_info)
-
-        for i, (ds_name, json_path) in enumerate(datasets_info):
-            if worker.is_cancelled:
-                self.app.call_from_thread(self.notify, "Dataset loading cancelled.")
-                break
-
-            self.app.call_from_thread(self.notify, f"Loading ({i+1}/{total_datasets}): {ds_name}")
-
-            try:
-                # Perform file I/O and JSON parsing in the worker thread
-                with open(json_path, mode="r", encoding="utf-8") as f:
-                    json_data_str = f.read()
-                json_data = json.loads(json_data_str)
-                cleaned_data = clean_string_values(json_data)
-
-                # Update UI from the main thread ---
-                # Define a helper function to perform the UI updates
-                def update_tree_ui(name: str, data: Dict[str, Any]):
-                    try:
-                        # Check if node already exists to prevent duplicates
-                        existing_labels = {node.label.plain for node in tree.root.children}
-                        if name not in existing_labels:
-                            new_node = tree.root.add(name) # Add the top-level node
-                            tree.add_node(name, new_node, data) # Populate the node recursively
-                            self.app.notify(f"Successfully added {name}")
-                        else:
-                             self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
-                    except Exception as ui_e:
-                         # Log UI update errors specifically
-                         logger.error(f"Error updating tree UI for {name}: {ui_e}")
-                         self.app.notify(f"Error adding {name} to UI: {ui_e}", severity="error")
-
-                # Schedule the UI update function to run on the main thread
-                self.app.call_from_thread(update_tree_ui, name=ds_name, data=cleaned_data)
-                # Take a power nap to allow UI thread processing time
-                await asyncio.sleep(0.05)
-
-            except FileNotFoundError:
-                 logger.error(f"File not found for dataset: {ds_name} at {json_path}")
-                 self.app.call_from_thread(self.notify, f"Error: File not found for {ds_name}", severity="error")
-            except json.JSONDecodeError as e:
-                logger.error(f"JSON parsing error for {ds_name}: {e}")
-                self.app.call_from_thread(self.notify, f"Error parsing JSON for {ds_name}: {e}", severity="error")
-            except Exception as e:
-                # Catch other potential errors during file reading or processing
-                logger.error(f"Error loading dataset {ds_name}: {e}")
-                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=2)
-
-        self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
 
 
     #FUNCTION - Remove Data
@@ -629,6 +461,107 @@ class PaperSearch(App):
         
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
+    
+    def add_datasets(self):
+        """Handles the 'Add Dataset' button press by launching a worker."""
+        datasets: SelectionList = self.query_one("#datasets", SelectionList)
+        selected_indices: list[int] = datasets.selected
+
+        if not selected_indices:
+            self.notify("No datasets selected to add.", severity="warning")
+            return
+
+        datasets_to_load: List[Tuple[str, PurePath]] = []
+        for index in selected_indices:
+            # Ensure index is valid
+            if index <= len(datasets.options):
+                # Safely access the prompt text
+                prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
+                if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
+                    ds_name_base = prompt_text_list[0]
+                    ds_name = ds_name_base + ".json"
+                    # Determine source path based on whether the base name has numbers
+                    has_a_year = re.search(r"\d{4}", ds_name)
+                    source_p = self.root_data_dir if has_a_year else self.srch_data_dir
+                    json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
+                    datasets_to_load.append((ds_name, json_path))
+                else:
+                     self.notify(f"Could not retrieve name for selection index {index}.", severity="warning")
+
+            else:
+                 self.notify(f"Selection index {index} is out of bounds.", severity="warning")
+
+        if datasets_to_load:
+            self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
+            # Pass the list of datasets to the worker
+            self._add_multiple_datasets_worker(datasets_to_load)
+        else:
+             self.notify("No valid datasets found to load.", severity="warning")
+        datasets.deselect_all()
+
+    @work(thread=True, exclusive=True, group="dataset_loading")
+    async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
+        """
+        Worker thread to load multiple JSON files and update the tree safely.
+
+        Args:
+            datasets_info: A list of tuples, where each tuple contains
+                           (dataset_name, dataset_path).
+        """
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        tree: JSONTree = tree_view.query_one(JSONTree) 
+        worker = get_current_worker()
+        total_datasets = len(datasets_info)
+
+        for i, (ds_name, json_path) in enumerate(datasets_info):
+            if worker.is_cancelled:
+                self.app.call_from_thread(self.notify, "Dataset loading cancelled.")
+                break
+
+            self.app.call_from_thread(self.notify, f"Loading ({i+1}/{total_datasets}): {ds_name}")
+
+            try:
+                # Perform file I/O and JSON parsing in the worker thread
+                with open(json_path, mode="r", encoding="utf-8") as f:
+                    json_data_str = f.read()
+                json_data = json.loads(json_data_str)
+                cleaned_data = clean_string_values(json_data)
+
+                # Update UI from the main thread ---
+                # Define a helper function to perform the UI updates
+                def update_tree_ui(name: str, data: Dict[str, Any]):
+                    try:
+                        # Check if node already exists to prevent duplicates
+                        existing_labels = {node.label.plain for node in tree.root.children}
+                        if name not in existing_labels:
+                            new_node = tree.root.add(name) # Add the top-level node
+                            tree.add_node(name, new_node, data) # Populate the node recursively
+                            self.app.notify(f"Successfully added {name}")
+                        else:
+                             self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
+                    except Exception as ui_e:
+                         # Log UI update errors specifically
+                         logger.error(f"Error updating tree UI for {name}: {ui_e}")
+                         self.app.notify(f"Error adding {name} to UI: {ui_e}", severity="error")
+
+                # Schedule the UI update function to run on the main thread
+                self.app.call_from_thread(update_tree_ui, name=ds_name, data=cleaned_data)
+                # Take a power nap to allow UI thread processing time
+                await asyncio.sleep(0.05)
+
+            except FileNotFoundError:
+                 logger.error(f"File not found for dataset: {ds_name} at {json_path}")
+                 self.app.call_from_thread(self.notify, f"Error: File not found for {ds_name}", severity="error")
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON parsing error for {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error parsing JSON for {ds_name}: {e}", severity="error")
+            except Exception as e:
+                # Catch other potential errors during file reading or processing
+                logger.error(f"Error loading dataset {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=2)
+
+        self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
+
 
     #FUNCTION - run search
     def run_search(self) -> None:
@@ -739,6 +672,66 @@ class PaperSearch(App):
             self.app.call_from_thread(remove_progress_ui)
             #Reload SelectionList to include search results
             self.reload_datasets()
+
+    def search_arxiv(self):
+        #Load up search variables
+        variables = []
+        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
+        start_date = self.query_one("#input-arx-from", Input)._reactive_value
+        #Need a way to know if this is disabled
+        end_date = self.query_one("#input-arx-to", Input)
+        limit = self.query_one("#input-arx-limit", Input)._reactive_value
+        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
+        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
+        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
+
+        #TODO - Validation gates 
+            #[ ] -Need this for Date fields
+            #[ ] -Make sure start and end aren't passed current day
+        
+        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
+
+        #bind the info together into a list
+        variables = [limit, field, date_range, subject]
+        if not all(self.is_numeric_string(str(var)) for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            return None
+
+        #Remap the variables with their values        
+        variables = {
+            "query"     : srch_text,
+            "limit"     : int(limit),
+            "field"     : ARXIV_FIELDS[field].lower(),
+            "subject"   : ARXIV_SUBJECTS[subject], 
+            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            "dates"     : ARXIV_DATES[date_range],
+        }
+        if not end_date.disabled:
+            variables["start_date"] = start_date
+            variables["end_date"] = end_date
+        else:
+            if ARXIV_DATES[date_range] == "Specific Year":
+                variables["start_date"] = start_date
+
+        arxiv = ArxivSearch()
+        json_data = arxiv.request_papers(variables)
+
+        #Select the Tree object
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        tree: Tree = tree_view.query_one(Tree)
+
+        try:
+            #load the JSON into the Tree
+            self.load_data(tree, root_name, json_data)
+            #save the search
+            save_data(root_name, json_data)
+            logger.info(f"{len(json_data.keys())} papers found on arXiv")
+
+        except Exception as e:
+            logger.error(f"Failed to save search results: {e}")
+
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
