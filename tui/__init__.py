@@ -687,9 +687,6 @@ class PaperSearch(App):
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
 
-        #TODO - Validation gates 
-            #[ ] -Need this for Date fields
-            #[ ] -Make sure start and end aren't passed current day
         
         root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
 
@@ -699,14 +696,17 @@ class PaperSearch(App):
             self.notify("Search inputs are malformed.\nCheck inputs and try again")
             return None
 
-        #Remap the variables with their values        
+        #Remap the variables with their values     
         variables = {
             "query"     : srch_text,
             "limit"     : int(limit),
             "field"     : ARXIV_FIELDS[field].lower(),
-            "subject"   : ARXIV_SUBJECTS[subject], 
+            "subject"   : ARXIV_SUBJECTS[subject],
             "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
             "dates"     : ARXIV_DATES[date_range],
+            "start_date": "",
+            "end_date"  : "",
+            "year"      : ""
         }
         if not end_date.disabled:
             variables["start_date"] = start_date
@@ -715,23 +715,25 @@ class PaperSearch(App):
             if ARXIV_DATES[date_range] == "Specific Year":
                 variables["start_date"] = start_date
 
-        arxiv = ArxivSearch()
-        json_data = arxiv.request_papers(variables)
+        arxiv = ArxivSearch(variables)
+        json_data = arxiv.request_papers()
+        if json_data:
+            #TODO - Check to make sure False works here. 
+            #Select the Tree object
+            tree_view: TreeView = self.query_one("#tree-container", TreeView)
+            tree: Tree = tree_view.query_one(Tree)
 
-        #Select the Tree object
-        tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        tree: Tree = tree_view.query_one(Tree)
+            try:
+                #load the JSON into the Tree
+                self.load_data(tree, root_name, json_data)
+                #save the search
+                save_data(root_name, json_data)
+                logger.info(f"{len(json_data.keys())} papers found on arXiv")
 
-        try:
-            #load the JSON into the Tree
-            self.load_data(tree, root_name, json_data)
-            #save the search
-            save_data(root_name, json_data)
-            logger.info(f"{len(json_data.keys())} papers found on arXiv")
-
-        except Exception as e:
-            logger.error(f"Failed to save search results: {e}")
-
+            except Exception as e:
+                logger.error(f"Failed to save search results: {e}")
+        else:
+            logger.warning("Error cocured in arXiv request.  Check inputs as this is the last error gate")
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

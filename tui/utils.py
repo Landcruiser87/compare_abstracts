@@ -3,18 +3,178 @@ import datetime
 import requests
 import json
 import re
-import os
+from os import path
 import spacy
 import numpy as np
 import pandas as pd
 import torch
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
 from support import logger
 
+@dataclass
+class Paper:
+    title   : str
+    authors : list | None = None
+    keywords: list | None = None
+    abstract: str = ""
+    url     : str = ""
+    pdf     : str = ""
+    github_url     : str = ""
+    supplemental   : str = ""
+    date_published : str = ""  # dd-mm-yyyy
+    conference_info: str = ""  # e.g. arxiv
+
+class ArxivSearch(object):
+    def __init__(self, variables:dict):
+        self.paper = Paper
+        self.params = variables
+        
+    def classification_format(self):
+        pass
+
+    def it_is_a_date(self, datetext:str):
+        try:
+            datetime.strptime(datetext, '%d-%m-%Y')
+            return True
+        except ValueError:
+            return False
+        
+    def date_format(self):
+        #TODO - Validation gates 
+            #[ ] -Make sure start and end aren't passed current day
+
+        # ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
+        self.params["dates"] = self.params["dates"].lower().split()
+        self.params["dates"] = "_".join(self.params["dates"])
+        self.params["submitted_date"] = datetime.datetime.now().strptime('%d-%m-%Y')
+        if self.params["dates"] == "all_dates":
+            pass
+        elif self.params["dates"] == "specific_year":
+            start = self.params["start_date"]
+            if len(start) == 4 and start.isdigit():
+                self.params["year"] = int(start)
+                return True
+            else:
+                return False
+
+        elif self.params["dates"] == "past_12_months":
+            self.params["start_date"] = self.params["submitted_date"]
+            self.params["end_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["end_date"] = self.params["end_date"].strptime('%d-%m-%Y')
+            self.params["dates"] == "past_12"
+    
+        elif self.params["dates"] == "date_range":
+            start = self.params["start_date"]
+            end = self.params["end_date"]
+            for val in [start, end]:
+                if self.it_is_a_date(val):
+                    pass
+                else:
+                    logger.warning("Error in date formatting, please check inputs and research")
+                    return False
+            return True
+                
+        # {'query': 'toast', 
+        # 'limit': 10, 
+        # 'field': 
+        # 'title', 
+        # 'subject': 'Statistics',
+        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT',
+        # 'stat.TH'], 
+        # 'dates': 'Past 12 Months'}            
+
+    def request_papers(self) -> dict:
+        chrome_version = np.random.randint(120, 132)
+        baseurl = "https://arxiv.org/search/advanced"
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        formatted = self.date_format()
+        if not formatted:
+            return False
+        formatted = self.classification_format()
+        if not formatted:
+            return False
+
+        parameters = {
+            'advanced': '',
+            'terms-0-operator': 'AND',
+            'terms-0-term': self.params["query"],
+            'terms-0-field': self.params["field"],
+            f'classification-{self.params.get("subject")}:{self.params.get("classification")}'
+            'classification-physics_archives': 'all',
+            'classification-include_cross_list': 'include',
+            'date-filter_by': self.params["dates"],
+            'date-year': self.params["year"],
+            'date-from_date': self.params["start_date"],
+            'date-to_date': self.params["end_date"],
+            'date-date_type': self.params["submitted_date"],
+            'abstracts': 'show',
+            'size': self.params["limit"],
+            'order': '-announced_date_first',
+        }
+
+        # params = {
+        #     'advanced': '',
+        #     'terms-0-operator': 'AND',
+        #     'terms-0-term': parameters["query"],
+        #     'terms-0-field': parameters["field"],
+        #     'classification-computer_science': 'y',
+        #     'classification-physics_archives': 'all',
+        #     'classification-include_cross_list': 'include',
+        #     'date-filter_by': 'past_12',
+        #     'date-year': '',
+        #     'date-from_date': '',
+        #     'date-to_date': '',
+        #     'date-date_type': 'submitted_date',
+        #     'abstracts': 'show',  
+        #     'size': '100',
+        #     'order': '-announced_date_first',
+        # }
+
+        try:
+            response = requests.get(baseurl, headers=headers, params=parameters)
+
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+
+        # NOTE - Can only make a request every 3 seconds. 
+            # Due to speed limitations in our implementation of the API, the maximum
+            # number of results returned from a single call (max_results) is limited to
+            # 30000 in slices of at most 2000 at a time,
+
+            # baseurl = "http://export.arxiv.org/api/query?search_query="
+            # baseurl = "https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term="
+            # baseurl += parameters["query"] + "&terms-0-field=title&"
+            # baseurl += parameters["limit"]
+            #Sample advanced.  Not sure if the API was meant for this. 
+            #advanced=&terms-0-operator=AND&terms-0-term=Transformers&terms-0-field=title&
+            #classification-economics=y&classification-physics=y&classification-physics_archives=hep-lat&
+            #classification-include_cross_list=include&date-filter_by=past_12&date-year=&
+            #date-from_date=&date-to_date=&date-date_type=submitted_date&
+            #abstracts=show&size=50&order=-announced_date_first
 
 #FUNCTION get time
 def get_c_time():
@@ -92,7 +252,6 @@ def tfidf(data_fields:list, paper_names:list):
 	)
     return tsfrm_df, paper_names
 
-
 def cosine_similarity(tsfrm, ts_type:str):
 	"""Function that allows you to use either sklearns, or scipy's cosine similarity
 	Inputs are already in a sparse array format.  Scipy uses np.arrays, but the code 
@@ -154,7 +313,7 @@ def sbert(model_name:str):
         #Trained on a bunch of bing queries
         if model_name == "Marco": #Polooooooo.
             model_path = "./data/models/marco/"
-            if os.path.exists(model_path):
+            if path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")
             else:
@@ -165,7 +324,7 @@ def sbert(model_name:str):
         # trained on finding similar papers.  Works better with abstracts
         elif model_name == "Specter":
             model_path = "./data/models/specter"
-            if os.path.exists(model_path):
+            if path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")                
             else:
@@ -177,97 +336,3 @@ def sbert(model_name:str):
         
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
-
-
-@dataclass
-class Paper:
-    title: str
-    authors: list | None = None
-    keywords: list | None = None
-    url: str = ""
-    abstract: str = ""
-    pdf: str = ""
-    date_published: str = ""  # dd-mm-yyyy
-    github_url: str = ""
-    conference_info: str = ""  # e.g. arxiv
-    supplemental: str = ""
-
-class ArxivSearch(object):
-    def __init__(self):
-        self.paper = Paper
-    def date_format(self):
-        pass
-        #TODO - date formatting
-        #Need this routine to format all date "field"
-        #requires them to be passed differently
-    def classification_format():
-        pass
-        #TODO - subject formatting
-        #Need a way to build up the parameter dict 
-        #for whatever specific classes we want to look at
-        #Maybe put logic in there to input "all" if no
-        #subcategory is requested
-
-    def request_papers(self, parameters:dict)->dict:
-        chrome_version = np.random.randint(120, 132)
-        baseurl = "https://arxiv.org/search/advanced"
-        headers = {
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'accept-language': 'en-US,en;q=0.9',
-            'priority': 'u=0, i',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
-            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'document',
-            'sec-fetch-mode': 'navigate',
-            'sec-fetch-site': 'same-origin',
-            'sec-fetch-user': '?1',
-            'referer': baseurl,
-            'Content-Type': 'text/html,application/xhtml+xml,application/xml'
-        }
-
-        params = {
-            'advanced': '',
-            'terms-0-operator': 'AND',
-            'terms-0-term': parameters["query"],
-            'terms-0-field': parameters["abstract"],
-            'classification-computer_science': 'y',
-            'classification-physics_archives': 'all',
-            'classification-include_cross_list': 'include',
-            'date-filter_by': 'past_12',
-            'date-year': '',
-            'date-from_date': '',
-            'date-to_date': '',
-            'date-date_type': 'submitted_date',
-            'abstracts': 'show',
-            'size': '100',
-            'order': '-announced_date_first',
-        }
-        try:
-            response = requests.get(baseurl, headers=headers, params=params)
-
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None
-
-        # NOTE - Can only make a request every 3 seconds. 
-            # Due to speed limitations in our implementation of the API, the maximum
-            # number of results returned from a single call (max_results) is limited to
-            # 30000 in slices of at most 2000 at a time,
-            
-            # baseurl = "http://export.arxiv.org/api/query?search_query="
-            # baseurl = "https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term="
-            # baseurl += parameters["query"] + "&terms-0-field=title&"
-            # baseurl += parameters["limit"]
-            #Sample advanced.  Not sure if the API was meant for this. 
-            #advanced=&terms-0-operator=AND&terms-0-term=Transformers&terms-0-field=title&
-            #classification-economics=y&classification-physics=y&classification-physics_archives=hep-lat&
-            #classification-include_cross_list=include&date-filter_by=past_12&date-year=&
-            #date-from_date=&date-to_date=&date-date_type=submitted_date&
-            #abstracts=show&size=50&order=-announced_date_first
