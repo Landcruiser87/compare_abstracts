@@ -25,7 +25,7 @@ class Paper:
     pdf     : str = ""
     github_url     : str = ""
     supplemental   : str = ""
-    date_published : str = ""  # dd-mm-yyyy
+    date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
 
 class ArxivSearch(object):
@@ -35,25 +35,30 @@ class ArxivSearch(object):
         
     def classification_format(self):
         pass
+                
+        # {'query': 'toast', 
+        # 'limit': 10, 
+        # 'field': 
+        # 'title', 
+        # 'subject': 'Statistics',
+        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT', 'stat.TH'], 
+        # 'dates': 'Past 12 Months'}
 
     def it_is_a_date(self, datetext:str):
         try:
-            datetime.strptime(datetext, '%d-%m-%Y')
+            datetime.datetime.strptime(datetext, "%d-%m-%Y")
             return True
         except ValueError:
             return False
         
     def date_format(self):
-        #TODO - Validation gates 
-            #[ ] -Make sure start and end aren't passed current day
-
-        # ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
         self.params["dates"] = self.params["dates"].lower().split()
         self.params["dates"] = "_".join(self.params["dates"])
-        self.params["submitted_date"] = datetime.datetime.now().strptime('%d-%m-%Y')
-        if self.params["dates"] == "all_dates":
-            pass
-        elif self.params["dates"] == "specific_year":
+        self.params["submitted_date"] = datetime.datetime.today().date()
+        self.params["submitted_date"] = self.params["submitted_date"].strftime("%m-%d-%Y")
+
+        #Don't need logic for all_dates
+        if self.params["dates"] == "specific_year":
             start = self.params["start_date"]
             if len(start) == 4 and start.isdigit():
                 self.params["year"] = int(start)
@@ -62,9 +67,8 @@ class ArxivSearch(object):
                 return False
 
         elif self.params["dates"] == "past_12_months":
-            self.params["start_date"] = self.params["submitted_date"]
-            self.params["end_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
-            self.params["end_date"] = self.params["end_date"].strptime('%d-%m-%Y')
+            self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] == "past_12"
     
         elif self.params["dates"] == "date_range":
@@ -77,18 +81,9 @@ class ArxivSearch(object):
                     logger.warning("Error in date formatting, please check inputs and research")
                     return False
             return True
-                
-        # {'query': 'toast', 
-        # 'limit': 10, 
-        # 'field': 
-        # 'title', 
-        # 'subject': 'Statistics',
-        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT',
-        # 'stat.TH'], 
-        # 'dates': 'Past 12 Months'}            
 
     def request_papers(self) -> dict:
-        chrome_version = np.random.randint(120, 132)
+        chrome_version = np.random.randint(120, 135)
         baseurl = "https://arxiv.org/search/advanced"
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
@@ -106,12 +101,11 @@ class ArxivSearch(object):
             'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
         }
 
+        #Input validation checks
         formatted = self.date_format()
-        if not formatted:
-            return False
-        formatted = self.classification_format()
-        if not formatted:
-            return False
+        classy = self.classification_format()
+        if not formatted or not classy:
+            return None
 
         parameters = {
             'advanced': '',
@@ -301,7 +295,6 @@ def word2vec():
         return nlp
     except Exception as e:
         raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
-
 
 def sbert(model_name:str):
     #TODO - UPDATE THIS SO ITS NOT DINGUS MATERIAL
