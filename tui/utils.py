@@ -58,6 +58,7 @@ class ArxivSearch(object):
 
         elif self.params["dates"] == "past_12_months":
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["start_date"] = self.params["start_date"].strftime("%m-%d-%Y")
             self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] == "past_12"
             return True
@@ -85,7 +86,7 @@ class ArxivSearch(object):
         if len(self.params["categories"]) > 0:
             self.params["categories"] = "+OR+".join(self.params["categories"])
         else:
-            self.params["categories"] = ":all"
+            self.params["categories"] = "all"
         
         return True
 
@@ -105,7 +106,7 @@ class ArxivSearch(object):
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'accept-language': 'en-US,en;q=0.9',
             'priority': 'u=0, i',
-            'origin': baseurl,
+            'referer': baseurl,
             'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
@@ -130,36 +131,18 @@ class ArxivSearch(object):
             'terms-0-operator': 'AND',              
             'terms-0-term': self.params["query"],
             'terms-0-field': self.params["field"],
-             self.params["classification"]:'y',
-             self.params["classification"] + "_archives":self.params["categories"],
+            self.params["classification"]:'y',
+            self.params["classification"] + "_archives":self.params["categories"],
             'classification-include_cross_list': 'include',
             'date-filter_by': self.params["dates"],
             'date-year': self.params["year"],
             'date-from_date': self.params["start_date"],
             'date-to_date': self.params["end_date"],
-            'date-date_type': self.params["submitted_date"],
+            'date-date_type': "submitted_date", #self.params["submitted_date"],
             'abstracts': 'show',
             'size': self.params["limit"],
             'order': '-announced_date_first',
         }
-
-        # params = {
-        #     'advanced': '',
-        #     'terms-0-operator': 'AND',
-        #     'terms-0-term': parameters["query"],
-        #     'terms-0-field': parameters["field"],
-        #     'classification-computer_science': 'y',
-        #     'classification-physics_archives': 'all',
-        #     'classification-include_cross_list': 'include',
-        #     'date-filter_by': 'past_12',
-        #     'date-year': '',
-        #     'date-from_date': '',
-        #     'date-to_date': '',
-        #     'date-date_type': 'submitted_date',
-        #     'abstracts': 'show',  
-        #     'size': '100',
-        #     'order': '-announced_date_first',
-        # }
 
         try:
             response = requests.get(baseurl, headers=headers, params=parameters)
@@ -175,12 +158,12 @@ class ArxivSearch(object):
 
         results = bs4ob.find_all("item")
         if results:
-            new_papers = parse_feed(results, Paper)
-            logger.info(f'{len(new_papers)} articles returned from arxiv')
+            new_papers = self.parse_feed(results, Paper)
+            logger.info(f'{len(new_papers)} papers returned from arxiv')
             return new_papers
                 
         else:
-            logger.warning(f"No articles returned on {self.params["classification"]} for categories {self.params["categories"]}")
+            logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")
 
         # NOTE - Can only make a request every 3 seconds. 
             # Due to speed limitations in our implementation of the API, the maximum
@@ -198,6 +181,12 @@ class ArxivSearch(object):
             #date-from_date=&date-to_date=&date-date_type=submitted_date&
             #abstracts=show&size=50&order=-announced_date_first
 
+
+            #https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term=machine+learning&terms-0-field=title&
+            #classification-computer_science=y&classification-computer_science_archives=cs.AI%2BOR%2Bcs.AR%2BOR%2Bcs.CC&
+            #classification-include_cross_list=include&date-filter_by=specific_year&date-year=2024&
+            #date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=20&order=-announced_date_first
+            
 #FUNCTION get time
 def get_c_time():
     """Function for getting current time

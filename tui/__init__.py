@@ -699,7 +699,7 @@ class PaperSearch(App):
         #Remap the variables with their values     
         variables = {
             "query"     : srch_text,
-            "limit"     : int(limit),
+            "limit"     : limit,
             "field"     : ARXIV_FIELDS[field].lower(),
             "subject"   : ARXIV_SUBJECTS[subject],
             "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
