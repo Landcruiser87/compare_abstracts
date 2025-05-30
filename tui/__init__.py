@@ -713,7 +713,7 @@ class PaperSearch(App):
             variables["end_date"] = end_date
         else:
             if ARXIV_DATES[date_range] == "Specific Year":
-                variables["start_date"] = start_date
+                variables["year"] = start_date
 
         arxiv = ArxivSearch(variables)
         json_data = arxiv.request_papers()

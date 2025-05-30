@@ -10,6 +10,7 @@ import pandas as pd
 import torch
 from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
+from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
@@ -49,9 +50,8 @@ class ArxivSearch(object):
 
         #Don't need logic for all_dates
         if self.params["dates"] == "specific_year":
-            start = self.params["start_date"]
+            start = self.params["year"]
             if len(start) == 4 and start.isdigit():
-                self.params["year"] = int(start)
                 return True
             else:
                 return False
@@ -60,6 +60,7 @@ class ArxivSearch(object):
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
             self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] == "past_12"
+            return True
     
         elif self.params["dates"] == "date_range":
             start = self.params["start_date"]
@@ -69,6 +70,12 @@ class ArxivSearch(object):
                     logger.warning("Error in date formatting, please check inputs and research")
                     return False
             return True
+        elif self.params["dates"] == "all_dates":
+            #NOTE come back and check the date format for here. 
+            return True
+    
+    def parse_feed(results:list):
+        pass
         
     def classification_format(self):
         main_cat = self.params["subject"].lower()
@@ -79,7 +86,7 @@ class ArxivSearch(object):
             self.params["categories"] = "+OR+".join(self.params["categories"])
         else:
             self.params["categories"] = ":all"
-
+        
         return True
 
         #  https://arxiv.org/help/api/user-manual#subject_classifications for all
@@ -98,7 +105,7 @@ class ArxivSearch(object):
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'accept-language': 'en-US,en;q=0.9',
             'priority': 'u=0, i',
-            'referer': baseurl,
+            'origin': baseurl,
             'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
             'sec-ch-ua-mobile': '?0',
             'sec-ch-ua-platform': '"Windows"',
@@ -117,13 +124,14 @@ class ArxivSearch(object):
             return None
 
         #NOTE - Might need to update this with separate terms.
+        #Eventually update this query to operate on multiple separate terms
         parameters = {
-            'advanced': '1',                        #Eventually update this query to operate on multiple terms
+            'advanced': '',                        
             'terms-0-operator': 'AND',              
             'terms-0-term': self.params["query"],
             'terms-0-field': self.params["field"],
              self.params["classification"]:'y',
-             self.params["classification"]+"_archives":self.params["categories"],
+             self.params["classification"] + "_archives":self.params["categories"],
             'classification-include_cross_list': 'include',
             'date-filter_by': self.params["dates"],
             'date-year': self.params["year"],
@@ -163,6 +171,16 @@ class ArxivSearch(object):
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
             return None
+        bs4ob = BeautifulSoup(response.content, "lxml")
+
+        results = bs4ob.find_all("item")
+        if results:
+            new_papers = parse_feed(results, Paper)
+            logger.info(f'{len(new_papers)} articles returned from arxiv')
+            return new_papers
+                
+        else:
+            logger.warning(f"No articles returned on {self.params["classification"]} for categories {self.params["categories"]}")
 
         # NOTE - Can only make a request every 3 seconds. 
             # Due to speed limitations in our implementation of the API, the maximum
