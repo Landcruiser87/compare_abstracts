@@ -30,21 +30,11 @@ class Paper:
 
 class ArxivSearch(object):
     def __init__(self, variables:dict):
-        self.paper = Paper
-        self.params = variables
-        
-    def classification_format(self):
-        pass
-                
-        # {'query': 'toast', 
-        # 'limit': 10, 
-        # 'field': 
-        # 'title', 
-        # 'subject': 'Statistics',
-        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT', 'stat.TH'], 
-        # 'dates': 'Past 12 Months'}
+        self.paper: dataclass = Paper
+        self.params: dict = variables
+        self.results: list = []
 
-    def it_is_a_date(self, datetext:str):
+    def is_a_date(self, datetext:str):
         try:
             datetime.datetime.strptime(datetext, "%d-%m-%Y")
             return True
@@ -75,12 +65,31 @@ class ArxivSearch(object):
             start = self.params["start_date"]
             end = self.params["end_date"]
             for val in [start, end]:
-                if self.it_is_a_date(val):
-                    pass
-                else:
+                if not self.is_a_date(val):
                     logger.warning("Error in date formatting, please check inputs and research")
                     return False
             return True
+        
+    def classification_format(self):
+        main_cat = self.params["subject"].lower()
+        if " " in main_cat:
+            main_cat = "_".join(main_cat.split())
+        self.params["classification"] = f"classification-{main_cat}"
+        if len(self.params["categories"]) > 0:
+            self.params["categories"] = "+OR+".join(self.params["categories"])
+        else:
+            self.params["categories"] = ":all"
+
+        return True
+
+        #  https://arxiv.org/help/api/user-manual#subject_classifications for all
+        # {'query': 'toast', 
+        # 'limit': 10, 
+        # 'field': 
+        # 'title', 
+        # 'subject': 'Statistics',
+        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT', 'stat.TH'], 
+        # 'dates': 'Past 12 Months'}
 
     def request_papers(self) -> dict:
         chrome_version = np.random.randint(120, 135)
@@ -107,13 +116,14 @@ class ArxivSearch(object):
         if not formatted or not classy:
             return None
 
+        #NOTE - Might need to update this with separate terms.
         parameters = {
-            'advanced': '',
-            'terms-0-operator': 'AND',
+            'advanced': '1',                        #Eventually update this query to operate on multiple terms
+            'terms-0-operator': 'AND',              
             'terms-0-term': self.params["query"],
             'terms-0-field': self.params["field"],
-            f'classification-{self.params.get("subject")}:{self.params.get("classification")}'
-            'classification-physics_archives': 'all',
+             self.params["classification"]:'y',
+             self.params["classification"]+"_archives":self.params["categories"],
             'classification-include_cross_list': 'include',
             'date-filter_by': self.params["dates"],
             'date-year': self.params["year"],
@@ -302,7 +312,6 @@ def sbert(model_name:str):
     try:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
-        #I'd suggest using the cached version of each model.  
         #Trained on a bunch of bing queries
         if model_name == "Marco": #Polooooooo.
             model_path = "./data/models/marco/"
@@ -314,7 +323,7 @@ def sbert(model_name:str):
                 model.save_pretrained("./data/models/marco")
                 logger.info("Model loaded and saved dynamically")
 
-        # trained on finding similar papers.  Works better with abstracts
+        # trained on finding similar papers.  Works better with abstracts but takes a really long time
         elif model_name == "Specter":
             model_path = "./data/models/specter"
             if path.exists(model_path):

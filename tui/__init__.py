@@ -148,7 +148,7 @@ class PaperSearch(App):
                             with RadioSet(id="radio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
-                        with RadioSet(id="radio-arx-subjects", classes="header"):
+                        with RadioSet(id="radio-arx-subjects", classes="header", tooltip="Leave categories (next section) blank to search all"):
                             for subject in ARXIV_SUBJECTS:
                                 yield RadioButton(subject)
                         # yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")

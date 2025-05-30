@@ -73,7 +73,7 @@ def main():
         # See:Textualize/textual/issues/153#issuecomment-1256933121
         if not WINDOWS:
             sys.stdin = open("/dev/tty", "r")
-        
+
         app = PaperSearch(args.path)
         app.run()
 
