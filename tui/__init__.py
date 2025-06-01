@@ -156,8 +156,8 @@ class PaperSearch(App):
 
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
-                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: 4-22-2025", id="input-arx-from", type="text")
-                            yield Input("Date To", tooltip="Ex: 4-22-2025", id="input-arx-to", type="text", disabled=True)
+                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 2025-4-12", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
         yield Footer()
 

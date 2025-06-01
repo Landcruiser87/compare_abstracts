@@ -37,7 +37,7 @@ class ArxivSearch(object):
 
     def is_a_date(self, datetext:str):
         try:
-            datetime.datetime.strptime(datetext, "%d-%m-%Y")
+            datetime.datetime.strptime(datetext, "-%Y-%m-%d")
             return True
         except ValueError:
             return False
@@ -46,7 +46,7 @@ class ArxivSearch(object):
         self.params["dates"] = self.params["dates"].lower().split()
         self.params["dates"] = "_".join(self.params["dates"])
         self.params["submitted_date"] = datetime.datetime.today().date()
-        self.params["submitted_date"] = self.params["submitted_date"].strftime("%m-%d-%Y")
+        self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
 
         #Don't need logic for all_dates
         if self.params["dates"] == "specific_year":
@@ -58,7 +58,7 @@ class ArxivSearch(object):
 
         elif self.params["dates"] == "past_12_months":
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
-            self.params["start_date"] = self.params["start_date"].strftime("%m-%d-%Y")
+            self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
             self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] == "past_12"
             return True
@@ -83,7 +83,8 @@ class ArxivSearch(object):
         if " " in main_cat:
             main_cat = "_".join(main_cat.split())
         self.params["classification"] = f"classification-{main_cat}"
-        if len(self.params["categories"]) > 0:
+
+        if len(self.params["categories"]) > 1:
             self.params["categories"] = "+OR+".join(self.params["categories"])
         else:
             self.params["categories"] = "all"
@@ -133,12 +134,13 @@ class ArxivSearch(object):
             'terms-0-field': self.params["field"],
             self.params["classification"]:'y',
             self.params["classification"] + "_archives":self.params["categories"],
+            # 'classification-physics_archives': 'all',
             'classification-include_cross_list': 'include',
             'date-filter_by': self.params["dates"],
             'date-year': self.params["year"],
             'date-from_date': self.params["start_date"],
             'date-to_date': self.params["end_date"],
-            'date-date_type': "submitted_date", #self.params["submitted_date"],
+            'date-date_type': "submitted_date", 
             'abstracts': 'show',
             'size': self.params["limit"],
             'order': '-announced_date_first',
@@ -156,7 +158,7 @@ class ArxivSearch(object):
             return None
         bs4ob = BeautifulSoup(response.content, "lxml")
 
-        results = bs4ob.find_all("item")
+        results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
             new_papers = self.parse_feed(results, Paper)
             logger.info(f'{len(new_papers)} papers returned from arxiv')
@@ -186,7 +188,7 @@ class ArxivSearch(object):
             #classification-computer_science=y&classification-computer_science_archives=cs.AI%2BOR%2Bcs.AR%2BOR%2Bcs.CC&
             #classification-include_cross_list=include&date-filter_by=specific_year&date-year=2024&
             #date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=20&order=-announced_date_first
-            
+
 #FUNCTION get time
 def get_c_time():
     """Function for getting current time
