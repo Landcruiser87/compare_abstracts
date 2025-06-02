@@ -8,25 +8,26 @@ import spacy
 import numpy as np
 import pandas as pd
 import torch
-from dataclasses import dataclass, fields
+import time
+from dataclasses import dataclass, asdict
 from sklearn.feature_extraction.text import TfidfVectorizer
 from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
-from support import logger
+from support import logger, NumpyArrayEncoder
 
 @dataclass
 class Paper:
-    title   : str
+    title   : str  | None = None
     authors : list | None = None
     keywords: list | None = None
     category: list | None = None
     abstract: str = ""
     url     : str = ""
     pdf     : str = ""
-    github_url     : str = ""
-    supplemental   : str = ""
+    github_url     : str = ""  
+    supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
 
@@ -79,33 +80,50 @@ class ArxivSearch(object):
             return True
     
     def parse_feed(self, results:list) -> dict:
-    # class Paper:
-    #     title   : str
-    #     authors : list | None = None
-    #     keywords: list | None = None
-    #     category: list | None = None
-    #     abstract: str = ""
-    #     url     : str = ""
-    #     pdf     : str = ""
-    #     github_url     : str = ""
-    #     supplemental   : str = ""
-    #     date_published : str = ""  # mm-dd-yyyy
-    #     conference_info: str = ""  # e.g. arxiv
-
-        clean_papers = []
+        paper_dict = {}
         for idx, result in enumerate(results):
-            pass
-            # paper = Paper
-            # #Get the ID
-            # id_cont = result.find("p", {"class":"list-title is-inline-block"})
-            # paper.id = idx + "_" + id_cont.get("a").text
-            # #Get the title
-            # paper.title = result.find("p a", {"class":"list-title is-inline-block"})
-            # paper.authors = result.find_all("p a", {"class":"list-title is-inline-block"})
-            # paper.keywords = result.find_all("p a", {"class":"list-title is-inline-block"})
-            # paper.url = result.find("p a", {"class":"list-title is-inline-block"})
-            # clean_papers.append(paper)
+            paper = Paper()
+            #Get the URL
+            url = result.find("p", {"class":"list-title is-inline-block"})
+            paper.url = url.select("a")[0].get('href')
+            #Grab title
+            paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
+            paper.id = str(idx) + "_" + paper.title
+            #Grab authors
+            authors = result.find("p", {"class":"authors"})
+            if authors != None:
+                paper.authors = [x.text for x in authors.find_all("a")]
+            #Abstract
+            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()
+            categories = result.find("div", attrs={"class":"tags is-inline-block"})
+            if categories != None:
+                paper.category = categories.text.split()
+
+            comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+            if comments != None:
+                comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                if comment_ != None:
+                    paper.supplemental = comment_.text
+
+            published = result.find("p", attrs={"class":"is-size-7"})
+            if published != None:
+                temp = published.find("span", attrs={"class": lambda e: e.startswith("has-text-black-bis")})
+                if temp.text == "Submitted":
+                    paper.date_published = datetime.datetime.strptime(temp.next_sibling.strip().strip(";"), '%d %B, %Y')
+
+            if "github" in paper.abstract:
+                #This regex will pull out a github.io or github.com link
+                pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                possiblematch = re.findall(pattern, paper.abstract)
+                if possiblematch:
+                    paper.github_url = possiblematch
             
+            paper_dict[paper.id] = asdict(paper)
+            del paper
+
+        json_data = json.dumps(paper_dict, cls=NumpyArrayEncoder)
+        return json_data
+          
     def classification_format(self):
         main_cat = self.params["subject"].lower()
         if " " in main_cat:
@@ -166,17 +184,17 @@ class ArxivSearch(object):
             'date-year': self.params["year"],
             'date-from_date': self.params["start_date"],
             'date-to_date': self.params["end_date"],
-            'date-date_type': "submitted_date", 
+            'date-date_type': "submitted_date_first", 
             'abstracts': 'show',
             'size': self.params["limit"],
-            'order': '-announced_date_first',
+            'order':'-submitted_date',
         }
         if self.params["add_cat"]:
             parameters[f'{self.params["classification"]}' + "_archives"]  = self.params["categories"]
 
         try:
             response = requests.get(baseurl, headers=headers, params=parameters)
-
+            
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
 
@@ -184,15 +202,16 @@ class ArxivSearch(object):
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
             return None
+        
+        # time.sleep(2)
         bs4ob = BeautifulSoup(response.content, "lxml")
 
         results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
-            logger.info(f"{len(results)} results")
-            # new_papers = self.parse_feed(results)
-            # logger.info(f'{len(new_papers)} papers returned from arxiv')
-            # return new_papers
-                
+            logger.info(f'{len(results)} papers returned from arxiv')
+            new_papers = self.parse_feed(results)
+            return new_papers
+
         else:
             logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")
 
