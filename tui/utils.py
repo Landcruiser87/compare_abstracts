@@ -21,6 +21,7 @@ class Paper:
     title   : str
     authors : list | None = None
     keywords: list | None = None
+    category: list | None = None
     abstract: str = ""
     url     : str = ""
     pdf     : str = ""
@@ -31,15 +32,15 @@ class Paper:
 
 class ArxivSearch(object):
     def __init__(self, variables:dict):
-        self.paper: dataclass = Paper
         self.params: dict = variables
         self.results: list = []
 
     def is_a_date(self, datetext:str):
         try:
-            datetime.datetime.strptime(datetext, "-%Y-%m-%d")
+            datetime.datetime.strptime(datetext, "%Y-%m-%d")
             return True
-        except ValueError:
+        except Exception as e:
+            logger.warning(f"date extraction error.  Check inputs\n{e}")
             return False
         
     def date_format(self):
@@ -49,57 +50,84 @@ class ArxivSearch(object):
         self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
 
         #Don't need logic for all_dates
+        #works
         if self.params["dates"] == "specific_year":
             start = self.params["year"]
             if len(start) == 4 and start.isdigit():
                 return True
             else:
                 return False
-
+        #works
         elif self.params["dates"] == "past_12_months":
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
             self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
             self.params["end_date"] = self.params["submitted_date"]
-            self.params["dates"] == "past_12"
+            self.params["dates"] = "past_12"
             return True
-    
+        #doesn't work
         elif self.params["dates"] == "date_range":
             start = self.params["start_date"]
             end = self.params["end_date"]
             for val in [start, end]:
                 if not self.is_a_date(val):
-                    logger.warning("Error in date formatting, please check inputs and research")
+                    logger.warning("Error in date formatting, please check inputs")
                     return False
             return True
+        #works
         elif self.params["dates"] == "all_dates":
             #NOTE come back and check the date format for here. 
             return True
     
-    def parse_feed(results:list):
-        pass
-        
+    def parse_feed(self, results:list) -> dict:
+    # class Paper:
+    #     title   : str
+    #     authors : list | None = None
+    #     keywords: list | None = None
+    #     category: list | None = None
+    #     abstract: str = ""
+    #     url     : str = ""
+    #     pdf     : str = ""
+    #     github_url     : str = ""
+    #     supplemental   : str = ""
+    #     date_published : str = ""  # mm-dd-yyyy
+    #     conference_info: str = ""  # e.g. arxiv
+
+        clean_papers = []
+        for idx, result in enumerate(results):
+            pass
+            # paper = Paper
+            # #Get the ID
+            # id_cont = result.find("p", {"class":"list-title is-inline-block"})
+            # paper.id = idx + "_" + id_cont.get("a").text
+            # #Get the title
+            # paper.title = result.find("p a", {"class":"list-title is-inline-block"})
+            # paper.authors = result.find_all("p a", {"class":"list-title is-inline-block"})
+            # paper.keywords = result.find_all("p a", {"class":"list-title is-inline-block"})
+            # paper.url = result.find("p a", {"class":"list-title is-inline-block"})
+            # clean_papers.append(paper)
+            
     def classification_format(self):
         main_cat = self.params["subject"].lower()
         if " " in main_cat:
             main_cat = "_".join(main_cat.split())
         self.params["classification"] = f"classification-{main_cat}"
-
-        if len(self.params["categories"]) > 1:
-            self.params["categories"] = "+OR+".join(self.params["categories"])
-        else:
-            self.params["categories"] = "all"
+        search_cat = self.params["categories"]
         
-        return True
-
-        #  https://arxiv.org/help/api/user-manual#subject_classifications for all
-        # {'query': 'toast', 
-        # 'limit': 10, 
-        # 'field': 
-        # 'title', 
-        # 'subject': 'Statistics',
-        # 'categories': ['stat.ML', 'stat.AP', 'stat.CO', 'stat.ME', 'stat.OT', 'stat.TH'], 
-        # 'dates': 'Past 12 Months'}
-
+        try:
+            if len(search_cat) > 1:
+                self.params["categories"] = "+OR+".join(search_cat)
+                self.params["add_cat"] = True
+            #BUG - may not need last elif
+                #I think that's just for  the physics archives which for some
+                #reason they hardcode into the request. 
+            elif len(search_cat) == 0:
+                self.params["categories"] = "all"
+            return True
+        
+        except Exception as e:
+            logger.warning(f"Error in classification formatting\n{e}")
+            return False
+        
     def request_papers(self) -> dict:
         chrome_version = np.random.randint(120, 135)
         baseurl = "https://arxiv.org/search/advanced"
@@ -133,8 +161,6 @@ class ArxivSearch(object):
             'terms-0-term': self.params["query"],
             'terms-0-field': self.params["field"],
             self.params["classification"]:'y',
-            self.params["classification"] + "_archives":self.params["categories"],
-            # 'classification-physics_archives': 'all',
             'classification-include_cross_list': 'include',
             'date-filter_by': self.params["dates"],
             'date-year': self.params["year"],
@@ -145,6 +171,8 @@ class ArxivSearch(object):
             'size': self.params["limit"],
             'order': '-announced_date_first',
         }
+        if self.params["add_cat"]:
+            parameters[f'{self.params["classification"]}' + "_archives"]  = self.params["categories"]
 
         try:
             response = requests.get(baseurl, headers=headers, params=parameters)
@@ -160,9 +188,10 @@ class ArxivSearch(object):
 
         results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
-            new_papers = self.parse_feed(results, Paper)
-            logger.info(f'{len(new_papers)} papers returned from arxiv')
-            return new_papers
+            logger.info(f"{len(results)} results")
+            # new_papers = self.parse_feed(results)
+            # logger.info(f'{len(new_papers)} papers returned from arxiv')
+            # return new_papers
                 
         else:
             logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")
@@ -171,23 +200,6 @@ class ArxivSearch(object):
             # Due to speed limitations in our implementation of the API, the maximum
             # number of results returned from a single call (max_results) is limited to
             # 30000 in slices of at most 2000 at a time,
-
-            # baseurl = "http://export.arxiv.org/api/query?search_query="
-            # baseurl = "https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term="
-            # baseurl += parameters["query"] + "&terms-0-field=title&"
-            # baseurl += parameters["limit"]
-            #Sample advanced.  Not sure if the API was meant for this. 
-            #advanced=&terms-0-operator=AND&terms-0-term=Transformers&terms-0-field=title&
-            #classification-economics=y&classification-physics=y&classification-physics_archives=hep-lat&
-            #classification-include_cross_list=include&date-filter_by=past_12&date-year=&
-            #date-from_date=&date-to_date=&date-date_type=submitted_date&
-            #abstracts=show&size=50&order=-announced_date_first
-
-
-            #https://arxiv.org/search/advanced?advanced=&terms-0-operator=AND&terms-0-term=machine+learning&terms-0-field=title&
-            #classification-computer_science=y&classification-computer_science_archives=cs.AI%2BOR%2Bcs.AR%2BOR%2Bcs.CC&
-            #classification-include_cross_list=include&date-filter_by=specific_year&date-year=2024&
-            #date-from_date=&date-to_date=&date-date_type=submitted_date&abstracts=show&size=20&order=-announced_date_first
 
 #FUNCTION get time
 def get_c_time():

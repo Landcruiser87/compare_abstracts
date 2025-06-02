@@ -678,16 +678,14 @@ class PaperSearch(App):
         variables = []
         srch_text = self.query_one("#input-arxiv", Input)._reactive_value
         start_date = self.query_one("#input-arx-from", Input)._reactive_value
-        #Need a way to know if this is disabled
-        end_date = self.query_one("#input-arx-to", Input)
+        end_date_input = end_date = self.query_one("#input-arx-to", Input)
+        end_date = end_date_input._reactive_value
         limit = self.query_one("#input-arx-limit", Input)._reactive_value
         field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
         date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
         subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
-
-        
         root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
 
         #bind the info together into a list
@@ -706,9 +704,10 @@ class PaperSearch(App):
             "dates"     : ARXIV_DATES[date_range],
             "start_date": "",
             "end_date"  : "",
-            "year"      : ""
+            "year"      : "",
+            "add_cat"   : False
         }
-        if not end_date.disabled:
+        if not end_date_input.disabled:
             variables["start_date"] = start_date
             variables["end_date"] = end_date
         else:
@@ -733,7 +732,7 @@ class PaperSearch(App):
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
         else:
-            logger.warning("Error cocured in arXiv request.  Check inputs as this is the last error gate")
+            logger.warning("An error occured in the arXiv request.  Check inputs as this is the last error gate")
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
