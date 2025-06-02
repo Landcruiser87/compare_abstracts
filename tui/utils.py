@@ -121,8 +121,8 @@ class ArxivSearch(object):
             paper_dict[paper.id] = asdict(paper)
             del paper
 
-        json_data = json.dumps(paper_dict, cls=NumpyArrayEncoder)
-        return json_data
+        # json_data = json.loads(paper_dict)
+        return paper_dict
           
     def classification_format(self):
         main_cat = self.params["subject"].lower()

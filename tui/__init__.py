@@ -707,6 +707,10 @@ class PaperSearch(App):
             "year"      : "",
             "add_cat"   : False
         }
+        
+        #TODO - Need to update the term searching to how they do it. 
+        #add an AND/OR button or someway to separate individual terms. 
+
         if not end_date_input.disabled:
             variables["start_date"] = start_date
             variables["end_date"] = end_date
@@ -726,6 +730,7 @@ class PaperSearch(App):
                 #load the JSON into the Tree
                 self.load_data(tree, root_name, json_data)
                 #save the search
+                #TODO - Check save routine.  Saved format is weird
                 save_data(root_name, json_data)
                 logger.info(f"{len(json_data.keys())} papers found on arXiv")
 
