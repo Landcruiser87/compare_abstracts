@@ -223,19 +223,11 @@ https://github.com/user-attachments/assets/b20b32c9-55f0-4e3b-a436-5571a47f9700
 
 # Project Todo list
 
-### Search Tab - Modeling paths 
-
-[x] - Implement SBert Model
-[x] - Install CUDA toolkit to use GPU
-  [x] - Update instructions on how to do that
-
-
 ### Additional Tab's to add
 
-1. [x] arXiv
-2. medarXiv / bioarXiv
-3. PubMed
-4. Local Zotero search
+1. medarXiv / bioarXiv
+2. PubMed
+3. Local Zotero search
 
 ### medarxiv / bioarxiv Tab
 

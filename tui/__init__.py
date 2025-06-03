@@ -574,7 +574,7 @@ class PaperSearch(App):
         #bind the info together in a tuple
         variables = [model, field, res_limit, threshold]
         if not all(self.is_numeric_string(str(var)) for var in variables):
-            self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again")
+            self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again", severity="error")
             return
 
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
@@ -691,7 +691,7 @@ class PaperSearch(App):
         #bind the info together into a list
         variables = [limit, field, date_range, subject]
         if not all(self.is_numeric_string(str(var)) for var in variables):
-            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
             return None
 
         #Remap the variables with their values     
@@ -736,9 +736,9 @@ class PaperSearch(App):
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
         elif errors:
-            self.notify(f"Error:\n{errors}")
+            self.notify(f"Error:\n{errors}", severity="error")
         else:
-            self.notify(f"No papers matched the search {variables['query']}")
+            self.notify(f"No papers matched the search {variables['query']}", severity="warning")
             logger.warning(f"No papers found the search {variables['query']}")
 
     ##########################  Tree Functions ####################################
