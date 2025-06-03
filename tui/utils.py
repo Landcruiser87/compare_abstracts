@@ -116,7 +116,7 @@ class ArxivSearch(object):
                 pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
                 possiblematch = re.findall(pattern, paper.abstract)
                 if possiblematch:
-                    paper.github_url = possiblematch
+                    paper.github_url = possiblematch[0]
             paper.conference_info = "https://arxiv.org"
             paper_dict[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}# asdict(paper). asdict not saving the authors keys
             del paper
@@ -137,8 +137,8 @@ class ArxivSearch(object):
             #BUG - may not need last elif
                 #I think that's just for  the physics archives which for some
                 #reason they hardcode into the request. 
-            elif len(search_cat) == 0:
-                self.params["categories"] = "all"
+            # elif len(search_cat) == 0:
+            #     self.params["categories"] = "all"
             return True
         
         except Exception as e:
