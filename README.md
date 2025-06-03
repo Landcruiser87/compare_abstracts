@@ -218,7 +218,7 @@ Suggested operation ranges
 
 With the TUI running, it should look something like this. 
 
-https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
+https://github.com/user-attachments/assets/b20b32c9-55f0-4e3b-a436-5571a47f9700
 
 
 # Project Todo list
