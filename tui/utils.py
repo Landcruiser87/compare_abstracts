@@ -375,4 +375,4 @@ def sbert(model_name:str):
         return model, device
         
     except Exception as e:
-        raise ValueError(f"You need to install sentence-transformers for model {model_name}")
+        raise ValueError(f"error:{e}\nYou probably to install sentence-transformers for model {model_name}")
