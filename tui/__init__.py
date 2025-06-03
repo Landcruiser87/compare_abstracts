@@ -686,7 +686,7 @@ class PaperSearch(App):
         subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
-        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{ARXIV_SUBJECTS[subject].lower()}_{'-'.join(srch_text.lower().split())}"
+        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{"_".join(ARXIV_SUBJECTS[subject].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
 
         #bind the info together into a list
         variables = [limit, field, date_range, subject]
@@ -727,6 +727,7 @@ class PaperSearch(App):
             tree: Tree = tree_view.query_one(Tree)
 
             try:
+                self.notify(f"{len(json_data)} papers found")
                 #load the JSON into the Tree
                 self.load_data(tree, root_name, json_data)
                 #save the search
@@ -737,6 +738,8 @@ class PaperSearch(App):
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
         else:
+            self.notify(f"No papers matched the search {variables['query']}")
+
             logger.warning("An error occured in the arXiv request.  Check inputs as this is the last error gate")
 
     ##########################  Tree Functions ####################################

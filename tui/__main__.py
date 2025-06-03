@@ -41,7 +41,7 @@ def main():
         help="path to file, or stdin",
         default=sys.stdin,
     )
-
+    
     args = parser.parse_args()
     numeric_level = getattr(logging, args.log.upper(), None)
     file_choice = ""
