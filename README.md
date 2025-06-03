@@ -163,7 +163,7 @@ While in root directory run commands below
 
 ```terminal
 $ mkdir data/logs data/logs/scrape data/logs/tui
-$ mkdir data/searches data/models/Marco data/models/specter
+$ mkdir data/searches data/models/marco data/models/specter
 ```
 
 ## Model setup

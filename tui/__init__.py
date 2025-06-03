@@ -727,11 +727,10 @@ class PaperSearch(App):
             tree: Tree = tree_view.query_one(Tree)
 
             try:
-                self.notify(f"{len(json_data)} papers found")
+                self.notify(f"{len(json_data)} papers found on arXiv")
                 #load the JSON into the Tree
                 self.load_data(tree, root_name, json_data)
                 #save the search
-                #TODO - Check save routine.  Saved format is weird
                 save_data(root_name, json_data)
                 logger.info(f"{len(json_data.keys())} papers found on arXiv")
                 self.reload_datasets()
@@ -740,7 +739,6 @@ class PaperSearch(App):
                 logger.error(f"Failed to save search results: {e}")
         else:
             self.notify(f"No papers matched the search {variables['query']}")
-
             logger.warning("An error occured in the arXiv request.  Check inputs as this is the last error gate")
 
     ##########################  Tree Functions ####################################

@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import torch
 import time
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
 from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
@@ -92,7 +92,7 @@ class ArxivSearch(object):
             #Grab authors
             authors = result.find("p", {"class":"authors"})
             if authors != None:
-                paper.authors = [x.text for x in authors.find_all("a")]
+                paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
             #Abstract
             paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()
             categories = result.find("div", attrs={"class":"tags is-inline-block"})
@@ -117,11 +117,10 @@ class ArxivSearch(object):
                 possiblematch = re.findall(pattern, paper.abstract)
                 if possiblematch:
                     paper.github_url = possiblematch
-            
-            paper_dict[paper.id] = asdict(paper)
+            paper.conference_info = "https://arxiv.org"
+            paper_dict[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}# asdict(paper). asdict not saving the authors keys
             del paper
 
-        # json_data = json.loads(paper_dict)
         return paper_dict
           
     def classification_format(self):
