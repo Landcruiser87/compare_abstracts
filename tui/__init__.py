@@ -155,7 +155,7 @@ class PaperSearch(App):
                         yield SelectionList(name="Category", id="sl-arx-categories")
 
                         with Vertical(id="sub-arx-limit"):
-                            yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
+                            yield Input("Result limit", tooltip="Limit the amount of returned results.  200 is the max you can request", id="input-arx-limit", type="integer")
                             yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
                             yield Input("Date To", tooltip="Ex: 2025-4-12", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
@@ -719,27 +719,27 @@ class PaperSearch(App):
                 variables["year"] = start_date
 
         arxiv = ArxivSearch(variables)
-        json_data = arxiv.request_papers()
+        json_data, errors = arxiv.request_papers()
         if json_data:
-            #TODO - Check to make sure False works here. 
             #Select the Tree object
             tree_view: TreeView = self.query_one("#tree-container", TreeView)
             tree: Tree = tree_view.query_one(Tree)
 
             try:
-                self.notify(f"{len(json_data)} papers found on arXiv")
+                self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]} in subject {variables["subject"]}")
                 #load the JSON into the Tree
                 self.load_data(tree, root_name, json_data)
                 #save the search
                 save_data(root_name, json_data)
-                logger.info(f"{len(json_data.keys())} papers found on arXiv")
                 self.reload_datasets()
 
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
+        if errors:
+            self.notify(f"Error returned {errors}")
         else:
             self.notify(f"No papers matched the search {variables['query']}")
-            logger.warning("An error occured in the arXiv request.  Check inputs as this is the last error gate")
+            logger.warning(f"No papers found the search {variables['query']}")
 
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

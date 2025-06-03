@@ -168,7 +168,7 @@ class ArxivSearch(object):
         formatted = self.date_format()
         classy = self.classification_format()
         if not formatted or not classy:
-            return None
+            return None, "Error in formatting classification or date"
 
         #NOTE - Might need to update this with separate terms.
         #Eventually update this query to operate on multiple separate terms
@@ -200,16 +200,16 @@ class ArxivSearch(object):
         if response.status_code != 200:
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
-            return None
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
         
         # time.sleep(2)
         bs4ob = BeautifulSoup(response.content, "lxml")
 
         results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
-            logger.info(f'{len(results)} papers returned from arxiv')
+            logger.info(f'{len(results)} papers returned from arxiv searching {self.params["query"]}')
             new_papers = self.parse_feed(results)
-            return new_papers
+            return new_papers, None
 
         else:
             logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")

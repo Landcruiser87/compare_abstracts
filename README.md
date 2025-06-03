@@ -10,7 +10,7 @@
 
 ## Purpose
 
-The purpose of this repo is to perform a yearly survey of major machine learning conferences.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
+The purpose of this repo is to perform a yearly survey of major machine learning conferences and arXiv.  Extract all the metadata, abstracts, and other information from of all the papers and look for topic frequencies that show up.  
 
 ## Disclaimer 
 
@@ -30,7 +30,7 @@ The two search parameters that work best are `title and abstract` as those have 
 - spacy
 - scikit-learn
 - beautifulsoup4
-- pyzotero
+- pyzotero (eventually)
 
 In `VSCODE` press `CTRL + SHIFT + ~` to open a terminal
 Navigate to the directory where you want to clone the repo. 
@@ -176,11 +176,7 @@ python -m spacy download en_core_web_md
 
 ## TUI
 
-This repo also comes with a TUI (Terminal User Interface) that allows you to
-explore the JSON objects for each conference / year.  This repo was forked from
-[here](https://github.com/oleksis/jtree) and updated with a ScrollableContainer
-on the right panel instead of the previous output.  Thank you to
-[oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
+This repo also comes with a TUI (Terminal User Interface) that allows you to explore the JSON objects for each conference / year.  This repo was forked from [here](https://github.com/oleksis/jtree).  Thank you to [oleksis](https://github.com/oleksis) for creating the initial structure!! :tada:
 
 To run the TUI with poetry
 
@@ -195,9 +191,7 @@ python tui/__main__.py data/scraped/2024_ICML.json
 #replace year/conf
 ```
 
-With no file args, like a madman.  This will launch a file picking application
-that scans the `data/conferences` folder and shows you a list of available files. 
-Enter a number of the conference you want, and you're good to go.
+With no file args, like a madman.  This will launch a file picking application that scans the `data/conferences` folder and shows you a list of available files. Enter a number of the conference you want, and you're good to go.
 
 ```terminal
 poetry run python tui/__main__.py
