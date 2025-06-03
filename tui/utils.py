@@ -94,7 +94,7 @@ class ArxivSearch(object):
             if authors != None:
                 paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
             #Abstract
-            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()
+            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()[:-15]
             categories = result.find("div", attrs={"class":"tags is-inline-block"})
             if categories != None:
                 paper.category = categories.text.split()
