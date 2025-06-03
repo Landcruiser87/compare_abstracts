@@ -305,7 +305,6 @@ def get_categories(result:BeautifulSoup) -> dict:
 
     #Iterate over taxonomy children
     for child in result.contents:
-
         #If its an H2 tag, its a category
         if child.name == "h2":
             key = child.text

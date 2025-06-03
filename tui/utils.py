@@ -211,7 +211,7 @@ class ArxivSearch(object):
             return new_papers, None
 
         else:
-            err_message =f"No papers returned on {self.params['classification']} for categories {self.params['subject']}"
+            err_message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
             logger.warning(err_message)
             return None, err_message
 
