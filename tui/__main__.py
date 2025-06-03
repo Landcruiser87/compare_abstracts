@@ -3,8 +3,7 @@ import argparse
 import logging
 import platform
 import sys
-from support import logger
-import support
+from support import logger, launch_tui
 
 if sys.version_info < (3, 8):
     import importlib_metadata
@@ -50,7 +49,7 @@ def main():
     
     # Check if no path was provided as a command-line argument
     if args.path is sys.stdin:
-        file_choice = support.launch_tui()
+        file_choice = launch_tui()
     
     # If a file was chosen
     if file_choice:

@@ -238,28 +238,19 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
 
 ### Additional Tab's to add
 
-1. arXiv
-2. medarXiv
-3. bioarXiv
+1. [x] arXiv
+2. medarXiv / bioarXiv
+3. PubMed
 4. Local Zotero search
-
-### Arxiv Tab
-
-1. Need basic search here.  
-  - Functionality
-    - make a query search 
-    - Add data to searched datasets as json
-    - 
 
 ### medarxiv / bioarxiv Tab
 
 1. Workflow
   - Unsure at the current moment
-  - Likely a checkbox that can switch maybe between all 3 arxiv sources?
+  - Likely a checkbox that can switch maybe between medarxiv and bioarxiv
   - I think they have different inputs
 
 ### Zotero Tab
-
 
 ### Possible Features
 1. LLM Summarization Paper Summarization
@@ -270,4 +261,4 @@ https://github.com/user-attachments/assets/c5b93174-1abd-43af-bd8d-d40a4c70751e
    - Look at first two components to find the subject topics that are most in variation.
 4. Tom Arnold idea.  Build a graph network from the citations of each paper
   - Analyze who is getting cited most often and driving a particular area of research.  Really like this!!
-5. Nate Idea. Summarize each year (or current datasets) to display top       'keywords' or 'hottest categories'.
+5. Nate Idea. Summarize each year (or current datasets) to display top 'keywords' or 'hottest categories'.

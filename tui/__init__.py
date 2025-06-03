@@ -734,6 +734,7 @@ class PaperSearch(App):
                 #TODO - Check save routine.  Saved format is weird
                 save_data(root_name, json_data)
                 logger.info(f"{len(json_data.keys())} papers found on arXiv")
+                self.reload_datasets()
 
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
