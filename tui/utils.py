@@ -202,9 +202,8 @@ class ArxivSearch(object):
             logger.warning(f'Reason: {response.reason}')
             return None, f"Status Code {response.status_code} Reason: {response.reason}"
         
-        # time.sleep(2)
+        time.sleep(2) #Be nice to the servers
         bs4ob = BeautifulSoup(response.content, "lxml")
-
         results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
             logger.info(f'{len(results)} papers returned from arxiv searching {self.params["query"]}')
@@ -212,12 +211,12 @@ class ArxivSearch(object):
             return new_papers, None
 
         else:
-            logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")
+            err_message =f"No papers returned on {self.params['classification']} for categories {self.params['subject']}"
+            logger.warning(err_message)
+            return None, err_message
 
         # NOTE - Can only make a request every 3 seconds. 
-            # Due to speed limitations in our implementation of the API, the maximum
-            # number of results returned from a single call (max_results) is limited to
-            # 30000 in slices of at most 2000 at a time,
+        # NOTE - Don't feel like dealing with pagination so.  200 is the max request limit!
 
 #FUNCTION get time
 def get_c_time():

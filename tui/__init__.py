@@ -736,7 +736,7 @@ class PaperSearch(App):
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
         elif errors:
-            self.notify(f"Error returned {errors}")
+            self.notify(f"Error:\n{errors}")
         else:
             self.notify(f"No papers matched the search {variables['query']}")
             logger.warning(f"No papers found the search {variables['query']}")
