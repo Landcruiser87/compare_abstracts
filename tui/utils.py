@@ -80,7 +80,7 @@ class ArxivSearch(object):
             return True
     
     def parse_feed(self, results:list) -> dict:
-        paper_dict = {}
+        paper_dict = {"search_params":self.params}
         for idx, result in enumerate(results):
             paper = Paper()
             #Get the URL
@@ -120,7 +120,7 @@ class ArxivSearch(object):
             paper.conference_info = "https://arxiv.org"
             paper_dict[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}# asdict(paper). asdict not saving the authors keys
             del paper
-
+        
         return paper_dict
           
     def classification_format(self):
@@ -134,11 +134,7 @@ class ArxivSearch(object):
             if len(search_cat) > 1:
                 self.params["categories"] = "+OR+".join(search_cat)
                 self.params["add_cat"] = True
-            #BUG - may not need last elif
-                #I think that's just for  the physics archives which for some
-                #reason they hardcode into the request. 
-            # elif len(search_cat) == 0:
-            #     self.params["categories"] = "all"
+
             return True
         
         except Exception as e:
@@ -202,7 +198,7 @@ class ArxivSearch(object):
             logger.warning(f'Reason: {response.reason}')
             return None, f"Status Code {response.status_code} Reason: {response.reason}"
         
-        time.sleep(2) #Be nice to the servers
+        time.sleep(3) #Be nice to the servers
         bs4ob = BeautifulSoup(response.content, "lxml")
         results = bs4ob.find_all("li", {"class":"arxiv-result"})
         if results:
