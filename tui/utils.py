@@ -3,7 +3,7 @@ import datetime
 import requests
 import json
 import re
-from os import path
+from os import path, mkdir
 import spacy
 import numpy as np
 import pandas as pd
@@ -341,8 +341,6 @@ def word2vec():
         raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
 
 def sbert(model_name:str):
-    #TODO - UPDATE THIS SO ITS NOT DINGUS MATERIAL
-        #ie the folder creation and download of the models
     try:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
@@ -353,7 +351,8 @@ def sbert(model_name:str):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")
             else:
-                model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
+                mkdir("./data/models/marco")
+                model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80M
                 model.save_pretrained("./data/models/marco")
                 logger.info("Model loaded and saved dynamically")
 
@@ -364,6 +363,7 @@ def sbert(model_name:str):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")                
             else:
+                mkdir("./data/models/specter")
                 model = SentenceTransformer("allenai-specter", device = device) #425 MB
                 model.save_pretrained("./data/models/specter")
                 logger.info("Model loaded and saved dynamically")
