@@ -3,8 +3,7 @@ import argparse
 import logging
 import platform
 import sys
-from support import logger
-import support
+from support import logger, launch_tui
 
 if sys.version_info < (3, 8):
     import importlib_metadata
@@ -12,7 +11,7 @@ else:
     import importlib.metadata as importlib_metadata
 
 from __init__ import PaperSearch, __prog_name__, __version__
-
+#textual run --dev tui/__main__.py data/conferences/2020_COLT.json
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
 
@@ -41,7 +40,7 @@ def main():
         help="path to file, or stdin",
         default=sys.stdin,
     )
-
+    
     args = parser.parse_args()
     numeric_level = getattr(logging, args.log.upper(), None)
     file_choice = ""
@@ -50,7 +49,7 @@ def main():
     
     # Check if no path was provided as a command-line argument
     if args.path is sys.stdin:
-        file_choice = support.launch_tui()
+        file_choice = launch_tui()
     
     # If a file was chosen
     if file_choice:
@@ -73,7 +72,7 @@ def main():
         # See:Textualize/textual/issues/153#issuecomment-1256933121
         if not WINDOWS:
             sys.stdin = open("/dev/tty", "r")
-        
+
         app = PaperSearch(args.path)
         app.run()
 

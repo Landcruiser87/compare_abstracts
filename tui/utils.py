@@ -1,18 +1,223 @@
 import contextlib
 import datetime
+import requests
 import json
 import re
-import os
+from os import path
 import spacy
 import numpy as np
 import pandas as pd
 import torch
+import time
+from dataclasses import dataclass, asdict, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
+from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
-from support import logger
+from support import logger, NumpyArrayEncoder
 
+@dataclass
+class Paper:
+    title   : str  | None = None
+    authors : list | None = None
+    keywords: list | None = None
+    category: list | None = None
+    abstract: str = ""
+    url     : str = ""
+    pdf     : str = ""
+    github_url     : str = ""  
+    supplemental   : str = ""  #general comments
+    date_published : str = ""  # mm-dd-yyyy
+    conference_info: str = ""  # e.g. arxiv
+
+class ArxivSearch(object):
+    def __init__(self, variables:dict):
+        self.params: dict = variables
+        self.results: list = []
+
+    def is_a_date(self, datetext:str):
+        try:
+            datetime.datetime.strptime(datetext, "%Y-%m-%d")
+            return True
+        except Exception as e:
+            logger.warning(f"date extraction error.  Check inputs\n{e}")
+            return False
+        
+    def date_format(self):
+        self.params["dates"] = self.params["dates"].lower().split()
+        self.params["dates"] = "_".join(self.params["dates"])
+        self.params["submitted_date"] = datetime.datetime.today().date()
+        self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
+
+        #Don't need logic for all_dates
+        #works
+        if self.params["dates"] == "specific_year":
+            start = self.params["year"]
+            if len(start) == 4 and start.isdigit():
+                return True
+            else:
+                return False
+        #works
+        elif self.params["dates"] == "past_12_months":
+            self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
+            self.params["end_date"] = self.params["submitted_date"]
+            self.params["dates"] = "past_12"
+            return True
+        #doesn't work
+        elif self.params["dates"] == "date_range":
+            start = self.params["start_date"]
+            end = self.params["end_date"]
+            for val in [start, end]:
+                if not self.is_a_date(val):
+                    logger.warning("Error in date formatting, please check inputs")
+                    return False
+            return True
+        #works
+        elif self.params["dates"] == "all_dates":
+            #NOTE come back and check the date format for here. 
+            return True
+    
+    def parse_feed(self, results:list) -> dict:
+        paper_dict = {}
+        for idx, result in enumerate(results):
+            paper = Paper()
+            #Get the URL
+            url = result.find("p", {"class":"list-title is-inline-block"})
+            paper.url = url.select("a")[0].get('href')
+            #Grab title
+            paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
+            paper.id = str(idx) + "_" + paper.title
+            #Grab authors
+            authors = result.find("p", {"class":"authors"})
+            if authors != None:
+                paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
+            #Abstract
+            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()
+            categories = result.find("div", attrs={"class":"tags is-inline-block"})
+            if categories != None:
+                paper.category = categories.text.split()
+
+            comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+            if comments != None:
+                comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                if comment_ != None:
+                    paper.supplemental = comment_.text
+
+            published = result.find("p", attrs={"class":"is-size-7"})
+            if published != None:
+                temp = published.find("span", attrs={"class": lambda e: e.startswith("has-text-black-bis")})
+                if temp.text == "Submitted":
+                    paper.date_published = datetime.datetime.strptime(temp.next_sibling.strip().strip(";"), '%d %B, %Y')
+
+            if "github" in paper.abstract:
+                #This regex will pull out a github.io or github.com link
+                pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                possiblematch = re.findall(pattern, paper.abstract)
+                if possiblematch:
+                    paper.github_url = possiblematch
+            paper.conference_info = "https://arxiv.org"
+            paper_dict[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}# asdict(paper). asdict not saving the authors keys
+            del paper
+
+        return paper_dict
+          
+    def classification_format(self):
+        main_cat = self.params["subject"].lower()
+        if " " in main_cat:
+            main_cat = "_".join(main_cat.split())
+        self.params["classification"] = f"classification-{main_cat}"
+        search_cat = self.params["categories"]
+        
+        try:
+            if len(search_cat) > 1:
+                self.params["categories"] = "+OR+".join(search_cat)
+                self.params["add_cat"] = True
+            #BUG - may not need last elif
+                #I think that's just for  the physics archives which for some
+                #reason they hardcode into the request. 
+            elif len(search_cat) == 0:
+                self.params["categories"] = "all"
+            return True
+        
+        except Exception as e:
+            logger.warning(f"Error in classification formatting\n{e}")
+            return False
+        
+    def request_papers(self) -> dict:
+        chrome_version = np.random.randint(120, 135)
+        baseurl = "https://arxiv.org/search/advanced"
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        #Input validation checks
+        formatted = self.date_format()
+        classy = self.classification_format()
+        if not formatted or not classy:
+            return None
+
+        #NOTE - Might need to update this with separate terms.
+        #Eventually update this query to operate on multiple separate terms
+        parameters = {
+            'advanced': '',                        
+            'terms-0-operator': 'AND',              
+            'terms-0-term': self.params["query"],
+            'terms-0-field': self.params["field"],
+            self.params["classification"]:'y',
+            'classification-include_cross_list': 'include',
+            'date-filter_by': self.params["dates"],
+            'date-year': self.params["year"],
+            'date-from_date': self.params["start_date"],
+            'date-to_date': self.params["end_date"],
+            'date-date_type': "submitted_date_first", 
+            'abstracts': 'show',
+            'size': self.params["limit"],
+            'order':'-submitted_date',
+        }
+        if self.params["add_cat"]:
+            parameters[f'{self.params["classification"]}' + "_archives"]  = self.params["categories"]
+
+        try:
+            response = requests.get(baseurl, headers=headers, params=parameters)
+            
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+        # time.sleep(2)
+        bs4ob = BeautifulSoup(response.content, "lxml")
+
+        results = bs4ob.find_all("li", {"class":"arxiv-result"})
+        if results:
+            logger.info(f'{len(results)} papers returned from arxiv')
+            new_papers = self.parse_feed(results)
+            return new_papers
+
+        else:
+            logger.warning(f"No papers returned on {self.params["classification"]} for categories {self.params["categories"]}")
+
+        # NOTE - Can only make a request every 3 seconds. 
+            # Due to speed limitations in our implementation of the API, the maximum
+            # number of results returned from a single call (max_results) is limited to
+            # 30000 in slices of at most 2000 at a time,
 
 #FUNCTION get time
 def get_c_time():
@@ -90,7 +295,6 @@ def tfidf(data_fields:list, paper_names:list):
 	)
     return tsfrm_df, paper_names
 
-
 def cosine_similarity(tsfrm, ts_type:str):
 	"""Function that allows you to use either sklearns, or scipy's cosine similarity
 	Inputs are already in a sparse array format.  Scipy uses np.arrays, but the code 
@@ -141,28 +345,27 @@ def word2vec():
     except Exception as e:
         raise ValueError(f"No Soup for you! Download the model by running python -m spacy download {model_name}")
 
-
 def sbert(model_name:str):
+    #TODO - UPDATE THIS SO ITS NOT DINGUS MATERIAL
+        #ie the folder creation and download of the models
     try:
         device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
-        #I'd suggest using the cached version of each model.  
         #Trained on a bunch of bing queries
         if model_name == "Marco": #Polooooooo.
             model_path = "./data/models/marco/"
-            if os.path.exists(model_path):
+            if path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")
             else:
-                
                 model = SentenceTransformer("msmarco-MiniLM-L6-v3", device = device)  #80MB
                 model.save_pretrained("./data/models/marco")
                 logger.info("Model loaded and saved dynamically")
 
-        # trained on finding similar papers.  Works better with abstracts
+        # trained on finding similar papers.  Works better with abstracts but takes a really long time
         elif model_name == "Specter":
             model_path = "./data/models/specter"
-            if os.path.exists(model_path):
+            if path.exists(model_path):
                 model = SentenceTransformer(model_path, device = device)
                 logger.info("Model loaded locally")                
             else:
@@ -174,4 +377,3 @@ def sbert(model_name:str):
         
     except Exception as e:
         raise ValueError(f"You need to install sentence-transformers for model {model_name}")
-

@@ -9,58 +9,45 @@ from time import sleep
 from typing import TYPE_CHECKING, List, Tuple, Dict, Any 
 from pathlib import Path, PurePath
 from collections import deque
-import torch
+from torch.cuda import empty_cache
 #Textual Imports
 from textual import on, work
 from textual.binding import Binding
 from textual.app import App, ComposeResult
 from widgets import (
-    JSONDocumentView, 
-    JSONTree,
-    TreeView, 
-    SearchProgress
-) 
+    JSONDocumentView,JSONTree,
+    TreeView,SearchProgress
+)
 from textual.containers import Container, Horizontal, Vertical
 from textual.fuzzy import Matcher
 from textual.worker import get_current_worker
 from textual.reactive import reactive, var
 from textual.widgets import (
-    Button, 
-    Footer,
-    Header,
-    Input,
-    Static,
-    SelectionList,
-    RadioButton, 
-    RadioSet,
-    TabbedContent, 
-    TabPane,       
-    Tree,
+    Button,Footer,Header,
+    Input,Static,SelectionList,
+    RadioButton,RadioSet, 
+    TabbedContent,TabPane,Tree
 )
 from textual.widgets.selection_list import Selection
 from textual.widgets.tree import TreeNode
 from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
-    sbert,
-    word2vec,
-    tfidf,    
-    get_c_time, 
-    clean_text, 
-    cosine_similarity, 
-    clean_string_values,
+    ArxivSearch,sbert,word2vec,
+    tfidf,get_c_time,clean_text,
+    cosine_similarity,clean_string_values
 )
 
 from support import (
-    list_datasets, save_data, logger,         #functions
+    list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_CATS, ARXIV_SUBJECTS, ARXIV_DATES   #arXiv vars
+    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "ML_Tree"
-__version__ = "0.3.1"
+__version__ = "0.3.2"
 
 #CLASS - Load Data
 class PaperSearch(App):
@@ -125,7 +112,7 @@ class PaperSearch(App):
                             yield Button("Add Dataset", id="add-button")
                             yield Button("Remove Dataset", id="rem-button")
 
-                # Tab 3 - Search (Placeholder)
+                # Tab 3 - Datasets Search
                 with TabPane("Search Datasets", id="search-tab"):
                     with Container(id="srch-container"):
                         yield Input("Type search here", id="input-search")
@@ -145,6 +132,33 @@ class PaperSearch(App):
                                 yield Input("threshold", tooltip="Threshold the appropriate metric", id="input-thres", type="number")
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
+                # Tab 4 - arXiv Search
+                with TabPane("Search arXiv", id="arxiv-tab"):
+                    with Container(id="srch-arx-container"):
+                        yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
+                        yield Static("Search Field\nDate Range", id="hdr-arx-cat", classes="header")
+                        yield Static("Subject", id="hdr-arx-sub", classes="header")
+                        yield Static("Category", id="hdr-arx-date", classes="header")
+                        yield Static("Limits", id="hdr-arx-limit", classes="header")
+                        with Vertical(id="arx-radios"):
+                            with RadioSet(id="radio-arx-cat", classes="header"):
+                                for cat in ARXIV_FIELDS:
+                                    yield RadioButton(cat)
+
+                            with RadioSet(id="radio-arx-dates", classes="header"):
+                                for dfield in ARXIV_DATES:
+                                    yield RadioButton(dfield)
+                        with RadioSet(id="radio-arx-subjects", classes="header", tooltip="Leave categories (next section) blank to search all"):
+                            for subject in ARXIV_SUBJECTS:
+                                yield RadioButton(subject)
+                        # yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
+                        yield SelectionList(name="Category", id="sl-arx-categories")
+
+                        with Vertical(id="sub-arx-limit"):
+                            yield Input("Result limit", tooltip="Limit the amount of returned results", id="input-arx-limit", type="integer")
+                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 2025-4-12", id="input-arx-to", type="text", disabled=True)
+                            yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
         yield Footer()
 
     #FUNCTION - onmount
@@ -159,7 +173,7 @@ class PaperSearch(App):
         tree.focus()
 
     @on(SelectionList.SelectedChanged, "#datasets")
-    def on_selection(self, event: SelectionList.SelectedChanged) -> None:
+    def on_datasets_selection_changed(self, event: SelectionList.SelectedChanged) -> None:
         abutton = self.query_one("#add-button", Button)
         rbutton = self.query_one("#rem-button", Button)
         selections = len(event.selection_list.selected)
@@ -171,7 +185,7 @@ class PaperSearch(App):
             rbutton.label = f"Remove Data"
 
     @on(RadioSet.Changed, "#radio-models")
-    def on_selection(self, event: RadioSet.Changed) -> None:
+    def on_radio_models_changed(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
         if "Fuzzy" in event.pressed.label:
             met_range = "-1 to 1"
@@ -194,6 +208,51 @@ class PaperSearch(App):
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
+
+    @on(RadioSet.Changed, "#radio-arx-dates")
+    def on_radioset_arx_dates_changed(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
+
+
+    @on(RadioSet.Changed, "#radio-arx-subjects")
+    def on_radio_subjects_changed(self, event: RadioSet.Changed) -> None:
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        categories.clear_options()
+        pressed = getattr(event.pressed.label, '_text', None)[0]
+        for key, val in ARXIV_AREAS.items():
+            if key == pressed:
+                codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
+                categories.add_options(codes)
+                break
+
+    #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
+    # @on(SelectionList.SelectionHighlighted, "#arx-subjects")
+    # def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
+    #     categories = self.query_one("#sl-arx-categories", SelectionList)
+    #     categories.clear_options()
+    #     selections = event.selection_list.selected
+    #     if len(selections) > 0:
+    #         for selection in selections:
+    #             for key, val in ARXIV_AREAS.items():
+    #                 if ARXIV_SUBJECTS[selection][0] in key:
+    #                     codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
+    #                     categories.add_options(codes)
+
+    @on(SelectionList.SelectionHighlighted, "#sl-arx-categories")
+    def on_arx_categories_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        if event.selection_list.selected:
+            selected = getattr(categories.options[event.selection_list.selected[-1]].prompt, '_text', None)
+            tips = [[(k2, v2) for k2, v2 in v2.items() if k2==selected[0]] for _, v2 in ARXIV_AREAS.items()]
+            tips = list(filter(None, tips))
+            categories.tooltip = tips[0][0][0]+ "\n" + "\n".join(tips[0][0][1])
+        else:
+            categories.tooltip = None
+
     @on(Button.Pressed, "#add-button")
     def add_button_event(self):
         self.add_datasets()
@@ -206,6 +265,10 @@ class PaperSearch(App):
     def search_button_event(self):
         self.run_search()
 
+    @on(Button.Pressed, "#search-arxiv")
+    def arxiv_button_event(self):
+        self.search_arxiv()
+
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
@@ -216,106 +279,6 @@ class PaperSearch(App):
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name, new_node, json_data)
-
-    def add_datasets(self):
-        """Handles the 'Add Dataset' button press by launching a worker."""
-        datasets: SelectionList = self.query_one("#datasets", SelectionList)
-        selected_indices: list[int] = datasets.selected
-
-        if not selected_indices:
-            self.notify("No datasets selected to add.", severity="warning")
-            return
-
-        datasets_to_load: List[Tuple[str, PurePath]] = []
-        for index in selected_indices:
-            # Ensure index is valid
-            if index < len(datasets.options):
-                # Safely access the prompt text
-                prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
-                if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
-                    ds_name_base = prompt_text_list[0]
-                    ds_name = ds_name_base + ".json"
-                    # Determine source path based on whether the base name has numbers
-                    has_a_year = re.search(r"\d{4}", ds_name)
-                    source_p = self.root_data_dir if has_a_year else self.srch_data_dir
-                    json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
-                    datasets_to_load.append((ds_name, json_path))
-                else:
-                     self.notify(f"Could not retrieve name for selection index {index}.", severity="warning")
-
-            else:
-                 self.notify(f"Selection index {index} is out of bounds.", severity="warning")
-
-        if datasets_to_load:
-            self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
-            # Pass the list of datasets to the worker
-            self._add_multiple_datasets_worker(datasets_to_load)
-        else:
-             self.notify("No valid datasets found to load.", severity="warning")
-        datasets.deselect_all()
-
-    @work(thread=True, exclusive=True, group="dataset_loading")
-    async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
-        """
-        Worker thread to load multiple JSON files and update the tree safely.
-
-        Args:
-            datasets_info: A list of tuples, where each tuple contains
-                           (dataset_name, dataset_path).
-        """
-        tree_view: TreeView = self.query_one("#tree-container", TreeView)
-        tree: JSONTree = tree_view.query_one(JSONTree) 
-        worker = get_current_worker()
-        total_datasets = len(datasets_info)
-
-        for i, (ds_name, json_path) in enumerate(datasets_info):
-            if worker.is_cancelled:
-                self.app.call_from_thread(self.notify, "Dataset loading cancelled.")
-                break
-
-            self.app.call_from_thread(self.notify, f"Loading ({i+1}/{total_datasets}): {ds_name}")
-
-            try:
-                # Perform file I/O and JSON parsing in the worker thread
-                with open(json_path, mode="r", encoding="utf-8") as f:
-                    json_data_str = f.read()
-                json_data = json.loads(json_data_str)
-                cleaned_data = clean_string_values(json_data)
-
-                # Update UI from the main thread ---
-                # Define a helper function to perform the UI updates
-                def update_tree_ui(name: str, data: Dict[str, Any]):
-                    try:
-                        # Check if node already exists to prevent duplicates
-                        existing_labels = {node.label.plain for node in tree.root.children}
-                        if name not in existing_labels:
-                            new_node = tree.root.add(name) # Add the top-level node
-                            tree.add_node(name, new_node, data) # Populate the node recursively
-                            self.app.notify(f"Successfully added {name}")
-                        else:
-                             self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
-                    except Exception as ui_e:
-                         # Log UI update errors specifically
-                         logger.error(f"Error updating tree UI for {name}: {ui_e}")
-                         self.app.notify(f"Error adding {name} to UI: {ui_e}", severity="error")
-
-                # Schedule the UI update function to run on the main thread
-                self.app.call_from_thread(update_tree_ui, name=ds_name, data=cleaned_data)
-                # Take a power nap to allow UI thread processing time
-                await asyncio.sleep(0.05)
-
-            except FileNotFoundError:
-                 logger.error(f"File not found for dataset: {ds_name} at {json_path}")
-                 self.app.call_from_thread(self.notify, f"Error: File not found for {ds_name}", severity="error")
-            except json.JSONDecodeError as e:
-                logger.error(f"JSON parsing error for {ds_name}: {e}")
-                self.app.call_from_thread(self.notify, f"Error parsing JSON for {ds_name}: {e}", severity="error")
-            except Exception as e:
-                # Catch other potential errors during file reading or processing
-                logger.error(f"Error loading dataset {ds_name}: {e}")
-                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=2)
-
-        self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
 
 
     #FUNCTION - Remove Data
@@ -420,18 +383,14 @@ class PaperSearch(App):
             paper_names = papers
             logger.info(f"{metric} {sims.shape}")
 
-            #BUG - Check return here. 
-                #I think you might only be returning the top 10.  Which is fine.  But... 
-
-            #BUG - Specter Model management. 
-                #loading and unloading even the local model is slowing things down.  
-                #Might be better to refactor and attach the model to the self app as a
-                #variable for you to use once at runtime. 
-
-        #Maybe some garage cleanup would help?
+            #BUG - Specter Model
+                #The specter model on abstract (what its designed for) is quite slow
+                #Not sure how to speed that up.
+        
+        #Delete the model and empty the cache
         del bert
         if device == "cuda":
-            torch.cuda.empty_cache()
+            empty_cache()
 
         return sims[1:], paper_names[1:]
 
@@ -502,6 +461,107 @@ class PaperSearch(App):
         
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
+    
+    def add_datasets(self):
+        """Handles the 'Add Dataset' button press by launching a worker."""
+        datasets: SelectionList = self.query_one("#datasets", SelectionList)
+        selected_indices: list[int] = datasets.selected
+
+        if not selected_indices:
+            self.notify("No datasets selected to add.", severity="warning")
+            return
+
+        datasets_to_load: List[Tuple[str, PurePath]] = []
+        for index in selected_indices:
+            # Ensure index is valid
+            if index <= len(datasets.options):
+                # Safely access the prompt text
+                prompt_text_list = getattr(datasets.options[index].prompt, '_text', None)
+                if prompt_text_list and isinstance(prompt_text_list, list):# and prompt_text_list:
+                    ds_name_base = prompt_text_list[0]
+                    ds_name = ds_name_base + ".json"
+                    # Determine source path based on whether the base name has numbers
+                    has_a_year = re.search(r"\d{4}", ds_name)
+                    source_p = self.root_data_dir if has_a_year else self.srch_data_dir
+                    json_path = PurePath(Path.cwd(), source_p, Path(ds_name))
+                    datasets_to_load.append((ds_name, json_path))
+                else:
+                     self.notify(f"Could not retrieve name for selection index {index}.", severity="warning")
+
+            else:
+                 self.notify(f"Selection index {index} is out of bounds.", severity="warning")
+
+        if datasets_to_load:
+            self.app.notify(f"Starting background load for {len(datasets_to_load)} dataset(s)...")
+            # Pass the list of datasets to the worker
+            self._add_multiple_datasets_worker(datasets_to_load)
+        else:
+             self.notify("No valid datasets found to load.", severity="warning")
+        datasets.deselect_all()
+
+    @work(thread=True, exclusive=True, group="dataset_loading")
+    async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
+        """
+        Worker thread to load multiple JSON files and update the tree safely.
+
+        Args:
+            datasets_info: A list of tuples, where each tuple contains
+                           (dataset_name, dataset_path).
+        """
+        tree_view: TreeView = self.query_one("#tree-container", TreeView)
+        tree: JSONTree = tree_view.query_one(JSONTree) 
+        worker = get_current_worker()
+        total_datasets = len(datasets_info)
+
+        for i, (ds_name, json_path) in enumerate(datasets_info):
+            if worker.is_cancelled:
+                self.app.call_from_thread(self.notify, "Dataset loading cancelled.")
+                break
+
+            self.app.call_from_thread(self.notify, f"Loading ({i+1}/{total_datasets}): {ds_name}")
+
+            try:
+                # Perform file I/O and JSON parsing in the worker thread
+                with open(json_path, mode="r", encoding="utf-8") as f:
+                    json_data_str = f.read()
+                json_data = json.loads(json_data_str)
+                cleaned_data = clean_string_values(json_data)
+
+                # Update UI from the main thread ---
+                # Define a helper function to perform the UI updates
+                def update_tree_ui(name: str, data: Dict[str, Any]):
+                    try:
+                        # Check if node already exists to prevent duplicates
+                        existing_labels = {node.label.plain for node in tree.root.children}
+                        if name not in existing_labels:
+                            new_node = tree.root.add(name) # Add the top-level node
+                            tree.add_node(name, new_node, data) # Populate the node recursively
+                            self.app.notify(f"Successfully added {name}")
+                        else:
+                             self.app.notify(f"Dataset '{name}' already exists in the tree. Skipping.", severity="warning")
+                    except Exception as ui_e:
+                         # Log UI update errors specifically
+                         logger.error(f"Error updating tree UI for {name}: {ui_e}")
+                         self.app.notify(f"Error adding {name} to UI: {ui_e}", severity="error")
+
+                # Schedule the UI update function to run on the main thread
+                self.app.call_from_thread(update_tree_ui, name=ds_name, data=cleaned_data)
+                # Take a power nap to allow UI thread processing time
+                await asyncio.sleep(0.05)
+
+            except FileNotFoundError:
+                 logger.error(f"File not found for dataset: {ds_name} at {json_path}")
+                 self.app.call_from_thread(self.notify, f"Error: File not found for {ds_name}", severity="error")
+            except json.JSONDecodeError as e:
+                logger.error(f"JSON parsing error for {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error parsing JSON for {ds_name}: {e}", severity="error")
+            except Exception as e:
+                # Catch other potential errors during file reading or processing
+                logger.error(f"Error loading dataset {ds_name}: {e}")
+                self.app.call_from_thread(self.notify, f"Error loading {ds_name}: {e}", severity="error", timeout=2)
+
+        self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
+
 
     #FUNCTION - run search
     def run_search(self) -> None:
@@ -613,6 +673,74 @@ class PaperSearch(App):
             #Reload SelectionList to include search results
             self.reload_datasets()
 
+    def search_arxiv(self):
+        #Load up search variables
+        variables = []
+        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
+        start_date = self.query_one("#input-arx-from", Input)._reactive_value
+        end_date_input = end_date = self.query_one("#input-arx-to", Input)
+        end_date = end_date_input._reactive_value
+        limit = self.query_one("#input-arx-limit", Input)._reactive_value
+        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
+        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
+        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
+        categories = self.query_one("#sl-arx-categories", SelectionList)
+        selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
+        root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{"_".join(ARXIV_SUBJECTS[subject].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
+
+        #bind the info together into a list
+        variables = [limit, field, date_range, subject]
+        if not all(self.is_numeric_string(str(var)) for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again")
+            return None
+
+        #Remap the variables with their values     
+        variables = {
+            "query"     : srch_text,
+            "limit"     : limit,
+            "field"     : ARXIV_FIELDS[field].lower(),
+            "subject"   : ARXIV_SUBJECTS[subject],
+            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            "dates"     : ARXIV_DATES[date_range],
+            "start_date": "",
+            "end_date"  : "",
+            "year"      : "",
+            "add_cat"   : False
+        }
+        
+        #TODO - Need to update the term searching to how they do it. 
+        #add an AND/OR button or someway to separate individual terms. 
+
+        if not end_date_input.disabled:
+            variables["start_date"] = start_date
+            variables["end_date"] = end_date
+        else:
+            if ARXIV_DATES[date_range] == "Specific Year":
+                variables["year"] = start_date
+
+        arxiv = ArxivSearch(variables)
+        json_data = arxiv.request_papers()
+        if json_data:
+            #TODO - Check to make sure False works here. 
+            #Select the Tree object
+            tree_view: TreeView = self.query_one("#tree-container", TreeView)
+            tree: Tree = tree_view.query_one(Tree)
+
+            try:
+                self.notify(f"{len(json_data)} papers found on arXiv")
+                #load the JSON into the Tree
+                self.load_data(tree, root_name, json_data)
+                #save the search
+                save_data(root_name, json_data)
+                logger.info(f"{len(json_data.keys())} papers found on arXiv")
+                self.reload_datasets()
+
+            except Exception as e:
+                logger.error(f"Failed to save search results: {e}")
+        else:
+            self.notify(f"No papers matched the search {variables['query']}")
+            logger.warning("An error occured in the arXiv request.  Check inputs as this is the last error gate")
+
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
@@ -650,5 +778,3 @@ class PaperSearch(App):
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
 # ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3
-#TODO - Create hover routine that fires after a SelectionEvent on the metric search.
-    #when hovering over the threshold box give a suggested threshold range for the selected metric. 

@@ -5,6 +5,9 @@ import logging
 import os
 import json
 import numpy as np
+import requests
+from bs4 import BeautifulSoup
+from dataclasses import dataclass
 from rich import print
 from rich.tree import Tree
 from rich.text import Text
@@ -103,6 +106,7 @@ def get_time():
     current_t_s = datetime.datetime.now().strftime("%m-%d-%Y-%H-%M-%S")
     current_t = datetime.datetime.strptime(current_t_s, "%m-%d-%Y-%H-%M-%S")
     return current_t
+
 ########################## Saving funcs ##########################################
 # #FUNCTION save results
 # def save_result(name:str, processed:pd.DataFrame, logger:logging):
@@ -265,16 +269,130 @@ class NumpyArrayEncoder(json.JSONEncoder):
         else:
             return super(NumpyArrayEncoder, self).default(obj)
     
-#FUNCTION save dictionary
+#FUNCTION Save JSON
 def save_data(search_name:str, data:dict):
     result_json = json.dumps(data, indent=2, cls=NumpyArrayEncoder)
     with open(f"./data/searches/{search_name}.json", "w") as outf:
         outf.write(result_json)
 
+#FUNCTION Load JSON
+def load_json(fp:str)->json:
+    """Loads the saved JSON arXiv categories
+
+    Args:
+        fp (str): File path for ze loading
+
+    Returns:
+        jsondata (JSON): dictionary version of saved JSON
+    """    
+    if os.path.exists(fp):
+        with open(fp, "r") as f:
+            jsondata = json.loads(f.read())
+            return jsondata	
+
+########################## Web functions ##########################################
+def get_categories(result:BeautifulSoup) -> dict:
+    """[Ingest XML of summary page for articles info]
+
+    Args:
+        result (BeautifulSoup object): html of apartments page
+
+    Returns:
+        categories (dict): [Dictionary of the arXiv categories]
+    """
+    #Base data container
+    categories = {}
+
+    #Iterate over taxonomy children
+    for child in result.contents:
+
+        #If its an H2 tag, its a category
+        if child.name == "h2":
+            key = child.text
+            categories[key] = {}
+            continue
+        #If its blank, skip it
+        elif child == '\n':
+            continue
+        #If its the body, extract the sub categories we want        
+        elif child.attrs.get("class")[0] == "accordion-body":
+            containers = child.find_all("div", class_="columns divided")
+            for subchild in containers:
+                code_search = subchild.find("h4")
+                code = code_search.text.split()[0].strip()
+                abb_search = subchild.find("span")
+                abb = abb_search.text.strip("()")
+                desc_search = subchild.find("p")
+                desc = desc_search.text.strip()
+                categories[key][code] = (abb, desc)
+
+    return categories
+
+def rebuild_taxonomy() -> dict:
+    url = "https://www.arxiv.org/category_taxonomy"
+    referrer = "https://info.arxiv.org/"
+    chrome_version = np.random.randint(120, 132)
+    headers = {
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+        'sec-ch-ua-mobile': '?1',
+        'sec-ch-ua-platform': '"Android"',
+        'referer': referrer,
+        'Content-Type': 'text/html,application/xhtml+xml,application/xml'
+    }
+    response = requests.get(url, headers=headers)
+    if response.status_code != 200:
+        logger.warning(f'Status code: {response.status_code}')
+        logger.warning(f'Reason: {response.reason}')
+        return None
+
+    #Parse the XML
+    bs4ob = BeautifulSoup(response.text, features="lxml")
+
+    #Find all the categories
+    results = bs4ob.find("div", {"id":"category_taxonomy_list"})
+    if results:
+        categories = get_categories(results)
+        logger.debug(f'categories successfully returned from {url}')
+        return categories
+            
+    else:
+        logger.warning(f"An error occured and categories could not be extracted. Check DOM for updated field names")
+
+def load_taxonomy(search:bool=False):
+    try:
+        if search:
+            categories = rebuild_taxonomy()
+            cat_json = json.dumps(categories, indent=2, cls=NumpyArrayEncoder)
+            with open(f"./data/conferences/arxiv_cat.json", "w") as outf:
+                outf.write(cat_json)
+            
+        else:
+            path = "./data/arxiv_cat.json"
+            if os.path.exists(path):
+                categories = load_json(path)
+            else:
+                logger.warning(f"An error occured loading the arx-cat.json file")
+
+        return categories 
+    
+    except Exception as e:
+        logger.warning("Arxiv Categories were not loaded properly")
+        logger.warning(f"Error: {e}")
+        logger.warning("To rebuild Taxonomy, set initial search variable to True")
+
 ########################## Global Variables for import ##########################################
+
+#logger/console stuffs
+date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
+console = Console(color_system="auto", stderr=True)
+logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log")
+
 #Confernces
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ICCV"] 
+SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
 #Metrics for asymetric similarity search
 SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
 MODEL_DESC = [
@@ -284,12 +402,8 @@ MODEL_DESC = [
     "Good for Asymetric Semantic Search.  Slower than above, but more accurate. Available for GPU",
     "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
-
-SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
-ARXIV_CATS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "arXiv author id" "ORCID"]
-ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering", "Mathematics", "Physics", "Quantitative Biology", "Quantiative Finance", "Statistics"]
+#arXiv Params
+ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID"]
+ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
-
-date_json = get_time().strftime("%m-%d-%Y_%H-%M-%S")
-console = Console(color_system="auto", stderr=True)
-logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log") 
+ARXIV_AREAS = load_taxonomy()
