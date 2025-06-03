@@ -342,7 +342,11 @@ def word2vec():
 
 def sbert(model_name:str):
     try:
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        gpu_count = torch.cuda.device_count()
+        if gpu_count > 1:
+            device = "cuda:0" if torch.cuda.is_available() else "cpu"
+        else:
+            device = "cuda" if torch.cuda.is_available() else "cpu"
         # device = "cpu"
         #Trained on a bunch of bing queries
         if model_name == "Marco": #Polooooooo.
