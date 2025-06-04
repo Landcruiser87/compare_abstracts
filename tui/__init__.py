@@ -144,16 +144,13 @@ class PaperSearch(App):
                             with RadioSet(id="radio-arx-cat", classes="header"):
                                 for cat in ARXIV_FIELDS:
                                     yield RadioButton(cat)
-
                             with RadioSet(id="radio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
                         with RadioSet(id="radio-arx-subjects", classes="header", tooltip="Leave categories (next section) blank to search all"):
                             for subject in ARXIV_SUBJECTS:
                                 yield RadioButton(subject)
-                        # yield SelectionList(*ARXIV_SUBJECTS, name="Subjects", id="arx-subjects")
                         yield SelectionList(name="Category", id="sl-arx-categories")
-
                         with Vertical(id="sub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results.  200 is the max you can request", id="input-arx-limit", type="integer")
                             yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
@@ -719,7 +716,7 @@ class PaperSearch(App):
                 variables["year"] = start_date
 
         arxiv = ArxivSearch(variables)
-        json_data, errors = arxiv.request_papers()
+        json_data, no_res_message = arxiv.request_papers()
         if json_data:
             #Select the Tree object
             tree_view: TreeView = self.query_one("#tree-container", TreeView)
@@ -735,8 +732,8 @@ class PaperSearch(App):
 
             except Exception as e:
                 logger.error(f"Failed to save search results: {e}")
-        elif errors:
-            self.notify(f"Error:\n{errors}", severity="error")
+        elif no_res_message:
+            self.notify(f"{no_res_message}", severity="warning")
         else:
             self.notify(f"No papers matched the search {variables['query']}", severity="warning")
             logger.warning(f"No papers found the search {variables['query']}")

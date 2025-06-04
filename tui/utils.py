@@ -207,9 +207,9 @@ class ArxivSearch(object):
             return new_papers, None
 
         else:
-            err_message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
-            logger.warning(err_message)
-            return None, err_message
+            message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
+            logger.warning(message)
+            return None, message
 
         # NOTE - Can only make a request every 3 seconds. 
         # NOTE - Don't feel like dealing with pagination so.  200 is the max request limit!
