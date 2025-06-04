@@ -184,24 +184,20 @@ class PaperSearch(App):
     @on(RadioSet.Changed, "#radio-models")
     def on_radio_models_changed(self, event: RadioSet.Changed) -> None:
         input_thres = self.query_one("#input-thres", Input)
+        met_range = "-1 to 1"
         if "Fuzzy" in event.pressed.label:
-            met_range = "-1 to 1"
             suggested = 0.25
             input_thres.tooltip = f"Input threshold\nFuzzy:{met_range}\nSuggested:{suggested}"
         elif "Cosine" in event.pressed.label:
-            met_range = "-1 to 1"
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nCosine: {met_range}\nSuggested:{suggested}"
         elif "Word2Vec" in event.pressed.label:
-            met_range = "-1 to 1"
             suggested = 0.85
             input_thres.tooltip = f"Input threshold\nWord2Vec: {met_range}\nSuggested:{suggested}"
         elif "Marco" in event.pressed.label:
-            met_range = "-1 to 1"
             suggested = 0.25
             input_thres.tooltip = f"Input threshold\nMarco: {met_range}\nSuggested:{suggested}"
         elif "Specter" in event.pressed.label:
-            met_range = "-1 to 1"
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
