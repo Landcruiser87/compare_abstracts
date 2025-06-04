@@ -7,7 +7,6 @@ import json
 import numpy as np
 import requests
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
 from rich import print
 from rich.tree import Tree
 from rich.text import Text

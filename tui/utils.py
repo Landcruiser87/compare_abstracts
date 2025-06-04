@@ -15,7 +15,7 @@ from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
-from support import logger, NumpyArrayEncoder
+from support import logger
 
 @dataclass
 class Paper:

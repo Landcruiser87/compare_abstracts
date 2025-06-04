@@ -1,12 +1,10 @@
 from __future__ import annotations
 import json
-from typing import Literal
 from rich.highlighter import ReprHighlighter
 from rich.text import Text
 from rich.pretty import pretty_repr
 from textual.app import ComposeResult
-from textual.containers import ScrollableContainer, Grid
-from textual.screen import ModalScreen
+from textual.containers import ScrollableContainer
 from textual.widget import Widget
 from textual.widgets import (
     Label,
@@ -16,7 +14,6 @@ from textual.widgets import (
 )
 from textual.widgets.tree import TreeNode
 from os import get_terminal_size
-from support import logger
 
 highlighter = ReprHighlighter()
 
