@@ -17,7 +17,7 @@ DEBUGPY_PORT = 5678
 
 def main():
     parser = argparse.ArgumentParser(
-        prog=__prog_name__, description="Json Tree for ML Conferences", epilog=f"v{__version__}"
+        prog=__prog_name__, description="ML_Tree. Exploring high quality machine learning papers", epilog=f"v{__version__}"
     )
 
     parser.add_argument(

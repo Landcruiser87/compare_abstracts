@@ -14,7 +14,7 @@ The purpose of this repo is to perform a yearly survey of major machine learning
 
 ## Disclaimer 
 
-Current product version is 0.3.2.  `__main__.py` in the TUI folder is operational.  Currently the only two working search models are `Fuzzy, Cosine, Word2vec, Marco and Specter`.  
+Current product version is 0.3.2.  `__main__.py` in the TUI folder is operational.  Current working search models are `Fuzzy, Cosine, Word2vec, Marco and Specter`.  
 The two search parameters that work best are `title and abstract` as those have the least amount of missing values.  (Scraping data isn't always perfect)
 
 ## Requirements
