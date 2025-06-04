@@ -99,6 +99,15 @@ Mac/Linux
 source .venv/bin/activate
 ```
 
+## Folder Setup
+
+While in root directory run commands below
+
+```terminal
+$ mkdir data/logs data/logs/scrape data/logs/tui searches
+$ mkdir data/searches data/models/marco data/models/specter
+```
+
 ### Installation with GPU
 To use your GPU, or not to use your GPU.  That is the question.  If you're lucky enough to have workhorse GPU on your rig, you might be inclined to use it when selecting the "Marco" and "Specter" models.  To do so requires... a few extra annoying steps.  Hopefully you bought into the NVIDIA hype and have one of their GPU's as most of pytorch's implmentations are based on the NVIDIA CUDA drivers.  
 
@@ -157,14 +166,6 @@ To view only top level library requirements
 poetry show -T
 ```
 
-## File Setup
-
-While in root directory run commands below
-
-```terminal
-$ mkdir data/logs data/logs/scrape data/logs/tui
-$ mkdir data/searches data/models/marco data/models/specter
-```
 
 ## Model setup
 If you'd like to use `word2vec` to do your asymetric semantic search, you'll need to do a few things before starting.  `In your terminal, with your environment activated` type the following in your terminal. This should install the model in your activated environment. You can check by looking for something like en_core_web_md-3.8.0.... in your .venv/Lib/site-packages folder.
