@@ -154,7 +154,7 @@ poetry lock
 poetry install --no-root
 ```
 
-This will read from the project.toml file that is included in this repo and install all necessary packagage versions.  Should other versions be needed, the project TOML file will be utilized and packages updated according to your system requirements. To view the current libraries installed
+This will read from the project.toml file that is included in this repo and install all necessary packgage versions.  Should other versions be needed, the project TOML file will be utilized and packages updated according to your system requirements. To view the current libraries installed
 
 ```terminal
 poetry show
