@@ -220,31 +220,3 @@ With the TUI running, it should look something like this.
 
 https://github.com/user-attachments/assets/b20b32c9-55f0-4e3b-a436-5571a47f9700
 
-
-# Project Todo list
-
-### Additional Tab's to add
-
-1. medarXiv / bioarXiv
-2. PubMed
-3. Local Zotero search
-
-### medarxiv / bioarxiv Tab
-
-1. Workflow
-  - Unsure at the current moment
-  - Likely a checkbox that can switch maybe between medarxiv and bioarxiv
-  - I think they have different inputs
-
-### Zotero Tab
-
-### Possible Features
-1. LLM Summarization Paper Summarization
-  - I bet gemini would be a good free use case
-2. Clustering Tab
-3. Gemma / Bert embedding
-   - Tsne
-   - Look at first two components to find the subject topics that are most in variation.
-4. Tom Arnold idea.  Build a graph network from the citations of each paper
-  - Analyze who is getting cited most often and driving a particular area of research.  Really like this!!
-5. Nate Idea. Summarize each year (or current datasets) to display top 'keywords' or 'hottest categories'.
