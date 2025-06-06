@@ -17,6 +17,8 @@ from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
 from support import logger
 
+
+################################# Classes #################################
 @dataclass
 class Paper:
     title   : str  | None = None
@@ -36,14 +38,6 @@ class ArxivSearch(object):
         self.params: dict = variables
         self.results: list = []
 
-    def is_a_date(self, datetext:str):
-        try:
-            datetime.datetime.strptime(datetext, "%Y-%m-%d")
-            return True
-        except Exception as e:
-            logger.warning(f"date extraction error.  Check inputs\n{e}")
-            return False
-        
     def date_format(self):
         self.params["dates"] = self.params["dates"].lower().split()
         self.params["dates"] = "_".join(self.params["dates"])
@@ -70,7 +64,7 @@ class ArxivSearch(object):
             start = self.params["start_date"]
             end = self.params["end_date"]
             for val in [start, end]:
-                if not self.is_a_date(val):
+                if not is_a_date(val):
                     logger.warning("Error in date formatting, please check inputs")
                     return False
             return True
@@ -166,8 +160,6 @@ class ArxivSearch(object):
         if not formatted or not classy:
             return None, "Error in formatting classification or date"
 
-        #NOTE - Might need to update this with separate terms.
-        #Eventually update this query to operate on multiple separate terms
         parameters = {
             'advanced': '',                        
             'terms-0-operator': 'AND',              
@@ -213,6 +205,57 @@ class ArxivSearch(object):
 
         # NOTE - Can only make a request every 3 seconds. 
         # NOTE - Don't feel like dealing with pagination so.  200 is the max request limit!
+
+
+class xRxivBase(object):
+    def __init__(
+        self,
+        variables:dict,
+        server: str, 
+        launchdt: str,
+        base_url: str = "https://api.medxiv.org",
+    ):
+        """Base clase for bioRxiv and medRxiv objects.  Thanks to jannisborn.  I borrowed alot of his class structure here. https://github.com/jannisborn/paperscraper/blob/main/paperscraper/xrxiv/xrxiv_api.py
+
+        Args:
+            variables (dict): _description_
+            server (str)    : _description_
+            launchdt (str)  : _description_
+            base_url (str)  : _description_. Defaults to "https://api.medxiv.org".
+        """    
+        self.params: dict = variables
+        self.results: list = []
+        self.server = server
+        self.launchdt = launchdt
+        self.base_url = base_url
+    def fun_funcs():
+        pass
+
+class bioRxiv(xRxivBase):
+    def __init__(self):
+        super.__init__(
+            server = "bioRxiv",
+            launchdt = "2013-01-01",
+            base_url = "https://api.biorxiv.org"
+        )
+
+class medRxiv(xRxivBase):
+    def __init__(self):
+        super.__init__(
+        server = "medRxiv",
+        launchdt = "2019-06-01",
+        base_url = "https://api.medrxiv.org"
+    )
+
+###############################  Date Functions ########################################
+def is_a_date(datetext:str):
+    try:
+        datetime.datetime.strptime(datetext, "%Y-%m-%d")
+        return True
+    except Exception as e:
+        logger.warning(f"date extraction error.  Check date format\n{e}")
+        return False
+
 
 #FUNCTION get time
 def get_c_time():

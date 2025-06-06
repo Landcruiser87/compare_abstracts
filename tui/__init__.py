@@ -41,7 +41,8 @@ from utils import (
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
+    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS, #arXiv vars
+    XARXIV_FIELDS, XARXIV_SEARCH, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -156,6 +157,35 @@ class PaperSearch(App):
                             yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
                             yield Input("Date To", tooltip="Ex: 2025-4-12", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
+
+                # Tab 5 - medRxiv / bioRXiv Search
+                with TabPane("Search BioRxiv|medRxiv", id="xarxiv-tab"):
+                    with Container(id="xsrch-arx-container"):
+                        yield Input("Type search here", id="xinput-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
+                        yield Static("Source\nDate Range", id="xhdr-arx-cat", classes="header")
+                        yield Static("Subject", id="xhdr-arx-sub", classes="header")
+                        yield Static("Category", id="xhdr-arx-date", classes="header")
+                        yield Static("Limits", id="xhdr-arx-limit", classes="header")
+                        with Vertical(id="xarx-radios"):
+                            with RadioSet(id="xradio-arx-source", classes="header"):
+                                for source in ["bioRxiv", "medRxiv", "both"]:
+                                    yield RadioButton(source)
+                            with RadioSet(id="xradio-arx-dates", classes="header"):
+                                for dfield in ARXIV_DATES:
+                                    yield RadioButton(dfield)
+                        with RadioSet(id="xradio-arx-cat", classes="header"):
+                            for cat in XARXIV_FIELDS:
+                                yield RadioButton(cat)
+                        with RadioSet(id="xradio-arx-fields", classes="header"):
+                            for field in XARXIV_SEARCH:
+                                yield RadioButton(field)
+                        yield SelectionList(name="Category", id="xsl-arx-categories")
+                        with Vertical(id="xsub-arx-limit"):
+                            yield Input("Result limit", tooltip="Limit the amount of returned results.  200 is the max you can request", id="xinput-arx-limit", type="integer")
+                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="xinput-arx-from", type="text")
+                            yield Input("Date To", tooltip="Ex: 2025-4-12", id="xinput-arx-to", type="text", disabled=True)
+                            yield Button("Search", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="xsearch-arxiv")
+
         yield Footer()
 
     #FUNCTION - onmount
@@ -272,7 +302,6 @@ class PaperSearch(App):
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name, new_node, json_data)
-
 
     #FUNCTION - Remove Data
     def remove_datasets(self) -> None:
@@ -771,3 +800,46 @@ class PaperSearch(App):
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
 # ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3
+
+bioRxiv =[
+    "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
+    "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",
+    "Clinical Trials", "Developmental Biology", "Ecology", "Epidemiology",
+    "Evolutionary Biology", "Genetics", "Genomics", "Immunology", "Microbiology", 
+    "Molecular Biology", "Neuroscience", "Paleontology", "Pathology", 
+    "Pharmacology and Toxicology", "Physiology", "Plant Biology", 
+    "Scientific Communication and Education", "Synthetic Biology", "Systems Biology", "Zoology"
+]
+
+medRxiv= [
+    "Addiction Medicine", "Allergy and Immunology", "Anesthesia",
+    "Cardiovascular Medicine", "Dentistry and Oral Medicine", "Dermatology",
+    "Emergency Medicine", "Endocrinology (including Diabetes Mellitus and Metabolic Disease)", 
+    "Epidemiology", "Forensic Medicine", "Gastroenterology", "Genetic and Genomic Medicine", "Geriatric Medicine",
+    "Health Economics", "Health Informatics", "Health Policy", 
+    "Health Systems and Quality Improvement", "Hematology", "HIV/AIDS", 
+    "Infectious Diseases (except HIV/AIDS)", "Intensive Care and Critical Care Medicine", "Medical Education",
+    "Medical Ethics", "Nephrology", "Neurology", "Nursing",
+    "Nutrition", "Obstetrics and Gynecology", "Occupational and Environmental Health",
+    "Oncology", "Ophthalmology", "Orthopedics", "Otolaryngology",
+    "Pain Medicine", "Palliative Medicine", "Pathology", "Pediatrics",
+    "Pharmacology and Therapeutics", "Primary Care Research", "Psychiatry and Clinical Psychology", 
+    "Public and Global Health", "Radiology and Imaging",
+    "Rehabilitation Medicine and Physical Therapy", "Respiratory Medicine",
+    "Rheumatology", "Sexual and Reproductive Health", "Sports Medicine",
+    "Surgery", "Toxicology", "Transplantation", "Urology"
+]
+
+    # 'https://www.medrxiv.org/search/'
+    # 'hemorrhagic%252Bshock%20'
+    # 'jcode%3Amedrxiv%20'
+    # 'subject_collection_code%3A'
+    # 'Cardiovascular%20Medicine%20'
+    # 'limit_from%3A'
+    # '2022-01-05%20'
+    # 'limit_to%3A'
+    # '2025-06-05%20'
+    # 'numresults%3A75%20'
+    # 'sort%3Arelevance-rank%20'
+    # 'format_result%3Astandard',
+    
