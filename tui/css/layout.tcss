@@ -382,7 +382,7 @@ Button {
     width: 1fr;
 }
 
-#xradio-arx-cat {
+#xradio-arx-fields {
     height: 1fr;
     width: 1fr;
 }

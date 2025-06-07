@@ -44,22 +44,18 @@ class ArxivSearch(object):
         self.params["submitted_date"] = datetime.datetime.today().date()
         self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
 
-        #Don't need logic for all_dates
-        #works
         if self.params["dates"] == "specific_year":
             start = self.params["year"]
             if len(start) == 4 and start.isdigit():
                 return True
             else:
                 return False
-        #works
         elif self.params["dates"] == "past_12_months":
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
             self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
             self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] = "past_12"
             return True
-        #doesn't work
         elif self.params["dates"] == "date_range":
             start = self.params["start_date"]
             end = self.params["end_date"]
@@ -68,7 +64,6 @@ class ArxivSearch(object):
                     logger.warning("Error in date formatting, please check inputs")
                     return False
             return True
-        #works
         elif self.params["dates"] == "all_dates":
             #NOTE come back and check the date format for here. 
             return True
@@ -206,46 +201,146 @@ class ArxivSearch(object):
         # NOTE - Can only make a request every 3 seconds. 
         # NOTE - Don't feel like dealing with pagination so.  200 is the max request limit!
 
-
 class xRxivBase(object):
     def __init__(
         self,
-        variables:dict,
-        server: str, 
+        server: str,
         launchdt: str,
         base_url: str = "https://api.medrxiv.org",
     ):
-        """Base clase for bioRxiv and medRxiv objects.  Thanks to jannisborn.  I borrowed alot of his class structure here. https://github.com/jannisborn/paperscraper/blob/main/paperscraper/xrxiv/xrxiv_api.py
-
-        Args:
-            variables (dict): _description_
-            server (str)    : _description_
-            launchdt (str)  : _description_
-            base_url (str)  : _description_. Defaults to "https://api.medrxiv.org".
-        """    
-        self.params  : dict = variables
-        self.results : list = []
         self.server  : str = server
-        self.launchdt: str = launchdt
+        self.launchdt = launchdt
         self.base_url: str = base_url
-        
-    def fun_funcs():
+        self.results : list = []
+    def _date_format(self):
+        self.params["dates"] = self.params["dates"].lower().split()
+        self.params["dates"] = "_".join(self.params["dates"])
+        self.params["submitted_date"] = datetime.datetime.today().date()
+        self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
+
+        if self.params["dates"] == "specific_year":
+            start = self.params["year"]
+            if len(start) == 4 and start.isdigit():
+                return True
+            else:
+                return False
+        elif self.params["dates"] == "past_12_months":
+            self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
+            self.params["end_date"] = self.params["submitted_date"]
+            self.params["dates"] = "past_12"
+            return True
+        elif self.params["dates"] == "date_range":
+            start = self.params["start_date"]
+            end = self.params["end_date"]
+            for val in [start, end]:
+                if not is_a_date(val):
+                    logger.warning("Error in date formatting, please check inputs")
+                    return False
+            return True
+        elif self.params["dates"] == "all_dates":
+            #NOTE come back and check the date format for here. 
+            return True
+    def _url_format(self):
         pass
+    
+        # 'https://www.medrxiv.org/search/'
+        # 'hemorrhagic%252Bshock%20'
+        # 'jcode%3Amedrxiv%20'
+        # 'subject_collection_code%3A'
+        # 'Cardiovascular%20Medicine%20'
+        # 'limit_from%3A'
+        # '2022-01-05%20'
+        # 'limit_to%3A'
+        # '2025-06-05%20'
+        # 'numresults%3A75%20'
+        # 'sort%3Arelevance-rank%20'
+        # 'format_result%3Astandard',
+    def _parse_query(self):
+        pass
+        #TODO build query for parsing 
+    def _query_xrxiv(self) -> dict:
+        chrome_version = np.random.randint(120, 135)
+        baseurl = self.base_url
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        #Input validation checks
+        formatted = self._date_format()
+        classy = self._url_format()
+        if not formatted or not classy:
+            return None, "Error in formatting classification or date"
+
+        parameters = {
+            "query":"",
+            "jcode":"",
+            "subject_collection_code":"",
+            "numresults":"75",
+            "sort":"relevance-rank",
+            "format_result":"standard"
+        }
+        'https://www.medrxiv.org/search/'
+        'hemorrhagic%252Bshock%20'
+        'jcode%3Amedrxiv%20'
+        'subject_collection_code%3AAddiction%20Medicine%2CCardiovascular%20Medicine%2CEmergency%20Medicine%20'
+        'numresults%3A75%20'
+        'sort%3Arelevance-rank%20'
+        'format_result%3Astandard',
+        
+        try:
+            response = requests.get(baseurl, headers=headers, params=parameters)
+            
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
+        
+        time.sleep(3) #Be nice to the servers
+        bs4ob = BeautifulSoup(response.content, "lxml")
+        results = bs4ob.find_all("li", {"class":"arxiv-result"})
+        if results:
+            logger.info(f'{len(results)} papers returned from arxiv searching {self.params["query"]}')
+            new_papers = self._parse_query(results)
+            return new_papers, None
+
+        else:
+            message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
+            logger.warning(message)
+            return None, message
 
 class bioRxiv(xRxivBase):
-    def __init__(self):
-        super.__init__(
+    def __init__(self, variables:dict):
+        super().__init__(
             server = "bioRxiv",
             launchdt = "2013-01-01",
-            base_url = "https://api.biorxiv.org"
+            base_url = "https://api.biorxiv.org",
+            params = variables
         )
 
 class medRxiv(xRxivBase):
-    def __init__(self):
-        super.__init__(
-        server = "medRxiv",
-        launchdt = "2019-06-01",
-        base_url = "https://api.medrxiv.org"
+    def __init__(self, variables:dict):
+        super().__init__(
+            server = "medRxiv",
+            launchdt = "2019-06-01",
+            base_url = "https://api.medrxiv.org",
+            params = variables
     )
 
 ###############################  Date Functions ########################################

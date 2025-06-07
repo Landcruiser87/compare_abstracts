@@ -33,16 +33,16 @@ from textual.widgets.tree import TreeNode
 from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
-    ArxivSearch,sbert,word2vec,
-    tfidf,get_c_time,clean_text,
-    cosine_similarity,clean_string_values
+    ArxivSearch, bioRxiv, medRxiv,
+    cosine_similarity, sbert, word2vec, 
+    tfidf, get_c_time,clean_text, clean_string_values
 )
 
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
     ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS, #arXiv vars
-    XARXIV_SEARCH, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
+    XARXIV_SOURCES, XARXIV_FIELDS, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -134,7 +134,7 @@ class PaperSearch(App):
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
                 # Tab 4 - arXiv Search
-                with TabPane("Search arXiv", id="arxiv-tab"):
+                with TabPane("arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
                         yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Search Field\nDate Range", id="hdr-arx-cat", classes="header")
@@ -159,30 +159,28 @@ class PaperSearch(App):
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
 
                 # Tab 5 - medRxiv / bioRXiv Search
-                with TabPane("Search BioRxiv|medRxiv", id="xarxiv-tab"):
+                with TabPane("bioRxiv|medRxiv", id="xarxiv-tab"):
                     with Container(id="xsrch-arx-container"):
                         yield Input("Type search here", id="xinput-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Source\nDate Range", id="xhdr-arx-cat", classes="header")
                         yield Static("Search Fields", id="xhdr-arx-sub", classes="header")
                         yield Static("Category", id="xhdr-arx-date", classes="header")
                         yield Static("Limits", id="xhdr-arx-limit", classes="header")
-                        with Vertical(id="xarx-radios-1"):
+                        with Vertical(id="xarx-radios"):
                             with RadioSet(id="xradio-arx-source", classes="header"):
-                                for source in ["bioRxiv", "medRxiv", "both"]:
+                                for source in XARXIV_SOURCES:
                                     yield RadioButton(source)
                             with RadioSet(id="xradio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
-                        with RadioSet(id="xradio-arx-cat", classes="header"):
-                            [ARXIV_FIELDS.pop(4) for x in range(2)]
-                            ARXIV_FIELDS.extend(XARXIV_SEARCH)
-                            for cat in ARXIV_FIELDS:
-                                yield RadioButton(cat)
+                        with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Category blank to search all categories"):
+                            for field in XARXIV_FIELDS:
+                                yield RadioButton(field)
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
-                            yield Input("Result limit", tooltip="Limit the amount of returned results.  200 is the max you can request", id="xinput-arx-limit", type="integer")
-                            yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="xinput-arx-from", type="text")
-                            yield Input("Date To", tooltip="Ex: 2025-4-12", id="xinput-arx-to", type="text", disabled=True)
+                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Limit the amount of returned results.  75 is the max you can request", type="integer")
+                            yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
+                            yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
                             yield Button("Search", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="xsearch-arxiv")
 
         yield Footer()
@@ -230,7 +228,6 @@ class PaperSearch(App):
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
-
     @on(RadioSet.Changed, "#radio-arx-dates")
     def on_radioset_arx_dates_changed(self, event: RadioSet.Changed) -> None:
         dateto = self.query_one("#input-arx-to", Input)
@@ -238,7 +235,6 @@ class PaperSearch(App):
             dateto.disabled = False
         else:
             dateto.disabled = True
-
 
     @on(RadioSet.Changed, "#radio-arx-subjects")
     def on_radio_subjects_changed(self, event: RadioSet.Changed) -> None:
@@ -251,7 +247,6 @@ class PaperSearch(App):
                 categories.add_options(codes)
                 break
 
-
     @on(RadioSet.Changed, "#xradio-arx-source")
     def on_radio_source_changed(self, event: RadioSet.Changed) -> None:
         categories = self.query_one("#xsl-arx-categories", SelectionList)
@@ -261,8 +256,8 @@ class PaperSearch(App):
             codes = [Selection(y, x, False) for x, y in enumerate(BIOARXIV_SUBJECTS)]
         elif pressed == "medRxiv":
             codes = [Selection(y, x, False) for x, y in enumerate(MEDARXIV_SUBJECTS)]
-        #TODO - What do do for both?
-            #manually map out a permanent url from xrxiv
+        elif pressed == "both":
+            codes = [Selection("all", 0, True)]
         categories.add_options(codes)
 
     #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
@@ -283,7 +278,7 @@ class PaperSearch(App):
         categories = self.query_one("#sl-arx-categories", SelectionList)
         if event.selection_list.selected:
             selected = getattr(categories.options[event.selection_list.selected[-1]].prompt, '_text', None)
-            tips = [[(k2, v2) for k2, v2 in v2.items() if k2==selected[0]] for _, v2 in ARXIV_AREAS.items()]
+            tips = [[(k2, v2) for k2, v2 in v1.items() if k2==selected[0]] for _, v1 in ARXIV_AREAS.items()]
             tips = list(filter(None, tips))
             categories.tooltip = tips[0][0][0]+ "\n" + "\n".join(tips[0][0][1])
         else:
@@ -304,6 +299,10 @@ class PaperSearch(App):
     @on(Button.Pressed, "#search-arxiv")
     def arxiv_button_event(self):
         self.search_arxiv()
+
+    @on(Button.Pressed, "#xsearch-arxiv")
+    def xarxiv_button_event(self):
+        self.search_xrxiv()
 
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
@@ -471,7 +470,7 @@ class PaperSearch(App):
                 sims, paper_names = self.launch_sbert(srch_text, field, node, metric)
             else:
                 self.app.notify("Something broke", severity="error")
-                raise ValueError("Something broke, check me! Line 412")
+                raise ValueError("Something broke, check me! Line 474")
             arr = np.array(sims, dtype=np.float32)
             qual_indexes = np.where(arr >= threshold)[0]
             if qual_indexes.shape[0] > 0:
@@ -776,6 +775,78 @@ class PaperSearch(App):
             self.notify(f"No papers matched the search {variables['query']}", severity="warning")
             logger.warning(f"No papers found the search {variables['query']}")
 
+    def search_xrxiv(self):
+        #Load up search variables
+        variables = []
+        srch_text = self.query_one("#xinput-arxiv", Input)._reactive_value
+        start_date = self.query_one("#xinput-arx-from", Input)._reactive_value
+        end_date_input = end_date = self.query_one("#xinput-arx-to", Input)
+        end_date = end_date_input._reactive_value
+        limit = self.query_one("#xinput-arx-limit", Input)._reactive_value
+        source = self.query_one("#xradio-arx-source", RadioSet)._reactive__selected
+        date_range = self.query_one("#xradio-arx-dates", RadioSet)._reactive__selected
+        field = self.query_one("#xradio-arx-fields", RadioSet)._reactive__selected
+        categories = self.query_one("#xsl-arx-categories", SelectionList)
+        selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
+        
+        #bind the info together into a list
+        variables = [limit, field, date_range]
+        if not all(self.is_numeric_string(str(var)) for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
+            return None
+
+        #Remap the variables with their values     
+        variables = {
+            "query"     : srch_text,
+            "limit"     : limit,
+            "field"     : XARXIV_FIELDS[field].lower(),
+            "source"    : XARXIV_SOURCES[source],
+            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            "dates"     : ARXIV_DATES[date_range],
+            "start_date": "",
+            "end_date"  : "",
+            "year"      : "",
+            "add_cat"   : False
+        }
+        
+        if not end_date_input.disabled:
+            variables["start_date"] = start_date
+            variables["end_date"] = end_date
+        else:
+            if ARXIV_DATES[date_range] == "Specific Year":
+                variables["year"] = start_date
+        
+        if variables["source"] == "medRxiv":
+            variables["subjects"] = MEDARXIV_SUBJECTS
+            rxiv = medRxiv(variables)
+
+        elif variables["source"] == "bioRxiv":
+            variables["subjects"] = BIOARXIV_SUBJECTS
+            rxiv = bioRxiv(variables)
+        
+        root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{"_".join(variables["subjects"][selected_cat].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
+        json_data, no_res_message = rxiv._query_xrxiv()
+        if json_data:
+            #Select the Tree object
+            tree_view: TreeView = self.query_one("#tree-container", TreeView)
+            tree: Tree = tree_view.query_one(Tree)
+
+            try:
+                self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]} in subject {variables["subject"]}")
+                #load the JSON into the Tree
+                self.load_data(tree, root_name, json_data)
+                #save the search
+                save_data(root_name, json_data)
+                self.reload_datasets()
+
+            except Exception as e:
+                logger.error(f"Failed to save search results: {e}")
+        elif no_res_message:
+            self.notify(f"{no_res_message}", severity="warning")
+        else:
+            self.notify(f"No papers matched the search {variables['query']}", severity="warning")
+            logger.warning(f"No papers found the search {variables['query']}")
+    
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
@@ -813,46 +884,3 @@ class PaperSearch(App):
         tree: JSONTree = tree_view.query_one(JSONTree) 
         tree.show_root = not tree.show_root
 # ref https://www.newscatcherapi.com/blog/ultimate-guide-to-text-similarity-with-python#toc-3
-
-bioRxiv =[
-    "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
-    "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",
-    "Clinical Trials", "Developmental Biology", "Ecology", "Epidemiology",
-    "Evolutionary Biology", "Genetics", "Genomics", "Immunology", "Microbiology", 
-    "Molecular Biology", "Neuroscience", "Paleontology", "Pathology", 
-    "Pharmacology and Toxicology", "Physiology", "Plant Biology", 
-    "Scientific Communication and Education", "Synthetic Biology", "Systems Biology", "Zoology"
-]
-
-medRxiv= [
-    "Addiction Medicine", "Allergy and Immunology", "Anesthesia",
-    "Cardiovascular Medicine", "Dentistry and Oral Medicine", "Dermatology",
-    "Emergency Medicine", "Endocrinology (including Diabetes Mellitus and Metabolic Disease)", 
-    "Epidemiology", "Forensic Medicine", "Gastroenterology", "Genetic and Genomic Medicine", "Geriatric Medicine",
-    "Health Economics", "Health Informatics", "Health Policy", 
-    "Health Systems and Quality Improvement", "Hematology", "HIV/AIDS", 
-    "Infectious Diseases (except HIV/AIDS)", "Intensive Care and Critical Care Medicine", "Medical Education",
-    "Medical Ethics", "Nephrology", "Neurology", "Nursing",
-    "Nutrition", "Obstetrics and Gynecology", "Occupational and Environmental Health",
-    "Oncology", "Ophthalmology", "Orthopedics", "Otolaryngology",
-    "Pain Medicine", "Palliative Medicine", "Pathology", "Pediatrics",
-    "Pharmacology and Therapeutics", "Primary Care Research", "Psychiatry and Clinical Psychology", 
-    "Public and Global Health", "Radiology and Imaging",
-    "Rehabilitation Medicine and Physical Therapy", "Respiratory Medicine",
-    "Rheumatology", "Sexual and Reproductive Health", "Sports Medicine",
-    "Surgery", "Toxicology", "Transplantation", "Urology"
-]
-
-    # 'https://www.medrxiv.org/search/'
-    # 'hemorrhagic%252Bshock%20'
-    # 'jcode%3Amedrxiv%20'
-    # 'subject_collection_code%3A'
-    # 'Cardiovascular%20Medicine%20'
-    # 'limit_from%3A'
-    # '2022-01-05%20'
-    # 'limit_to%3A'
-    # '2025-06-05%20'
-    # 'numresults%3A75%20'
-    # 'sort%3Arelevance-rank%20'
-    # 'format_result%3Astandard',
-    

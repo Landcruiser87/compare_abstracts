@@ -162,7 +162,7 @@ def launch_tui():
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
-    file_choice = console.input(f"{question}")
+    file_choice = "8"#console.input(f"{question}")
     if file_choice.isnumeric():
         file_to_load = files[int(file_choice) - 1]
         #check output directory exists
@@ -402,12 +402,15 @@ MODEL_DESC = [
     "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
 #arXiv Params
-ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID", "DOI"]
+ARXIV_FIELDS = ["Title", "Abstract", "Author(s)",  "Comments", "DOI", "arXiv id", "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 ARXIV_AREAS = load_taxonomy()
 
-XARXIV_SEARCH =  ["Abstract", "Abstract|Title", "Abst|Title|Text"]
+XARXIV_FIELDS = ARXIV_FIELDS.copy()
+[XARXIV_FIELDS.insert(2, x) for x in ["Abst|Title|Text", "Abstract|Title"]]
+XARXIV_FIELDS = XARXIV_FIELDS[:-2]
+XARXIV_SOURCES = ["bioRxiv", "medRxiv", "both"]
 BIOARXIV_SUBJECTS =[
     "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
     "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",
