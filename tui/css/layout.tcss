@@ -324,7 +324,7 @@ Button {
 #xsrch-arx-container {
     layout: grid;
     grid-size: 4 3;
-    grid-columns: 1fr 1fr 1fr 1fr;
+    grid-columns: 0.8fr 0.9fr 1.3fr 0.9fr;
     grid-rows: 0.6fr 0.4fr 1.4fr;
     border: rebeccapurple;
     background: $panel;
@@ -373,26 +373,24 @@ Button {
 }
 
 #xradio-arx-source {
-    height: 0.4fr;
+    height: 0.5fr;
     width: 1fr;
 }
 
 #xradio-arx-dates {
-    height: 0.4fr;
+    height: 0.5fr;
     width: 1fr;
 }
 
 #xradio-arx-cat {
-    height: 0.5fr;
+    height: 1fr;
     width: 1fr;
-    margin-bottom:1;
 }
 
 #xradio-arx-fields {
     height: 1fr;
     width: 1fr;
 }
-
 
 #xsl-arx-categories {
     height: 1fr;

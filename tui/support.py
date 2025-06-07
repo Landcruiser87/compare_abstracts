@@ -402,13 +402,12 @@ MODEL_DESC = [
     "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
 #arXiv Params
-ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID"]
+ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID", "DOI"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 ARXIV_AREAS = load_taxonomy()
 
-XARXIV_SEARCH =  ["Abstract", "Abstract & Title", "Abstract & Title & Full Text"]
-XARXIV_FIELDS = ARXIV_FIELDS.append("DOI")
+XARXIV_SEARCH =  ["Abstract", "Abstract|Title", "Abst|Title|Text"]
 BIOARXIV_SUBJECTS =[
     "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
     "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",

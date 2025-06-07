@@ -42,7 +42,7 @@ from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
     ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS, #arXiv vars
-    XARXIV_FIELDS, XARXIV_SEARCH, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
+    XARXIV_SEARCH, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -163,10 +163,10 @@ class PaperSearch(App):
                     with Container(id="xsrch-arx-container"):
                         yield Input("Type search here", id="xinput-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Source\nDate Range", id="xhdr-arx-cat", classes="header")
-                        yield Static("Subject", id="xhdr-arx-sub", classes="header")
+                        yield Static("Search Fields", id="xhdr-arx-sub", classes="header")
                         yield Static("Category", id="xhdr-arx-date", classes="header")
                         yield Static("Limits", id="xhdr-arx-limit", classes="header")
-                        with Vertical(id="xarx-radios"):
+                        with Vertical(id="xarx-radios-1"):
                             with RadioSet(id="xradio-arx-source", classes="header"):
                                 for source in ["bioRxiv", "medRxiv", "both"]:
                                     yield RadioButton(source)
@@ -174,11 +174,10 @@ class PaperSearch(App):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
                         with RadioSet(id="xradio-arx-cat", classes="header"):
-                            for cat in XARXIV_FIELDS:
+                            [ARXIV_FIELDS.pop(4) for x in range(2)]
+                            ARXIV_FIELDS.extend(XARXIV_SEARCH)
+                            for cat in ARXIV_FIELDS:
                                 yield RadioButton(cat)
-                        with RadioSet(id="xradio-arx-fields", classes="header"):
-                            for field in XARXIV_SEARCH:
-                                yield RadioButton(field)
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
                             yield Input("Result limit", tooltip="Limit the amount of returned results.  200 is the max you can request", id="xinput-arx-limit", type="integer")
@@ -251,6 +250,20 @@ class PaperSearch(App):
                 codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
                 categories.add_options(codes)
                 break
+
+
+    @on(RadioSet.Changed, "#xradio-arx-source")
+    def on_radio_source_changed(self, event: RadioSet.Changed) -> None:
+        categories = self.query_one("#xsl-arx-categories", SelectionList)
+        categories.clear_options()
+        pressed = getattr(event.pressed.label, '_text', None)[0]
+        if pressed == "bioRxiv":
+            codes = [Selection(y, x, False) for x, y in enumerate(BIOARXIV_SUBJECTS)]
+        elif pressed == "medRxiv":
+            codes = [Selection(y, x, False) for x, y in enumerate(MEDARXIV_SUBJECTS)]
+        #TODO - What do do for both?
+            #manually map out a permanent url from xrxiv
+        categories.add_options(codes)
 
     #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
     # @on(SelectionList.SelectionHighlighted, "#arx-subjects")

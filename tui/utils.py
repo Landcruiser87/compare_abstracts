@@ -213,7 +213,7 @@ class xRxivBase(object):
         variables:dict,
         server: str, 
         launchdt: str,
-        base_url: str = "https://api.medxiv.org",
+        base_url: str = "https://api.medrxiv.org",
     ):
         """Base clase for bioRxiv and medRxiv objects.  Thanks to jannisborn.  I borrowed alot of his class structure here. https://github.com/jannisborn/paperscraper/blob/main/paperscraper/xrxiv/xrxiv_api.py
 
@@ -221,13 +221,14 @@ class xRxivBase(object):
             variables (dict): _description_
             server (str)    : _description_
             launchdt (str)  : _description_
-            base_url (str)  : _description_. Defaults to "https://api.medxiv.org".
+            base_url (str)  : _description_. Defaults to "https://api.medrxiv.org".
         """    
-        self.params: dict = variables
-        self.results: list = []
-        self.server = server
-        self.launchdt = launchdt
-        self.base_url = base_url
+        self.params  : dict = variables
+        self.results : list = []
+        self.server  : str = server
+        self.launchdt: str = launchdt
+        self.base_url: str = base_url
+        
     def fun_funcs():
         pass
 
