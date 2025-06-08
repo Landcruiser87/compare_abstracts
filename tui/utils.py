@@ -206,12 +206,17 @@ class xRxivBase(object):
         self,
         server: str,
         launchdt: str,
+        params: dict,
         base_url: str = "https://api.medrxiv.org",
+        
     ):
         self.server  : str = server
         self.launchdt = launchdt
-        self.base_url: str = base_url
+        self.params = params
+        self.base_url = base_url
         self.results : list = []
+        self.cursor : int = 0
+
     def _date_format(self):
         self.params["dates"] = self.params["dates"].lower().split()
         self.params["dates"] = "_".join(self.params["dates"])
@@ -221,6 +226,11 @@ class xRxivBase(object):
         if self.params["dates"] == "specific_year":
             start = self.params["year"]
             if len(start) == 4 and start.isdigit():
+                self.params["start_date"] = f"{start}-01-01"
+                if self.params["submitted_date"][:4] == start:
+                    self.params["end_date"] = self.params["submitted_date"]
+                else:
+                    self.params["end_date"] = f"{self.params["year"]}-12-31"
                 return True
             else:
                 return False
@@ -239,26 +249,10 @@ class xRxivBase(object):
                     return False
             return True
         elif self.params["dates"] == "all_dates":
-            #NOTE come back and check the date format for here. 
+            self.params["start_date"] = self.launchdt
+            self.params["end_date"] = self.params["submitted_date"]
             return True
-    def _url_format(self):
-        pass
-    
-        # 'https://www.medrxiv.org/search/'
-        # 'hemorrhagic%252Bshock%20'
-        # 'jcode%3Amedrxiv%20'
-        # 'subject_collection_code%3A'
-        # 'Cardiovascular%20Medicine%20'
-        # 'limit_from%3A'
-        # '2022-01-05%20'
-        # 'limit_to%3A'
-        # '2025-06-05%20'
-        # 'numresults%3A75%20'
-        # 'sort%3Arelevance-rank%20'
-        # 'format_result%3Astandard',
-    def _parse_query(self):
-        pass
-        #TODO build query for parsing 
+        
     def _query_xrxiv(self) -> dict:
         chrome_version = np.random.randint(120, 135)
         baseurl = self.base_url
@@ -283,26 +277,10 @@ class xRxivBase(object):
         formatted = self._date_format()
         classy = self._url_format()
         if not formatted or not classy:
-            return None, "Error in formatting classification or date"
+            return None, "Error in formatting date or url"
 
-        parameters = {
-            "query":"",
-            "jcode":"",
-            "subject_collection_code":"",
-            "numresults":"75",
-            "sort":"relevance-rank",
-            "format_result":"standard"
-        }
-        'https://www.medrxiv.org/search/'
-        'hemorrhagic%252Bshock%20'
-        'jcode%3Amedrxiv%20'
-        'subject_collection_code%3AAddiction%20Medicine%2CCardiovascular%20Medicine%2CEmergency%20Medicine%20'
-        'numresults%3A75%20'
-        'sort%3Arelevance-rank%20'
-        'format_result%3Astandard',
-        
         try:
-            response = requests.get(baseurl, headers=headers, params=parameters)
+            response = requests.get(baseurl, headers=headers, params=self.query_params)
             
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -324,6 +302,73 @@ class xRxivBase(object):
             message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
             logger.warning(message)
             return None, message
+
+    def _url_format(self):
+        query_params = {
+            "query":self.params["query"],
+            "jcode":self.params["source"],
+            "numresults":self.params["limit"],
+            "sort":"relevance-rank",
+            "format_result":"standard"
+        }
+        try:
+            if self.params["add_cat"]:
+                query_params["subject_collection_code"] = self.params["categories"]
+            if self.params["start_date"]:
+                query_params["limit_from"] = self.params["start_date"]
+            if self.params["end_date"]:
+                query_params["limit_to"] = self.params["end_date"]
+            # self.query_params = query_params
+            # self.query_encoded = self.params["baseurl"] + urlencode(query_params)
+            self.query_formatted = (
+                f"{self.base_url}" + "/details/"
+                f"{self.params['source']}/"
+                f"{self.params['start_date']}/{self.params['end_date']}"
+                f"{self.cursor}"
+                "/JSON"
+            )
+            return True
+
+        # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
+            # servers = duh
+            # interval - Date format whiiich looks like dates separated by /
+            # cursor - page iteration
+            # format - JSON or XML.  Json it is!
+        # https://api.medrxiv.org/details/[server]/[DOI]/na/[format]
+
+        except Exception as e:
+            logger.warning("Error in url query formatting")
+            return False
+
+    def _parse_query(self, results:list):
+        #Parse with the soups.
+        #NOTE - abstracts
+            #Also, i'm not sure the abstract gets returned so you may have to individually
+            #crawl each paper.  (not ideal)
+        paper_dict = {"search_params":self.params}
+        for idx, result in enumerate(results):
+            paper = Paper()
+            #Get the URL
+            url = result.find("p", {"class":"list-title is-inline-block"})
+            paper.url = url.select("a")[0].get('href')
+            #Grab title
+            paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
+            paper.id = str(idx) + "_" + paper.title
+            #Grab authors
+            authors = result.find("p", {"class":"authors"})
+            if authors != None:
+                paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
+            #Abstract
+            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()[:-15]
+            categories = result.find("div", attrs={"class":"tags is-inline-block"})
+            if categories != None:
+                paper.category = categories.text.split()
+
+            comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+            if comments != None:
+                comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                if comment_ != None:
+                    paper.supplemental = comment_.text
 
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict):

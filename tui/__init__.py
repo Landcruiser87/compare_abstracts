@@ -815,7 +815,13 @@ class PaperSearch(App):
         else:
             if ARXIV_DATES[date_range] == "Specific Year":
                 variables["year"] = start_date
-        
+
+        if selected_cat:
+            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{"_".join(variables["subjects"][selected_cat].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
+            variables["add_cat"] = True
+        else:
+            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
+
         if variables["source"] == "medRxiv":
             variables["subjects"] = MEDARXIV_SUBJECTS
             rxiv = medRxiv(variables)
@@ -823,11 +829,9 @@ class PaperSearch(App):
         elif variables["source"] == "bioRxiv":
             variables["subjects"] = BIOARXIV_SUBJECTS
             rxiv = bioRxiv(variables)
-        
-        root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{"_".join(variables["subjects"][selected_cat].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
+
         json_data, no_res_message = rxiv._query_xrxiv()
         if json_data:
-            #Select the Tree object
             tree_view: TreeView = self.query_one("#tree-container", TreeView)
             tree: Tree = tree_view.query_one(Tree)
 
@@ -845,7 +849,7 @@ class PaperSearch(App):
             self.notify(f"{no_res_message}", severity="warning")
         else:
             self.notify(f"No papers matched the search {variables['query']}", severity="warning")
-            logger.warning(f"No papers found the search {variables['query']}")
+            logger.warning(f"No papers found the search {variables}")
     
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

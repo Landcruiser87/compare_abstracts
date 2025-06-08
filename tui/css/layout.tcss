@@ -284,7 +284,6 @@ Button {
 
 #input-arx-limit {
     border: magenta 50%;
-    height: 1fr;
     margin-right: 1;
     margin-left: 1;
     content-align: center middle;
@@ -293,7 +292,6 @@ Button {
 #input-arx-from {
     border: magenta 50%;
     width: 1fr;
-    height: 1fr;
     margin-right: 1;
     margin-left: 1;
     content-align: center middle;
@@ -404,7 +402,6 @@ Button {
 
 #xinput-arx-limit {
     border: magenta 50%;
-    height: 1fr;
     margin-right: 1;
     margin-left: 1;
     content-align: center middle;
@@ -413,7 +410,6 @@ Button {
 #xinput-arx-from {
     border: magenta 50%;
     width: 1fr;
-    height: 1fr;
     margin-right: 1;
     margin-left: 1;
     content-align: center middle;
