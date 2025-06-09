@@ -332,31 +332,29 @@ class xRxivBase(object):
             query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
             self.query_formatted = self.base_url + search + quote(query_f1)
             return True
-
-            # https://www.biorxiv.org/search/ivabradine%20
-            # jcode%3Abiorxiv%20
-            # subject_collection_code%3AClinical%20Trials%20
-            # limit_from%3A2024-02-06%20
-            # limit_to%3A2025-06-09%20
-            # numresults%3A75%20
-            # sort%3Arelevance-rank%20
-            # format_result%3Astandard
-            
-            # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
-                # servers = duh
-                # interval - Date format whiiich looks like dates separated by /
-                # cursor - page iteration
-                # format - JSON or XML.  Json it is!
-            
-            # self.query_formatted = (
-            #     f"{self.base_url}" + "/details/"
-            #     f"{self.params['source'].lower()}/"
-            #     f"{self.params['start_date']}/{self.params['end_date']}/"
-            #     f"{self.cursor}/"
-            #     "JSON"
-            # )
-
-            # https://api.medrxiv.org/details/[server]/[DOI]/na/[format]
+            #NOTE: API
+                #I find it hilarious that neither xrxiv left in a space in their api
+                #to actually saerch the api as opposed to just dumping the lastest 
+                #100 papers to be submitted.  Because of this idiocy, we will have 
+                #to use the advanced search endpoint and parse the resultant 
+                #html.  This also means we need to scrape each url because the
+                #fundamental abstract data won't be present.  ugh.  idiots
+                
+                #api structure
+                # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
+                    # servers = duh
+                    # interval - Date format whiiich looks like dates separated by /
+                    # cursor - page iteration
+                    # format - JSON or XML.  Json it is!
+                #advancedsearch structure
+                # https://www.biorxiv.org/search/anomaly%20
+                # jcode%3Abiorxiv%20
+                # subject_collection_code%3AClinical%20Trials%20
+                # limit_from%3A2024-02-06%20
+                # limit_to%3A2025-06-09%20
+                # numresults%3A75%20
+                # sort%3Arelevance-rank%20
+                # format_result%3Astandard
 
         except Exception as e:
             logger.warning("Error in url query formatting")
