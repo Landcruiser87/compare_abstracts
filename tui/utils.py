@@ -301,10 +301,11 @@ class xRxivBase(object):
                 return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
             pcount = paper_count.text.split()[0]
             pcount = int("".join(x for x in pcount if x.isnumeric()))
-        
+            self.paper_count = pcount 
+
         if pcount:
-            results = bs4ob.select("ul", {"class":"highwire-search-summary"})
-            new_papers = self._parse_query(results)
+            
+            new_papers = self._parse_query(bs4ob)
             logger.info(f'{len(new_papers)} papers returned from arxiv searching {self.params["query"]}')
             return new_papers, None
 
@@ -339,7 +340,10 @@ class xRxivBase(object):
                 #to use the advanced search endpoint and parse the resultant 
                 #html.  This also means we need to scrape each url because the
                 #fundamental abstract data won't be present.  ugh.  idiots
-                
+                #TODO: Adapt SearchProgress progressbar
+                    #I'll need a progress bar now if this 
+                    #is going to take forever. 
+
                 #api structure
                 # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
                     # servers = duh
@@ -360,12 +364,13 @@ class xRxivBase(object):
             logger.warning("Error in url query formatting")
             return False
 
-    def _parse_query(self, results:list):
+    def _parse_query(self, bs4ob:BeautifulSoup):
         #Parse with the soups.
-        #NOTE - abstracts
-            #Also, i'm not sure the abstract gets returned so you may have to individually
-            #crawl each paper.  (not ideal)
+        totalpapers = self.paper_count
+        limit = self.params["limit"]
+        results = bs4ob.find("ul", {"class":"highwire-search-results-list"})
         paper_dict = {"search_params":self.params}
+        papers = results.find_all("li", "")
         for idx, result in enumerate(results):
             paper = Paper()
             #Get the URL

@@ -788,8 +788,12 @@ class PaperSearch(App):
         field = self.query_one("#xradio-arx-fields", RadioSet)._reactive__selected
         categories = self.query_one("#xsl-arx-categories", SelectionList)
         selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
-        
-        #bind the info together into a list
+        #NOTE: Going to need a progress bar here.. sooooo
+        #implement a similar function run_search.
+            #Meaning you'll also need the async func of _search_datasets_worker
+            #but for individual paper pulls.  
+            
+        #Check input validity (should all be ints)
         variables = [source, limit, field, date_range]
         if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
