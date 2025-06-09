@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import torch
 import time
+from urllib.parse import urlencode
 from dataclasses import dataclass, asdict, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
 from bs4 import BeautifulSoup
@@ -280,7 +281,7 @@ class xRxivBase(object):
             return None, "Error in formatting date or url"
 
         try:
-            response = requests.get(baseurl, headers=headers, params=self.query_params)
+            response = requests.get(self.query_formatted, headers=headers)
             
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -318,15 +319,15 @@ class xRxivBase(object):
                 query_params["limit_from"] = self.params["start_date"]
             if self.params["end_date"]:
                 query_params["limit_to"] = self.params["end_date"]
-            # self.query_params = query_params
-            # self.query_encoded = self.params["baseurl"] + urlencode(query_params)
-            self.query_formatted = (
-                f"{self.base_url}" + "/details/"
-                f"{self.params['source']}/"
-                f"{self.params['start_date']}/{self.params['end_date']}"
-                f"{self.cursor}"
-                "/JSON"
-            )
+            # self.query_formatted = (
+            #     f"{self.base_url}" + "/details/"
+            #     f"{self.params['source'].lower()}/"
+            #     f"{self.params['start_date']}/{self.params['end_date']}/"
+            #     f"{self.cursor}/"
+            #     "JSON"
+            # )
+            self.query_formatted = urlencode(query_params)
+
             return True
 
         # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
@@ -375,7 +376,7 @@ class bioRxiv(xRxivBase):
         super().__init__(
             server = "bioRxiv",
             launchdt = "2013-01-01",
-            base_url = "https://api.biorxiv.org",
+            base_url = "https://www.biorxiv.org/search/",
             params = variables
         )
 
@@ -384,7 +385,7 @@ class medRxiv(xRxivBase):
         super().__init__(
             server = "medRxiv",
             launchdt = "2019-06-01",
-            base_url = "https://api.medrxiv.org",
+            base_url = "https://www.medrxiv.org/search/",
             params = variables
     )
 
