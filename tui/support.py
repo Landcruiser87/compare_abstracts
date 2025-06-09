@@ -365,7 +365,7 @@ def load_taxonomy(search:bool=False):
             cat_json = json.dumps(categories, indent=2, cls=NumpyArrayEncoder)
             with open(f"./data/conferences/arxiv_cat.json", "w") as outf:
                 outf.write(cat_json)
-            
+
         else:
             path = "./data/arxiv_cat.json"
             if os.path.exists(path):

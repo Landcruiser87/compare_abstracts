@@ -253,66 +253,6 @@ class xRxivBase(object):
             self.params["start_date"] = self.launchdt
             self.params["end_date"] = self.params["submitted_date"]
             return True
-        
-    def _query_xrxiv(self) -> dict:
-        chrome_version = np.random.randint(120, 135)
-        baseurl = self.base_url
-        headers = {
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'accept-language': 'en-US,en;q=0.9',
-            'cache-control': 'max-age=0',
-            'priority': 'u=0, i',
-            'referer': baseurl,
-            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'document',
-            'sec-fetch-mode': 'navigate',
-            'sec-fetch-site': 'same-origin',
-            'sec-fetch-user': '?1',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
-        }
-
-        #Input validation checks
-        formatted = self._date_format()
-        classy = self._url_format()
-        if not formatted or not classy:
-            return None, "Error in formatting date or url"
-
-        try:
-            response = requests.post(self.query_formatted, headers=headers)
-            
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-            return None
-        
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None, f"Status Code {response.status_code} Reason: {response.reason}"
-        
-        time.sleep(3) #Be nice to the servers
-        bs4ob = BeautifulSoup(response.text, "lxml")
-        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
-
-        if len(paper_count.text) > 0:
-            if "No Results" in paper_count.text:
-                return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
-            pcount = paper_count.text.split()[0]
-            pcount = int("".join(x for x in pcount if x.isnumeric()))
-            self.paper_count = pcount 
-
-        if pcount:
-            
-            new_papers = self._parse_query(bs4ob)
-            logger.info(f'{len(new_papers)} papers returned from arxiv searching {self.params["query"]}')
-            return new_papers, None
-
-        else:
-            message =f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
-            logger.warning(message)
-            return None, message
 
     def _url_format(self):
         query_params = {
@@ -321,6 +261,7 @@ class xRxivBase(object):
         }
         try:
             if self.params["add_cat"]:
+                #TODO - remember to come back and check formatting
                 query_params["subject_collection_code"] = self.params["categories"]
             if self.params["start_date"]:
                 query_params["limit_from"] = self.params["start_date"]
@@ -333,6 +274,7 @@ class xRxivBase(object):
             query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
             self.query_formatted = self.base_url + search + quote(query_f1)
             return True
+
             #NOTE: API
                 #I find it hilarious that neither xrxiv left in a space in their api
                 #to actually saerch the api as opposed to just dumping the lastest 
@@ -363,38 +305,126 @@ class xRxivBase(object):
         except Exception as e:
             logger.warning("Error in url query formatting")
             return False
+    
+    def _make_request(self, post:bool = False):
+        chrome_version = np.random.randint(120, 135)
+        baseurl = self.base_url
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        try:
+            if post:
+                response = requests.post(self.query_formatted, headers=headers) 
+            else:
+                response = requests.get(self.query_formatted + f"page={self.cursor}", headers=headers)
+            
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
+        bs4ob = BeautifulSoup(response.text, "lxml")
+        time.sleep(3) #Be nice to the servers
+        return bs4ob
+
+    def _query_xrxiv(self) -> dict:
+        #Input validation checks
+        formatted = self._date_format()
+        classy = self._url_format()
+        if not formatted or not classy:
+            return None, "Error in formatting date or url"
+
+        bs4ob = self._make_request(True) #True means make a post request
+        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
+
+        if len(paper_count.text) > 0:
+            if "No Results" in paper_count.text:
+                return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            pcount = paper_count.text.split()[0]
+            pcount = int("".join(x for x in pcount if x.isnumeric()))
+            self.paper_count = pcount 
+
+        if pcount:
+            new_papers = self._parse_query(bs4ob)
+            logger.info(f'{len(new_papers)} papers returned from arxiv searching {self.params["query"]}')
+            return new_papers, None
+
+        else:
+            message =f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            logger.warning(message)
+            return None, message
 
     def _parse_query(self, bs4ob:BeautifulSoup):
-        #Parse with the soups.
+        #Parse with the soups.  Will be tricky as I'll need to make multiple requests. 
         totalpapers = self.paper_count
         limit = self.params["limit"]
-        results = bs4ob.find("ul", {"class":"highwire-search-results-list"})
-        paper_dict = {"search_params":self.params}
-        papers = results.find_all("li", "")
-        for idx, result in enumerate(results):
-            paper = Paper()
-            #Get the URL
-            url = result.find("p", {"class":"list-title is-inline-block"})
-            paper.url = url.select("a")[0].get('href')
-            #Grab title
-            paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
-            paper.id = str(idx) + "_" + paper.title
-            #Grab authors
-            authors = result.find("p", {"class":"authors"})
-            if authors != None:
-                paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
-            #Abstract
-            paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()[:-15]
-            categories = result.find("div", attrs={"class":"tags is-inline-block"})
-            if categories != None:
-                paper.category = categories.text.split()
+        #NOTE : Pagination
+            #Looks like they just add a #page=1
+            #to track the number of results
+        paper_idx = 0
+        while paper_idx <= totalpapers and paper_idx <= limit:
+            if self.cursor == 0:
+                papers = bs4ob.find("ul", {"class":"highwire-search-results-list"})
+            else:
+                papers = self._make_request()
+                results = papers.find_all("li", "")
 
-            comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
-            if comments != None:
-                comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
-                if comment_ != None:
-                    paper.supplemental = comment_.text
+            for idx, result in enumerate(results):
+                paper = Paper()
 
+                #Get the URL
+                url = result.find("p", {"class":"list-title is-inline-block"})
+                paper.url = url.select("a")[0].get('href')
+                #Grab title
+                paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
+                paper.id = str(idx) + "_" + paper.title
+                #Grab authors
+                authors = result.find("p", {"class":"authors"})
+                if authors != None:
+                    paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
+                #Abstract
+                paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()[:-15]
+                categories = result.find("div", attrs={"class":"tags is-inline-block"})
+                if categories != None:
+                    paper.category = categories.text.split()
+
+                comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+                if comments != None:
+                    comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                    if comment_ != None:
+                        paper.supplemental = comment_.text
+                self.results.append(paper)
+                paper_idx += 1
+
+            self.cursor += 1
+    # title   : str  | None = None
+    # authors : list | None = None
+    # keywords: list | None = None
+    # category: list | None = None
+    # abstract: str = ""
+    # url     : str = ""
+    # pdf     : str = ""
+    # github_url     : str = ""  
+    # supplemental   : str = ""  #general comments
+    # date_published : str = ""  # mm-dd-yyyy
+    # conference_info: str = ""  # e.g. arxiv
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict):
         super().__init__(

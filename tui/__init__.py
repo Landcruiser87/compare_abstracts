@@ -178,10 +178,10 @@ class PaperSearch(App):
                                 yield RadioButton(field)
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
-                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Limit the amount of returned results.  75 is the max you can request", type="integer")
+                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Limit the amount of returned results.  This function will take far longer the more you papers request", type="integer")
                             yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
                             yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
-                            yield Button("Search", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="xsearch-arxiv")
+                            yield Button("Search", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced", id="xsearch-arxiv")
 
         yield Footer()
 
@@ -340,7 +340,8 @@ class PaperSearch(App):
                     node.remove()
                     sleep(0.1)
         datasets.deselect_all()
-
+    
+    #FUNCTION - reload datasets
     def reload_datasets(self) -> None:
         #Manually refresh SelectionList options to avoid index errors
         datasets = self.query_one("#datasets", SelectionList)
@@ -351,7 +352,8 @@ class PaperSearch(App):
             for s in self.all_datasets
         ]
         datasets.add_options(new_datasets)
-
+    
+    #FUNCTION - is numeric string
     def is_numeric_string(self, s: str) -> bool:
         """
         Checks if a string represents a valid integer or float.
@@ -496,6 +498,7 @@ class PaperSearch(App):
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
     
+    #FUNCTION add datasets
     def add_datasets(self):
         """Handles the 'Add Dataset' button press by launching a worker."""
         datasets: SelectionList = self.query_one("#datasets", SelectionList)
@@ -532,7 +535,8 @@ class PaperSearch(App):
         else:
              self.notify("No valid datasets found to load.", severity="warning")
         datasets.deselect_all()
-
+    
+    #FUNCTION add dataset worker
     @work(thread=True, exclusive=True, group="dataset_loading")
     async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
         """
@@ -596,7 +600,6 @@ class PaperSearch(App):
 
         self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
 
-
     #FUNCTION - run search
     def run_search(self) -> None:
         #query needed widgets
@@ -619,7 +622,8 @@ class PaperSearch(App):
         root_name = f"{SEARCH_MODELS[model].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
-
+    
+    #FUNCTION - run search worker
     @work(thread=True, exclusive=True, group="dataset_searching")
     async def _search_datasets_worker(
         self, 
@@ -706,7 +710,8 @@ class PaperSearch(App):
             self.app.call_from_thread(remove_progress_ui)
             #Reload SelectionList to include search results
             self.reload_datasets()
-
+    
+    #FUNCTION - search arXiv
     def search_arxiv(self):
         #Load up search variables
         variables = []
@@ -774,7 +779,8 @@ class PaperSearch(App):
         else:
             self.notify(f"No papers matched the search {variables['query']}", severity="warning")
             logger.warning(f"No papers found the search {variables['query']}")
-
+    
+    #FUNCTION - search bio/medarxiv
     def search_xrxiv(self):
         #Load up search variables
         variables = []
@@ -792,7 +798,7 @@ class PaperSearch(App):
         #implement a similar function run_search.
             #Meaning you'll also need the async func of _search_datasets_worker
             #but for individual paper pulls.  
-            
+
         #Check input validity (should all be ints)
         variables = [source, limit, field, date_range]
         if not all(self.is_numeric_string(str(var)) for var in variables):
@@ -821,6 +827,7 @@ class PaperSearch(App):
                 variables["year"] = start_date
 
         if selected_cat:
+            #BUG - Broken when targeting categories. 
             root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{"_".join(variables["subjects"][selected_cat].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
             variables["add_cat"] = True
         else:
