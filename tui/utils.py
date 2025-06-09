@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import torch
 import time
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 from dataclasses import dataclass, asdict, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
 from bs4 import BeautifulSoup
@@ -208,7 +208,7 @@ class xRxivBase(object):
         server: str,
         launchdt: str,
         params: dict,
-        base_url: str = "https://api.medrxiv.org",
+        base_url: str = "https://www.biorxiv.org",
         
     ):
         self.server  : str = server
@@ -281,36 +281,42 @@ class xRxivBase(object):
             return None, "Error in formatting date or url"
 
         try:
-            response = requests.get(self.query_formatted, headers=headers)
+            response = requests.post(self.query_formatted, headers=headers)
             
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
-
+            return None
+        
         if response.status_code != 200:
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
             return None, f"Status Code {response.status_code} Reason: {response.reason}"
         
         time.sleep(3) #Be nice to the servers
-        bs4ob = BeautifulSoup(response.content, "lxml")
-        results = bs4ob.find_all("li", {"class":"arxiv-result"})
-        if results:
-            logger.info(f'{len(results)} papers returned from arxiv searching {self.params["query"]}')
+        bs4ob = BeautifulSoup(response.text, "lxml")
+        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
+
+        if len(paper_count.text) > 0:
+            if "No Results" in paper_count.text:
+                return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            pcount = paper_count.text.split()[0]
+            pcount = int("".join(x for x in pcount if x.isnumeric()))
+        
+        if pcount:
+            results = bs4ob.select("ul", {"class":"highwire-search-summary"})
             new_papers = self._parse_query(results)
+            logger.info(f'{len(new_papers)} papers returned from arxiv searching {self.params["query"]}')
             return new_papers, None
 
         else:
-            message =f"No papers returned for search ({self.params['query']}) in category {self.params['subject']}"
+            message =f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
             logger.warning(message)
             return None, message
 
     def _url_format(self):
         query_params = {
-            "query":self.params["query"],
-            "jcode":self.params["source"],
-            "numresults":self.params["limit"],
-            "sort":"relevance-rank",
-            "format_result":"standard"
+            "query":self.params["query"].replace(" ", "%252B") + "%20",
+            "jcode":self.params["source"].lower().strip(),
         }
         try:
             if self.params["add_cat"]:
@@ -319,6 +325,29 @@ class xRxivBase(object):
                 query_params["limit_from"] = self.params["start_date"]
             if self.params["end_date"]:
                 query_params["limit_to"] = self.params["end_date"]
+            query_params["numresults"] = "75"
+            query_params["sort"] = "relevance-rank"
+            query_params["format_result"] = "standard"
+            search = query_params["query"]
+            query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
+            self.query_formatted = self.base_url + search + quote(query_f1)
+            return True
+
+            # https://www.biorxiv.org/search/ivabradine%20
+            # jcode%3Abiorxiv%20
+            # subject_collection_code%3AClinical%20Trials%20
+            # limit_from%3A2024-02-06%20
+            # limit_to%3A2025-06-09%20
+            # numresults%3A75%20
+            # sort%3Arelevance-rank%20
+            # format_result%3Astandard
+            
+            # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
+                # servers = duh
+                # interval - Date format whiiich looks like dates separated by /
+                # cursor - page iteration
+                # format - JSON or XML.  Json it is!
+            
             # self.query_formatted = (
             #     f"{self.base_url}" + "/details/"
             #     f"{self.params['source'].lower()}/"
@@ -326,16 +355,8 @@ class xRxivBase(object):
             #     f"{self.cursor}/"
             #     "JSON"
             # )
-            self.query_formatted = urlencode(query_params)
 
-            return True
-
-        # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
-            # servers = duh
-            # interval - Date format whiiich looks like dates separated by /
-            # cursor - page iteration
-            # format - JSON or XML.  Json it is!
-        # https://api.medrxiv.org/details/[server]/[DOI]/na/[format]
+            # https://api.medrxiv.org/details/[server]/[DOI]/na/[format]
 
         except Exception as e:
             logger.warning("Error in url query formatting")

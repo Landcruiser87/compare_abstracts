@@ -790,7 +790,7 @@ class PaperSearch(App):
         selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
         
         #bind the info together into a list
-        variables = [limit, field, date_range]
+        variables = [source, limit, field, date_range]
         if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
             return None
