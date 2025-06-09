@@ -29,7 +29,8 @@ class Paper:
     abstract: str = ""
     url     : str = ""
     pdf     : str = ""
-    github_url     : str = ""  
+    doi     : str = ""            
+    github_url     : str = ""
     supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
@@ -306,9 +307,12 @@ class xRxivBase(object):
             logger.warning("Error in url query formatting")
             return False
     
-    def _make_request(self, post:bool = False):
+    def _make_request(self, post:bool = False, doi_url:str = ""):
         chrome_version = np.random.randint(120, 135)
-        baseurl = self.base_url
+        if doi_url:
+            baseurl = f"https://www.{self.server.lower()}.org"
+        else:
+            baseurl = self.base_url
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'accept-language': 'en-US,en;q=0.9',
@@ -327,10 +331,17 @@ class xRxivBase(object):
         }
 
         try:
+            #First request
             if post:
                 response = requests.post(self.query_formatted, headers=headers) 
+            
+            #Individual paper request
+            elif doi_url:
+                response = requests.get(doi_url, headers=headers)
+
+            #Page Iteration
             else:
-                response = requests.get(self.query_formatted + f"page={self.cursor}", headers=headers)
+                response = requests.post(self.query_formatted + f"page={self.cursor}", headers=headers)
             
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -351,7 +362,7 @@ class xRxivBase(object):
         if not formatted or not classy:
             return None, "Error in formatting date or url"
 
-        bs4ob = self._make_request(True) #True means make a post request
+        bs4ob = self._make_request(post=True) #True means make a post request
         paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
 
         if len(paper_count.text) > 0:
@@ -375,45 +386,78 @@ class xRxivBase(object):
         #Parse with the soups.  Will be tricky as I'll need to make multiple requests. 
         totalpapers = self.paper_count
         limit = self.params["limit"]
-        #NOTE : Pagination
-            #Looks like they just add a #page=1
-            #to track the number of results
         paper_idx = 0
-        while paper_idx <= totalpapers and paper_idx <= limit:
-            if self.cursor == 0:
-                papers = bs4ob.find("ul", {"class":"highwire-search-results-list"})
-            else:
-                papers = self._make_request()
-                results = papers.find_all("li", "")
-
-            for idx, result in enumerate(results):
+        while (paper_idx <= totalpapers) or (paper_idx <= limit): #If you are under either the requested limit, or the query limit continue extraction
+            if self.cursor != 0:
+                bs4ob = self._make_request()
+            papers = bs4ob.find_all("li", {"class":lambda x: "search-result-highwire-citation" in x})
+            for idx, result in enumerate(papers):
                 paper = Paper()
 
                 #Get the URL
-                url = result.find("p", {"class":"list-title is-inline-block"})
-                paper.url = url.select("a")[0].get('href')
-                #Grab title
-                paper.title = result.find("p", attrs={"class": lambda e: e.startswith("title")}).text.strip()
-                paper.id = str(idx) + "_" + paper.title
-                #Grab authors
-                authors = result.find("p", {"class":"authors"})
-                if authors != None:
-                    paper.authors = {str(idx) + "_" + x.text:x.text for idx, x in enumerate(authors.find_all("a"))}
-                #Abstract
-                paper.abstract = result.find("span", attrs={"class":"abstract-full"}).text.strip()[:-15]
-                categories = result.find("div", attrs={"class":"tags is-inline-block"})
-                if categories != None:
-                    paper.category = categories.text.split()
+                url = result.select("span", {"class":"highwire-cite-linked-title"})
+                f_url = f"{self.base_url[:-8]}" + url[0].select("a")[0].get("href")
+                paper.url = f_url
 
-                comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
-                if comments != None:
-                    comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
-                    if comment_ != None:
-                        paper.supplemental = comment_.text
+                if url:
+                    lil_req = self._make_request(doi_url=f_url)
+                    paper.title = lil_req.find("h1", {"class":"highwire-cite-title"}).text.strip()
+                    paper.id = str(idx) + "_" + paper.title
+
+                    authors = lil_req.find("span", {"class":"highwire-citation-authors"})
+                    if authors:
+                        paper.authors = {}
+                        for ind, author in enumerate(authors.find_all("span", {"class":"highwire-citation-author"})):
+                            name = author.find("span", {"class":"nlm-given-names"}).text + "_" + author.find("span", {"class":"nlm-surname"}).text
+                            paper.authors[str(ind)] = name
+
+                    abstract = lil_req.find("div", {"class":"section abstract"})
+                    if abstract:
+                        paper.abstract = abstract.find("p").text
+
+                    category = lil_req.find("span", {"class":"highwire-article-collection-term"})
+                    if category:
+                        paper.category = category.text.strip()
+
+                    posted = lil_req.find("div", {"class":"panel-pane pane-custom pane-1"})
+                    if posted:
+                        paper.date_published = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
+                    
+                    
+                    # if "github" in paper.abstract:
+                    #     #This regex will pull out a github.io or github.com link
+                    #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                    #     possiblematch = re.findall(pattern, paper.abstract)
+                    #     if possiblematch:
+                    #         paper.github_url = possiblematch[0]
+                    
+                    continue #to next paper
+                else:
+                    #Grab title
+                    paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
+                    paper.id = str(idx) + "_" + paper.title
+                    
+                    #Grab authors
+                    authors = result.find_all("div", {"class":lambda x:"authors" in x}).text.strip()
+                    if authors != None:
+                        paper.authors = {str(ind) + "_" + x.text:x.text for ind, x in enumerate(authors)}
+
+                    #
+                    categories = result.find("div", attrs={"class":"tags is-inline-block"})
+                    if categories != None:
+                        paper.category = categories.text.split()
+
+                    comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+                    if comments != None:
+                        comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                        if comment_ != None:
+                            paper.supplemental = comment_.text
+
                 self.results.append(paper)
                 paper_idx += 1
-
             self.cursor += 1
+
+
     # title   : str  | None = None
     # authors : list | None = None
     # keywords: list | None = None
@@ -425,6 +469,7 @@ class xRxivBase(object):
     # supplemental   : str = ""  #general comments
     # date_published : str = ""  # mm-dd-yyyy
     # conference_info: str = ""  # e.g. arxiv
+
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict):
         super().__init__(
