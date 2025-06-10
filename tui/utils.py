@@ -397,20 +397,32 @@ class xRxivBase(object):
                 #Get the URL
                 url = result.select("span", {"class":"highwire-cite-linked-title"})
                 f_url = f"{self.base_url[:-8]}" + url[0].select("a")[0].get("href")
-                paper.url = f_url
+                paper.doi = f_url
 
                 if url:
                     lil_req = self._make_request(doi_url=f_url)
                     paper.title = lil_req.find("h1", {"class":"highwire-cite-title"}).text.strip()
                     paper.id = str(idx) + "_" + paper.title
+                    paper.pdf = paper.doi + ".full.pdf"
 
-                    authors = lil_req.find("span", {"class":"highwire-citation-authors"})
+                    authors = lil_req.find_all("div", {"id":lambda x: x.startswith("q-tip")})
                     if authors:
                         paper.authors = {}
-                        for ind, author in enumerate(authors.find_all("span", {"class":"highwire-citation-author"})):
-                            name = author.find("span", {"class":"nlm-given-names"}).text + "_" + author.find("span", {"class":"nlm-surname"}).text
-                            paper.authors[str(ind)] = name
+                        for author in authors:
+                            name = author.find("div", {"class":"author-tooltip-name"})
+                            paper.authors[name] = {}
+                            #TODO - Write routines for all of these.  Ugh. 
+                            paper.authors[name]["fullname"] = name
+                            paper.authors[name]["url"]
+                            paper.authors[name]["institution"]
+                            paper.authors[name]["bio"]
+                            #orcid ID's are stored in a separate container. 
+                            #Meaning i would have to search and match the current name
+                            #? Might be able to do the next sibling to get the name if it
+                            #has an orcid id
 
+                            paper.authors[name]["orcidid"]
+                            
                     abstract = lil_req.find("div", {"class":"section abstract"})
                     if abstract:
                         paper.abstract = abstract.find("p").text
@@ -421,9 +433,22 @@ class xRxivBase(object):
 
                     posted = lil_req.find("div", {"class":"panel-pane pane-custom pane-1"})
                     if posted:
-                        paper.date_published = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
+                        post_date = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
+                        post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
+                        paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
                     
+                    paper.conference_info = self.params["source"]
                     
+                    #TODO's
+                    # keywords
+                    # See if you can grab the interaction data.  That might be fun
+                        # Looks like they have read abstracts, full, and pdf downloads
+                        # Sweet! use m/year as key
+
+                    # pull out if theirs a github repo in the info section
+                    # also if they have a pub_link for if its been published. 
+                        #Grab that too
+
                     # if "github" in paper.abstract:
                     #     #This regex will pull out a github.io or github.com link
                     #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
@@ -455,6 +480,7 @@ class xRxivBase(object):
 
                 self.results.append(paper)
                 paper_idx += 1
+
             self.cursor += 1
 
 
