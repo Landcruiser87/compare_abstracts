@@ -19,7 +19,7 @@ from sentence_transformers import SentenceTransformer
 from support import logger
 
 
-################################# Classes #################################
+################################# Dataclass #################################
 @dataclass
 class Paper:
     id      : str  | None = None
@@ -31,14 +31,14 @@ class Paper:
     url     : str = ""
     pdf     : str = ""
     doi     : str = ""            
-    journal : str = ""
-    journal_link   : str = ""
+    # journal : str = ""
+    # journal_link   : str = ""
     github_url     : str = ""
     supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
 
-
+################################# Classes #################################
 class ArxivSearch(object):
     def __init__(self, variables:dict):
         self.params: dict = variables
@@ -258,15 +258,112 @@ class xRxivBase(object):
             self.params["start_date"] = self.launchdt
             self.params["end_date"] = self.params["submitted_date"]
             return True
+    
+    def _make_request(self, post:bool = False, doi_url:str = "") -> BeautifulSoup:
+        chrome_version = np.random.randint(120, 135)
+        if doi_url:
+            baseurl = f"https://www.{self.server.lower()}.org"
+        else:
+            baseurl = self.base_url
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        try:
+            #First request
+            if post:
+                response = requests.post(self.query_formatted, headers=headers) 
+            
+            #Individual paper request
+            elif doi_url:
+                response = requests.get(doi_url, headers=headers)
+
+            #Page Iteration
+            else:
+                response = requests.post(self.query_formatted + f"page={self.cursor}", headers=headers)
+                
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
+        bs4ob = BeautifulSoup(response.text, "lxml")
+        time.sleep(3) #Be nice to the servers
+        return bs4ob
+
+    def _make_subdata_request(self, doi:str) -> BeautifulSoup:
+        chrome_version = np.random.randint(125, 137)
+        # baseurl = f"https://www.{self.server.lower()}.org"
+        # headers = {
+        #     'accept': 'text/html, */*; q=0.01',
+        #     'accept-language': 'en-US,en;q=0.9',
+        #     'priority': 'u=1, i',
+        #     'referer': doi + '.article-metrics',
+        #     'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
+        #     'sec-ch-ua-mobile': '?0',
+        #     'sec-ch-ua-platform': '"Windows"',
+        #     'sec-fetch-dest': 'empty',
+        #     'sec-fetch-mode': 'cors',
+        #     'sec-fetch-site': 'same-origin',
+        #     'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
+        #     'x-requested-with': 'XMLHttpRequest',
+        # }
+        baseurl = doi + ".article-metrics"
+        headers = {
+            'accept': 'text/html, */*; q=0.01',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=1, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
+            'x-requested-with': 'XMLHttpRequest',
+        }
+
+        try:
+            # response = requests.post(f'{baseurl}/highwire/sub-data', headers=headers)
+            response = requests.get(baseurl, headers=headers)
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+        bs4ob = BeautifulSoup(response.text, "lxml")
+        time.sleep(3) #Be nice to the servers
+        return bs4ob
 
     def _url_format(self):
+        
         query_params = {
             "query":self.params["query"].replace(" ", "%252B") + "%20",
             "jcode":self.params["source"].lower().strip(),
         }
         try:
             if self.params["add_cat"]:
-                #TODO - remember to come back and check formatting
                 query_params["subject_collection_code"] = self.params["categories"]
 
             if self.params["start_date"]:
@@ -313,89 +410,6 @@ class xRxivBase(object):
         except Exception as e:
             logger.warning("Error in url query formatting")
             return False
-    
-    def _make_request(self, post:bool = False, doi_url:str = "") -> BeautifulSoup:
-        chrome_version = np.random.randint(120, 135)
-        if doi_url:
-            baseurl = f"https://www.{self.server.lower()}.org"
-        else:
-            baseurl = self.base_url
-        headers = {
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'accept-language': 'en-US,en;q=0.9',
-            'cache-control': 'max-age=0',
-            'priority': 'u=0, i',
-            'referer': baseurl,
-            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'document',
-            'sec-fetch-mode': 'navigate',
-            'sec-fetch-site': 'same-origin',
-            'sec-fetch-user': '?1',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
-        }
-
-        try:
-            #First request
-            if post:
-                response = requests.post(self.query_formatted, headers=headers) 
-            
-            #Individual paper request
-            elif doi_url:
-                response = requests.get(doi_url, headers=headers)
-
-            #Page Iteration
-            else:
-                response = requests.post(self.query_formatted + f"page={self.cursor}", headers=headers)
-            
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-            return None
-        
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None, f"Status Code {response.status_code} Reason: {response.reason}"
-        bs4ob = BeautifulSoup(response.text, "lxml")
-        time.sleep(3) #Be nice to the servers
-        return bs4ob
-
-    def _make_subdata_request(self, doi:str) -> json:
-        chrome_version = np.random.randint(120, 137)
-        baseurl = f"https://www.{self.server.lower()}.org"
-        headers = {
-            'accept': 'application/json, text/javascript, */*; q=0.01',
-            'accept-language': 'en-US,en;q=0.9',
-            'origin': baseurl,
-            'priority': 'u=1, i',
-            'referer': doi,
-            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
-            'x-requested-with': 'XMLHttpRequest',
-        }
-
-        try:
-            response = requests.post(f'{baseurl}/highwire/sub-data', headers=headers)
-            
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-            return None
-        
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None
-        
-        resp_json = response.json()
-        time.sleep(3) #Be nice to the servers
-        return resp_json
 
     def _query_xrxiv(self) -> dict:
         #Input validation checks
@@ -473,30 +487,27 @@ class xRxivBase(object):
                         post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
                         paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
                     
-                    subdata = self._make_subdata_request(paper.doi)
-                    if subdata:
-                        #!Looks like they use a secondary request to fill out
-                        #the journal data.  Which stinks but i might be able
-                        #to recreate the query request and return a json
-                        paper.journal = subdata
-                        paper.journal_link = subdata
-                        paper.conference_info = self.params["source"]
-                        
-                        #TODO's
-                            # Looks like they have read abstracts, full, and pdf downloads
-                            # Sweet! use m/year as key
-                            #IDEA Could sort the papers by most interaction.  That would be fun
+                    #They put their infolinks behind another request.  Already at 3 calls per paper
+                    # github = lil_req.find('div', {"class":"section data-availability"})
+                    # if github:
+                    #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                    #     possiblematch = re.findall(pattern, github.text)
+                    #     if possiblematch:
+                    #         paper.github_url = possiblematch[0]
 
-                        # pull out if theirs a github repo in the info section
-                        # also if they have a pub_link for if its been published. 
-                            #Grab that too
-
-                        # if "github" in paper.abstract:
-                        #     #This regex will pull out a github.io or github.com link
-                        #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
-                        #     possiblematch = re.findall(pattern, paper.abstract)
-                        #     if possiblematch:
-                        #         paper.github_url = possiblematch[0]
+                    metrics = self._make_subdata_request(paper.doi)
+                    if metrics:
+                        viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                        rows = viewstable.find_all("tr")
+                        paper.supplemental = {}
+                        for col in rows:
+                            results = col.find_all("td")
+                            if results:
+                                key = results[0].text
+                                paper.supplemental[key] = {}
+                                paper.supplemental[key]["abstract"] = results[1].text
+                                paper.supplemental[key]["full"] = results[2].text
+                                paper.supplemental[key]["pdf"] = results[3].text
 
                 else:
                     #Grab title

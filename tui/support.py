@@ -408,7 +408,7 @@ ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 ARXIV_AREAS = load_taxonomy()
 
 XARXIV_FIELDS = ARXIV_FIELDS.copy()
-[XARXIV_FIELDS.insert(2, x) for x in ["Abst|Title|Text", "Abstract|Title"]]
+[XARXIV_FIELDS.insert(2, x) for x in ["Text|Abstract|Title", "Abstract|Title"]]
 XARXIV_FIELDS = XARXIV_FIELDS[:-2]
 XARXIV_SOURCES = ["bioRxiv", "medRxiv", "both"]
 BIOARXIV_SUBJECTS =[
