@@ -829,9 +829,12 @@ class PaperSearch(App):
                 variables["year"] = start_date
 
         if selected_cat:
-            #BUG - Broken when targeting categories. 
-            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{"_".join(variables["subjects"][selected_cat].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
+            temp =  ["_".join(variables["categories"][x].lower().split(" ")) for x in range(len(variables["categories"]))]
+            cat_string = "_".join(temp)
+            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{cat_string}_{'-'.join(srch_text.lower().split())}"
+            variables["categories"] = ",".join(map(str, variables["categories"]))
             variables["add_cat"] = True
+
         else:
             root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
 
@@ -851,6 +854,7 @@ class PaperSearch(App):
             try:
                 self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
                 #load the JSON into the Tree
+                root_name = root_name.replace("|", "_")
                 self.load_data(tree, root_name, json_data)
                 #save the search
                 save_data(root_name, json_data)
