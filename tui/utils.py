@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 import torch
 import time
-from urllib.parse import urlencode, quote
-from dataclasses import dataclass, asdict, fields
+from urllib.parse import quote
+from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
 from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
@@ -22,6 +22,7 @@ from support import logger
 ################################# Classes #################################
 @dataclass
 class Paper:
+    id      : str  | None = None
     title   : str  | None = None
     authors : list | None = None
     keywords: list | None = None
@@ -30,10 +31,13 @@ class Paper:
     url     : str = ""
     pdf     : str = ""
     doi     : str = ""            
+    journal : str = ""
+    journal_link   : str = ""
     github_url     : str = ""
     supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
+
 
 class ArxivSearch(object):
     def __init__(self, variables:dict):
@@ -264,10 +268,13 @@ class xRxivBase(object):
             if self.params["add_cat"]:
                 #TODO - remember to come back and check formatting
                 query_params["subject_collection_code"] = self.params["categories"]
+
             if self.params["start_date"]:
                 query_params["limit_from"] = self.params["start_date"]
+
             if self.params["end_date"]:
                 query_params["limit_to"] = self.params["end_date"]
+
             query_params["numresults"] = "75"
             query_params["sort"] = "relevance-rank"
             query_params["format_result"] = "standard"
@@ -307,7 +314,7 @@ class xRxivBase(object):
             logger.warning("Error in url query formatting")
             return False
     
-    def _make_request(self, post:bool = False, doi_url:str = ""):
+    def _make_request(self, post:bool = False, doi_url:str = "") -> BeautifulSoup:
         chrome_version = np.random.randint(120, 135)
         if doi_url:
             baseurl = f"https://www.{self.server.lower()}.org"
@@ -355,6 +362,41 @@ class xRxivBase(object):
         time.sleep(3) #Be nice to the servers
         return bs4ob
 
+    def _make_subdata_request(self, doi:str) -> json:
+        chrome_version = np.random.randint(120, 137)
+        baseurl = f"https://www.{self.server.lower()}.org"
+        headers = {
+            'accept': 'application/json, text/javascript, */*; q=0.01',
+            'accept-language': 'en-US,en;q=0.9',
+            'origin': baseurl,
+            'priority': 'u=1, i',
+            'referer': doi,
+            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
+            'x-requested-with': 'XMLHttpRequest',
+        }
+
+        try:
+            response = requests.post(f'{baseurl}/highwire/sub-data', headers=headers)
+            
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+        resp_json = response.json()
+        time.sleep(3) #Be nice to the servers
+        return resp_json
+
     def _query_xrxiv(self) -> dict:
         #Input validation checks
         formatted = self._date_format()
@@ -378,7 +420,7 @@ class xRxivBase(object):
             return new_papers, None
 
         else:
-            message =f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            message = f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
             logger.warning(message)
             return None, message
 
@@ -390,39 +432,33 @@ class xRxivBase(object):
         while (paper_idx <= totalpapers) or (paper_idx <= limit): #If you are under either the requested limit, or the query limit continue extraction
             if self.cursor != 0:
                 bs4ob = self._make_request()
+
             papers = bs4ob.find_all("li", {"class":lambda x: "search-result-highwire-citation" in x})
             for idx, result in enumerate(papers):
                 paper = Paper()
-
                 #Get the URL
-                url = result.select("span", {"class":"highwire-cite-linked-title"})
-                f_url = f"{self.base_url[:-8]}" + url[0].select("a")[0].get("href")
+                title = result.select("span", {"class":"highwire-cite-linked-title"})
+                f_url = f"{self.base_url[:-8]}" + title[0].select("a")[0].get("href")
                 paper.doi = f_url
 
-                if url:
+                if title:
                     lil_req = self._make_request(doi_url=f_url)
                     paper.title = lil_req.find("h1", {"class":"highwire-cite-title"}).text.strip()
                     paper.id = str(idx) + "_" + paper.title
                     paper.pdf = paper.doi + ".full.pdf"
-
-                    authors = lil_req.find_all("div", {"id":lambda x: x.startswith("q-tip")})
-                    if authors:
+                    
+                    #Grab authors
+                    outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
+                    if outer_authors != None:
                         paper.authors = {}
+                        authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
                         for author in authors:
-                            name = author.find("div", {"class":"author-tooltip-name"})
-                            paper.authors[name] = {}
-                            #TODO - Write routines for all of these.  Ugh. 
-                            paper.authors[name]["fullname"] = name
-                            paper.authors[name]["url"]
-                            paper.authors[name]["institution"]
-                            paper.authors[name]["bio"]
-                            #orcid ID's are stored in a separate container. 
-                            #Meaning i would have to search and match the current name
-                            #? Might be able to do the next sibling to get the name if it
-                            #has an orcid id
+                            name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
+                            paper.authors[name] = {"name":name}
+                            orcid = author.select("a")
+                            if orcid:
+                                paper.authors[name]["orcidid"] = orcid[0].get("href")
 
-                            paper.authors[name]["orcidid"]
-                            
                     abstract = lil_req.find("div", {"class":"section abstract"})
                     if abstract:
                         paper.abstract = abstract.find("p").text
@@ -437,26 +473,31 @@ class xRxivBase(object):
                         post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
                         paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
                     
-                    paper.conference_info = self.params["source"]
-                    
-                    #TODO's
-                    # keywords
-                    # See if you can grab the interaction data.  That might be fun
-                        # Looks like they have read abstracts, full, and pdf downloads
-                        # Sweet! use m/year as key
+                    subdata = self._make_subdata_request(paper.doi)
+                    if subdata:
+                        #!Looks like they use a secondary request to fill out
+                        #the journal data.  Which stinks but i might be able
+                        #to recreate the query request and return a json
+                        paper.journal = subdata
+                        paper.journal_link = subdata
+                        paper.conference_info = self.params["source"]
+                        
+                        #TODO's
+                            # Looks like they have read abstracts, full, and pdf downloads
+                            # Sweet! use m/year as key
+                            #IDEA Could sort the papers by most interaction.  That would be fun
 
-                    # pull out if theirs a github repo in the info section
-                    # also if they have a pub_link for if its been published. 
-                        #Grab that too
+                        # pull out if theirs a github repo in the info section
+                        # also if they have a pub_link for if its been published. 
+                            #Grab that too
 
-                    # if "github" in paper.abstract:
-                    #     #This regex will pull out a github.io or github.com link
-                    #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
-                    #     possiblematch = re.findall(pattern, paper.abstract)
-                    #     if possiblematch:
-                    #         paper.github_url = possiblematch[0]
-                    
-                    continue #to next paper
+                        # if "github" in paper.abstract:
+                        #     #This regex will pull out a github.io or github.com link
+                        #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                        #     possiblematch = re.findall(pattern, paper.abstract)
+                        #     if possiblematch:
+                        #         paper.github_url = possiblematch[0]
+
                 else:
                     #Grab title
                     paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
@@ -480,21 +521,7 @@ class xRxivBase(object):
 
                 self.results.append(paper)
                 paper_idx += 1
-
             self.cursor += 1
-
-
-    # title   : str  | None = None
-    # authors : list | None = None
-    # keywords: list | None = None
-    # category: list | None = None
-    # abstract: str = ""
-    # url     : str = ""
-    # pdf     : str = ""
-    # github_url     : str = ""  
-    # supplemental   : str = ""  #general comments
-    # date_published : str = ""  # mm-dd-yyyy
-    # conference_info: str = ""  # e.g. arxiv
 
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict):
