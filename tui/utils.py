@@ -220,7 +220,7 @@ class xRxivBase(object):
         self.launchdt = launchdt
         self.params = params
         self.base_url = base_url
-        self.results : list = []
+        self.results : dict = {}
         self.cursor : int = 0
 
     def _date_format(self):
@@ -259,7 +259,7 @@ class xRxivBase(object):
             self.params["end_date"] = self.params["submitted_date"]
             return True
     
-    def _make_request(self, post:bool = False, doi_url:str = "") -> BeautifulSoup:
+    def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
         chrome_version = np.random.randint(120, 135)
         if doi_url:
             baseurl = f"https://www.{self.server.lower()}.org"
@@ -292,7 +292,7 @@ class xRxivBase(object):
                 response = requests.get(doi_url, headers=headers)
 
             #Page Iteration
-            else:
+            elif cursor > 0:
                 response = requests.post(self.query_formatted + f"page={self.cursor}", headers=headers)
                 
         except Exception as e:
@@ -303,27 +303,12 @@ class xRxivBase(object):
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
             return None, f"Status Code {response.status_code} Reason: {response.reason}"
-        bs4ob = BeautifulSoup(response.text, "lxml")
+        bs4ob = BeautifulSoup(response.content, "lxml")
         time.sleep(3) #Be nice to the servers
         return bs4ob
 
     def _make_subdata_request(self, doi:str) -> BeautifulSoup:
         chrome_version = np.random.randint(125, 137)
-        # baseurl = f"https://www.{self.server.lower()}.org"
-        # headers = {
-        #     'accept': 'text/html, */*; q=0.01',
-        #     'accept-language': 'en-US,en;q=0.9',
-        #     'priority': 'u=1, i',
-        #     'referer': doi + '.article-metrics',
-        #     'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
-        #     'sec-ch-ua-mobile': '?0',
-        #     'sec-ch-ua-platform': '"Windows"',
-        #     'sec-fetch-dest': 'empty',
-        #     'sec-fetch-mode': 'cors',
-        #     'sec-fetch-site': 'same-origin',
-        #     'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
-        #     'x-requested-with': 'XMLHttpRequest',
-        # }
         baseurl = doi + ".article-metrics"
         headers = {
             'accept': 'text/html, */*; q=0.01',
@@ -341,7 +326,6 @@ class xRxivBase(object):
         }
 
         try:
-            # response = requests.post(f'{baseurl}/highwire/sub-data', headers=headers)
             response = requests.get(baseurl, headers=headers)
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -352,17 +336,20 @@ class xRxivBase(object):
             logger.warning(f'Reason: {response.reason}')
             return None
         
-        bs4ob = BeautifulSoup(response.text, "lxml")
+        bs4ob = BeautifulSoup(response.content, "lxml")
         time.sleep(3) #Be nice to the servers
         return bs4ob
 
     def _url_format(self):
-        
-        query_params = {
-            "query":self.params["query"].replace(" ", "%252B") + "%20",
-            "jcode":self.params["source"].lower().strip(),
-        }
+        query_params = {}
         try:
+            if self.params["field"]:
+                srch_field = "_".join(self.params["field"].lower().split("|"))
+                query_params["query"] = quote(f"{srch_field}:") +  self.params["query"].replace(" ", "%252B") + "%20" + quote(f"{srch_field}_flags:")
+            else:
+                query_params["query"] = self.params["query"].replace(" ", "%252B") + "%20"
+
+            query_params["jcode"] = self.params["source"].lower().strip(),
             if self.params["add_cat"]:
                 query_params["subject_collection_code"] = self.params["categories"]
 
@@ -378,6 +365,7 @@ class xRxivBase(object):
             search = query_params["query"]
             query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
             self.query_formatted = self.base_url + search + quote(query_f1)
+            logger.info(f"formatted query\n{self.query_formatted}")
             return True
 
             #NOTE: API
@@ -429,9 +417,9 @@ class xRxivBase(object):
             self.paper_count = pcount 
 
         if pcount:
-            new_papers = self._parse_query(bs4ob)
-            logger.info(f'{len(new_papers)} papers returned from arxiv searching {self.params["query"]}')
-            return new_papers, None
+            self._parse_query(bs4ob)
+            logger.info(f'{len(self.results)} papers returned from arxiv searching {self.params["query"]}')
+            return self.results, None
 
         else:
             message = f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
@@ -441,23 +429,22 @@ class xRxivBase(object):
     def _parse_query(self, bs4ob:BeautifulSoup):
         #Parse with the soups.  Will be tricky as I'll need to make multiple requests. 
         totalpapers = self.paper_count
-        limit = self.params["limit"]
-        paper_idx = 0
-        while (paper_idx <= totalpapers) or (paper_idx <= limit): #If you are under either the requested limit, or the query limit continue extraction
-            if self.cursor != 0:
-                bs4ob = self._make_request()
-
-            papers = bs4ob.find_all("li", {"class":lambda x: "search-result-highwire-citation" in x})
+        limit = int(self.params["limit"])
+        paper_idx = 1
+        while (paper_idx <= totalpapers and paper_idx <= limit): #If you are under either the requested limit, or the query limit continue extraction
+            if self.cursor != 0: 
+                bs4ob = self._make_request(cursor = self.cursor)
+            outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
+            papers = outer_papers.find_all("li", {"class":lambda x:"search-result-highwire-citation" in x})
             for idx, result in enumerate(papers):
                 paper = Paper()
                 #Get the URL
-                title = result.select("span", {"class":"highwire-cite-linked-title"})
-                f_url = f"{self.base_url[:-8]}" + title[0].select("a")[0].get("href")
-                paper.doi = f_url
-
-                if title:
+                title = result.find("a", {"class":"highwire-cite-linked-title"})
+                if title != None:
+                    f_url = f"{self.base_url[:-8]}" + title.get("href")
+                    paper.doi = f_url
                     lil_req = self._make_request(doi_url=f_url)
-                    paper.title = lil_req.find("h1", {"class":"highwire-cite-title"}).text.strip()
+                    paper.title = title.text
                     paper.id = str(idx) + "_" + paper.title
                     paper.pdf = paper.doi + ".full.pdf"
                     
@@ -487,7 +474,7 @@ class xRxivBase(object):
                         post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
                         paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
                     
-                    #They put their infolinks behind another request.  Already at 3 calls per paper
+                    # They put their infolinks behind another request.  Already at 3 calls per paper
                     # github = lil_req.find('div', {"class":"section data-availability"})
                     # if github:
                     #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
@@ -530,7 +517,8 @@ class xRxivBase(object):
                         if comment_ != None:
                             paper.supplemental = comment_.text
 
-                self.results.append(paper)
+                self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
+                del paper
                 paper_idx += 1
             self.cursor += 1
 

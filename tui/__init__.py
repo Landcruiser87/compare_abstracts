@@ -173,15 +173,17 @@ class PaperSearch(App):
                             with RadioSet(id="xradio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
-                        with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Category blank to search all categories"):
+                        with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Field blank to initiate general search.\nLeave Category blank to search all categories"):
                             for field in XARXIV_FIELDS:
                                 yield RadioButton(field)
+                        #TODO - Add another vertical here
+                        #TODO - Add sort selection 
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
                             yield Input("Result limit", id="xinput-arx-limit", tooltip="Limit the amount of returned results.  This function will take far longer the more you papers request", type="integer")
                             yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
                             yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
-                            yield Button("Search", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced", id="xsearch-arxiv")
+                            yield Button("Search",  id="xsearch-arxiv", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced\nReminder:Each paper takes about 10 seconds to query")
 
         yield Footer()
 
@@ -847,7 +849,7 @@ class PaperSearch(App):
             tree: Tree = tree_view.query_one(Tree)
 
             try:
-                self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]} in subject {variables["subject"]}")
+                self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
                 #load the JSON into the Tree
                 self.load_data(tree, root_name, json_data)
                 #save the search
