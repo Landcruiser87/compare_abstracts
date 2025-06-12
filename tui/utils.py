@@ -499,6 +499,7 @@ class xRxivBase(object):
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
             return None
+        
         await asyncio.sleep(np.random.randint(3,4)) #Be nice to the servers
 
         if response.status_code != 200:
