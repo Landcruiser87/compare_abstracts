@@ -293,7 +293,7 @@ class xRxivBase(object):
 
             #Page Iteration
             elif cursor > 0:
-                response = requests.post(self.query_formatted + f"page={self.cursor}", headers=headers)
+                response = requests.post(self.query_formatted + f"page={cursor}", headers=headers)
                 
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -350,7 +350,7 @@ class xRxivBase(object):
                 query_params["query"] = self.params["query"].replace(" ", "%252B") + "%20"
 
             query_params["jcode"] = self.params["source"].lower().strip(),
-            if self.params["add_cat"]:
+            if self.params["categories"]:
                 query_params["subject_collection_code"] = self.params["categories"]
 
             if self.params["start_date"]:
@@ -427,100 +427,99 @@ class xRxivBase(object):
             return None, message
 
     def _parse_query(self, bs4ob:BeautifulSoup):
-        #Parse with the soups.  Will be tricky as I'll need to make multiple requests. 
         totalpapers = self.paper_count
-        limit = int(self.params["limit"])
-        paper_idx = 1
-        while (paper_idx <= totalpapers and paper_idx <= limit): #If you are under either the requested limit, or the query limit continue extraction
-            if self.cursor != 0: 
-                bs4ob = self._make_request(cursor = self.cursor)
-            outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
-            papers = outer_papers.find_all("li", {"class":lambda x:"search-result-highwire-citation" in x})
-            for idx, result in enumerate(papers):
+        limit = int(self.params["limit"]) - 1
+        paper_idx = 0
+        if self.cursor != 0: 
+            bs4ob = self._make_request(cursor = self.cursor)
+        outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
+        papers = outer_papers.find_all("li", {"class":lambda x:"search-result-highwire-citation" in x})
+        for result in papers:
+            if paper_idx >= limit or paper_idx >= totalpapers:
+                return
+            else:
                 paper = Paper()
-                #Get the URL
                 title = result.find("a", {"class":"highwire-cite-linked-title"})
-                if title != None:
-                    f_url = f"{self.base_url[:-8]}" + title.get("href")
-                    paper.doi = f_url
-                    lil_req = self._make_request(doi_url=f_url)
-                    paper.title = title.text
-                    paper.id = str(idx) + "_" + paper.title
-                    paper.pdf = paper.doi + ".full.pdf"
-                    
-                    #Grab authors
-                    outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
-                    if outer_authors != None:
-                        paper.authors = {}
-                        authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
-                        for author in authors:
-                            name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
-                            paper.authors[name] = {"name":name}
-                            orcid = author.select("a")
-                            if orcid:
-                                paper.authors[name]["orcidid"] = orcid[0].get("href")
+                f_url = f"{self.base_url[:-8]}" + title.get("href")
+                paper.doi = f_url
+                lil_req = self._make_request(doi_url=f_url)
+                paper.title = title.text
+                paper.id = str(paper_idx) + "_" + paper.title
+                paper.pdf = paper.doi + ".full.pdf"
+                
+                #Grab authors
+                outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
+                if outer_authors != None:
+                    paper.authors = {}
+                    authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
+                    for author in authors:
+                        name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
+                        paper.authors[name] = {"name":name}
+                        orcid = author.select("a")
+                        if orcid:
+                            paper.authors[name]["orcidid"] = orcid[0].get("href")
 
-                    abstract = lil_req.find("div", {"class":"section abstract"})
-                    if abstract:
-                        paper.abstract = abstract.find("p").text
+                abstract = lil_req.find("div", {"class":"section abstract"})
+                if abstract:
+                    paper.abstract = abstract.find("p").text
 
-                    category = lil_req.find("span", {"class":"highwire-article-collection-term"})
-                    if category:
-                        paper.category = category.text.strip()
+                category = lil_req.find("span", {"class":"highwire-article-collection-term"})
+                if category:
+                    paper.category = category.text.strip()
 
-                    posted = lil_req.find("div", {"class":"panel-pane pane-custom pane-1"})
-                    if posted:
-                        post_date = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
-                        post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
-                        paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
-                    
-                    # They put their infolinks behind another request.  Already at 3 calls per paper
-                    # github = lil_req.find('div', {"class":"section data-availability"})
-                    # if github:
-                    #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
-                    #     possiblematch = re.findall(pattern, github.text)
-                    #     if possiblematch:
-                    #         paper.github_url = possiblematch[0]
+                posted = lil_req.find("div", {"class":"panel-pane pane-custom pane-1"})
+                if posted:
+                    post_date = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
+                    post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
+                    paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
+                
+                # They put their infolinks behind another request.  Already at 3 calls per paper
+                # github = lil_req.find('div', {"class":"section data-availability"})
+                # if github:
+                #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                #     possiblematch = re.findall(pattern, github.text)
+                #     if possiblematch:
+                #         paper.github_url = possiblematch[0]
 
-                    metrics = self._make_subdata_request(paper.doi)
-                    if metrics:
-                        viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
-                        rows = viewstable.find_all("tr")
-                        paper.supplemental = {}
-                        for col in rows:
-                            results = col.find_all("td")
-                            if results:
-                                key = results[0].text
-                                paper.supplemental[key] = {}
-                                paper.supplemental[key]["abstract"] = results[1].text
-                                paper.supplemental[key]["full"] = results[2].text
-                                paper.supplemental[key]["pdf"] = results[3].text
+                metrics = self._make_subdata_request(paper.doi)
+                if metrics:
+                    viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                    rows = viewstable.find_all("tr")
+                    paper.supplemental = {}
+                    for col in rows:
+                        results = col.find_all("td")
+                        if results:
+                            key = results[0].text
+                            paper.supplemental[key] = {}
+                            paper.supplemental[key]["abstract"] = results[1].text
+                            paper.supplemental[key]["full"] = results[2].text
+                            paper.supplemental[key]["pdf"] = results[3].text
 
-                else:
-                    #Grab title
-                    paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
-                    paper.id = str(idx) + "_" + paper.title
-                    
-                    #Grab authors
-                    authors = result.find_all("div", {"class":lambda x:"authors" in x}).text.strip()
-                    if authors != None:
-                        paper.authors = {str(ind) + "_" + x.text:x.text for ind, x in enumerate(authors)}
+                    # else:
+                    #     #Grab title
+                    #     paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
+                    #     paper.id = str(idx) + "_" + paper.title
+                        
+                    #     #Grab authors
+                    #     authors = result.find_all("div", {"class":lambda x:"authors" in x}).text.strip()
+                    #     if authors != None:
+                    #         paper.authors = {str(ind) + "_" + x.text:x.text for ind, x in enumerate(authors)}
 
-                    #
-                    categories = result.find("div", attrs={"class":"tags is-inline-block"})
-                    if categories != None:
-                        paper.category = categories.text.split()
+                    #     #
+                    #     categories = result.find("div", attrs={"class":"tags is-inline-block"})
+                    #     if categories != None:
+                    #         paper.category = categories.text.split()
 
-                    comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
-                    if comments != None:
-                        comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
-                        if comment_ != None:
-                            paper.supplemental = comment_.text
+                    #     comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+                    #     if comments != None:
+                    #         comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                    #         if comment_ != None:
+                    #             paper.supplemental = comment_.text
 
                 self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
                 del paper
                 paper_idx += 1
-            self.cursor += 1
+        self.cursor += 1
 
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict):
