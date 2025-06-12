@@ -180,10 +180,10 @@ class PaperSearch(App):
                         #TODO - Add sort selection 
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
-                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Limit the amount of returned results.  This function will take far longer the more you papers request", type="integer")
+                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Suggested limit:10 Papers. This search function takes 10 seconds per paper to run", type="integer")
                             yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
                             yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
-                            yield Button("Search",  id="xsearch-arxiv", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced\nReminder:Each paper takes about 10 seconds to query")
+                            yield Button("Search",  id="xsearch-arxiv", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced")
 
         yield Footer()
 
@@ -715,6 +715,7 @@ class PaperSearch(App):
     
     #FUNCTION - search arXiv
     def search_arxiv(self):
+        #TODO - Unit test for arxiv connection. 
         #Load up search variables
         variables = []
         srch_text = self.query_one("#input-arxiv", Input)._reactive_value
@@ -784,6 +785,9 @@ class PaperSearch(App):
     
     #FUNCTION - search bio/medarxiv
     def search_xrxiv(self):
+        #TODO - Unit test for xrxiv connection. 
+            #Noticing if either site went down, it just holds the search in an infinite loop.  
+            #Need to also get this into a progress bar and asycio requests 
         #Load up search variables
         variables = []
         srch_text = self.query_one("#xinput-arxiv", Input)._reactive_value
@@ -845,6 +849,7 @@ class PaperSearch(App):
         elif variables["source"] == "bioRxiv":
             variables["subjects"] = BIOARXIV_SUBJECTS
             rxiv = bioRxiv(variables)
+            
         elif variables["source"] == "both":
             variables["source"] = "medrxiv||biorxiv"
             variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)

@@ -433,7 +433,8 @@ class xRxivBase(object):
         if self.cursor != 0: 
             bs4ob = self._make_request(cursor = self.cursor)
         outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
-        papers = outer_papers.find_all("li", {"class":lambda x:"search-result-highwire-citation" in x})
+        logger.info("outer papers")
+        papers = outer_papers.find_all("li", {"class":lambda x: x.endswith("search-result-highwire-citation")})
         for result in papers:
             if paper_idx >= limit or paper_idx >= totalpapers:
                 return
@@ -451,6 +452,7 @@ class xRxivBase(object):
                 outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
                 if outer_authors != None:
                     paper.authors = {}
+                    logger.info("authors")
                     authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
                     for author in authors:
                         name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
@@ -482,11 +484,19 @@ class xRxivBase(object):
                 #         paper.github_url = possiblematch[0]
 
                 metrics = self._make_subdata_request(paper.doi)
-                if metrics:
-                    viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
-                    rows = viewstable.find_all("tr")
+                logger.info(f"searching metric {paper_idx}")
+                no_stats = metrics.find("div", class_="messages highwire-stats")
+                if no_stats != None:
+                    if "No statistics" in no_stats.text:
+                        continue
+                
+                viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                logger.info("viewstable")
+                rows = viewstable.find_all("tr")
+                if rows:
                     paper.supplemental = {}
                     for col in rows:
+                        logger.info("views table results")
                         results = col.find_all("td")
                         if results:
                             key = results[0].text
@@ -494,7 +504,9 @@ class xRxivBase(object):
                             paper.supplemental[key]["abstract"] = results[1].text
                             paper.supplemental[key]["full"] = results[2].text
                             paper.supplemental[key]["pdf"] = results[3].text
-
+                else:
+                    logger.info(f"No rows for requested table {paper.doi}")
+                    #Old code for grabbing first request paper information.  Not enough for useful search so had to pull each individual paper DOI.
                     # else:
                     #     #Grab title
                     #     paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
