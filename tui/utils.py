@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import torch
 import time
+import asyncio
 from urllib.parse import quote
 from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -261,86 +262,6 @@ class xRxivBase(object):
             self.params["end_date"] = self.params["submitted_date"]
             return True
     
-    def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
-        chrome_version = np.random.randint(120, 135)
-        if doi_url:
-            baseurl = f"https://www.{self.server.lower()}.org"
-        else:
-            baseurl = self.base_url
-        headers = {
-            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'accept-language': 'en-US,en;q=0.9',
-            'cache-control': 'max-age=0',
-            'priority': 'u=0, i',
-            'referer': baseurl,
-            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'document',
-            'sec-fetch-mode': 'navigate',
-            'sec-fetch-site': 'same-origin',
-            'sec-fetch-user': '?1',
-            'Upgrade-Insecure-Requests': '1',
-            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
-        }
-
-        try:
-            #First request
-            if post:
-                response = requests.post(self.query_formatted, headers=headers) 
-            
-            #Individual paper request
-            elif doi_url:
-                response = requests.get(doi_url, headers=headers)
-
-            #Page Iteration
-            elif cursor > 0:
-                response = requests.post(self.query_formatted + f"page={cursor}", headers=headers)
-
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-            return None
-
-        time.sleep(np.random.randint(3,4)) #Be nice to the servers
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None, f"Status Code {response.status_code} Reason: {response.reason}"
-        
-        return BeautifulSoup(response.content, "lxml")
-
-    def _make_subdata_request(self, doi:str) -> BeautifulSoup:
-        chrome_version = np.random.randint(125, 137)
-        baseurl = doi + ".article-metrics"
-        headers = {
-            'accept': 'text/html, */*; q=0.01',
-            'accept-language': 'en-US,en;q=0.9',
-            'priority': 'u=1, i',
-            'referer': baseurl,
-            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"Windows"',
-            'sec-fetch-dest': 'empty',
-            'sec-fetch-mode': 'cors',
-            'sec-fetch-site': 'same-origin',
-            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
-            'x-requested-with': 'XMLHttpRequest',
-        }
-
-        try:
-            response = requests.get(baseurl, headers=headers)
-            time.sleep(np.random.randint(3,5)) #Be nice to the servers
-        except Exception as e:
-            logger.warning(f"A general request error occured.  Check URL\n{e}")
-            return None
-        
-        if response.status_code != 200:
-            logger.warning(f'Status code: {response.status_code}')
-            logger.warning(f'Reason: {response.reason}')
-            return None
-        
-        return BeautifulSoup(response.content, "lxml")
-
     def _url_format(self):
         query_params = {}
         try:
@@ -400,14 +321,14 @@ class xRxivBase(object):
             logger.warning("Error in url query formatting")
             return False
 
-    def _query_xrxiv(self) -> dict:
+    async def _query_xrxiv(self) -> dict:
         #Input validation checks
         formatted = self._date_format()
         classy = self._url_format()
         if not formatted or not classy:
             return None, "Error in formatting date or url"
 
-        bs4ob = self._make_request(post=True) #True means make a post request
+        bs4ob = await self._make_request(post=True) #True means make a post request
         paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
 
         if len(paper_count.text) > 0:
@@ -415,11 +336,12 @@ class xRxivBase(object):
                 return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
             pcount = paper_count.text.split()[0]
             pcount = int("".join(x for x in pcount if x.isnumeric()))
-            self.paper_count = pcount 
+            self.paper_count = pcount
+            logger.info(f"{pcount} found on {self.params['source']} in {self.params['field']}")
 
         if pcount:
-            self._parse_query(bs4ob)
-            logger.info(f'{len(self.results)} papers returned from arxiv searching {self.params["query"]}')
+            await self._parse_query(bs4ob)
+            logger.info(f'{len(self.results)} papers processed arxiv searching {self.params["query"]}')
             return self.results, None
 
         else:
@@ -427,12 +349,12 @@ class xRxivBase(object):
             logger.warning(message)
             return None, message
 
-    def _parse_query(self, bs4ob:BeautifulSoup):
+    async def _parse_query(self, bs4ob:BeautifulSoup):
         totalpapers = self.paper_count
         limit = int(self.params["limit"]) - 1
         paper_idx = 0
         if self.cursor != 0: 
-            bs4ob = self._make_request(cursor = self.cursor)
+            bs4ob = await self._make_request(cursor = self.cursor)
         outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
         logger.info("outer papers")
         papers = outer_papers.find_all("li", {"class":lambda x: x.endswith("search-result-highwire-citation")})
@@ -444,7 +366,7 @@ class xRxivBase(object):
                 title = result.find("a", {"class":"highwire-cite-linked-title"})
                 f_url = f"{self.base_url[:-8]}" + title.get("href")
                 paper.doi = f_url
-                lil_req = self._make_request(doi_url=f_url)
+                lil_req = await self._make_request(doi_url=f_url)
                 paper.title = title.text
                 paper.id = str(paper_idx) + "_" + paper.title
                 paper.pdf = paper.doi + ".full.pdf"
@@ -483,28 +405,30 @@ class xRxivBase(object):
                 #     possiblematch = re.findall(pattern, github.text)
                 #     if possiblematch:
                 #         paper.github_url = possiblematch[0]
-
-                metrics = self._make_subdata_request(paper.doi)
+                proc_table = True
+                metrics = await self._make_subdata_request(paper.doi)
                 logger.info(f"searching metric {paper_idx}")
                 no_stats = metrics.find("div", class_="messages highwire-stats")
                 if no_stats != None:
                     if "No statistics" in no_stats.text:
+                        proc_table = False
                         logger.info(f"No rows for requested table {paper.doi}")
-                    else:
-                        viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
-                        logger.info("viewstable")
-                        rows = viewstable.find_all("tr")
-                        if rows:
-                            paper.supplemental = {}
-                            for col in rows:
-                                logger.info("views table results")
-                                results = col.find_all("td")
-                                if results:
-                                    key = results[0].text
-                                    paper.supplemental[key] = {}
-                                    paper.supplemental[key]["abstract"] = results[1].text
-                                    paper.supplemental[key]["full"] = results[2].text
-                                    paper.supplemental[key]["pdf"] = results[3].text
+                
+                logger.info(f"viewstable: {proc_table}")
+                if proc_table:
+                    viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                    rows = viewstable.find_all("tr")
+                    if rows:
+                        paper.supplemental = {}
+                        for col in rows:
+                            logger.info("views table results")
+                            results = col.find_all("td")
+                            if results:
+                                key = results[0].text
+                                paper.supplemental[key] = {}
+                                paper.supplemental[key]["abstract"] = results[1].text
+                                paper.supplemental[key]["full"] = results[2].text
+                                paper.supplemental[key]["pdf"] = results[3].text
                 self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
                 del paper
                 paper_idx += 1
@@ -535,6 +459,87 @@ class xRxivBase(object):
                     #         comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
                     #         if comment_ != None:
                     #             paper.supplemental = comment_.text
+
+    async def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
+        chrome_version = np.random.randint(120, 135)
+        if doi_url:
+            baseurl = f"https://www.{self.server.lower()}.org"
+        else:
+            baseurl = self.base_url
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        try:
+            #First request
+            if post:
+                response = requests.post(self.query_formatted, headers=headers) 
+            
+            #Individual paper request
+            elif doi_url:
+                response = requests.get(doi_url, headers=headers)
+
+            #Page Iteration
+            elif cursor > 0:
+                response = requests.post(self.query_formatted + f"page={cursor}", headers=headers)
+
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        await asyncio.sleep(np.random.randint(3,4)) #Be nice to the servers
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
+        
+        return BeautifulSoup(response.content, "lxml")
+
+    async def _make_subdata_request(self, doi:str) -> BeautifulSoup:
+        chrome_version = np.random.randint(125, 137)
+        baseurl = doi + ".article-metrics"
+        headers = {
+            'accept': 'text/html, */*; q=0.01',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=1, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
+            'x-requested-with': 'XMLHttpRequest',
+        }
+
+        try:
+            response = requests.get(baseurl, headers=headers)
+            await asyncio.sleep(np.random.randint(4,5)) #Be nice to the servers
+
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+        return BeautifulSoup(response.content, "lxml")
 
 
 

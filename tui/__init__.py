@@ -925,7 +925,7 @@ class PaperSearch(App):
 
         try:
             # Perform requests from bio/medarxiv
-            json_data, no_res_message = rxiv._query_xrxiv()
+            json_data, no_res_message = await rxiv._query_xrxiv()
             if json_data:
                 all_results.update(**json_data)
                 self.app.call_from_thread(self.notify, f"{len(json_data)} results found on {variables["source"]}")
