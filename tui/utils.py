@@ -12,6 +12,7 @@ import time
 from urllib.parse import quote
 from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
+from typing import Callable, Optional
 from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
@@ -214,7 +215,7 @@ class xRxivBase(object):
         launchdt: str,
         params: dict,
         base_url: str = "https://www.biorxiv.org",
-        
+        progress_callback: Optional[Callable[[int],None]] = None
     ):
         self.server  : str = server
         self.launchdt = launchdt
@@ -222,6 +223,7 @@ class xRxivBase(object):
         self.base_url = base_url
         self.results : dict = {}
         self.cursor : int = 0
+        self.progress_callback = progress_callback
 
     def _date_format(self):
         self.params["dates"] = self.params["dates"].lower().split()
@@ -436,7 +438,7 @@ class xRxivBase(object):
         logger.info("outer papers")
         papers = outer_papers.find_all("li", {"class":lambda x: x.endswith("search-result-highwire-citation")})
         for result in papers:
-            if paper_idx >= limit or paper_idx >= totalpapers:
+            if paper_idx > limit or paper_idx > totalpapers:
                 return
             else:
                 paper = Paper()
@@ -488,24 +490,31 @@ class xRxivBase(object):
                 no_stats = metrics.find("div", class_="messages highwire-stats")
                 if no_stats != None:
                     if "No statistics" in no_stats.text:
-                        continue
-                
-                viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
-                logger.info("viewstable")
-                rows = viewstable.find_all("tr")
-                if rows:
-                    paper.supplemental = {}
-                    for col in rows:
-                        logger.info("views table results")
-                        results = col.find_all("td")
-                        if results:
-                            key = results[0].text
-                            paper.supplemental[key] = {}
-                            paper.supplemental[key]["abstract"] = results[1].text
-                            paper.supplemental[key]["full"] = results[2].text
-                            paper.supplemental[key]["pdf"] = results[3].text
-                else:
-                    logger.info(f"No rows for requested table {paper.doi}")
+                        logger.info(f"No rows for requested table {paper.doi}")
+                    else:
+                        viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                        logger.info("viewstable")
+                        rows = viewstable.find_all("tr")
+                        if rows:
+                            paper.supplemental = {}
+                            for col in rows:
+                                logger.info("views table results")
+                                results = col.find_all("td")
+                                if results:
+                                    key = results[0].text
+                                    paper.supplemental[key] = {}
+                                    paper.supplemental[key]["abstract"] = results[1].text
+                                    paper.supplemental[key]["full"] = results[2].text
+                                    paper.supplemental[key]["pdf"] = results[3].text
+                self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
+                del paper
+                paper_idx += 1
+                if self.progress_callback:
+                    self.progress_callback(paper_idx)
+
+        self.cursor += 1
+
+
                     #Old code for grabbing first request paper information.  Not enough for useful search so had to pull each individual paper DOI.
                     # else:
                     #     #Grab title
@@ -528,27 +537,26 @@ class xRxivBase(object):
                     #         if comment_ != None:
                     #             paper.supplemental = comment_.text
 
-                self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
-                del paper
-                paper_idx += 1
-        self.cursor += 1
+
 
 class bioRxiv(xRxivBase):
-    def __init__(self, variables:dict):
+    def __init__(self, variables:dict, progress_callback):
         super().__init__(
             server = "bioRxiv",
             launchdt = "2013-01-01",
             base_url = "https://www.biorxiv.org/search/",
-            params = variables
+            params = variables,
+            progress_callback = progress_callback
         )
 
 class medRxiv(xRxivBase):
-    def __init__(self, variables:dict):
+    def __init__(self, variables:dict, progress_callback):
         super().__init__(
             server = "medRxiv",
             launchdt = "2019-06-01",
             base_url = "https://www.medrxiv.org/search/",
-            params = variables
+            params = variables,
+            progress_callback = progress_callback
     )
 
 ###############################  Date Functions ########################################

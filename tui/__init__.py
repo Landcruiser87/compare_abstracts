@@ -237,6 +237,14 @@ class PaperSearch(App):
             dateto.disabled = False
         else:
             dateto.disabled = True
+    
+    @on(RadioSet.Changed, "#xradio-arx-dates")
+    def on_radioset_xarx_dates_changed(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
 
     @on(RadioSet.Changed, "#radio-arx-subjects")
     def on_radio_subjects_changed(self, event: RadioSet.Changed) -> None:
@@ -712,7 +720,7 @@ class PaperSearch(App):
             self.app.call_from_thread(remove_progress_ui)
             #Reload SelectionList to include search results
             self.reload_datasets()
-    
+
     #FUNCTION - search arXiv
     def search_arxiv(self):
         #TODO - Unit test for arxiv connection. 
@@ -841,41 +849,223 @@ class PaperSearch(App):
 
         else:
             root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
+        
+        #BUG = Might not need this try block
+        try:    
+            tree_view: TreeView = self.query_one("#tree-container", TreeView)
+            tree: Tree = tree_view.query_one(Tree)
+            searchbar = SearchProgress(count=0, total=int(variables["limit"]))
+            self.search_container = Container(searchbar, id="loading-container")
+            self.mount(self.search_container)
+            self._search_xarxiv_worker(variables, root_name, tree)
+            
+            #OLD initialization
+            # self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
+            # #load the JSON into the Tree
+            # root_name = root_name.replace("|", "_")
+            # self.load_data(tree, root_name, json_data)
+            # #save the search
+            # save_data(root_name, json_data)
+            # self.reload_datasets()
+
+        except Exception as e:
+            logger.error(f"Failed to save search results: {e}")
+
+    #FUNCTION - run xarXiv worker
+    @work(thread=True, exclusive=True, group="xarxiv_searching")
+    async def _search_xarxiv_worker(
+        self, 
+        variables: dict,
+        root_name: str,
+        tree: Tree
+        ):
+        """Worker thread search medrxiv and biorxiv
+
+        Args:
+            variables (list): _description_
+            root_name (str): _description_
+            tree (Tree): _description_
+        """
+        # Define a helper function to perform the UI updates
+        def update_progress_ui(current_count:int):
+            if self.search_container and self.search_container.is_mounted:
+                try:
+                    progress_bar = self.search_container.query_one(SearchProgress)
+                    progress_bar.count = current_count
+                    progress_bar.advance(1)
+                    progress_bar.refresh()
+
+                except Exception as e:
+                        logger.error(f"Failed to update search progress bar: {e}")
+        
+        worker = get_current_worker()
+        all_results = {}
 
         if variables["source"] == "medRxiv":
             variables["subjects"] = MEDARXIV_SUBJECTS
-            rxiv = medRxiv(variables)
+            rxiv = medRxiv(
+                variables = variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
 
         elif variables["source"] == "bioRxiv":
             variables["subjects"] = BIOARXIV_SUBJECTS
-            rxiv = bioRxiv(variables)
+            rxiv = bioRxiv(
+                variables=variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
             
         elif variables["source"] == "both":
             variables["source"] = "medrxiv||biorxiv"
             variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)
-            rxiv = medRxiv(variables)
+            rxiv = medRxiv(
+                variables = variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
+
+        try:
+            # Perform requests from bio/medarxiv
+            json_data, no_res_message = rxiv._query_xrxiv()
+            if json_data:
+                all_results.update(**json_data)
+                self.app.call_from_thread(self.notify, f"{len(json_data)} results found on {variables["source"]}")
+            elif no_res_message:
+                self.app.call_from_thread(self.notify, f"No results:\nMessage: {no_res_message}")
+                logger.warning(f"No Results due to {no_res_message}")
+
+            # Take a power nap to allow UI thread processing time
+            await asyncio.sleep(0.1)
+
+            if not worker.is_cancelled:                
+                if all_results:
+                    root_name = root_name.replace("|", "_")
+                    try:
+                        self.app.call_from_thread(self.load_data, tree, root_name, all_results)
+                        # self.load_data(tree, root_name, json_data)
+                        save_data(root_name, all_results)
+                        self.app.call_from_thread(self.notify, f"Found {len(all_results.keys())} papers in {variables["source"]} sources.")
+
+                    except Exception as e:
+                        logger.error(f"Failed to save saerch results: {e}")
+
+                else:
+                    self.app.call_from_thread(self.notify, "Search Complete, No results found")
+                    sleep(2)
+
+        except Exception as e:
+            # Catch other potential errors during link traversal
+            logger.error(f"Error during worker run: {e}")
+            self.app.call_from_thread(self.notify, f"Search failed on {variables["source"]}: {e}", severity="error", timeout=2)
+
+        finally:
+            # Remove Progress Bar
+            def remove_progress_ui():
+                if self.search_container and self.search_container.is_mounted:
+                    try:
+                        self.search_container.remove()
+                        logger.info("Search progress container removed.")
+                        
+                    except Exception as e:
+                        logger.error(f"Error removing search progress container: {e}")
+                self.search_container = None 
+            self.app.call_from_thread(remove_progress_ui)
+            #Reload SelectionList to include search results
+            self.reload_datasets()
+
+    # OLD code for - search bio/medarxiv
+    # def search_xrxiv(self):
+    #     #Load up search variables
+    #     variables = []
+    #     srch_text = self.query_one("#xinput-arxiv", Input)._reactive_value
+    #     start_date = self.query_one("#xinput-arx-from", Input)._reactive_value
+    #     end_date_input = end_date = self.query_one("#xinput-arx-to", Input)
+    #     end_date = end_date_input._reactive_value
+    #     limit = self.query_one("#xinput-arx-limit", Input)._reactive_value
+    #     source = self.query_one("#xradio-arx-source", RadioSet)._reactive__selected
+    #     date_range = self.query_one("#xradio-arx-dates", RadioSet)._reactive__selected
+    #     field = self.query_one("#xradio-arx-fields", RadioSet)._reactive__selected
+    #     categories = self.query_one("#xsl-arx-categories", SelectionList)
+    #     selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
+    #     #NOTE: Going to need a progress bar here.. sooooo
+    #     #implement a similar function run_search.
+    #         #Meaning you'll also need the async func of _search_datasets_worker
+    #         #but for individual paper pulls.  
+
+    #     #Check input validity (should all be ints)
+    #     variables = [source, limit, field, date_range]
+    #     if not all(self.is_numeric_string(str(var)) for var in variables):
+    #         self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
+    #         return None
+
+    #     #Remap the variables with their values     
+    #     variables = {
+    #         "query"     : srch_text,
+    #         "limit"     : limit,
+    #         "field"     : XARXIV_FIELDS[field].lower(),
+    #         "source"    : XARXIV_SOURCES[source],
+    #         "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+    #         "dates"     : ARXIV_DATES[date_range],
+    #         "start_date": "",
+    #         "end_date"  : "",
+    #         "year"      : "",
+    #         "add_cat"   : False
+    #     }
+        
+    #     if not end_date_input.disabled:
+    #         variables["start_date"] = start_date
+    #         variables["end_date"] = end_date
+    #     else:
+    #         if ARXIV_DATES[date_range] == "Specific Year":
+    #             variables["year"] = start_date
+
+    #     if selected_cat:
+    #         temp =  ["_".join(variables["categories"][x].lower().split(" ")) for x in range(len(variables["categories"]))]
+    #         cat_string = "_".join(temp)
+    #         root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{cat_string}_{'-'.join(srch_text.lower().split())}"
+    #         variables["categories"] = ",".join(map(str, variables["categories"]))
+    #         variables["add_cat"] = True
+
+    #     else:
+    #         root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
+
+    #     if variables["source"] == "medRxiv":
+    #         variables["subjects"] = MEDARXIV_SUBJECTS
+    #         rxiv = medRxiv(variables)
+
+    #     elif variables["source"] == "bioRxiv":
+    #         variables["subjects"] = BIOARXIV_SUBJECTS
+    #         rxiv = bioRxiv(variables)
             
-        json_data, no_res_message = rxiv._query_xrxiv()
-        if json_data:
-            tree_view: TreeView = self.query_one("#tree-container", TreeView)
-            tree: Tree = tree_view.query_one(Tree)
+    #     elif variables["source"] == "both":
+    #         variables["source"] = "medrxiv||biorxiv"
+    #         variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)
+    #         rxiv = medRxiv(variables)
+            
+    #     json_data, no_res_message = rxiv._query_xrxiv()
+    #     if json_data:
+    #         tree_view: TreeView = self.query_one("#tree-container", TreeView)
+    #         tree: Tree = tree_view.query_one(Tree)
+    #         # searchbar = SearchProgress(count=0, total=len(sources))
+    #         # self.search_container = Container(searchbar, id="loading-container")
+    #         # self.mount(self.search_container)
+    #         # self._search_xarxiv_worker(srch_text, variables, rxiv, root_name, tree)
+    #         try:
+    #             self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
+    #             #load the JSON into the Tree
+    #             root_name = root_name.replace("|", "_")
+    #             self.load_data(tree, root_name, json_data)
+    #             #save the search
+    #             save_data(root_name, json_data)
+    #             self.reload_datasets()
 
-            try:
-                self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
-                #load the JSON into the Tree
-                root_name = root_name.replace("|", "_")
-                self.load_data(tree, root_name, json_data)
-                #save the search
-                save_data(root_name, json_data)
-                self.reload_datasets()
+    #         except Exception as e:
+    #             logger.error(f"Failed to save search results: {e}")
+    #     elif no_res_message:
+    #         self.notify(f"{no_res_message}", severity="warning")
+    #     else:
+    #         self.notify(f"No papers matched the search {variables['query']}", severity="warning")
+    #         logger.warning(f"No papers found the search {variables}")
 
-            except Exception as e:
-                logger.error(f"Failed to save search results: {e}")
-        elif no_res_message:
-            self.notify(f"{no_res_message}", severity="warning")
-        else:
-            self.notify(f"No papers matched the search {variables['query']}", severity="warning")
-            logger.warning(f"No papers found the search {variables}")
     
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
@@ -897,8 +1087,6 @@ class PaperSearch(App):
         activetab = self.query_one(TabbedContent)
         tree = self.query_one(TreeView)
         if not activetab.active == "content-tab":
-            # tree_view = self.query_one(TreeView)
-            # tree = tree_view.query_one(JSONTree)
             tree = self.query_one(TreeView)
             json_docview.focus()
             tree.focus()
