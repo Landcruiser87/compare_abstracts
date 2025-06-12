@@ -955,7 +955,7 @@ class PaperSearch(App):
         except Exception as e:
             # Catch other potential errors during link traversal
             logger.error(f"Error during worker run: {e}")
-            self.app.call_from_thread(self.notify, f"Search failed on {variables["source"]}: {e}", severity="error", timeout=2)
+            self.app.call_from_thread(self.notify, f"Search failed on {variables["source"]}:\n{e}", severity="error", timeout=2)
 
         finally:
             # Remove Progress Bar

@@ -296,18 +296,18 @@ class xRxivBase(object):
             #Page Iteration
             elif cursor > 0:
                 response = requests.post(self.query_formatted + f"page={cursor}", headers=headers)
-                
+
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
             return None
-        
+
+        time.sleep(np.random.randint(3,4)) #Be nice to the servers
         if response.status_code != 200:
             logger.warning(f'Status code: {response.status_code}')
             logger.warning(f'Reason: {response.reason}')
             return None, f"Status Code {response.status_code} Reason: {response.reason}"
-        bs4ob = BeautifulSoup(response.content, "lxml")
-        time.sleep(3) #Be nice to the servers
-        return bs4ob
+        
+        return BeautifulSoup(response.content, "lxml")
 
     def _make_subdata_request(self, doi:str) -> BeautifulSoup:
         chrome_version = np.random.randint(125, 137)
@@ -329,6 +329,7 @@ class xRxivBase(object):
 
         try:
             response = requests.get(baseurl, headers=headers)
+            time.sleep(np.random.randint(3,5)) #Be nice to the servers
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
             return None
@@ -338,9 +339,7 @@ class xRxivBase(object):
             logger.warning(f'Reason: {response.reason}')
             return None
         
-        bs4ob = BeautifulSoup(response.content, "lxml")
-        time.sleep(3) #Be nice to the servers
-        return bs4ob
+        return BeautifulSoup(response.content, "lxml")
 
     def _url_format(self):
         query_params = {}
