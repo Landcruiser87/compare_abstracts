@@ -845,7 +845,11 @@ class PaperSearch(App):
         elif variables["source"] == "bioRxiv":
             variables["subjects"] = BIOARXIV_SUBJECTS
             rxiv = bioRxiv(variables)
-
+        elif variables["source"] == "both":
+            variables["source"] = "medrxiv||biorxiv"
+            variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)
+            rxiv = medRxiv(variables)
+            
         json_data, no_res_message = rxiv._query_xrxiv()
         if json_data:
             tree_view: TreeView = self.query_one("#tree-container", TreeView)
