@@ -377,12 +377,13 @@ class xRxivBase(object):
                     paper.authors = {}
                     logger.info("authors")
                     authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
-                    for author in authors:
-                        name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
-                        paper.authors[name] = {"name":name}
-                        orcid = author.select("a")
-                        if orcid:
-                            paper.authors[name]["orcidid"] = orcid[0].get("href")
+                    if authors:
+                        for author in authors:
+                            name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
+                            paper.authors[name] = {"name":name}
+                            orcid = author.select("a")
+                            if orcid:
+                                paper.authors[name]["orcidid"] = orcid[0].get("href")
 
                 abstract = lil_req.find("div", {"class":"section abstract"})
                 if abstract:
