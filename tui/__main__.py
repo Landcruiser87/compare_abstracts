@@ -11,7 +11,6 @@ else:
     import importlib.metadata as importlib_metadata
 
 from __init__ import PaperSearch, __prog_name__, __version__
-#textual run --dev tui/__main__.py data/conferences/2020_COLT.json
 WINDOWS = platform.system() == "Windows"
 DEBUGPY_PORT = 5678
 
