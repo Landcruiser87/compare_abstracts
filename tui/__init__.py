@@ -726,14 +726,14 @@ class PaperSearch(App):
         #TODO - Unit test for arxiv connection. 
         #Load up search variables
         variables = []
-        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
-        start_date = self.query_one("#input-arx-from", Input)._reactive_value
+        srch_text = self.query_one("#input-arxiv", Input).value
+        start_date = self.query_one("#input-arx-from", Input).value
         end_date_input = end_date = self.query_one("#input-arx-to", Input)
-        end_date = end_date_input._reactive_value
-        limit = self.query_one("#input-arx-limit", Input)._reactive_value
-        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
-        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
-        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
+        end_date = end_date_input.value
+        limit = self.query_one("#input-arx-limit", Input).value
+        field = self.query_one("#radio-arx-cat", RadioSet).pressed_index
+        date_range = self.query_one("#radio-arx-dates", RadioSet).pressed_index
+        subject = self.query_one("#radio-arx-subjects", RadioSet).pressed_index
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
         root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{"_".join(ARXIV_SUBJECTS[subject].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
@@ -798,14 +798,14 @@ class PaperSearch(App):
             #Need to also get this into a progress bar and asycio requests 
         #Load up search variables
         variables = []
-        srch_text = self.query_one("#xinput-arxiv", Input)._reactive_value
-        start_date = self.query_one("#xinput-arx-from", Input)._reactive_value
+        srch_text = self.query_one("#xinput-arxiv", Input).value
+        start_date = self.query_one("#xinput-arx-from", Input).value
         end_date_input = end_date = self.query_one("#xinput-arx-to", Input)
-        end_date = end_date_input._reactive_value
-        limit = self.query_one("#xinput-arx-limit", Input)._reactive_value
-        source = self.query_one("#xradio-arx-source", RadioSet)._reactive__selected
-        date_range = self.query_one("#xradio-arx-dates", RadioSet)._reactive__selected
-        field = self.query_one("#xradio-arx-fields", RadioSet)._reactive__selected
+        end_date = end_date_input.value
+        limit = self.query_one("#xinput-arx-limit", Input).value
+        source = self.query_one("#xradio-arx-source", RadioSet).pressed_index
+        date_range = self.query_one("#xradio-arx-dates", RadioSet).pressed_index
+        field = self.query_one("#xradio-arx-fields", RadioSet).pressed_index
         categories = self.query_one("#xsl-arx-categories", SelectionList)
         selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
         #NOTE: Going to need a progress bar here.. sooooo

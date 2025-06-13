@@ -33,8 +33,6 @@ class Paper:
     url     : str = ""
     pdf     : str = ""
     doi     : str = ""            
-    # journal : str = ""
-    # journal_link   : str = ""
     github_url     : str = ""
     supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
@@ -293,13 +291,10 @@ class xRxivBase(object):
             #NOTE: API
                 #I find it hilarious that neither xrxiv left in a space in their api
                 #to actually saerch the api as opposed to just dumping the lastest 
-                #100 papers to be submitted.  Because of this idiocy, we will have 
+                #100 papers submitted.  Because of this idiocy, we will have 
                 #to use the advanced search endpoint and parse the resultant 
                 #html.  This also means we need to scrape each url because the
                 #fundamental abstract data won't be present.  ugh.  idiots
-                #[x] Adapt SearchProgress progressbar
-                    #I'll need a progress bar now if this 
-                    #is going to take forever. 
 
                 #api structure
                 # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
@@ -465,7 +460,7 @@ class xRxivBase(object):
     async def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
         chrome_version = np.random.randint(125, 137)
         if doi_url:
-            baseurl = f"https://www.{self.server.lower()}.org"
+            baseurl = self.query_formatted
         else:
             baseurl = self.base_url
         #BUG - Bioarxiv bug in here
@@ -532,7 +527,7 @@ class xRxivBase(object):
 
         try:
             response = requests.get(baseurl, headers=headers)
-            await asyncio.sleep(np.random.randint(4,5)) #Be nice to the servers
+            await asyncio.sleep(np.random.randint(6,8)) #Extra long nap because metrics.... don't like to come through for some reason. 
 
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
@@ -544,8 +539,6 @@ class xRxivBase(object):
             return None
         
         return BeautifulSoup(response.content, "lxml")
-
-
 
 class bioRxiv(xRxivBase):
     def __init__(self, variables:dict, progress_callback):
