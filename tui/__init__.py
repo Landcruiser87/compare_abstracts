@@ -808,10 +808,6 @@ class PaperSearch(App):
         field = self.query_one("#xradio-arx-fields", RadioSet).pressed_index
         categories = self.query_one("#xsl-arx-categories", SelectionList)
         selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
-        #NOTE: Going to need a progress bar here.. sooooo
-        #implement a similar function run_search.
-            #Meaning you'll also need the async func of _search_datasets_worker
-            #but for individual paper pulls.  
 
         #Check input validity (should all be ints)
         variables = [source, limit, field, date_range]

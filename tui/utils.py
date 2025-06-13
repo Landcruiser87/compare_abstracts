@@ -322,10 +322,12 @@ class xRxivBase(object):
         classy = self._url_format()
         if not formatted or not classy:
             return None, "Error in formatting date or url"
-
+        
+        #Make first request
         bs4ob = await self._make_request(post=True) #True means make a post request
-        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
 
+        #Isolate how many papers were found, if any self._parse_query
+        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
         if len(paper_count.text) > 0:
             if "No Results" in paper_count.text:
                 return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
@@ -359,27 +361,40 @@ class xRxivBase(object):
             else:
                 paper = Paper()
                 title = result.find("a", {"class":"highwire-cite-linked-title"})
-                f_url = f"{self.base_url[:-8]}" + title.get("href")
-                paper.doi = f_url
-                lil_req = await self._make_request(doi_url=f_url)
-                paper.title = title.text
-                paper.id = str(paper_idx) + "_" + paper.title
-                paper.pdf = paper.doi + ".full.pdf"
-                
+                if title:
+                    f_url = f"{self.base_url[:-8]}" + title.get("href")
+                    paper.doi = f_url
+                    lil_req = await self._make_request(doi_url=f_url)
+                    paper.title = title.text
+                    paper.id = str(paper_idx) + "_" + paper.title
+                    paper.pdf = paper.doi + ".full.pdf"
+                else:
+                    logger.error(f"error in title extraction for {paper_idx}")
+                    logger.error(f"Unable to extract paper and moving to next")
+                    continue
                 #Grab authors
                 outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
                 if outer_authors != None:
                     paper.authors = {}
-                    logger.info("outer authors")
+                    logger.debug("outer authors")
                     authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
                     if authors:
                         for author in authors:
-                            logger.info("inner author")
-                            name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
-                            paper.authors[name] = {"name":name}
-                            orcid = author.select("a")
-                            if orcid:
-                                paper.authors[name]["orcidid"] = orcid[0].get("href")
+                            logger.debug("inner author")
+                            first = author.find("span", class_="nlm-given-names")
+                            if first:
+                                firstn = first.text.strip()
+                            last = author.find("span", class_="nlm-surname")
+                            if last:
+                                lastn = last.text.strip()
+                            if first and last:
+                                name = " ".join([firstn, lastn])
+                                paper.authors[name] = {"name":name}
+                                orcid = author.select("a")
+                                if orcid:
+                                    paper.authors[name]["orcidid"] = orcid[0].get("href")
+                            else:
+                                logger.error(f"error in author extraction for {paper_idx}:{paper.title}")
 
                 abstract = lil_req.find("div", {"class":"section abstract"})
                 if abstract:
@@ -485,15 +500,16 @@ class xRxivBase(object):
             #First request
             if post:
                 response = requests.post(self.query_formatted, headers=headers) 
-            
+                logger.debug(self.query_formatted)
             #Individual paper request
             elif doi_url:
                 response = requests.get(doi_url, headers=headers)
-
+                logger.debug(doi_url)
             #Page Iteration
             elif cursor > 0:
-                response = requests.post(self.query_formatted + f"page={cursor}", headers=headers)
-
+                url = self.query_formatted + f"page={cursor}"
+                response = requests.post(url, headers=headers)
+                logger.debug(url)
         except Exception as e:
             logger.warning(f"A general request error occured.  Check URL\n{e}")
             return None
@@ -527,6 +543,7 @@ class xRxivBase(object):
 
         try:
             response = requests.get(baseurl, headers=headers)
+            logger.debug(baseurl)
             await asyncio.sleep(np.random.randint(6,8)) #Extra long nap because metrics.... don't like to come through for some reason. 
 
         except Exception as e:
