@@ -439,14 +439,18 @@ class xRxivBase(object):
                     if rows:
                         paper.supplemental = {}
                         for col in rows:
-                            logger.debug("views table results")
+                            logger.debug("view table results")
                             results = col.find_all("td")
                             if results:
                                 key = results[0].text
                                 paper.supplemental[key] = {}
                                 paper.supplemental[key]["abstract"] = results[1].text
-                                paper.supplemental[key]["full"] = results[2].text
-                                paper.supplemental[key]["pdf"] = results[3].text
+                                if len(results) == 3:
+                                    paper.supplemental[key]["pdf"] = results[2].text
+                                elif len(results) == 4:
+                                    paper.supplemental[key]["full"] = results[2].text
+                                    paper.supplemental[key]["pdf"] = results[3].text
+
                 self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
                 del paper
                 paper_idx += 1
