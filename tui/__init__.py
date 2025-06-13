@@ -33,15 +33,16 @@ from textual.widgets.tree import TreeNode
 from sentence_transformers import util as st_utils
 #Custom Imports
 from utils import (
-    ArxivSearch,sbert,word2vec,
-    tfidf,get_c_time,clean_text,
-    cosine_similarity,clean_string_values
+    ArxivSearch, bioRxiv, medRxiv,
+    cosine_similarity, sbert, word2vec, 
+    tfidf, get_c_time,clean_text, clean_string_values
 )
 
 from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
-    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS #arXiv vars
+    ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS, #arXiv vars
+    XARXIV_SOURCES, XARXIV_FIELDS, XARXIV_SORT, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -133,7 +134,7 @@ class PaperSearch(App):
                             yield Button("Search Datasets", tooltip="Run like ya stole something!", id="search-button")
 
                 # Tab 4 - arXiv Search
-                with TabPane("Search arXiv", id="arxiv-tab"):
+                with TabPane("arXiv", id="arxiv-tab"):
                     with Container(id="srch-arx-container"):
                         yield Input("Type search here", id="input-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Search Field\nDate Range", id="hdr-arx-cat", classes="header")
@@ -156,6 +157,37 @@ class PaperSearch(App):
                             yield Input("Date From", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", id="input-arx-from", type="text")
                             yield Input("Date To", tooltip="Ex: 2025-4-12", id="input-arx-to", type="text", disabled=True)
                             yield Button("Search arXiv", tooltip="For search tips go to\nhttps://arxiv.org/search/advanced", id="search-arxiv")
+
+                # Tab 5 - medRxiv / bioRXiv Search
+                with TabPane("bioRxiv|medRxiv", id="xarxiv-tab"):
+                    with Container(id="xsrch-arx-container"):
+                        yield Input("Type search here", id="xinput-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
+                        yield Static("Source\nDate Range", id="xhdr-arx-cat", classes="header")
+                        yield Static("Search Fields\nSort Results", id="xhdr-arx-sub", classes="header")
+                        yield Static("Category", id="xhdr-arx-date", classes="header")
+                        yield Static("Limits", id="xhdr-arx-limit", classes="header")
+                        with Vertical(id="xarx-radios"):
+                            with RadioSet(id="xradio-arx-source", classes="header"):
+                                for source in XARXIV_SOURCES:
+                                    yield RadioButton(source)
+                            with RadioSet(id="xradio-arx-dates", classes="header"):
+                                for dfield in ARXIV_DATES:
+                                    yield RadioButton(dfield)
+                        with Vertical(id="xarx-radios2"):
+                            with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Field blank to initiate general search.\nLeave Category blank to search all categories"):
+                                for field in XARXIV_FIELDS:
+                                    yield RadioButton(field)
+                            with RadioSet(id="xradio-arx-sort", classes="header", tooltip="Type of match"):
+                                for sfield in XARXIV_SORT:
+                                    yield RadioButton(sfield)
+                            
+                        yield SelectionList(name="Category", id="xsl-arx-categories")
+                        with Vertical(id="xsub-arx-limit"):
+                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Suggested limit:10 Papers. This search function takes 10 seconds per paper to run", type="integer")
+                            yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
+                            yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
+                            yield Button("Search",  id="xsearch-arxiv", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced")
+
         yield Footer()
 
     #FUNCTION - onmount
@@ -201,7 +233,6 @@ class PaperSearch(App):
             suggested = 0.5
             input_thres.tooltip = f"Input threshold\nSpecter: {met_range}\nSuggested:{suggested}"
 
-
     @on(RadioSet.Changed, "#radio-arx-dates")
     def on_radioset_arx_dates_changed(self, event: RadioSet.Changed) -> None:
         dateto = self.query_one("#input-arx-to", Input)
@@ -209,7 +240,14 @@ class PaperSearch(App):
             dateto.disabled = False
         else:
             dateto.disabled = True
-
+    
+    @on(RadioSet.Changed, "#xradio-arx-dates")
+    def on_radioset_xarx_dates_changed(self, event: RadioSet.Changed) -> None:
+        dateto = self.query_one("#input-arx-to", Input)
+        if "Date Range" in event.pressed.label:
+            dateto.disabled = False
+        else:
+            dateto.disabled = True
 
     @on(RadioSet.Changed, "#radio-arx-subjects")
     def on_radio_subjects_changed(self, event: RadioSet.Changed) -> None:
@@ -221,6 +259,19 @@ class PaperSearch(App):
                 codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
                 categories.add_options(codes)
                 break
+
+    @on(RadioSet.Changed, "#xradio-arx-source")
+    def on_radio_source_changed(self, event: RadioSet.Changed) -> None:
+        categories = self.query_one("#xsl-arx-categories", SelectionList)
+        categories.clear_options()
+        pressed = getattr(event.pressed.label, '_text', None)[0]
+        if pressed == "bioRxiv":
+            codes = [Selection(y, x, False) for x, y in enumerate(BIOARXIV_SUBJECTS)]
+        elif pressed == "medRxiv":
+            codes = [Selection(y, x, False) for x, y in enumerate(MEDARXIV_SUBJECTS)]
+        elif pressed == "both":
+            codes = [Selection("all", 0, True)]
+        categories.add_options(codes)
 
     #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
     # @on(SelectionList.SelectionHighlighted, "#arx-subjects")
@@ -240,7 +291,7 @@ class PaperSearch(App):
         categories = self.query_one("#sl-arx-categories", SelectionList)
         if event.selection_list.selected:
             selected = getattr(categories.options[event.selection_list.selected[-1]].prompt, '_text', None)
-            tips = [[(k2, v2) for k2, v2 in v2.items() if k2==selected[0]] for _, v2 in ARXIV_AREAS.items()]
+            tips = [[(k2, v2) for k2, v2 in v1.items() if k2==selected[0]] for _, v1 in ARXIV_AREAS.items()]
             tips = list(filter(None, tips))
             categories.tooltip = tips[0][0][0]+ "\n" + "\n".join(tips[0][0][1])
         else:
@@ -262,6 +313,10 @@ class PaperSearch(App):
     def arxiv_button_event(self):
         self.search_arxiv()
 
+    @on(Button.Pressed, "#xsearch-arxiv")
+    def xarxiv_button_event(self):
+        self.search_xrxiv()
+
     #FUNCTION - Load Data
     def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
         new_node = json_tree.root.add(root_name)
@@ -272,7 +327,6 @@ class PaperSearch(App):
         elif isinstance(json_data, dict):
             json_data = clean_string_values(json_data)
             json_tree.add_node(root_name, new_node, json_data)
-
 
     #FUNCTION - Remove Data
     def remove_datasets(self) -> None:
@@ -299,7 +353,8 @@ class PaperSearch(App):
                     node.remove()
                     sleep(0.1)
         datasets.deselect_all()
-
+    
+    #FUNCTION - reload datasets
     def reload_datasets(self) -> None:
         #Manually refresh SelectionList options to avoid index errors
         datasets = self.query_one("#datasets", SelectionList)
@@ -310,7 +365,8 @@ class PaperSearch(App):
             for s in self.all_datasets
         ]
         datasets.add_options(new_datasets)
-
+    
+    #FUNCTION - is numeric string
     def is_numeric_string(self, s: str) -> bool:
         """
         Checks if a string represents a valid integer or float.
@@ -429,7 +485,7 @@ class PaperSearch(App):
                 sims, paper_names = self.launch_sbert(srch_text, field, node, metric)
             else:
                 self.app.notify("Something broke", severity="error")
-                raise ValueError("Something broke, check me! Line 412")
+                raise ValueError("Something broke, check me! Line 474")
             arr = np.array(sims, dtype=np.float32)
             qual_indexes = np.where(arr >= threshold)[0]
             if qual_indexes.shape[0] > 0:
@@ -455,6 +511,7 @@ class PaperSearch(App):
         res = sorted(results.items(), key=lambda x:x[1].get("metric_match"), reverse=True)[:res_limit]
         return dict(res)
     
+    #FUNCTION add datasets
     def add_datasets(self):
         """Handles the 'Add Dataset' button press by launching a worker."""
         datasets: SelectionList = self.query_one("#datasets", SelectionList)
@@ -491,7 +548,8 @@ class PaperSearch(App):
         else:
              self.notify("No valid datasets found to load.", severity="warning")
         datasets.deselect_all()
-
+    
+    #FUNCTION add dataset worker
     @work(thread=True, exclusive=True, group="dataset_loading")
     async def _add_multiple_datasets_worker(self, datasets_info: List[Tuple[str, PurePath]]):
         """
@@ -555,13 +613,12 @@ class PaperSearch(App):
 
         self.app.call_from_thread(self.notify, f"Finished loading {total_datasets} dataset(s).")
 
-
     #FUNCTION - run search
     def run_search(self) -> None:
         #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
-        model = self.query_one("#radio-models", RadioSet)._reactive__selected
-        field = self.query_one("#radio-fields", RadioSet)._reactive__selected
+        model = self.query_one("#radio-models", RadioSet).pressed_index
+        field = self.query_one("#radio-fields", RadioSet).pressed_index
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
         #bind the info together in a tuple
@@ -578,7 +635,8 @@ class PaperSearch(App):
         root_name = f"{SEARCH_MODELS[model].lower()}_{SEARCH_FIELDS[field]}_{'-'.join(srch_text.lower().split())}"
         self.mount(self.search_container)
         self._search_datasets_worker(srch_text, variables, sources, root_name, tree)
-
+    
+    #FUNCTION - run search worker
     @work(thread=True, exclusive=True, group="dataset_searching")
     async def _search_datasets_worker(
         self, 
@@ -666,17 +724,19 @@ class PaperSearch(App):
             #Reload SelectionList to include search results
             self.reload_datasets()
 
+    #FUNCTION - search arXiv
     def search_arxiv(self):
+        #TODO - Unit test for arxiv connection. 
         #Load up search variables
         variables = []
-        srch_text = self.query_one("#input-arxiv", Input)._reactive_value
-        start_date = self.query_one("#input-arx-from", Input)._reactive_value
+        srch_text = self.query_one("#input-arxiv", Input).value
+        start_date = self.query_one("#input-arx-from", Input).value
         end_date_input = end_date = self.query_one("#input-arx-to", Input)
-        end_date = end_date_input._reactive_value
-        limit = self.query_one("#input-arx-limit", Input)._reactive_value
-        field = self.query_one("#radio-arx-cat", RadioSet)._reactive__selected
-        date_range = self.query_one("#radio-arx-dates", RadioSet)._reactive__selected
-        subject = self.query_one("#radio-arx-subjects", RadioSet)._reactive__selected
+        end_date = end_date_input.value
+        limit = self.query_one("#input-arx-limit", Input).value
+        field = self.query_one("#radio-arx-cat", RadioSet).pressed_index
+        date_range = self.query_one("#radio-arx-dates", RadioSet).pressed_index
+        subject = self.query_one("#radio-arx-subjects", RadioSet).pressed_index
         categories = self.query_one("#sl-arx-categories", SelectionList)
         selected_cat = self.query_one("#sl-arx-categories", SelectionList).selected
         root_name = f"arxiv_{ARXIV_FIELDS[field].lower()}_{"_".join(ARXIV_SUBJECTS[subject].lower().split(" "))}_{'-'.join(srch_text.lower().split())}"
@@ -733,7 +793,179 @@ class PaperSearch(App):
         else:
             self.notify(f"No papers matched the search {variables['query']}", severity="warning")
             logger.warning(f"No papers found the search {variables['query']}")
+    
+    #FUNCTION - search bio/medarxiv
+    def search_xrxiv(self):
+        #TODO - Unit test for xrxiv connection. 
+            #Noticing if either site went down, it just holds the search in an infinite loop.  
+            #Need to also get this into a progress bar and asycio requests 
+        #Load up search variables
+        variables = []
+        srch_text = self.query_one("#xinput-arxiv", Input).value
+        start_date = self.query_one("#xinput-arx-from", Input).value
+        end_date_input = end_date = self.query_one("#xinput-arx-to", Input)
+        end_date = end_date_input.value
+        limit = self.query_one("#xinput-arx-limit", Input).value
+        source = self.query_one("#xradio-arx-source", RadioSet).pressed_index
+        date_range = self.query_one("#xradio-arx-dates", RadioSet).pressed_index
+        field = self.query_one("#xradio-arx-fields", RadioSet).pressed_index
+        sort = self.query_one("#xradio-arx-sort", RadioSet).pressed_index
+        categories = self.query_one("#xsl-arx-categories", SelectionList)
+        selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
 
+        #Check input validity (should all be ints)
+        variables = [source, limit, field, date_range]
+        if not all(self.is_numeric_string(str(var)) for var in variables):
+            self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
+            return None
+
+        #Remap the variables with their values     
+        variables = {
+            "query"     : srch_text,
+            "limit"     : limit,
+            "sort"      : XARXIV_SORT[sort].lower(),
+            "field"     : XARXIV_FIELDS[field].lower(),
+            "source"    : XARXIV_SOURCES[source],
+            "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
+            "dates"     : ARXIV_DATES[date_range],
+            "start_date": "",
+            "end_date"  : "",
+            "year"      : "",
+            "add_cat"   : False
+        }
+        
+        if not end_date_input.disabled:
+            variables["start_date"] = start_date
+            variables["end_date"] = end_date
+        else:
+            if ARXIV_DATES[date_range] == "Specific Year":
+                variables["year"] = start_date
+
+        if selected_cat:
+            temp =  ["_".join(variables["categories"][x].lower().split(" ")) for x in range(len(variables["categories"]))]
+            cat_string = "_".join(temp)
+            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{cat_string}_{'-'.join(srch_text.lower().split())}"
+            variables["categories"] = ",".join(map(str, variables["categories"]))
+            variables["add_cat"] = True
+
+        else:
+            root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
+        
+        #BUG = Might not need this try block
+        try:    
+            tree_view: TreeView = self.query_one("#tree-container", TreeView)
+            tree: Tree = tree_view.query_one(Tree)
+            searchbar = SearchProgress(count=0, total=int(variables["limit"]))
+            self.search_container = Container(searchbar, id="loading-container")
+            self.mount(self.search_container)
+            self._search_xarxiv_worker(variables, root_name, tree)
+            
+        except Exception as e:
+            logger.error(f"Failed to save search results: {e}")
+
+    #FUNCTION - run xarXiv worker
+    @work(thread=True, exclusive=True, group="xarxiv_searching")
+    async def _search_xarxiv_worker(
+        self, 
+        variables: dict,
+        root_name: str,
+        tree: Tree
+        ):
+        """Worker thread search medrxiv and biorxiv
+
+        Args:
+            variables (list): _description_
+            root_name (str): _description_
+            tree (Tree): _description_
+        """
+        # Define a helper function to perform the UI updates
+        def update_progress_ui(current_count:int):
+            if self.search_container and self.search_container.is_mounted:
+                try:
+                    progress_bar = self.search_container.query_one(SearchProgress)
+                    progress_bar.count = current_count
+                    progress_bar.advance(1)
+                    progress_bar.refresh()
+
+                except Exception as e:
+                        logger.error(f"Failed to update search progress bar: {e}")
+        
+        worker = get_current_worker()
+        all_results = {}
+
+        if variables["source"] == "medRxiv":
+            variables["subjects"] = MEDARXIV_SUBJECTS
+            rxiv = medRxiv(
+                variables = variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
+
+        elif variables["source"] == "bioRxiv":
+            #BUG - bioarxiv is adding search to its URL
+            
+            variables["subjects"] = BIOARXIV_SUBJECTS
+            rxiv = bioRxiv(
+                variables=variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
+            
+        elif variables["source"] == "both":
+            variables["source"] = "medrxiv||biorxiv"
+            variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)
+            rxiv = medRxiv(
+                variables = variables,
+                progress_callback=lambda step: self.app.call_from_thread(update_progress_ui, step)
+            )
+
+        try:
+            # Perform requests from bio/medarxiv
+            json_data, no_res_message = await rxiv._query_xrxiv()
+            if json_data:
+                all_results.update(**json_data)
+                self.app.call_from_thread(self.notify, f"{len(json_data)} results found on {variables["source"]}")
+            elif no_res_message:
+                self.app.call_from_thread(self.notify, f"No results:\nMessage: {no_res_message}")
+                logger.warning(f"No Results due to {no_res_message}")
+
+            # Take a power nap to allow UI thread processing time
+            await asyncio.sleep(0.1)
+
+            if not worker.is_cancelled:                
+                if all_results:
+                    root_name = root_name.replace("|", "_")
+                    try:
+                        self.app.call_from_thread(self.load_data, tree, root_name, all_results)
+                        # self.load_data(tree, root_name, json_data)
+                        save_data(root_name, all_results)
+                        self.app.call_from_thread(self.notify, f"Found {len(all_results.keys())} papers in {variables["source"]} sources.")
+
+                    except Exception as e:
+                        logger.error(f"Failed to save saerch results: {e}")
+
+                else:
+                    self.app.call_from_thread(self.notify, "Search Complete, No results found")
+                    sleep(2)
+
+        except Exception as e:
+            # Catch other potential errors during link traversal
+            logger.error(f"Error during worker run: {e}")
+            self.app.call_from_thread(self.notify, f"Search failed on {variables["source"]}:\n{e}", severity="error", timeout=2)
+
+        finally:
+            # Remove Progress Bar
+            def remove_progress_ui():
+                if self.search_container and self.search_container.is_mounted:
+                    try:
+                        self.search_container.remove()
+                        logger.info("Search progress container removed.")
+                        
+                    except Exception as e:
+                        logger.error(f"Error removing search progress container: {e}")
+                self.search_container = None 
+            self.app.call_from_thread(remove_progress_ui)
+            #Reload SelectionList to include search results
+            self.reload_datasets()
+    
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select
     def on_tree_node_selected(self, event: Tree.NodeSelected) -> None:
@@ -754,8 +986,6 @@ class PaperSearch(App):
         activetab = self.query_one(TabbedContent)
         tree = self.query_one(TreeView)
         if not activetab.active == "content-tab":
-            # tree_view = self.query_one(TreeView)
-            # tree = tree_view.query_one(JSONTree)
             tree = self.query_one(TreeView)
             json_docview.focus()
             tree.focus()

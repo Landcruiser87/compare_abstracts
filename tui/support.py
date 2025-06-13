@@ -60,7 +60,7 @@ def get_logger(console:Console, log_dir:Path)->logging.Logger:
     """	
     #Load logger and set basic level
     logger = logging.getLogger()
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     #Load file handler for how to format the log file.
     file_handler = get_file_handler(log_dir)
     file_handler.setLevel(logging.DEBUG)
@@ -162,7 +162,7 @@ def launch_tui():
         print(tree)
     # logger.info(f"There are {pcount} papers in {directory}")
     question ="What file would you like to load?\n"
-    file_choice = console.input(f"{question}")
+    file_choice = "8"#console.input(f"{question}")
     if file_choice.isnumeric():
         file_to_load = files[int(file_choice) - 1]
         #check output directory exists
@@ -365,7 +365,7 @@ def load_taxonomy(search:bool=False):
             cat_json = json.dumps(categories, indent=2, cls=NumpyArrayEncoder)
             with open(f"./data/conferences/arxiv_cat.json", "w") as outf:
                 outf.write(cat_json)
-            
+
         else:
             path = "./data/arxiv_cat.json"
             if os.path.exists(path):
@@ -391,6 +391,7 @@ logger = get_logger(console, log_dir=f"data/logs/tui/{date_json}.log")
 MAIN_CONFERENCES  = ["ICML", "ICLR", "NEURIPS"]
 SUB_CONFERENCES   =  ["COLT", "AISTATS", "AAAI", "CHIL", "ML4H", "ICCV"] 
 SEARCH_FIELDS = ["title", "keywords", "topic", "abstract"]  
+
 #Metrics for asymetric similarity search
 SEARCH_MODELS = ["Fuzzy", "Cosine", "Word2Vec", "Marco", "Specter"]
 MODEL_DESC = [
@@ -401,7 +402,39 @@ MODEL_DESC = [
     "Meant for comparing scientific papers.   Runs quite slowly on abstracts. Available for GPU"
 ]
 #arXiv Params
-ARXIV_FIELDS = ["Title", "Author(s)", "Abstract", "Comments", "arXiv id", "ORCID"]
+ARXIV_FIELDS = ["Title", "Abstract", "Author(s)",  "Comments", "DOI", "arXiv id", "ORCID"]
 ARXIV_SUBJECTS = ["Computer Science", "Economics", "Electrical Engineering and Systems Science", "Mathematics", "Physics", "Quantitative Biology", "Quantitative Finance", "Statistics"]
 ARXIV_DATES = ["All Dates", "Past 12 Months", "Specific Year", "Date Range"]
 ARXIV_AREAS = load_taxonomy()
+
+XARXIV_FIELDS = ["Title", "Abstract", "Author(s)", "Abstract|Title", "Text|Abstract|Title"]  
+XARXIV_SOURCES = ["bioRxiv", "medRxiv", "both"]
+XARXIV_SORT = ["Best match", "Oldest first", "Newest first"]
+BIOARXIV_SUBJECTS =[
+    "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
+    "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",
+    "Clinical Trials", "Developmental Biology", "Ecology", "Epidemiology",
+    "Evolutionary Biology", "Genetics", "Genomics", "Immunology", "Microbiology", 
+    "Molecular Biology", "Neuroscience", "Paleontology", "Pathology", 
+    "Pharmacology and Toxicology", "Physiology", "Plant Biology", 
+    "Scientific Communication and Education", "Synthetic Biology", "Systems Biology", "Zoology"
+]
+
+MEDARXIV_SUBJECTS= [
+    "Addiction Medicine", "Allergy and Immunology", "Anesthesia",
+    "Cardiovascular Medicine", "Dentistry and Oral Medicine", "Dermatology",
+    "Emergency Medicine", "Endocrinology (including Diabetes Mellitus and Metabolic Disease)", 
+    "Epidemiology", "Forensic Medicine", "Gastroenterology", "Genetic and Genomic Medicine", "Geriatric Medicine",
+    "Health Economics", "Health Informatics", "Health Policy", 
+    "Health Systems and Quality Improvement", "Hematology", "HIV/AIDS", 
+    "Infectious Diseases (except HIV/AIDS)", "Intensive Care and Critical Care Medicine", "Medical Education",
+    "Medical Ethics", "Nephrology", "Neurology", "Nursing",
+    "Nutrition", "Obstetrics and Gynecology", "Occupational and Environmental Health",
+    "Oncology", "Ophthalmology", "Orthopedics", "Otolaryngology",
+    "Pain Medicine", "Palliative Medicine", "Pathology", "Pediatrics",
+    "Pharmacology and Therapeutics", "Primary Care Research", "Psychiatry and Clinical Psychology", 
+    "Public and Global Health", "Radiology and Imaging",
+    "Rehabilitation Medicine and Physical Therapy", "Respiratory Medicine",
+    "Rheumatology", "Sexual and Reproductive Health", "Sports Medicine",
+    "Surgery", "Toxicology", "Transplantation", "Urology"
+]

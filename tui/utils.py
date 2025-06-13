@@ -9,16 +9,22 @@ import numpy as np
 import pandas as pd
 import torch
 import time
-from dataclasses import dataclass, asdict, fields
+import asyncio
+from urllib.parse import quote
+from dataclasses import dataclass, fields
 from sklearn.feature_extraction.text import TfidfVectorizer
+from typing import Callable, Optional
 from bs4 import BeautifulSoup
 from scipy.spatial.distance import cosine as scipy_cos
 from sklearn.metrics.pairwise import cosine_similarity as sklearn_cos
 from sentence_transformers import SentenceTransformer
 from support import logger
 
+
+################################# Dataclass #################################
 @dataclass
 class Paper:
+    id      : str  | None = None
     title   : str  | None = None
     authors : list | None = None
     keywords: list | None = None
@@ -26,55 +32,44 @@ class Paper:
     abstract: str = ""
     url     : str = ""
     pdf     : str = ""
-    github_url     : str = ""  
+    doi     : str = ""            
+    github_url     : str = ""
     supplemental   : str = ""  #general comments
     date_published : str = ""  # mm-dd-yyyy
     conference_info: str = ""  # e.g. arxiv
 
+################################# Classes #################################
 class ArxivSearch(object):
     def __init__(self, variables:dict):
         self.params: dict = variables
         self.results: list = []
 
-    def is_a_date(self, datetext:str):
-        try:
-            datetime.datetime.strptime(datetext, "%Y-%m-%d")
-            return True
-        except Exception as e:
-            logger.warning(f"date extraction error.  Check inputs\n{e}")
-            return False
-        
     def date_format(self):
         self.params["dates"] = self.params["dates"].lower().split()
         self.params["dates"] = "_".join(self.params["dates"])
         self.params["submitted_date"] = datetime.datetime.today().date()
         self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
 
-        #Don't need logic for all_dates
-        #works
         if self.params["dates"] == "specific_year":
             start = self.params["year"]
             if len(start) == 4 and start.isdigit():
                 return True
             else:
                 return False
-        #works
         elif self.params["dates"] == "past_12_months":
             self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
             self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
             self.params["end_date"] = self.params["submitted_date"]
             self.params["dates"] = "past_12"
             return True
-        #doesn't work
         elif self.params["dates"] == "date_range":
             start = self.params["start_date"]
             end = self.params["end_date"]
             for val in [start, end]:
-                if not self.is_a_date(val):
+                if not is_a_date(val):
                     logger.warning("Error in date formatting, please check inputs")
                     return False
             return True
-        #works
         elif self.params["dates"] == "all_dates":
             #NOTE come back and check the date format for here. 
             return True
@@ -166,8 +161,6 @@ class ArxivSearch(object):
         if not formatted or not classy:
             return None, "Error in formatting classification or date"
 
-        #NOTE - Might need to update this with separate terms.
-        #Eventually update this query to operate on multiple separate terms
         parameters = {
             'advanced': '',                        
             'terms-0-operator': 'AND',              
@@ -213,6 +206,396 @@ class ArxivSearch(object):
 
         # NOTE - Can only make a request every 3 seconds. 
         # NOTE - Don't feel like dealing with pagination so.  200 is the max request limit!
+
+class xRxivBase(object):
+    def __init__(
+        self,
+        server: str,
+        launchdt: str,
+        params: dict,
+        base_url: str,
+        progress_callback: Optional[Callable[[int],None]] = None
+    ):
+        self.server  : str = server
+        self.launchdt: str = launchdt
+        self.params: dict = params
+        self.base_url : str = base_url
+        self.results : dict = {}
+        self.cursor : int = 0
+        self.progress_callback = progress_callback
+
+    def _date_format(self):
+        self.params["dates"] = self.params["dates"].lower().split()
+        self.params["dates"] = "_".join(self.params["dates"])
+        self.params["submitted_date"] = datetime.datetime.today().date()
+        self.params["submitted_date"] = self.params["submitted_date"].strftime("%Y-%m-%d")
+
+        if self.params["dates"] == "specific_year":
+            start = self.params["year"]
+            if len(start) == 4 and start.isdigit():
+                self.params["start_date"] = f"{start}-01-01"
+                if self.params["submitted_date"][:4] == start:
+                    self.params["end_date"] = self.params["submitted_date"]
+                else:
+                    self.params["end_date"] = f"{self.params["year"]}-12-31"
+                return True
+            else:
+                return False
+        elif self.params["dates"] == "past_12_months":
+            self.params["start_date"] = datetime.datetime.today().date() - datetime.timedelta(days=365)
+            self.params["start_date"] = self.params["start_date"].strftime("%Y-%m-%d")
+            self.params["end_date"] = self.params["submitted_date"]
+            self.params["dates"] = "past_12"
+            return True
+        elif self.params["dates"] == "date_range":
+            start = self.params["start_date"]
+            end = self.params["end_date"]
+            for val in [start, end]:
+                if not is_a_date(val):
+                    logger.warning("Error in date formatting, please check inputs")
+                    return False
+            return True
+        elif self.params["dates"] == "all_dates":
+            self.params["start_date"] = self.launchdt
+            self.params["end_date"] = self.params["submitted_date"]
+            return True
+    
+    def _url_format(self):
+        query_params = {}
+        try:
+            if self.params["field"]:
+                srch_field = "_".join(self.params["field"].lower().split("|"))
+                query_params["query"] = quote(f"{srch_field}:") +  self.params["query"].replace(" ", "%2B") + "%20" + quote(f"{srch_field}_flags:match-all ")
+            else:
+                query_params["query"] = self.params["query"].replace(" ", "%25") + "%20"
+
+            query_params["jcode"] = self.params["source"].lower().strip()
+            if self.params["categories"]:
+                query_params["subject_collection_code"] = self.params["categories"]
+
+            if self.params["start_date"]:
+                query_params["limit_from"] = self.params["start_date"]
+
+            if self.params["end_date"]:
+                query_params["limit_to"] = self.params["end_date"]
+
+            query_params["numresults"] = "75"
+            if self.params["sort"] == "best match":
+                query_params["sort"] = "relevance-rank"
+            elif self.params["sort"] == "oldest first":
+                query_params["sort"] = "publication-date direction:ascending"
+            elif self.params["sort"] == "newest first":
+                query_params["sort"] = "publication-date direction:descending"
+
+            query_params["format_result"] = "standard"
+            search = query_params["query"]
+            query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
+            self.query_formatted = self.base_url + search + quote(query_f1)
+            logger.info(f"formatted query\n{self.query_formatted}")
+            return True
+
+            #NOTE: API
+                #I find it hilarious that neither xrxiv left in a space in their api
+                #to actually saerch the api as opposed to just dumping the lastest 
+                #100 papers submitted.  Because of this idiocy, we will have 
+                #to use the advanced search endpoint and parse the resultant 
+                #html.  This also means we need to scrape each url because the
+                #fundamental abstract data won't be present.  ugh.  idiots
+
+                #api structure
+                # https://api.medrxiv.org/details/[server]/[interval]/[cursor]/[format] 
+                    # servers = duh
+                    # interval - Date format whiiich looks like dates separated by /
+                    # cursor - page iteration
+                    # format - JSON or XML.  Json it is!
+                #advancedsearch structure
+                # https://www.biorxiv.org/search/anomaly%20
+                # jcode%3Abiorxiv%20
+                # subject_collection_code%3AClinical%20Trials%20
+                # limit_from%3A2024-02-06%20
+                # limit_to%3A2025-06-09%20
+                # numresults%3A75%20
+                # sort%3Arelevance-rank%20
+                # format_result%3Astandard
+
+        except Exception as e:
+            logger.warning("Error in url query formatting")
+            return False
+
+    async def _query_xrxiv(self) -> dict:
+        #Input validation checks
+        formatted = self._date_format()
+        classy = self._url_format()
+        if not formatted or not classy:
+            return None, "Error in formatting date or url"
+        
+        #Make first request
+        bs4ob = await self._make_request(post=True) #True means make a post request
+
+        #Isolate how many papers were found, if any self._parse_query
+        paper_count = bs4ob.find("div", {"class":"highwire-search-summary"})
+        if len(paper_count.text) > 0:
+            if "No Results" in paper_count.text:
+                return None, f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            pcount = paper_count.text.split()[0]
+            pcount = int("".join(x for x in pcount if x.isnumeric()))
+            self.paper_count = pcount
+            logger.info(f"{pcount} found on {self.params['source']} in {self.params['field']}")
+
+        if pcount:
+            await self._parse_query(bs4ob)
+            logger.info(f'{len(self.results)} papers processed arxiv searching {self.params["query"]}')
+            return self.results, None
+
+        else:
+            message = f"No papers returned for search ({self.params['query']}) in {self.params['source']} {self.params['field']}"
+            logger.warning(message)
+            return None, message
+
+    async def _parse_query(self, bs4ob:BeautifulSoup):
+        totalpapers = self.paper_count
+        limit = int(self.params["limit"]) - 1
+        paper_idx = 0
+        if self.cursor != 0: 
+            bs4ob = await self._make_request(cursor = self.cursor)
+        outer_papers = bs4ob.find("ul", class_="highwire-search-results-list")
+        logger.info("outer papers")
+        papers = outer_papers.find_all("li", {"class":lambda x: x.endswith("search-result-highwire-citation")})
+        for result in papers:
+            if paper_idx > limit or paper_idx > totalpapers:
+                return
+            else:
+                paper = Paper()
+                title = result.find("a", {"class":"highwire-cite-linked-title"})
+                if title:
+                    f_url = f"{self.base_url[:-8]}" + title.get("href")
+                    paper.doi = f_url
+                    lil_req = await self._make_request(doi_url=f_url)
+                    paper.title = title.text
+                    paper.id = str(paper_idx) + "_" + paper.title
+                    paper.pdf = paper.doi + ".full.pdf"
+                else:
+                    logger.error(f"error in title extraction for {paper_idx}")
+                    logger.error(f"Unable to extract title -> moving to next paper")
+                    continue
+                #Grab authors
+                outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
+                if outer_authors != None:
+                    paper.authors = {}
+                    logger.debug("outer authors")
+                    authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
+                    if authors:
+                        for author in authors:
+                            logger.debug("inner author")
+                            first = author.find("span", class_="nlm-given-names")
+                            if first:
+                                firstn = first.text.strip()
+                            last = author.find("span", class_="nlm-surname")
+                            if last:
+                                lastn = last.text.strip()
+                            if first and last:
+                                name = " ".join([firstn, lastn])
+                                paper.authors[name] = {"name":name}
+                                orcid = author.select("a")
+                                if orcid:
+                                    paper.authors[name]["orcidid"] = orcid[0].get("href")
+                            else:
+                                logger.error(f"error in author extraction for {paper_idx}:{paper.title}")
+
+                abstract = lil_req.find("div", {"class":"section abstract"})
+                if abstract:
+                    paper.abstract = abstract.find("p").text
+
+                category = lil_req.find("span", {"class":"highwire-article-collection-term"})
+                if category:
+                    paper.category = category.text.strip()
+
+                posted = lil_req.find("div", {"class":"panel-pane pane-custom pane-1"})
+                if posted:
+                    post_date = posted.find("div", {"class":"pane-content"}).text.split("Posted\xa0")[1].strip().strip(".")
+                    post_date_f = datetime.datetime.strptime(post_date, "%B %d, %Y")
+                    paper.date_published = datetime.datetime.strftime(post_date_f, "%Y-%m-%d")
+                
+                # They put their infolinks behind another request.  Already at 3 calls per paper
+                # github = lil_req.find('div', {"class":"section data-availability"})
+                # if github:
+                #     pattern = r"((?:https?://)?(?:www\.)?(?:[a-zA-Z0-9-]+\.)?github\.(?:com|io)(?:/[a-zA-Z0-9\._-]+)*)"
+                #     possiblematch = re.findall(pattern, github.text)
+                #     if possiblematch:
+                #         paper.github_url = possiblematch[0]
+                proc_table = True
+                metrics = await self._make_subdata_request(paper.doi)
+                logger.debug(f"searching metric {paper_idx}")
+                no_stats = metrics.find("div", class_="messages highwire-stats")
+                if no_stats != None:
+                    if "No statistics" in no_stats.text:
+                        proc_table = False
+                        logger.info(f"No rows for requested table {paper.doi}")
+                
+                logger.debug(f"viewstable: {proc_table}")
+                if proc_table:
+                    viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
+                    rows = viewstable.find_all("tr")
+                    if rows:
+                        paper.supplemental = {}
+                        for col in rows:
+                            logger.debug("view table results")
+                            results = col.find_all("td")
+                            if results:
+                                key = results[0].text
+                                paper.supplemental[key] = {}
+                                paper.supplemental[key]["abstract"] = results[1].text
+                                if len(results) == 3:
+                                    paper.supplemental[key]["pdf"] = results[2].text
+                                elif len(results) == 4:
+                                    paper.supplemental[key]["full"] = results[2].text
+                                    paper.supplemental[key]["pdf"] = results[3].text
+
+                self.results[paper.id] = {field.name: getattr(paper, field.name) for field in fields(paper)}
+                del paper
+                paper_idx += 1
+                if self.progress_callback:
+                    self.progress_callback(paper_idx)
+
+        self.cursor += 1
+
+
+                    #Old code for grabbing first request paper information.  Not enough for useful search so had to pull each individual paper DOI.
+                    # else:
+                    #     #Grab title
+                    #     paper.title = result.find("span", {"class":lambda x:"title" in x}).text.strip()
+                    #     paper.id = str(idx) + "_" + paper.title
+                        
+                    #     #Grab authors
+                    #     authors = result.find_all("div", {"class":lambda x:"authors" in x}).text.strip()
+                    #     if authors != None:
+                    #         paper.authors = {str(ind) + "_" + x.text:x.text for ind, x in enumerate(authors)}
+
+                    #     #
+                    #     categories = result.find("div", attrs={"class":"tags is-inline-block"})
+                    #     if categories != None:
+                    #         paper.category = categories.text.split()
+
+                    #     comments = result.find("p", attrs={"class": lambda e: e.startswith("comments")})
+                    #     if comments != None:
+                    #         comment_= comments.find("span", attrs={"class":"has-text-grey-dark mathjax"})
+                    #         if comment_ != None:
+                    #             paper.supplemental = comment_.text
+
+    async def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
+        chrome_version = np.random.randint(125, 137)
+        if doi_url:
+            baseurl = self.query_formatted
+        else:
+            baseurl = self.base_url
+        #BUG - Bioarxiv bug in here
+        headers = {
+            'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'accept-language': 'en-US,en;q=0.9',
+            'cache-control': 'max-age=0',
+            'priority': 'u=0, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Not)A;Brand";v="99", "Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'document',
+            'sec-fetch-mode': 'navigate',
+            'sec-fetch-site': 'same-origin',
+            'sec-fetch-user': '?1',
+            'Upgrade-Insecure-Requests': '1',
+            'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
+        }
+
+        try:
+            #First request
+            if post:
+                response = requests.post(self.query_formatted, headers=headers) 
+                logger.debug(self.query_formatted)
+            #Individual paper request
+            elif doi_url:
+                response = requests.get(doi_url, headers=headers)
+                logger.debug(doi_url)
+            #Page Iteration
+            elif cursor > 0:
+                url = self.query_formatted + f"page={cursor}"
+                response = requests.post(url, headers=headers)
+                logger.debug(url)
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        await asyncio.sleep(np.random.randint(3,4)) #Be nice to the servers
+
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None, f"Status Code {response.status_code} Reason: {response.reason}"
+        
+        return BeautifulSoup(response.content, "lxml")
+
+    async def _make_subdata_request(self, doi:str) -> BeautifulSoup:
+        chrome_version = np.random.randint(125, 137)
+        baseurl = doi + ".article-metrics"
+        headers = {
+            'accept': 'text/html, */*; q=0.01',
+            'accept-language': 'en-US,en;q=0.9',
+            'priority': 'u=1, i',
+            'referer': baseurl,
+            'sec-ch-ua': f'"Google Chrome";v={chrome_version}, "Chromium";v={chrome_version}, "Not/A)Brand";v="24"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': f'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Safari/537.36',
+            'x-requested-with': 'XMLHttpRequest',
+        }
+
+        try:
+            response = requests.get(baseurl, headers=headers)
+            logger.debug(baseurl)
+            await asyncio.sleep(np.random.randint(6,8)) #Extra long nap because metrics.... don't like to come through for some reason. 
+
+        except Exception as e:
+            logger.warning(f"A general request error occured.  Check URL\n{e}")
+            return None
+        
+        if response.status_code != 200:
+            logger.warning(f'Status code: {response.status_code}')
+            logger.warning(f'Reason: {response.reason}')
+            return None
+        
+        return BeautifulSoup(response.content, "lxml")
+
+class bioRxiv(xRxivBase):
+    def __init__(self, variables:dict, progress_callback):
+        super().__init__(
+            server = "bioRxiv",
+            launchdt = "2013-01-01",
+            base_url = "https://www.biorxiv.org/search/",
+            params = variables,
+            progress_callback = progress_callback
+        )
+
+class medRxiv(xRxivBase):
+    def __init__(self, variables:dict, progress_callback):
+        super().__init__(
+            server = "medRxiv",
+            launchdt = "2019-06-01",
+            base_url = "https://www.medrxiv.org/search/",
+            params = variables,
+            progress_callback = progress_callback
+    )
+
+###############################  Date Functions ########################################
+def is_a_date(datetext:str):
+    try:
+        datetime.datetime.strptime(datetext, "%Y-%m-%d")
+        return True
+    except Exception as e:
+        logger.warning(f"date extraction error.  Check date format\n{e}")
+        return False
+
 
 #FUNCTION get time
 def get_c_time():
