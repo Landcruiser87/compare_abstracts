@@ -859,15 +859,6 @@ class PaperSearch(App):
             self.mount(self.search_container)
             self._search_xarxiv_worker(variables, root_name, tree)
             
-            #OLD initialization
-            # self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
-            # #load the JSON into the Tree
-            # root_name = root_name.replace("|", "_")
-            # self.load_data(tree, root_name, json_data)
-            # #save the search
-            # save_data(root_name, json_data)
-            # self.reload_datasets()
-
         except Exception as e:
             logger.error(f"Failed to save search results: {e}")
 
@@ -909,6 +900,8 @@ class PaperSearch(App):
             )
 
         elif variables["source"] == "bioRxiv":
+            #BUG - bioarxiv is adding search to its URL
+            
             variables["subjects"] = BIOARXIV_SUBJECTS
             rxiv = bioRxiv(
                 variables=variables,

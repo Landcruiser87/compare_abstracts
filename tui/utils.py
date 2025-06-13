@@ -215,13 +215,13 @@ class xRxivBase(object):
         server: str,
         launchdt: str,
         params: dict,
-        base_url: str = "https://www.biorxiv.org",
+        base_url: str,
         progress_callback: Optional[Callable[[int],None]] = None
     ):
         self.server  : str = server
-        self.launchdt = launchdt
-        self.params = params
-        self.base_url = base_url
+        self.launchdt: str = launchdt
+        self.params: dict = params
+        self.base_url : str = base_url
         self.results : dict = {}
         self.cursor : int = 0
         self.progress_callback = progress_callback
@@ -267,11 +267,11 @@ class xRxivBase(object):
         try:
             if self.params["field"]:
                 srch_field = "_".join(self.params["field"].lower().split("|"))
-                query_params["query"] = quote(f"{srch_field}:") +  self.params["query"].replace(" ", "%252B") + "%20" + quote(f"{srch_field}_flags:")
+                query_params["query"] = quote(f"{srch_field}:") +  self.params["query"].replace(" ", "%2B") + "%20" + quote(f"{srch_field}_flags:match-all ")
             else:
-                query_params["query"] = self.params["query"].replace(" ", "%252B") + "%20"
+                query_params["query"] = self.params["query"].replace(" ", "%25") + "%20"
 
-            query_params["jcode"] = self.params["source"].lower().strip(),
+            query_params["jcode"] = self.params["source"].lower().strip()
             if self.params["categories"]:
                 query_params["subject_collection_code"] = self.params["categories"]
 
@@ -297,7 +297,7 @@ class xRxivBase(object):
                 #to use the advanced search endpoint and parse the resultant 
                 #html.  This also means we need to scrape each url because the
                 #fundamental abstract data won't be present.  ugh.  idiots
-                #TODO: Adapt SearchProgress progressbar
+                #[x] Adapt SearchProgress progressbar
                     #I'll need a progress bar now if this 
                     #is going to take forever. 
 
@@ -375,10 +375,11 @@ class xRxivBase(object):
                 outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
                 if outer_authors != None:
                     paper.authors = {}
-                    logger.info("authors")
+                    logger.info("outer authors")
                     authors = outer_authors.find_all("span", class_=lambda x:x.startswith("highwire-citation-author"))
                     if authors:
                         for author in authors:
+                            logger.info("inner author")
                             name = " ".join([author.find("span", class_="nlm-given-names").text, author.find("span", class_="nlm-surname").text]).strip()
                             paper.authors[name] = {"name":name}
                             orcid = author.select("a")
@@ -462,11 +463,12 @@ class xRxivBase(object):
                     #             paper.supplemental = comment_.text
 
     async def _make_request(self, post:bool = False, doi_url:str = "", cursor:int = 0) -> BeautifulSoup:
-        chrome_version = np.random.randint(120, 135)
+        chrome_version = np.random.randint(125, 137)
         if doi_url:
             baseurl = f"https://www.{self.server.lower()}.org"
         else:
             baseurl = self.base_url
+        #BUG - Bioarxiv bug in here
         headers = {
             'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
             'accept-language': 'en-US,en;q=0.9',
