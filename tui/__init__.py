@@ -42,7 +42,7 @@ from support import (
     list_datasets, save_data, logger, #functions
     SEARCH_FIELDS, SEARCH_MODELS, MODEL_DESC, #global vars
     ARXIV_FIELDS, ARXIV_SUBJECTS, ARXIV_DATES, ARXIV_AREAS, #arXiv vars
-    XARXIV_SOURCES, XARXIV_FIELDS, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
+    XARXIV_SOURCES, XARXIV_FIELDS, XARXIV_SORT, BIOARXIV_SUBJECTS, MEDARXIV_SUBJECTS #xRxiv vars
 )
 if TYPE_CHECKING:
     from io import TextIOWrapper
@@ -163,7 +163,7 @@ class PaperSearch(App):
                     with Container(id="xsrch-arx-container"):
                         yield Input("Type search here", id="xinput-arxiv", tooltip="for explicit query formatting details visit\nhttps://info.arxiv.org/help/api/user-manual.html#query_details")
                         yield Static("Source\nDate Range", id="xhdr-arx-cat", classes="header")
-                        yield Static("Search Fields", id="xhdr-arx-sub", classes="header")
+                        yield Static("Search Fields\nSort Results", id="xhdr-arx-sub", classes="header")
                         yield Static("Category", id="xhdr-arx-date", classes="header")
                         yield Static("Limits", id="xhdr-arx-limit", classes="header")
                         with Vertical(id="xarx-radios"):
@@ -173,11 +173,14 @@ class PaperSearch(App):
                             with RadioSet(id="xradio-arx-dates", classes="header"):
                                 for dfield in ARXIV_DATES:
                                     yield RadioButton(dfield)
-                        with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Field blank to initiate general search.\nLeave Category blank to search all categories"):
-                            for field in XARXIV_FIELDS:
-                                yield RadioButton(field)
-                        #TODO - Add another vertical here
-                        #TODO - Add sort selection 
+                        with Vertical(id="xarx-radios2"):
+                            with RadioSet(id="xradio-arx-fields", classes="header", tooltip="Leave Field blank to initiate general search.\nLeave Category blank to search all categories"):
+                                for field in XARXIV_FIELDS:
+                                    yield RadioButton(field)
+                            with RadioSet(id="xradio-arx-sort", classes="header", tooltip="Type of match"):
+                                for sfield in XARXIV_SORT:
+                                    yield RadioButton(sfield)
+                            
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
                             yield Input("Result limit", id="xinput-arx-limit", tooltip="Suggested limit:10 Papers. This search function takes 10 seconds per paper to run", type="integer")
@@ -614,8 +617,8 @@ class PaperSearch(App):
     def run_search(self) -> None:
         #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
-        model = self.query_one("#radio-models", RadioSet)._reactive__selected
-        field = self.query_one("#radio-fields", RadioSet)._reactive__selected
+        model = self.query_one("#radio-models", RadioSet).pressed_index
+        field = self.query_one("#radio-fields", RadioSet).pressed_index
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
         #bind the info together in a tuple
@@ -806,6 +809,7 @@ class PaperSearch(App):
         source = self.query_one("#xradio-arx-source", RadioSet).pressed_index
         date_range = self.query_one("#xradio-arx-dates", RadioSet).pressed_index
         field = self.query_one("#xradio-arx-fields", RadioSet).pressed_index
+        sort = self.query_one("#xradio-arx-sort", RadioSet).pressed_index
         categories = self.query_one("#xsl-arx-categories", SelectionList)
         selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
 
@@ -819,6 +823,7 @@ class PaperSearch(App):
         variables = {
             "query"     : srch_text,
             "limit"     : limit,
+            "sort"      : XARXIV_SORT[sort].lower(),
             "field"     : XARXIV_FIELDS[field].lower(),
             "source"    : XARXIV_SOURCES[source],
             "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
@@ -960,101 +965,6 @@ class PaperSearch(App):
             self.app.call_from_thread(remove_progress_ui)
             #Reload SelectionList to include search results
             self.reload_datasets()
-
-    # OLD code for - search bio/medarxiv
-    # def search_xrxiv(self):
-    #     #Load up search variables
-    #     variables = []
-    #     srch_text = self.query_one("#xinput-arxiv", Input)._reactive_value
-    #     start_date = self.query_one("#xinput-arx-from", Input)._reactive_value
-    #     end_date_input = end_date = self.query_one("#xinput-arx-to", Input)
-    #     end_date = end_date_input._reactive_value
-    #     limit = self.query_one("#xinput-arx-limit", Input)._reactive_value
-    #     source = self.query_one("#xradio-arx-source", RadioSet)._reactive__selected
-    #     date_range = self.query_one("#xradio-arx-dates", RadioSet)._reactive__selected
-    #     field = self.query_one("#xradio-arx-fields", RadioSet)._reactive__selected
-    #     categories = self.query_one("#xsl-arx-categories", SelectionList)
-    #     selected_cat = self.query_one("#xsl-arx-categories", SelectionList).selected
-    #     #NOTE: Going to need a progress bar here.. sooooo
-    #     #implement a similar function run_search.
-    #         #Meaning you'll also need the async func of _search_datasets_worker
-    #         #but for individual paper pulls.  
-
-    #     #Check input validity (should all be ints)
-    #     variables = [source, limit, field, date_range]
-    #     if not all(self.is_numeric_string(str(var)) for var in variables):
-    #         self.notify("Search inputs are malformed.\nCheck inputs and try again", severity="error")
-    #         return None
-
-    #     #Remap the variables with their values     
-    #     variables = {
-    #         "query"     : srch_text,
-    #         "limit"     : limit,
-    #         "field"     : XARXIV_FIELDS[field].lower(),
-    #         "source"    : XARXIV_SOURCES[source],
-    #         "categories":[getattr(categories.options[cat].prompt, '_text', None)[0] for cat in selected_cat],
-    #         "dates"     : ARXIV_DATES[date_range],
-    #         "start_date": "",
-    #         "end_date"  : "",
-    #         "year"      : "",
-    #         "add_cat"   : False
-    #     }
-        
-    #     if not end_date_input.disabled:
-    #         variables["start_date"] = start_date
-    #         variables["end_date"] = end_date
-    #     else:
-    #         if ARXIV_DATES[date_range] == "Specific Year":
-    #             variables["year"] = start_date
-
-    #     if selected_cat:
-    #         temp =  ["_".join(variables["categories"][x].lower().split(" ")) for x in range(len(variables["categories"]))]
-    #         cat_string = "_".join(temp)
-    #         root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_{cat_string}_{'-'.join(srch_text.lower().split())}"
-    #         variables["categories"] = ",".join(map(str, variables["categories"]))
-    #         variables["add_cat"] = True
-
-    #     else:
-    #         root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
-
-    #     if variables["source"] == "medRxiv":
-    #         variables["subjects"] = MEDARXIV_SUBJECTS
-    #         rxiv = medRxiv(variables)
-
-    #     elif variables["source"] == "bioRxiv":
-    #         variables["subjects"] = BIOARXIV_SUBJECTS
-    #         rxiv = bioRxiv(variables)
-            
-    #     elif variables["source"] == "both":
-    #         variables["source"] = "medrxiv||biorxiv"
-    #         variables["subjects"] = MEDARXIV_SUBJECTS.extend(BIOARXIV_SUBJECTS)
-    #         rxiv = medRxiv(variables)
-            
-    #     json_data, no_res_message = rxiv._query_xrxiv()
-    #     if json_data:
-    #         tree_view: TreeView = self.query_one("#tree-container", TreeView)
-    #         tree: Tree = tree_view.query_one(Tree)
-    #         # searchbar = SearchProgress(count=0, total=len(sources))
-    #         # self.search_container = Container(searchbar, id="loading-container")
-    #         # self.mount(self.search_container)
-    #         # self._search_xarxiv_worker(srch_text, variables, rxiv, root_name, tree)
-    #         try:
-    #             self.notify(f"{len(json_data)} papers found on arXiv searching {variables["query"]}")
-    #             #load the JSON into the Tree
-    #             root_name = root_name.replace("|", "_")
-    #             self.load_data(tree, root_name, json_data)
-    #             #save the search
-    #             save_data(root_name, json_data)
-    #             self.reload_datasets()
-
-    #         except Exception as e:
-    #             logger.error(f"Failed to save search results: {e}")
-    #     elif no_res_message:
-    #         self.notify(f"{no_res_message}", severity="warning")
-    #     else:
-    #         self.notify(f"No papers matched the search {variables['query']}", severity="warning")
-    #         logger.warning(f"No papers found the search {variables}")
-
     
     ##########################  Tree Functions ####################################
     #FUNCTION Tree Node select

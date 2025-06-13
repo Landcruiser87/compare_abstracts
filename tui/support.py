@@ -409,6 +409,7 @@ ARXIV_AREAS = load_taxonomy()
 
 XARXIV_FIELDS = ["Title", "Abstract", "Author(s)", "Abstract|Title", "Text|Abstract|Title"]  
 XARXIV_SOURCES = ["bioRxiv", "medRxiv", "both"]
+XARXIV_SORT = ["Best match", "Oldest first", "Newest first"]
 BIOARXIV_SUBJECTS =[
     "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
     "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",

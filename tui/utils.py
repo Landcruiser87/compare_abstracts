@@ -280,7 +280,13 @@ class xRxivBase(object):
                 query_params["limit_to"] = self.params["end_date"]
 
             query_params["numresults"] = "75"
-            query_params["sort"] = "relevance-rank"
+            if self.params["sort"] == "best match":
+                query_params["sort"] = "relevance-rank"
+            elif self.params["sort"] == "oldest first":
+                query_params["sort"] = "publication-date direction:ascending"
+            elif self.params["sort"] == "newest first":
+                query_params["sort"] = "publication-date direction:descending"
+
             query_params["format_result"] = "standard"
             search = query_params["query"]
             query_f1 = " ".join(f"{k}:{v}" for k, v in query_params.items() if k != "query")
@@ -370,7 +376,7 @@ class xRxivBase(object):
                     paper.pdf = paper.doi + ".full.pdf"
                 else:
                     logger.error(f"error in title extraction for {paper_idx}")
-                    logger.error(f"Unable to extract paper and moving to next")
+                    logger.error(f"Unable to extract title -> moving to next paper")
                     continue
                 #Grab authors
                 outer_authors = lil_req.find("span", {"class":"highwire-citation-authors"})
@@ -419,21 +425,21 @@ class xRxivBase(object):
                 #         paper.github_url = possiblematch[0]
                 proc_table = True
                 metrics = await self._make_subdata_request(paper.doi)
-                logger.info(f"searching metric {paper_idx}")
+                logger.debug(f"searching metric {paper_idx}")
                 no_stats = metrics.find("div", class_="messages highwire-stats")
                 if no_stats != None:
                     if "No statistics" in no_stats.text:
                         proc_table = False
                         logger.info(f"No rows for requested table {paper.doi}")
                 
-                logger.info(f"viewstable: {proc_table}")
+                logger.debug(f"viewstable: {proc_table}")
                 if proc_table:
                     viewstable = metrics.find('table', class_=lambda x:x.startswith("highwire-stats"))
                     rows = viewstable.find_all("tr")
                     if rows:
                         paper.supplemental = {}
                         for col in rows:
-                            logger.info("views table results")
+                            logger.debug("views table results")
                             results = col.find_all("td")
                             if results:
                                 key = results[0].text
