@@ -279,7 +279,7 @@ class xRxivBase(object):
             if self.params["end_date"]:
                 query_params["limit_to"] = self.params["end_date"]
 
-            query_params["numresults"] = "10"
+            query_params["numresults"] = "75"
             if self.params["sort"] == "best match":
                 query_params["sort"] = "relevance-rank"
             elif self.params["sort"] == "oldest first":
