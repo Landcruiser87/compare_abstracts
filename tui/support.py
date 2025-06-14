@@ -60,7 +60,7 @@ def get_logger(console:Console, log_dir:Path)->logging.Logger:
     """	
     #Load logger and set basic level
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     #Load file handler for how to format the log file.
     file_handler = get_file_handler(log_dir)
     file_handler.setLevel(logging.DEBUG)
@@ -329,7 +329,7 @@ def get_categories(result:BeautifulSoup) -> dict:
 def rebuild_taxonomy() -> dict:
     url = "https://www.arxiv.org/category_taxonomy"
     referrer = "https://info.arxiv.org/"
-    chrome_version = np.random.randint(120, 132)
+    chrome_version = np.random.randint(120, 137)
     headers = {
         'Upgrade-Insecure-Requests': '1',
         'User-Agent': f'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{chrome_version}.0.0.0 Mobile Safari/537.36',
@@ -409,7 +409,7 @@ ARXIV_AREAS = load_taxonomy()
 
 XARXIV_FIELDS = ["Title", "Abstract", "Author(s)", "Abstract|Title", "Text|Abstract|Title"]  
 XARXIV_SOURCES = ["bioRxiv", "medRxiv", "both"]
-XARXIV_SORT = ["Best match", "Oldest first", "Newest first"]
+XARXIV_SORT = ["Best match", "Oldest first", "Newest first", "Popularity"]
 BIOARXIV_SUBJECTS =[
     "Animal Behavior and Cognition", "Biochemistry", "Bioengineering",
     "Bioinformatics", "Biophysics", "Cancer Biology", "Cell Biology",

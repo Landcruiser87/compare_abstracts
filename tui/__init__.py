@@ -48,7 +48,7 @@ if TYPE_CHECKING:
     from io import TextIOWrapper
 
 __prog_name__ = "ML_Tree"
-__version__ = "0.3.2"
+__version__ = "0.3.3"
 
 #CLASS - Load Data
 class PaperSearch(App):
@@ -183,11 +183,10 @@ class PaperSearch(App):
                             
                         yield SelectionList(name="Category", id="xsl-arx-categories")
                         with Vertical(id="xsub-arx-limit"):
-                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Suggested limit:10 Papers. This search function takes 10 seconds per paper to run", type="integer")
+                            yield Input("Result limit", id="xinput-arx-limit", tooltip="Suggested limit:20 Papers. This search function takes around 14 seconds per paper to run", type="integer")
                             yield Input("Date From", id="xinput-arx-from", tooltip="Specific Year Ex:2025\nDate Range Ex: YYYY-MM-DD", type="text")
                             yield Input("Date To", id="xinput-arx-to", tooltip="Ex: 2025-4-12", type="text", disabled=True)
                             yield Button("Search",  id="xsearch-arxiv", tooltip="For search tips go to\nhttps://biorxiv.org/search/advanced")
-
         yield Footer()
 
     #FUNCTION - onmount
@@ -273,19 +272,6 @@ class PaperSearch(App):
             codes = [Selection("all", 0, True)]
         categories.add_options(codes)
 
-    #Old code for SelectionList behavior.  Saving for now as I might go back to it. 
-    # @on(SelectionList.SelectionHighlighted, "#arx-subjects")
-    # def on_arx_subjects_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
-    #     categories = self.query_one("#sl-arx-categories", SelectionList)
-    #     categories.clear_options()
-    #     selections = event.selection_list.selected
-    #     if len(selections) > 0:
-    #         for selection in selections:
-    #             for key, val in ARXIV_AREAS.items():
-    #                 if ARXIV_SUBJECTS[selection][0] in key:
-    #                     codes = [Selection(y, x, False) for x, y in enumerate(val.keys())]
-    #                     categories.add_options(codes)
-
     @on(SelectionList.SelectionHighlighted, "#sl-arx-categories")
     def on_arx_categories_highlighted(self, event: SelectionList.SelectionHighlighted) -> None:
         categories = self.query_one("#sl-arx-categories", SelectionList)
@@ -318,7 +304,15 @@ class PaperSearch(App):
         self.search_xrxiv()
 
     #FUNCTION - Load Data
-    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str) -> dict:
+    def load_data(self, json_tree: TreeView, root_name:str, json_data:dict|str):
+        """Loads data into the TreeView object
+
+        Args:
+            json_tree (TreeView): JSON data container
+            root_name (str): Name of the file being loaded
+            json_data (dict | str): Data that goes with it
+
+        """        
         new_node = json_tree.root.add(root_name)
         if isinstance(json_data, str):
             json_data = clean_string_values(json.loads(json_data))
@@ -330,6 +324,8 @@ class PaperSearch(App):
 
     #FUNCTION - Remove Data
     def remove_datasets(self) -> None:
+        """removes datasets from the TreeView object
+        """        
         tree_view: TreeView = self.query_one("#tree-container", TreeView)
         tree: Tree = tree_view.query_one(Tree)
         datasets: SelectionList = self.query_one("#datasets", SelectionList)
@@ -356,6 +352,8 @@ class PaperSearch(App):
     
     #FUNCTION - reload datasets
     def reload_datasets(self) -> None:
+        """Refreshes Treeview object with datasets from the conference and search directories
+        """        
         #Manually refresh SelectionList options to avoid index errors
         datasets = self.query_one("#datasets", SelectionList)
         datasets.clear_options()
@@ -392,6 +390,16 @@ class PaperSearch(App):
         
     #FUNCTION - launch cos sim
     def launch_cos(self, srch_txt:str, srch_field:str, node:Tree):
+        """Lauches basic cosine similarity search between your input field and loaded datasets
+
+        Args:
+            srch_txt (str): Input query
+            srch_field (str): What field you're searching in
+            node (Tree): TreeView Object
+
+        Returns:
+            sims, papers (list, list): Returns the calculated similaries and the accompanying paper names.  Indexed from the first paper on because that's our search vector
+        """        
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         tfid, paper_names = tfidf(fields, paper_names)
         sims = cosine_similarity(tfid, "scipy")
@@ -399,6 +407,16 @@ class PaperSearch(App):
 
     #FUNCTION - launch word2vec
     def launch_word2vec(self, srch_txt:str, srch_field:str, node:Tree):
+        """Launches word2vec model.  Which is basically cosine similarity through spacy's basic NLP pipeline. Uses the word2vec embedding model so slightly more complex than your basic cosine sim
+
+        Args:
+            srch_txt (str): Input query
+            srch_field (str): What field you're searching in
+            node (Tree): TreeView Object
+
+        Returns:
+            sims, papers (list, list): Returns the calculated similaries and the accompanying paper names.  Indexed from the first paper on because that's our search vector
+        """        
         nlp = word2vec()
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         target = nlp(srch_txt)
@@ -412,6 +430,17 @@ class PaperSearch(App):
 
     #FUNCTION - launch sbert
     def launch_sbert(self, srch_txt:str, srch_field:str, node:Tree, metric:str):
+        """Launches Bidirectional SBert (sentence embedding) models Marco and Specter.  These embeddings were each trained on a much larger corpus.  Bing aueries and scientific papers.  
+
+        Args:
+            srch_txt (str): Input query
+            srch_field (str): What field you're searching in
+            node (Tree): TreeView Object
+            metric (str): Which Sbert model you want (Marco / Specter)
+
+        Returns:
+            sims, papers (list, list): Returns the calculated similaries and the accompanying paper names.  Indexed from the first paper on because that's our search vector
+        """        
         bert, device = sbert(metric)
         fields, paper_names = clean_text(srch_txt, srch_field, node)
         query_embedding = bert.encode(srch_txt, convert_to_tensor=True)
@@ -443,14 +472,28 @@ class PaperSearch(App):
 
         return sims[1:], paper_names[1:]
 
-    #FUNCTION conf search
-    def conf_search(
+    #FUNCTION search_data
+    def search_data(
             self,
             srch_text:str, 
             node:Tree, 
             variables:list,
             conf:str
         ):
+        """Searches active TreeView datasets.  
+
+        Args:
+            srch_txt (str): Input query
+            node (Tree): TreeView Object
+            variables (list): List of variables.  #BUG Probably should been a tuple
+            conf (str): conference or dataset that you're searching
+
+        Raises:
+            ValueError: If you don't select a metric from those listed, It raises an error. 
+
+        Returns:
+            (dict): Dictionary of results returned
+        """        
         #Load variables
         results = {}
         metric = SEARCH_MODELS[variables[0]]
@@ -615,13 +658,12 @@ class PaperSearch(App):
 
     #FUNCTION - run search
     def run_search(self) -> None:
-        #query needed widgets
         srch_text = self.query_one("#input-search", Input).value
         model = self.query_one("#radio-models", RadioSet).pressed_index
         field = self.query_one("#radio-fields", RadioSet).pressed_index
         res_limit = self.query_one("#input-limit", Input).value
         threshold = self.query_one("#input-thres", Input).value
-        #bind the info together in a tuple
+        #bind the info together in a list
         variables = [model, field, res_limit, threshold]
         if not all(self.is_numeric_string(str(var)) for var in variables):
             self.notify("Search inputs are malformed.\nCheck inputs (int or float) and try again", severity="error")
@@ -649,7 +691,7 @@ class PaperSearch(App):
         """Worker thread to search JSON files.
 
         Args:
-            srch_text (str): _description_
+            srch_text (str): Input Query
             variables (list): _description_
             sources (List[TreeNode]): _description_
             root_name (str): _description_
@@ -669,7 +711,7 @@ class PaperSearch(App):
                 self.app.call_from_thread(self.notify, f"Searching ({srchcount+1}/{total_datasets}): {conf_name}")
                 
                 # Perform JSON parsing in the worker thread
-                result = self.conf_search(srch_text, node, variables, conf_name)
+                result = self.search_data(srch_text, node, variables, conf_name)
                 if result:
                     all_results.update(**result)
                 srchcount += 1
@@ -761,9 +803,6 @@ class PaperSearch(App):
             "add_cat"   : False
         }
         
-        #TODO - Need to update the term searching to how they do it. 
-        #add an AND/OR button or someway to separate individual terms. 
-
         if not end_date_input.disabled:
             variables["start_date"] = start_date
             variables["end_date"] = end_date
@@ -851,7 +890,6 @@ class PaperSearch(App):
         else:
             root_name = f"{variables["source"]}_{XARXIV_FIELDS[field].lower()}_all_{'-'.join(srch_text.lower().split())}"
         
-        #BUG = Might not need this try block
         try:    
             tree_view: TreeView = self.query_one("#tree-container", TreeView)
             tree: Tree = tree_view.query_one(Tree)
@@ -901,8 +939,6 @@ class PaperSearch(App):
             )
 
         elif variables["source"] == "bioRxiv":
-            #BUG - bioarxiv is adding search to its URL
-            
             variables["subjects"] = BIOARXIV_SUBJECTS
             rxiv = bioRxiv(
                 variables=variables,
